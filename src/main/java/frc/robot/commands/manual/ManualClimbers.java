@@ -1,4 +1,5 @@
 package frc.robot.commands.manual;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.Climbers.ClimberStates;
@@ -20,8 +21,7 @@ public class ManualClimbers extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

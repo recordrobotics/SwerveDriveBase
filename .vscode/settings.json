@@ -46,5 +46,6 @@
   "livePreview.previewDebounceDelay": 3000,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
-  "iis.configDir": ""
+  "iis.configDir": "",
+  "java.debug.settings.onBuildFailureProceed": true
 }

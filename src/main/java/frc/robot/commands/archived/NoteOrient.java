@@ -18,7 +18,8 @@ package frc.robot.commands.archived;
 //     Photosensor photosensor;
 //     BooleanSupplier button;
 
-//     public NoteOrient(Drivetrain drivetrain, Vision vision, Photosensor photosensor, BooleanSupplier button){
+//     public NoteOrient(Drivetrain drivetrain, Vision vision, Photosensor photosensor,
+// BooleanSupplier button){
 //         addRequirements(drivetrain);
 //         setSubsystem(drivetrain.getName());
 //         this.driveTrain = drivetrain;
@@ -36,12 +37,14 @@ package frc.robot.commands.archived;
 
 //     @Override
 //     public void execute() {
-//         driveTrain.drive(new DriveCommandData(0, 0, anglePID.calculate(vision.ringDirection().getRadians()), false));
+//         driveTrain.drive(new DriveCommandData(0, 0,
+// anglePID.calculate(vision.ringDirection().getRadians()), false));
 //     }
 
 //     @Override
 //     public boolean isFinished(){
-//         return (vision.ringDirection().getRadians() < 0.1 && vision.ringDirection().getRadians() > -0.1) || !button.getAsBoolean();
+//         return (vision.ringDirection().getRadians() < 0.1 && vision.ringDirection().getRadians()
+// > -0.1) || !button.getAsBoolean();
 //     }
 
 //     @Override

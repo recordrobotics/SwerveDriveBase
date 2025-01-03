@@ -1,7 +1,7 @@
-FRC 2024 Robot Control System
+FRC 2025 Robot Control System
 =============================
 
-This is the documentation for the `2024_Control <https://github.com/recordrobotics/2024_Control>`__
+This is the documentation for the `2025_Control <https://github.com/recordrobotics/2025_Control>`__
 repository code. If you are new to the progamming team or trying to understand
 a piece of code you didn't write, use this to help you understand what each subsystem does
 and the theory behind it.

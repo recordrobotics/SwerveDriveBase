@@ -9,7 +9,6 @@ package frc.robot.commands.archived;
 // import frc.robot.subsystems.Vision;
 // import frc.robot.utils.DriveCommandData;
 
-
 // public class GetNote extends Command{
 //     Drivetrain driveTrain;
 //     Vision vision;
@@ -18,7 +17,8 @@ package frc.robot.commands.archived;
 //     Acquisition _acquisition;
 //     Channel _channel;
 
-//     public GetNote(Drivetrain drivetrain, Vision vision, double speed, Photosensor photosensor, Acquisition acquisition, Channel channel){
+//     public GetNote(Drivetrain drivetrain, Vision vision, double speed, Photosensor photosensor,
+// Acquisition acquisition, Channel channel){
 //         addRequirements(drivetrain);
 //         addRequirements(acquisition);
 //         addRequirements(channel);
@@ -36,7 +36,7 @@ package frc.robot.commands.archived;
 //     @Override
 //     public void execute(){
 //         driveTrain.drive(new DriveCommandData(speed, 0, 0, false));
-        
+
 //     }
 
 //     @Override

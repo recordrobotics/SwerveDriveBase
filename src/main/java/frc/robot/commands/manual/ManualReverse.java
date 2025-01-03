@@ -1,8 +1,9 @@
 package frc.robot.commands.manual;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Acquisition;
-import frc.robot.subsystems.Channel;
 import frc.robot.subsystems.Acquisition.AcquisitionStates;
+import frc.robot.subsystems.Channel;
 import frc.robot.subsystems.Channel.ChannelStates;
 
 public class ManualReverse extends Command {
@@ -10,7 +11,7 @@ public class ManualReverse extends Command {
   private static Acquisition _acquisition;
   private static Channel _channel;
 
-  public ManualReverse (Acquisition acquisition, Channel channel) {
+  public ManualReverse(Acquisition acquisition, Channel channel) {
     _acquisition = acquisition;
     _channel = channel;
     addRequirements(acquisition);
@@ -26,8 +27,7 @@ public class ManualReverse extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

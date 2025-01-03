@@ -5,7 +5,7 @@
         "encoderChannel":1,
         "encoderOffset":{
             "falcon":0.1889,
-            "kraken":0.6376
+            "kraken":0.6345
         }
     },
     "front-right":{
@@ -14,7 +14,7 @@
         "encoderChannel":2,
         "encoderOffset":{
             "falcon":0.4251,
-            "kraken":0.835
+            "kraken":0.8333
         }
     },
     "back-left":{
@@ -23,7 +23,7 @@
         "encoderChannel":4,
         "encoderOffset":{
             "falcon":0.1763,
-            "kraken":0.857
+            "kraken":0.8596
         }
     },
     "back-right":{
@@ -32,7 +32,7 @@
         "encoderChannel":3,
         "encoderOffset":{
             "falcon":0.8705,
-            "kraken":0.6266
+            "kraken":0.5079
         }
     }
 }

@@ -62,6 +62,11 @@
 #
 ##############################################################################
 
+# Note: use this command to build:
+# gradlew build   -D org.gradle.java.home="C:\Users\Public\wpilib\2024\jdk"
+
+
+
 # Attempt to set APP_HOME
 
 # Resolve links: $0 may be a link

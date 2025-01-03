@@ -2,8 +2,8 @@
 
 # -- Project information
 
-project = '2024 Control'
-copyright = '2024, Record Robotics'
+project = '2025 Control'
+copyright = '2025, Record Robotics'
 author = 'Record Robotics'
 
 release = '1.0'
