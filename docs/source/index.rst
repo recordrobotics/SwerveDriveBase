@@ -12,16 +12,15 @@ New team members
 Here are some helpful pages to quickly understand the basics about how the robot works
 and the ``WPILib`` code structure.
 
-- `Our programming toolchain <toolchain/index.html>`__
-- `Test <test>`__
-- `Test <test>`__
+- `Our programming toolchain <toolchain/introduction.html>`__
+- `The robot's subsystems <code-structure/subsystems.html>`__
 
 .. toctree::
    :maxdepth: 1
    :caption: Toolchain
    :hidden:
 
-   toolchain/index
+   toolchain/introduction
    toolchain/wpilib
    toolchain/java
    toolchain/gradle
@@ -44,4 +43,4 @@ and the ``WPILib`` code structure.
    :caption: Code Structure
    :hidden:
 
-   CodeStructure/index
+   code-structure/subsystems
