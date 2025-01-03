@@ -55,8 +55,7 @@ public class RobotContainer {
     // Bindings and Teleop
     configureButtonBindings();
 
-    ShuffleboardPublisher.setup(
-        nav, drivetrain, compressor, limelight);
+    ShuffleboardPublisher.setup(nav, drivetrain, compressor, limelight);
   }
 
   public void teleopInit() {
@@ -74,8 +73,7 @@ public class RobotContainer {
 
     // Command to kill robot
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getKillAuto())
-        .whileTrue(
-            new KillSpecified(drivetrain));
+        .whileTrue(new KillSpecified(drivetrain));
 
     // Command to kill compressor
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getKillCompressor())

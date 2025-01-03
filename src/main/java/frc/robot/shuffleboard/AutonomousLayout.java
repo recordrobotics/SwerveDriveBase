@@ -11,7 +11,6 @@ import frc.robot.Constants.FieldStartingLocation;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class AutonomousLayout extends AbstractLayout {
 
@@ -19,9 +18,6 @@ public class AutonomousLayout extends AbstractLayout {
   private static SendableChooser<AutoName> autoChooser = new SendableChooser<>();
   private static SendableChooser<FieldStartingLocation> fieldStartingLocationChooser =
       new SendableChooser<>();
-
-  private Supplier<Boolean> acquisitionValue = () -> false;
-  private Supplier<Boolean> hasNoteValue = () -> false;
 
   private static final Map<Integer, TuningData> velocityGraphData = new HashMap<>();
 
