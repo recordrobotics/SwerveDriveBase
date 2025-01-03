@@ -22,6 +22,15 @@ and the ``WPILib`` code structure.
    :hidden:
 
    toolchain/index
+   toolchain/wpilib
+   toolchain/java
+   toolchain/gradle
+   toolchain/network-tables
+   toolchain/path-planner
+   toolchain/pheonix-6
+   toolchain/photonlib
+   toolchain/revlib
+   toolchain/navx
 
 .. toctree::
    :maxdepth: 1
@@ -29,4 +38,10 @@ and the ``WPILib`` code structure.
    :hidden:
 
    contributing/index
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Code Structure
+   :hidden:
+
    CodeStructure/index
