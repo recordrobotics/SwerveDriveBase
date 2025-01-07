@@ -30,7 +30,7 @@ public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
   // kUSB2(3),
   // kI2C(4);
 
-  public static AHRS _nav = new AHRS(NavXComType.kMXP_SPI);
+  public static AHRS _nav = new AHRS(NavXComType.kUSB1);
 
   // variable to keep track of a reference angle whenever you reset
   private static double referenceAngle = _nav.getAngle();
