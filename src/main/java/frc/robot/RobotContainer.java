@@ -26,7 +26,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here
   private final NavSensor nav;
   private final Drivetrain drivetrain;
-  private final PCMCompressor compressor;
   private final Limelight limelight;
 
   // Autonomous
@@ -39,7 +38,6 @@ public class RobotContainer {
     // Init subsystems
     nav = new NavSensor();
     drivetrain = new Drivetrain();
-    compressor = new PCMCompressor();
     limelight = new Limelight();
 
     // this is very cursed but it is less cursed than other ways to do it, so don't touch
@@ -55,7 +53,7 @@ public class RobotContainer {
     // Bindings and Teleop
     configureButtonBindings();
 
-    ShuffleboardPublisher.setup(nav, drivetrain, compressor, limelight);
+    ShuffleboardPublisher.setup(nav, drivetrain, limelight);
   }
 
   public void teleopInit() {
@@ -77,8 +75,6 @@ public class RobotContainer {
 
     // Command to kill compressor
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getKillCompressor())
-        .onTrue(new InstantCommand(compressor::disable))
-        .onFalse(new InstantCommand(compressor::enable))
         .onTrue(new InstantCommand(() -> ShuffleboardUI.Overview.getControl().vibrate(1)))
         .onFalse(new InstantCommand(() -> ShuffleboardUI.Overview.getControl().vibrate(0)));
 
@@ -106,7 +102,6 @@ public class RobotContainer {
   /** frees up all hardware allocations */
   public void close() {
     drivetrain.close();
-    compressor.close();
     limelight.close();
   }
 }

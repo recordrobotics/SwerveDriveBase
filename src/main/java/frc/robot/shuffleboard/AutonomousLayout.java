@@ -25,7 +25,7 @@ public class AutonomousLayout extends AbstractLayout {
     getTab().add(field).withWidget(BuiltInWidgets.kField).withSize(6, 3).withPosition(0, 0);
 
     EnumSet.allOf(AutoName.class).forEach(v -> autoChooser.addOption(v.pathref, v));
-    autoChooser.setDefaultOption(AutoName._4NoteSpeaker.pathref, AutoName._4NoteSpeaker);
+    autoChooser.setDefaultOption(AutoName.None.pathref, AutoName.None);
 
     // Creates the UI for auto routines
     getTab()
@@ -37,7 +37,7 @@ public class AutonomousLayout extends AbstractLayout {
     EnumSet.allOf(FieldStartingLocation.class)
         .forEach(v -> fieldStartingLocationChooser.addOption(v.name(), v));
     fieldStartingLocationChooser.setDefaultOption(
-        FieldStartingLocation.FrontSpeakerClose.name(), FieldStartingLocation.FrontSpeakerClose);
+        FieldStartingLocation.ZeroZero.name(), FieldStartingLocation.ZeroZero);
 
     // Creates the UI for starting location
     getTab()
@@ -75,8 +75,7 @@ public class AutonomousLayout extends AbstractLayout {
   }
 
   public FieldStartingLocation getStartingLocation() {
-    if (fieldStartingLocationChooser.getSelected() == null)
-      return FieldStartingLocation.FrontSpeaker;
+    if (fieldStartingLocationChooser.getSelected() == null) return FieldStartingLocation.ZeroZero;
     return fieldStartingLocationChooser.getSelected();
   }
 }
