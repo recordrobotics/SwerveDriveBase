@@ -288,7 +288,8 @@ public final class Constants {
     /** The max jerk of the robot below which the pose is certain (in G/s) */
     public static final double MaxPoseCertaintyJerk = 80;
 
-    public static final RobotConfig PPDefaultConfig = new RobotConfig(1, 1, null, 1);
+    public static final RobotConfig PPDefaultConfig = new RobotConfig(
+      1, 1, null, 1);
 
     public static final PPHolonomicDriveController PPDriveController =
         new PPHolonomicDriveController(
