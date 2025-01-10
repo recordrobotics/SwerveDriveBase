@@ -29,6 +29,7 @@ public class RobotContainer {
   private final Limelight limelight;
 
   // Autonomous
+  @SuppressWarnings("unused")
   private final AutoPath autoPath;
   private Command autoCommand;
 
