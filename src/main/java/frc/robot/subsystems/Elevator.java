@@ -19,8 +19,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private static double kG = 1.2;
   private static double kV = 1.3;
 
-  private final Encoder encoder = new Encoder(1, 2); // TODO ports go somewhere else
-  private final TalonFX motor = new TalonFX(-1); // TODO what port
+  private final TalonFX motor;
+  private final TalonFX motor2;
 
   // Create a PID controller whose setpoint's change is subject to maximum
   // velocity and acceleration constraints.
@@ -40,6 +40,12 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public Elevator() {
+  private final TalonFX motor = new TalonFX(-1); // TODO what port and ports go somewhere else
+  private final TalonFX motor2 = new TalonFX(-1); // TODO what port
+
+    motor2.set(ControlMode.Follower, motor.getDeviceID());
+    motor2.setInverted(true); // TODO depreciated
+
     encoder.setDistancePerPulse(
         1.0 / 360.0 * 2.0 * Math.PI
             * 1.5); // TODO should be a constant and also what math is this bro
