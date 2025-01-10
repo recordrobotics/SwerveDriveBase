@@ -73,7 +73,7 @@ public class PoseTracker extends SubsystemBase {
     poseFilter.resetPosition(
         nav.getAdjustedAngle(),
         getModulePositions(),
-        Constants.FieldStartingLocation.FrontSpeakerClose.getPose());
+        Constants.FieldStartingLocation.AutoStart.getPose());
   }
 
   // Singleton stuff

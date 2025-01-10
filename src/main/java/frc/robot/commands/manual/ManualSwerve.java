@@ -31,7 +31,6 @@ public class ManualSwerve extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     AbstractControl controls = ShuffleboardUI.Overview.getControl();
 
     DriveCommandData driveCommandData = controls.getDriveCommandData();
