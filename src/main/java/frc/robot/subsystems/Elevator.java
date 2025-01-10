@@ -40,7 +40,9 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public Elevator() {
-    encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5); // TODO should be a constant and also what math is this bro
+    encoder.setDistancePerPulse(
+        1.0 / 360.0 * 2.0 * Math.PI
+            * 1.5); // TODO should be a constant and also what math is this bro
   }
 
   @Override
