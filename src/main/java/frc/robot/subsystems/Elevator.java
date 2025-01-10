@@ -52,6 +52,11 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return motor.getPosition().getValueAsDouble(); // TODO might work, should check
   }
 
+  private void setMotorVoltage(double voltage) {
+    motor.setVoltage(voltage);
+    motor2.setVoltage(-voltage);
+  }
+
   @Override
   public void periodic() {
     // Run controller and update motor output
