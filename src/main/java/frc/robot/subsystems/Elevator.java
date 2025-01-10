@@ -40,8 +40,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public Elevator() {
-  private final TalonFX motor = new TalonFX(-1); // TODO what port and ports go somewhere else
-  private final TalonFX motor2 = new TalonFX(-1); // TODO what port
+    motor = new TalonFX(-1); // TODO what port and ports go somewhere else
+    motor2 = new TalonFX(-1); // TODO what port
 
     motor2.set(ControlMode.Follower, motor.getDeviceID());
     motor2.setInverted(true); // TODO depreciated
