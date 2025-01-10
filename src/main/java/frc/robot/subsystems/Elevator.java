@@ -1,10 +1,11 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
 
@@ -20,7 +21,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private static double kV = 1.3;
 
   private final Encoder encoder = new Encoder(1, 2); // TODO ports go somewhere else
-  private final PWMSparkMax motor = new PWMSparkMax(1);
+  private final TalonFX motor = new TalonFX(-1); // TODO what port
 
   // Create a PID controller whose setpoint's change is subject to maximum
   // velocity and acceleration constraints.
