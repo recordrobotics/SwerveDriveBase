@@ -31,6 +31,7 @@ public class RobotContainer {
   // Autonomous
   @SuppressWarnings("unused")
   private final AutoPath autoPath;
+
   private Command autoCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
