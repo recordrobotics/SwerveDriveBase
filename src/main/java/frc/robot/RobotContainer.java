@@ -46,6 +46,8 @@ public class RobotContainer {
     // Sets up auto path
     autoPath = new AutoPath(drivetrain);
 
+    ShuffleboardUI.Autonomous.setupAutoChooser();
+
     // Sets up Control scheme chooser
     ShuffleboardUI.Overview.addControls(
         new JoystickXbox(2, 0), new DoubleXbox(0, 1), new DoubleXboxSpin(0, 1));
@@ -90,7 +92,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     if (autoCommand == null) {
-      autoCommand = new PlannedAuto(drivetrain, autoPath);
+      autoCommand = new PlannedAuto(drivetrain);
     }
     return autoCommand;
   }

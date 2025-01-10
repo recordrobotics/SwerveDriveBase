@@ -51,7 +51,9 @@ public final class Constants {
   }
 
   public enum FieldStartingLocation {
-    ZeroZero(new Pose2d(0, 0, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(Math.PI)));
+    AutoStart(
+        new Pose2d(15.305, 4.001, new Rotation2d(Math.PI)),
+        new Pose2d(1.235, 4.001, new Rotation2d(0)));
 
     private final Pose2d m_transformRed;
     private final Pose2d m_transformBlue;
@@ -90,7 +92,7 @@ public final class Constants {
 
     // Sensitivity for speed meter
     public static final double DIRECTIONAL_SPEED_METER_LOW = 0.25;
-    public static final double DIRECTIONAL_SPEED_METER_HIGH = 4.0;
+    public static final double DIRECTIONAL_SPEED_METER_HIGH = 20; // 4.0;
     public static final double SPIN_SPEED_METER_LOW = 0.5;
     public static final double SPIN_SPEED_METER_HIGH = 2.4;
 
@@ -157,12 +159,12 @@ public final class Constants {
     public static final double FALCON_TURN_KI = 0;
     public static final double FALCON_TURN_KD = 0;
 
-    public static final double FALCON_DRIVE_KP = 0.2681;
+    public static final double FALCON_DRIVE_KP = 0.2850;
     public static final double FALCON_DRIVE_KI = 0;
     public static final double FALCON_DRIVE_KD = 0;
 
-    public static final double FALCON_DRIVE_FEEDFORWARD_KS = 0.1586;
-    public static final double FALCON_DRIVE_FEEDFORWARD_KV = 2.4408;
+    public static final double FALCON_DRIVE_FEEDFORWARD_KS = 0.274308;
+    public static final double FALCON_DRIVE_FEEDFORWARD_KV = 2.49683;
 
     public static final double KRAKEN_TURN_KP = 2.3;
     public static final double KRAKEN_TURN_KI = 0;
@@ -190,7 +192,7 @@ public final class Constants {
         30; // 2 * Math.PI; // radians per second squared
 
     /** The max speed the robot is allowed to travel */
-    public static final double robotMaxSpeed = 7.0;
+    public static final double robotMaxSpeed = 4.7;
 
     /** The max jerk of the robot below which the pose is certain (in G/s) */
     public static final double MaxPoseCertaintyJerk = 80;

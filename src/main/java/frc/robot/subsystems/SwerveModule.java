@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.utils.ModuleConstants;
 
@@ -24,7 +25,7 @@ public class SwerveModule implements ShuffleboardPublisher {
 
   private final ProfiledPIDController drivePIDController;
   private final ProfiledPIDController turningPIDController;
-  private final SimpleMotorFeedforward driveFeedForward;
+  private SimpleMotorFeedforward driveFeedForward;
 
   private final double TURN_GEAR_RATIO;
   private final double DRIVE_GEAR_RATIO;
@@ -86,6 +87,10 @@ public class SwerveModule implements ShuffleboardPublisher {
 
     // Corrects for offset in absolute motor position
     m_turningMotor.setPosition(getAbsWheelTurnOffset());
+
+    SmartDashboard.putNumber("P", drivePIDController.getP());
+    SmartDashboard.putNumber("kS", driveFeedForward.getKs());
+    SmartDashboard.putNumber("kV", driveFeedForward.getKv());
   }
 
   /**
@@ -193,6 +198,11 @@ public class SwerveModule implements ShuffleboardPublisher {
 
     // Optimize the reference state to avoid spinning further than 90 degrees
     desiredState.optimize(getTurnWheelRotation2d());
+
+    drivePIDController.setP(SmartDashboard.getNumber("P", 0.2681));
+    driveFeedForward =
+        new SimpleMotorFeedforward(
+            SmartDashboard.getNumber("kS", 0.1586), SmartDashboard.getNumber("kV", 2.4408));
 
     // Calculate the drive output from the drive PID controller then set drive
     // motor.
