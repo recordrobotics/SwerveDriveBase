@@ -59,7 +59,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   public void periodic() {
     // Run controller and update motor output
     setMotorVoltage(
-        controller.calculate(encoder.getDistance())
+        controller.calculate(getCurrentHieght())
             + feedforward.calculate(controller.getSetpoint().velocity));
   }
 
