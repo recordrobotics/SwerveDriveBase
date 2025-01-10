@@ -1,11 +1,16 @@
 package frc.robot.subsystems;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
+  private static final Map<ElevatorStates, Double> stateToHieght = new HashMap<>();
 
   // TODO move these to Constants.java
   private static double kDt = 0.02;
@@ -40,14 +45,11 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   public Elevator() {
     motor = new TalonFX(-1); // TODO what port and ports go somewhere else
-    motor2 = new TalonFX(-1); // TODO what port
+    motor2 = new TalonFX(-1); // TODO what port and ports go somewhere else
+  }
 
-    motor2.set(ControlMode.Follower, motor.getDeviceID());
-    motor2.setInverted(true); // TODO depreciated
-
-    encoder.setDistancePerPulse(
-        1.0 / 360.0 * 2.0 * Math.PI
-            * 1.5); // TODO should be a constant and also what math is this bro
+  private double getCurrentHieght() {
+    return motor.getPosition().getValueAsDouble(); // TODO might work, should check
   }
 
   @Override
@@ -62,7 +64,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     controller.setGoal(setpoint);
   }
 
-  public void toggle(ElevatorStates state) {
+  public void moveTo(ElevatorStates state) {
     switch (state) {
       case INTAKE:
         toggle(0);
@@ -81,14 +83,14 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
         break;
       case OFF:
       default:
-        motor.setVoltage(0);
+        kill();
         break;
     }
   }
 
   @Override
   public void kill() {
-    motor.set(0); // TODO set or setVoltage
+    motor.setVoltage(0);
   }
 
   @Override
@@ -97,5 +99,5 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   @Override
-  public void setupShuffleboard() {} // TODO what shuffleboard things do we want
+  public void setupShuffleboard() {} // TODO add test slider for target
 }
