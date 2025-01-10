@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
   private static final Map<ElevatorStates, Double> stateToHieght = new HashMap<>();
@@ -60,7 +58,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   @Override
   public void periodic() {
     // Run controller and update motor output
-    motor.setVoltage(
+    setMotorVoltage(
         controller.calculate(encoder.getDistance())
             + feedforward.calculate(controller.getSetpoint().velocity));
   }
@@ -95,7 +93,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   @Override
   public void kill() {
-    motor.setVoltage(0);
+    setMotorVoltage(0);
   }
 
   @Override
