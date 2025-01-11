@@ -28,6 +28,7 @@ public class RobotContainer {
   public static final PoseTracker poseTracker = new PoseTracker();
   public static final Limelight limelight = new Limelight();
   public static final Elevator elevator = new Elevator();
+  public static final CoralShooter coralShooter = new CoralShooter();
 
   // Autonomous
   @SuppressWarnings("unused")
@@ -96,5 +97,6 @@ public class RobotContainer {
     drivetrain.close();
     limelight.close();
     elevator.close();
+    coralShooter.close();
   }
 }
