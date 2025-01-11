@@ -6,11 +6,11 @@ import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
-import frc.robot.subsystems.*;
+import frc.robot.RobotContainer;
 
 public class AutoPath {
 
-  public AutoPath(Drivetrain drivetrain) {
+  public AutoPath() {
     // TODO figure out if this is correct
     RobotConfig config = Constants.Swerve.PPDefaultConfig;
     try {
@@ -22,19 +22,21 @@ public class AutoPath {
     // Registering named commands (so that the pathplanner can call them by name)
 
     // Stop the robot's movement
-    NamedCommands.registerCommand("Stop", new InstantCommand(() -> drivetrain.kill()));
+    NamedCommands.registerCommand(
+        "Stop", new InstantCommand(() -> RobotContainer.drivetrain.kill()));
 
     // Configures auto builder
     AutoBuilder.configure(
-        PoseTracker::getEstimatedPosition, // Robot pose supplier
-        PoseTracker
+        RobotContainer.poseTracker::getEstimatedPosition, // Robot pose supplier
+        RobotContainer.poseTracker
             ::setToPose, // Method to reset odometry (will be called if your auto has a starting
         // pose)
-        drivetrain::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        RobotContainer.drivetrain
+            ::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
 
         // Method that will drive the robot given ROBOT RELATIVE speeds
         (speeds, feedforwards) -> {
-          drivetrain.drive(
+          RobotContainer.drivetrain.drive(
               new DriveCommandData(
                   speeds.vxMetersPerSecond,
                   speeds.vyMetersPerSecond,
@@ -56,6 +58,6 @@ public class AutoPath {
         },
 
         // Reference to this subsystem to set requirements
-        drivetrain);
+        RobotContainer.drivetrain);
   }
 }
