@@ -48,6 +48,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     isHomed = false;
     leftMotorOffset = 0;
     rightMotorOffset = 0;
+
+    controller.setTolerance(Constants.Elevator.AT_GOAL_POSITION_TOLERANCE, Constants.Elevator.AT_GOAL_VELOCITY_TOLERANCE);
   }
 
   public double getAbsLeftRotation() {
@@ -136,6 +138,10 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
         toggle(height.getHeight());
         break;
     }
+  }
+
+  public boolean atGoal() {
+    return controller.atGoal();
   }
 
   @Override

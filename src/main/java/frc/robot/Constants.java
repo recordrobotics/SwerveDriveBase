@@ -119,6 +119,9 @@ public final class Constants {
     public static double METERS_PER_ROTATION = 1;
 
     public static double HOMING_SPEED = 0.1; // TODO is it slow enough?
+
+    public static double AT_GOAL_POSITION_TOLERANCE = 0.1; // TODO what should these be
+    public static double AT_GOAL_VELOCITY_TOLERANCE = 0.1; // TODO what should these be
   }
 
   public final class FieldConstants {
