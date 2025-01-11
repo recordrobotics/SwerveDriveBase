@@ -7,8 +7,8 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants;
-import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.RobotMap;
+import frc.robot.shuffleboard.ShuffleboardUI;
 
 public class CoralShooter extends KillableSubsystem {
 
@@ -17,9 +17,7 @@ public class CoralShooter extends KillableSubsystem {
   public CoralShooter() {
     motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
     toggle(CoralShooterStates.OFF); // initialize as off
-    ShuffleboardUI.Test.addSlider(
-            "Coral Shooter", motor.get(), -1, 1)
-        .subscribe(motor::set);
+    ShuffleboardUI.Test.addSlider("Coral Shooter", motor.get(), -1, 1).subscribe(motor::set);
   }
 
   public enum CoralShooterStates {

@@ -7,8 +7,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
-import frc.robot.RobotMap;
 import frc.robot.Constants.ElevatorHeight;
+import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
