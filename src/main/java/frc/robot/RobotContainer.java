@@ -23,10 +23,10 @@ import frc.robot.utils.AutoPath;
  */
 public class RobotContainer {
 
-  // The robot's subsystems and commands are defined here
-  private final NavSensor nav;
-  private final Drivetrain drivetrain;
-  private final Limelight limelight;
+  // Subsystems
+  public static final PoseTracker poseTracker = new PoseTracker();
+  public static final Drivetrain drivetrain = new Drivetrain();
+  public static final Limelight limelight = new Limelight();
 
   // Autonomous
   @SuppressWarnings("unused")
@@ -37,16 +37,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    // Init subsystems
-    nav = new NavSensor();
-    drivetrain = new Drivetrain();
-    limelight = new Limelight();
-
-    // this is very cursed but it is less cursed than other ways to do it, so don't touch
-    PoseTracker.instance = new PoseTracker(drivetrain, limelight);
-
     // Sets up auto path
-    autoPath = new AutoPath(drivetrain);
+    autoPath = new AutoPath();
 
     ShuffleboardUI.Autonomous.setupAutoChooser();
 
@@ -57,12 +49,12 @@ public class RobotContainer {
     // Bindings and Teleop
     configureButtonBindings();
 
-    ShuffleboardPublisher.setup(nav, drivetrain, limelight);
+    ShuffleboardPublisher.setup(poseTracker.nav, drivetrain, limelight);
   }
 
   public void teleopInit() {
     // Sets default command for manual swerve. It is the only one right now
-    drivetrain.setDefaultCommand(new ManualSwerve(drivetrain));
+    drivetrain.setDefaultCommand(new ManualSwerve());
   }
 
   /**
@@ -79,7 +71,7 @@ public class RobotContainer {
 
     // Reset pose trigger
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getPoseReset())
-        .onTrue(new InstantCommand(PoseTracker::resetDriverPose));
+        .onTrue(new InstantCommand(poseTracker::resetDriverPose));
   }
 
   /**
@@ -89,7 +81,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     if (autoCommand == null) {
-      autoCommand = new PlannedAuto(drivetrain);
+      autoCommand = new PlannedAuto();
     }
     return autoCommand;
   }
