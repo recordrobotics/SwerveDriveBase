@@ -245,8 +245,8 @@ public final class Constants {
 
     public static final PPHolonomicDriveController PPDriveController =
         new PPHolonomicDriveController(
-            new PIDConstants(6, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(5, 0.0, 0.0) // Rotation PID constants
+            new PIDConstants(10, 0.0, 0.8), // Translation PID constants
+            new PIDConstants(6, 0.0, 0.0) // Rotation PID constants
             );
 
     // Module Creation
