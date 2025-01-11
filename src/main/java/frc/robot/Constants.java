@@ -114,8 +114,11 @@ public final class Constants {
 
     public static int MOTOR_LEFT_ID = 9;
     public static int MOTOR_RIGHT_ID = 10;
+    public static int ENDSTOP_ID = -1; // TODO get actual DIO port number
 
     public static double METERS_PER_ROTATION = 1;
+
+    public static double HOMING_SPEED = 0.1; // TODO is it slow enough?
   }
 
   public final class FieldConstants {

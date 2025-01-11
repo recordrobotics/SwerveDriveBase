@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
@@ -13,6 +14,12 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   private final TalonFX motorLeft;
   private final TalonFX motorRight;
+  private final DigitalInput endStop;
+
+  private boolean isHomed;
+  private boolean isHoming;
+  private double leftMotorOffset;
+  private double rightMotorOffset;
 
   // Create a PID controller whose setpoint's change is subject to maximum
   // velocity and acceleration constraints.
@@ -36,6 +43,30 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   public Elevator() {
     motorLeft = new TalonFX(Constants.Elevator.MOTOR_LEFT_ID);
     motorRight = new TalonFX(Constants.Elevator.MOTOR_RIGHT_ID);
+    endStop = new DigitalInput(Constants.Elevator.ENDSTOP_ID);
+
+    isHomed = false;
+    leftMotorOffset = 0;
+    rightMotorOffset = 0;
+  }
+
+  public double getAbsLeftRotation() {
+    return motorLeft.getPosition().getValueAsDouble() - leftMotorOffset;
+  }
+
+  public double getAbsRightRotation() {
+    return motorRight.getPosition().getValueAsDouble() - rightMotorOffset;
+  }
+
+  public void home() { // TODO should be called with a command that waits for finishedHoming
+    isHoming = true;
+    controller.setGoal(
+        new TrapezoidProfile.State(
+            getCurrentHeight(), -Constants.Elevator.HOMING_SPEED)); // TODO is this right
+  }
+
+  public boolean finishedHoming() {
+    return isHomed;
   }
 
   private double getCurrentHeightLeft() {
@@ -59,10 +90,23 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   double lastSpeed = 0;
-  double lastTime = Timer.getFPGATimestamp();
+  double lastTime = Timer.getFPGATimestamp(); // TODO why is this here
+
+  private boolean getEndStopPressed() {
+    return endStop.get();
+  }
 
   @Override
   public void periodic() {
+    if (isHoming) {
+      if (getEndStopPressed()) {
+        leftMotorOffset = motorLeft.getPosition().getValueAsDouble();
+        rightMotorOffset = motorRight.getPosition().getValueAsDouble();
+        isHoming = false;
+        isHomed = true;
+      }
+    }
+
     // Run controller and update motor output
     double pidVal = controller.calculate(getCurrentHeight());
     double acceleration =
@@ -78,8 +122,9 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public void toggle(double heightMeters) {
-    controller.setGoal(
-        heightMeters * 2 /* double because current height is sum of both left+right */);
+    if (!isHoming) {
+      controller.setGoal(heightMeters);
+    }
   }
 
   public void moveTo(ElevatorHeight height) {
@@ -109,5 +154,5 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   public void setupShuffleboard() {
     ShuffleboardUI.Test.addSlider("Elevator Target", controller.getGoal().position, -90, 90)
         .subscribe(this::toggle);
-  } // TODO add test slider for target
+  }
 }
