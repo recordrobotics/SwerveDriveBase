@@ -121,7 +121,8 @@ public final class Constants {
   }
 
   public final class CoralShooter {
-    
+    public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
+    public static final double INTAKE_SPEED = 0.2; // TODO test this
   }
 
   public final class FieldConstants {
