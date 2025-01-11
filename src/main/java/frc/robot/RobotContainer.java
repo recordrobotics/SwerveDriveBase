@@ -24,8 +24,8 @@ import frc.robot.utils.AutoPath;
 public class RobotContainer {
 
   // Subsystems
-  public static final PoseTracker poseTracker = new PoseTracker();
   public static final Drivetrain drivetrain = new Drivetrain();
+  public static final PoseTracker poseTracker = new PoseTracker();
   public static final Limelight limelight = new Limelight();
 
   // Autonomous
