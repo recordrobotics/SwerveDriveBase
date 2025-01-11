@@ -5,17 +5,17 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 
 public class ElevatorMove extends Command {
-  private ElevatorHeight targetHieght;
+  private ElevatorHeight targetHeight;
 
-  public ElevatorMove(ElevatorHeight targetHieght) {
-    this.targetHieght = targetHieght;
+  public ElevatorMove(ElevatorHeight targetHeight) {
+    this.targetHeight = targetHeight;
     addRequirements(RobotContainer.elevator);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.elevator.moveTo(targetHieght);
+    RobotContainer.elevator.moveTo(targetHeight);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -114,15 +114,15 @@ public final class Constants {
 
     public static double METERS_PER_ROTATION = 1;
 
-    public static double HOMING_SPEED = 0.1; // TODO is it slow enough?
-
-    public static double AT_GOAL_POSITION_TOLERANCE = 0.1; // TODO what should these be
-    public static double AT_GOAL_VELOCITY_TOLERANCE = 0.1; // TODO what should these be
+    public static double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values
+    public static double AT_GOAL_VELOCITY_TOLERANCE = 0.05; // TODO test different values
   }
 
   public final class CoralShooter {
     public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = 0.2; // TODO test this
+    public static final double INTAKE_SPEED = 0.2; // TODO should this be negative?
+
+    public static final double SHOOT_TIME = 0.1; // TODO make correct
   }
 
   public final class FieldConstants {

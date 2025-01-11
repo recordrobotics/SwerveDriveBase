@@ -15,10 +15,9 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   private final TalonFX motorLeft;
   private final TalonFX motorRight;
-  private final DigitalInput endStop;
+  private final DigitalInput bottomEndStop;
+  private final DigitalInput topEndStop;
 
-  private boolean isHomed;
-  private boolean isHoming;
   private double leftMotorOffset;
   private double rightMotorOffset;
 
@@ -44,9 +43,9 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   public Elevator() {
     motorLeft = new TalonFX(RobotMap.Elevator.MOTOR_LEFT_ID);
     motorRight = new TalonFX(RobotMap.Elevator.MOTOR_RIGHT_ID);
-    endStop = new DigitalInput(RobotMap.Elevator.ENDSTOP_ID);
+    bottomEndStop = new DigitalInput(RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
+    topEndStop = new DigitalInput(RobotMap.Elevator.TOP_ENDSTOP_ID);
 
-    isHomed = false;
     leftMotorOffset = 0;
     rightMotorOffset = 0;
 
@@ -63,17 +62,6 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return motorRight.getPosition().getValueAsDouble() - rightMotorOffset;
   }
 
-  public void home() { // TODO should be called with a command that waits for finishedHoming
-    isHoming = true;
-    controller.setGoal(
-        new TrapezoidProfile.State(
-            getCurrentHeight(), -Constants.Elevator.HOMING_SPEED)); // TODO is this right
-  }
-
-  public boolean finishedHoming() {
-    return isHomed;
-  }
-
   private double getCurrentHeightLeft() {
     return motorLeft.getPosition().getValueAsDouble() / Constants.Elevator.METERS_PER_ROTATION;
   }
@@ -87,7 +75,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return (getCurrentHeightLeft() + getCurrentHeightRight()) / 2;
   }
 
-  /** Left hieght - right height */
+  /** Left height - right height */
   private double getCurrentHeightDifference() {
     // subtract the two to get differnce
     // TODO why do we need this?
@@ -97,28 +85,26 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   double lastSpeed = 0;
   double lastTime = Timer.getFPGATimestamp(); // TODO why is this here
 
-  private boolean getEndStopPressed() {
-    return endStop.get();
+  private boolean getBottomEndStopPressed() {
+    return bottomEndStop.get();
+  }
+
+  private boolean getTopEndStopPressed() {
+    return topEndStop.get();
   }
 
   @Override
   public void periodic() {
-    if (isHoming) {
-      if (getEndStopPressed()) {
-        leftMotorOffset = motorLeft.getPosition().getValueAsDouble();
-        rightMotorOffset = motorRight.getPosition().getValueAsDouble();
-        isHoming = false;
-        isHomed = true;
-      }
-    }
-
     // Run controller and update motor output
     double pidVal = controller.calculate(getCurrentHeight());
     double acceleration =
         (controller.getSetpoint().velocity - lastSpeed) / (Timer.getFPGATimestamp() - lastTime);
     double fwVal = feedforward.calculate(controller.getSetpoint().velocity, acceleration);
-    motorLeft.setVoltage(pidVal + fwVal);
-    motorRight.setVoltage(pidVal + fwVal);
+
+    if ((!getTopEndStopPressed() || pidVal <= 0) && (!getBottomEndStopPressed() || pidVal >= 0)) {
+      motorLeft.setVoltage(pidVal + fwVal);
+      motorRight.setVoltage(pidVal + fwVal);
+    }
 
     // TODO: replace this stuff to also include minimizing getCurrentHeightDifference() to 0
 
@@ -127,9 +113,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public void toggle(double heightMeters) {
-    if (!isHoming) {
-      controller.setGoal(heightMeters);
-    }
+    controller.setGoal(heightMeters);
   }
 
   public void moveTo(ElevatorHeight height) {
@@ -161,7 +145,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   @Override
   public void setupShuffleboard() {
-    ShuffleboardUI.Test.addSlider("Elevator Target", controller.getGoal().position, -90, 90)
+    ShuffleboardUI.Test.addSlider(
+            "Elevator Target", controller.getGoal().position, 0, ElevatorHeight.L4.getHeight())
         .subscribe(this::toggle);
   }
 }
