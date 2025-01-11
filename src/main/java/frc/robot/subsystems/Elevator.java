@@ -7,6 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
+import frc.robot.shuffleboard.ShuffleboardUI;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
 
@@ -98,5 +99,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   @Override
-  public void setupShuffleboard() {} // TODO add test slider for target
+  public void setupShuffleboard() {
+    ShuffleboardUI.Test.addSlider("Elevator Target", controller.getGoal().position, -90, 90)
+        .subscribe(this::toggle);
+  } // TODO add test slider for target
 }
