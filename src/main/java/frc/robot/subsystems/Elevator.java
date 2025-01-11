@@ -38,17 +38,24 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     motorRight = new TalonFX(Constants.Elevator.MOTOR_RIGHT_ID);
   }
 
-  private double getCurrentHeight() {
-    // take sum of both motors to account for difference in heights for each motor
-    return motorLeft.getPosition().getValueAsDouble() / Constants.Elevator.GEAR_RATIO
-        + motorRight.getPosition().getValueAsDouble()
-            / Constants.Elevator.GEAR_RATIO; // TODO: figure out how to convert rotations to height
+  private double getCurrentHeightLeft() {
+    return motorLeft.getPosition().getValueAsDouble() / Constants.Elevator.METERS_PER_ROTATION;
   }
 
+  private double getCurrentHeightRight() {
+    return motorRight.getPosition().getValueAsDouble() / Constants.Elevator.METERS_PER_ROTATION;
+  }
+
+  /** Average of the left and right heights of the elevator */
+  private double getCurrentHeight() {
+    return (getCurrentHeightLeft() + getCurrentHeightRight()) / 2;
+  }
+
+  /** Left hieght - right height */
   private double getCurrentHeightDifference() {
-    return motorLeft.getPosition().getValueAsDouble() / Constants.Elevator.GEAR_RATIO
-        - /* NOTE: subtract the two to get differnce */ motorRight.getPosition().getValueAsDouble()
-            / Constants.Elevator.GEAR_RATIO; // TODO: figure out how to convert rotations to height
+    // subtract the two to get differnce
+    // TODO why do we need this?
+    return getCurrentHeightLeft() - getCurrentHeightRight();
   }
 
   double lastSpeed = 0;

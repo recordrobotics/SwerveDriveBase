@@ -115,7 +115,7 @@ public final class Constants {
     public static int MOTOR_LEFT_ID = 9;
     public static int MOTOR_RIGHT_ID = 10;
 
-    public static double GEAR_RATIO = 1;
+    public static double METERS_PER_ROTATION = 1;
   }
 
   public final class FieldConstants {
