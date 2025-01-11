@@ -49,7 +49,9 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     leftMotorOffset = 0;
     rightMotorOffset = 0;
 
-    controller.setTolerance(Constants.Elevator.AT_GOAL_POSITION_TOLERANCE, Constants.Elevator.AT_GOAL_VELOCITY_TOLERANCE);
+    controller.setTolerance(
+        Constants.Elevator.AT_GOAL_POSITION_TOLERANCE,
+        Constants.Elevator.AT_GOAL_VELOCITY_TOLERANCE);
   }
 
   public double getAbsLeftRotation() {

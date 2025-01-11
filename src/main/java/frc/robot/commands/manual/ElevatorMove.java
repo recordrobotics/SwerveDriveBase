@@ -1,8 +1,8 @@
 package frc.robot.commands.manual;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.ElevatorHeight;
+import frc.robot.RobotContainer;
 
 public class ElevatorMove extends Command {
   private ElevatorHeight targetHieght;

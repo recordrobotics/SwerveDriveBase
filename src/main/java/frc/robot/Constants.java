@@ -124,6 +124,30 @@ public final class Constants {
     public static double AT_GOAL_VELOCITY_TOLERANCE = 0.1; // TODO what should these be
   }
 
+  public final class CoralShooter {
+    public static double kDt = 0.02;
+    public static double kMaxVelocity = 1.00;
+    public static double kMaxAcceleration = 0.75;
+    public static double kP = 1.3;
+    public static double kI = 0.0;
+    public static double kD = 0.7;
+    public static double kS = 1.1;
+    public static double kG = 1.2;
+    public static double kV = 1.3;
+    public static double kA = 0.2;
+
+    public static int MOTOR_LEFT_ID = 9;
+    public static int MOTOR_RIGHT_ID = 10;
+    public static int ENDSTOP_ID = -1; // TODO get actual DIO port number
+
+    public static double METERS_PER_ROTATION = 1;
+
+    public static double HOMING_SPEED = 0.1; // TODO is it slow enough?
+
+    public static double AT_GOAL_POSITION_TOLERANCE = 0.1; // TODO what should these be
+    public static double AT_GOAL_VELOCITY_TOLERANCE = 0.1; // TODO what should these be
+  }
+
   public final class FieldConstants {
 
     // Field width and length
