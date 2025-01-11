@@ -4,101 +4,97 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import java.util.HashMap;
-import java.util.Map;
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
+import frc.robot.Constants.ElevatorHeight;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
-  private static final Map<ElevatorStates, Double> stateToHieght = new HashMap<>();
 
-  // TODO move these to Constants.java
-  private static double kDt = 0.02;
-  private static double kMaxVelocity = 1.75;
-  private static double kMaxAcceleration = 0.75;
-  private static double kP = 1.3;
-  private static double kI = 0.0;
-  private static double kD = 0.7;
-  private static double kS = 1.1;
-  private static double kG = 1.2;
-  private static double kV = 1.3;
-
-  private final TalonFX motor;
-  private final TalonFX motor2;
+  private final TalonFX motorLeft;
+  private final TalonFX motorRight;
 
   // Create a PID controller whose setpoint's change is subject to maximum
   // velocity and acceleration constraints.
   private final TrapezoidProfile.Constraints constraints =
-      new TrapezoidProfile.Constraints(kMaxVelocity, kMaxAcceleration);
+      new TrapezoidProfile.Constraints(
+          Constants.Elevator.kMaxVelocity, Constants.Elevator.kMaxAcceleration);
   private final ProfiledPIDController controller =
-      new ProfiledPIDController(kP, kI, kD, constraints, kDt);
-  private final ElevatorFeedforward feedforward = new ElevatorFeedforward(kS, kG, kV);
-
-  public enum ElevatorStates {
-    INTAKE,
-    L1,
-    L2,
-    L3,
-    L4,
-    OFF
-  }
+      new ProfiledPIDController(
+          Constants.Elevator.kP,
+          Constants.Elevator.kI,
+          Constants.Elevator.kD,
+          constraints,
+          Constants.Elevator.kDt);
+  private final ElevatorFeedforward feedforward =
+      new ElevatorFeedforward(
+          Constants.Elevator.kS,
+          Constants.Elevator.kG,
+          Constants.Elevator.kV,
+          Constants.Elevator.kA);
 
   public Elevator() {
-    motor = new TalonFX(-1); // TODO what port and ports go somewhere else
-    motor2 = new TalonFX(-1); // TODO what port and ports go somewhere else
+    motorLeft = new TalonFX(Constants.Elevator.MOTOR_LEFT_ID);
+    motorRight = new TalonFX(Constants.Elevator.MOTOR_RIGHT_ID);
   }
 
-  private double getCurrentHieght() {
-    return motor.getPosition().getValueAsDouble(); // TODO might work, should check
+  private double getCurrentHeight() {
+    // take sum of both motors to account for difference in heights for each motor
+    return motorLeft.getPosition().getValueAsDouble() / Constants.Elevator.GEAR_RATIO
+        + motorRight.getPosition().getValueAsDouble()
+            / Constants.Elevator.GEAR_RATIO; // TODO: figure out how to convert rotations to height
   }
 
-  private void setMotorVoltage(double voltage) {
-    motor.setVoltage(voltage);
-    motor2.setVoltage(-voltage);
+  private double getCurrentHeightDifference() {
+    return motorLeft.getPosition().getValueAsDouble() / Constants.Elevator.GEAR_RATIO
+        - /* NOTE: subtract the two to get differnce */ motorRight.getPosition().getValueAsDouble()
+            / Constants.Elevator.GEAR_RATIO; // TODO: figure out how to convert rotations to height
   }
+
+  double lastSpeed = 0;
+  double lastTime = Timer.getFPGATimestamp();
 
   @Override
   public void periodic() {
     // Run controller and update motor output
-    setMotorVoltage(
-        controller.calculate(getCurrentHieght())
-            + feedforward.calculate(controller.getSetpoint().velocity));
+    double pidVal = controller.calculate(getCurrentHeight());
+    double acceleration =
+        (controller.getSetpoint().velocity - lastSpeed) / (Timer.getFPGATimestamp() - lastTime);
+    double fwVal = feedforward.calculate(controller.getSetpoint().velocity, acceleration);
+    motorLeft.setVoltage(pidVal + fwVal);
+    motorRight.setVoltage(pidVal + fwVal);
+
+    // TODO: replace this stuff to also include minimizing getCurrentHeightDifference() to 0
+
+    lastSpeed = controller.getSetpoint().velocity;
+    lastTime = Timer.getFPGATimestamp();
   }
 
-  public void toggle(double setpoint) {
-    controller.setGoal(setpoint);
+  public void toggle(double heightMeters) {
+    controller.setGoal(
+        heightMeters * 2 /* double because current height is sum of both left+right */);
   }
 
-  public void moveTo(ElevatorStates state) {
-    switch (state) {
-      case INTAKE:
-        toggle(0);
-        break;
-      case L1:
-        toggle(1);
-        break;
-      case L2:
-        toggle(2);
-        break;
-      case L3:
-        toggle(3);
-        break;
-      case L4:
-        toggle(4);
-        break;
+  public void moveTo(ElevatorHeight height) {
+    switch (height) {
       case OFF:
-      default:
         kill();
+        break;
+      default:
+        toggle(height.getHeight());
         break;
     }
   }
 
   @Override
   public void kill() {
-    setMotorVoltage(0);
+    motorLeft.setVoltage(0);
+    motorRight.setVoltage(0);
   }
 
   @Override
   public void close() {
-    motor.close();
+    motorLeft.close();
+    motorRight.close();
   }
 
   @Override

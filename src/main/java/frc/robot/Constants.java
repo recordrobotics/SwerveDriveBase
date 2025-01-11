@@ -33,6 +33,25 @@ public final class Constants {
     public static final int NEO_MOTOR_KV = 473;
   }
 
+  public enum ElevatorHeight {
+    INTAKE(0),
+    L1(0.03),
+    L2(0.07),
+    L3(0.11),
+    L4(0.17),
+    OFF(0);
+
+    private double height;
+
+    private ElevatorHeight(double heightMeters) {
+      this.height = heightMeters;
+    }
+
+    public double getHeight() {
+      return height;
+    }
+  }
+
   public enum FieldPosition {
     ;
 
@@ -79,6 +98,24 @@ public final class Constants {
     AutoName(String pathplannerRef) {
       pathref = pathplannerRef;
     }
+  }
+
+  public final class Elevator {
+    public static double kDt = 0.02;
+    public static double kMaxVelocity = 1.00;
+    public static double kMaxAcceleration = 0.75;
+    public static double kP = 1.3;
+    public static double kI = 0.0;
+    public static double kD = 0.7;
+    public static double kS = 1.1;
+    public static double kG = 1.2;
+    public static double kV = 1.3;
+    public static double kA = 0.2;
+
+    public static int MOTOR_LEFT_ID = 9;
+    public static int MOTOR_RIGHT_ID = 10;
+
+    public static double GEAR_RATIO = 1;
   }
 
   public final class FieldConstants {
