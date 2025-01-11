@@ -77,11 +77,6 @@ public class RobotContainer {
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getKillAuto())
         .whileTrue(new KillSpecified(drivetrain));
 
-    // Command to kill compressor
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getKillCompressor())
-        .onTrue(new InstantCommand(() -> ShuffleboardUI.Overview.getControl().vibrate(1)))
-        .onFalse(new InstantCommand(() -> ShuffleboardUI.Overview.getControl().vibrate(0)));
-
     // Reset pose trigger
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getPoseReset())
         .onTrue(new InstantCommand(PoseTracker::resetDriverPose));

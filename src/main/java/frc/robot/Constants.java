@@ -92,7 +92,7 @@ public final class Constants {
 
     // Sensitivity for speed meter
     public static final double DIRECTIONAL_SPEED_METER_LOW = 0.25;
-    public static final double DIRECTIONAL_SPEED_METER_HIGH = 20; // 4.0;
+    public static final double DIRECTIONAL_SPEED_METER_HIGH = 4.7;
     public static final double SPIN_SPEED_METER_LOW = 0.5;
     public static final double SPIN_SPEED_METER_HIGH = 2.4;
 
@@ -155,9 +155,9 @@ public final class Constants {
     public static final double KRAKEN_DRIVE_GEAR_RATIO = 6.75; // X1 12 pinion
 
     // PID Values
-    public static final double FALCON_TURN_KP = 1;
+    public static final double FALCON_TURN_KP = 3.2;
     public static final double FALCON_TURN_KI = 0;
-    public static final double FALCON_TURN_KD = 0;
+    public static final double FALCON_TURN_KD = 0.01;
 
     public static final double FALCON_DRIVE_KP = 0.2850;
     public static final double FALCON_DRIVE_KI = 0;
@@ -184,9 +184,8 @@ public final class Constants {
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
 
     // Turn & Drive max velocity and acceleration
-    public static final double TurnMaxAngularVelocity = 25; // Drivetrain.kMaxAngularSpeed;
-    public static final double TurnMaxAngularAcceleration =
-        34; // 2 * Math.PI; // radians per second squared
+    public static final double TurnMaxAngularVelocity = 40; // ROTATIONS / SECOND
+    public static final double TurnMaxAngularAcceleration = 200; // ROTATIONS^2 / SECOND
     public static final double DriveMaxAngularVelocity = 15; // Drivetrain.kMaxAngularSpeed;
     public static final double DriveMaxAngularAcceleration =
         30; // 2 * Math.PI; // radians per second squared
