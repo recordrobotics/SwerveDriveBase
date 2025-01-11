@@ -2,11 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
-import frc.robot.Robot;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.utils.SimpleMath;
 
@@ -22,10 +20,6 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
   public Limelight() {
     LimelightHelpers.setPipelineIndex(name, 0);
-    ShuffleboardUI.Overview.setTagNum(() -> numTags);
-    ShuffleboardUI.Overview.setConfidence(() -> confidence);
-    ShuffleboardUI.Overview.setHasVision(() -> hasVision);
-    ShuffleboardUI.Overview.setLimelightConnected(() -> limelightConnected);
   }
 
   @Override
@@ -55,16 +49,17 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       }
     }
 
-    double timeSinceAuto = Timer.getFPGATimestamp() - Robot.getAutoStartTime();
+    // TODO: what does this do?
+    // double timeSinceAuto = Timer.getFPGATimestamp() - Robot.getAutoStartTime();
 
-    if (timeSinceAuto > 1
-        && measurement
-                .pose
-                .getTranslation()
-                .getDistance(PoseTracker.getEstimatedPosition().getTranslation())
-            > 2) {
-      confidence = 0;
-    }
+    // if (timeSinceAuto > 1
+    //     && measurement
+    //             .pose
+    //             .getTranslation()
+    //             .getDistance(PoseTracker.getEstimatedPosition().getTranslation())
+    //         > 2) {
+    //   confidence = 0;
+    // }
 
     handleMeasurement(measurement, confidence);
   }

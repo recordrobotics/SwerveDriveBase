@@ -84,8 +84,8 @@ public final class Constants {
   public final class FieldConstants {
 
     // Field width and length
-    public static final double FIELD_X_DIMENSION = 16.54; // Length
-    public static final double FIELD_Y_DIMENSION = 8.21; // Width
+    public static final double FIELD_X_DIMENSION = 17.548; // Length
+    public static final double FIELD_Y_DIMENSION = 8.052; // Width
   }
 
   public final class Control {
