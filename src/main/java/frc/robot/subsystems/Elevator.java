@@ -7,6 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
+import frc.robot.RobotMap;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.shuffleboard.ShuffleboardUI;
 
@@ -41,9 +42,9 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
           Constants.Elevator.kA);
 
   public Elevator() {
-    motorLeft = new TalonFX(Constants.Elevator.MOTOR_LEFT_ID);
-    motorRight = new TalonFX(Constants.Elevator.MOTOR_RIGHT_ID);
-    endStop = new DigitalInput(Constants.Elevator.ENDSTOP_ID);
+    motorLeft = new TalonFX(RobotMap.Elevator.MOTOR_LEFT_ID);
+    motorRight = new TalonFX(RobotMap.Elevator.MOTOR_RIGHT_ID);
+    endStop = new DigitalInput(RobotMap.Elevator.ENDSTOP_ID);
 
     isHomed = false;
     leftMotorOffset = 0;
