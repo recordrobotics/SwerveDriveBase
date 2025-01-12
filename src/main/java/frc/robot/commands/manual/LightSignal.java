@@ -1,14 +1,22 @@
 package frc.robot.commands.manual;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Lights.LightMode;
+import java.util.function.Supplier;
 
 public class LightSignal extends Command {
   private LightMode mode;
   private Supplier<Boolean> until;
+
+  public LightSignal(LightMode mode) {
+    this(mode, createDelaySupplier(2000));
+  }
+
+  private static Supplier<Boolean> createDelaySupplier(long delayMillis) {
+    long startTime = System.currentTimeMillis();
+    return () -> System.currentTimeMillis() - startTime >= delayMillis;
+  }
 
   public LightSignal(LightMode mode, Supplier<Boolean> until) {
     this.mode = mode;

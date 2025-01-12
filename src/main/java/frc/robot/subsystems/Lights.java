@@ -31,9 +31,7 @@ public class Lights extends SubsystemBase {
     setDefaultCommand(runPattern(LEDPattern.solid(Color.kBlack)).withName("Off"));
   }
 
-  /**
-   * NOTE: Only interact with light strip with the command!!!
-   */
+  /** NOTE: Only interact with light strip with the command!!! */
   public void setMode(LightMode mode) {
     LEDPattern pattern;
 
