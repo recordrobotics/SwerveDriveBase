@@ -29,6 +29,7 @@ public class RobotContainer {
   public static final Limelight limelight = new Limelight();
   public static final Elevator elevator = new Elevator();
   public static final CoralShooter coralShooter = new CoralShooter();
+  public static final Lights lights = new Lights();
 
   // Autonomous
   @SuppressWarnings("unused")
