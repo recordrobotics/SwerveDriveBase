@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Seconds;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -10,14 +12,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Lights extends SubsystemBase {
-  public enum Mode {
+  public enum LightMode {
     OFF,
-    INTAKE_READY,
-    INTAKE_DONE,
-    ELEVATOR_UP
+    RUNNING,
+    SUCCESS,
+    FAIL
   }
 
-  private Mode mode;
   private AddressableLED LEDs;
   private AddressableLEDBuffer buffer;
 
@@ -26,26 +27,35 @@ public class Lights extends SubsystemBase {
     buffer = new AddressableLEDBuffer(150); // TODO Constant
     LEDs.setLength(150); // TODO same Constant ^^^^^^^^^^^^^
     LEDs.start();
-    mode = Mode.OFF;
+    setMode(LightMode.OFF);
 
     // Default command makes lights turn off by default
     setDefaultCommand(runPattern(LEDPattern.solid(Color.kBlack)).withName("Off"));
   }
 
-  public void setMode(Mode mode) {
-    this.mode = mode;
-  }
-
-  public void periodic() {
+  /**
+   * NOTE: Only interact with light strip with the command!!!
+   */
+  public void setMode(LightMode mode) {
     switch (mode) {
-      case INTAKE_READY:
+      case OFF:
+        runPattern(LEDPattern.solid(Color.kBlack));
+        break;
+      case RUNNING:
         LEDPattern pattern = LEDPattern.solid(Color.kOrange); // Just orange
         pattern = pattern.breathe(Seconds.of(1)); // Pulsating orange
         pattern = pattern.blend(LEDPattern.solid(Color.kOrange)); // Prevent from going to 0
-      default:
+        break;
+      case SUCCESS:
+        runPattern(LEDPattern.solid(Color.kGreen));
+        break;
+      case FAIL:
+        runPattern(LEDPattern.solid(Color.kRed));
         break;
     }
+  }
 
+  public void periodic() {
     // Periodically send the latest LED color data to the LED strip for it to display
     LEDs.setData(buffer);
   }
