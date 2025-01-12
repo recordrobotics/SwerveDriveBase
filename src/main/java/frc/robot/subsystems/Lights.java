@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Seconds;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -66,6 +64,6 @@ public class Lights extends SubsystemBase {
    * @param pattern the LED pattern to run
    */
   public Command runPattern(LEDPattern pattern) {
-    return run(() -> pattern.apply(buffer));
+    return run(() -> pattern.applyTo(buffer));
   }
 }
