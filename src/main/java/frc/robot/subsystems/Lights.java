@@ -35,22 +35,27 @@ public class Lights extends SubsystemBase {
    * NOTE: Only interact with light strip with the command!!!
    */
   public void setMode(LightMode mode) {
+    LEDPattern pattern;
+
     switch (mode) {
-      case OFF:
-        runPattern(LEDPattern.solid(Color.kBlack));
-        break;
       case RUNNING:
-        LEDPattern pattern = LEDPattern.solid(Color.kOrange); // Just orange
+        pattern = LEDPattern.solid(Color.kOrange); // Just orange
         pattern = pattern.breathe(Seconds.of(1)); // Pulsating orange
         pattern = pattern.blend(LEDPattern.solid(Color.kOrange)); // Prevent from going to 0
         break;
       case SUCCESS:
-        runPattern(LEDPattern.solid(Color.kGreen));
+        pattern = LEDPattern.solid(Color.kGreen);
         break;
       case FAIL:
-        runPattern(LEDPattern.solid(Color.kRed));
+        pattern = LEDPattern.solid(Color.kRed);
+        break;
+      case OFF:
+      default:
+        pattern = LEDPattern.solid(Color.kBlack);
         break;
     }
+
+    runPattern(pattern).schedule();
   }
 
   public void periodic() {
