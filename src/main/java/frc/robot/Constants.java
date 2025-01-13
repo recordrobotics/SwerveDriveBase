@@ -112,6 +112,10 @@ public final class Constants {
     public static double kV = 1.3;
     public static double kA = 0.2;
 
+    public static double DIFFERENCE_P = 0.1;
+    public static double DIFFERENCE_I = 0.0;
+    public static double DIFFERENCE_D = 0.0;
+
     public static double METERS_PER_ROTATION = 1;
 
     public static double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values

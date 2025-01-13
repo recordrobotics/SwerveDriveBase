@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotMap;
@@ -39,6 +39,12 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
           Constants.Elevator.kG,
           Constants.Elevator.kV,
           Constants.Elevator.kA);
+
+  private final PIDController differenceController =
+      new PIDController(
+          Constants.Elevator.DIFFERENCE_P,
+          Constants.Elevator.DIFFERENCE_I,
+          Constants.Elevator.DIFFERENCE_D);
 
   public Elevator() {
     motorLeft = new TalonFX(RobotMap.Elevator.MOTOR_LEFT_ID);
@@ -78,12 +84,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   /** Left height - right height */
   private double getCurrentHeightDifference() {
     // subtract the two to get differnce
-    // TODO why do we need this?
     return getCurrentHeightLeft() - getCurrentHeightRight();
   }
-
-  double lastSpeed = 0;
-  double lastTime = Timer.getFPGATimestamp(); // TODO why is this here
 
   private boolean getBottomEndStopPressed() {
     return bottomEndStop.get();
@@ -93,23 +95,29 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return topEndStop.get();
   }
 
+  private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
+
   @Override
   public void periodic() {
     // Run controller and update motor output
     double pidVal = controller.calculate(getCurrentHeight());
-    double acceleration =
-        (controller.getSetpoint().velocity - lastSpeed) / (Timer.getFPGATimestamp() - lastTime);
-    double fwVal = feedforward.calculate(controller.getSetpoint().velocity, acceleration);
+    double fwVal =
+        feedforward.calculateWithVelocities(
+            currentSetpoint.velocity, controller.getSetpoint().velocity);
+
+    double diffVal =
+        differenceController.calculate(
+            getCurrentHeightDifference(), 0 /* target is no difference between heights */);
 
     if ((!getTopEndStopPressed() || pidVal <= 0) && (!getBottomEndStopPressed() || pidVal >= 0)) {
-      motorLeft.setVoltage(pidVal + fwVal);
-      motorRight.setVoltage(pidVal + fwVal);
+      motorLeft.setVoltage(pidVal + fwVal + diffVal);
+      motorRight.setVoltage(
+          pidVal
+              + fwVal
+              - diffVal /* right side reduces difference by correcting in opposite direction */);
     }
 
-    // TODO: replace this stuff to also include minimizing getCurrentHeightDifference() to 0
-
-    lastSpeed = controller.getSetpoint().velocity;
-    lastTime = Timer.getFPGATimestamp();
+    currentSetpoint = controller.getSetpoint();
   }
 
   public void toggle(double heightMeters) {
