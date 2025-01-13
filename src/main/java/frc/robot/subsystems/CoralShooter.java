@@ -8,11 +8,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
 
 public class CoralShooter extends KillableSubsystem {
+  private final DigitalInput coralDetector =
+      new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
 
   private final SparkMax motor;
   private final PIDController pid =
@@ -56,6 +59,10 @@ public class CoralShooter extends KillableSubsystem {
         toggle(0);
         break;
     }
+  }
+
+  public boolean hasCoral() {
+    return coralDetector.get();
   }
 
   @Override

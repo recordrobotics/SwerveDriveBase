@@ -30,7 +30,8 @@ public class Lights extends SubsystemBase {
     setGlobalMode(LightMode.OFF);
 
     // Default command makes lights turn off by default
-    setDefaultCommand(runPattern(LEDPattern.solid(Color.kBlack), 0, Constants.Lights.length).withName("Off"));
+    setDefaultCommand(
+        runPattern(LEDPattern.solid(Color.kBlack), 0, Constants.Lights.length).withName("Off"));
   }
 
   /** NOTE: Only interact with light strip with the command!!! */
@@ -45,7 +46,8 @@ public class Lights extends SubsystemBase {
     switch (mode) {
       case RUNNING:
         pattern = LEDPattern.solid(Color.kOrange); // Just orange
-        pattern = pattern.breathe(Seconds.of(Constants.Lights.pulsateFrequency)); // Pulsating orange
+        pattern =
+            pattern.breathe(Seconds.of(Constants.Lights.pulsateFrequency)); // Pulsating orange
         pattern = pattern.blend(LEDPattern.solid(Color.kOrange)); // Prevent from going to 0
         break;
       case SUCCESS:
@@ -60,7 +62,8 @@ public class Lights extends SubsystemBase {
         break;
     }
 
-    runPattern(pattern.atBrightness(Percent.of(Constants.Lights.multiplier)), start, end).schedule();
+    runPattern(pattern.atBrightness(Percent.of(Constants.Lights.multiplier)), start, end)
+        .schedule();
   }
 
   public void periodic() {
@@ -74,6 +77,6 @@ public class Lights extends SubsystemBase {
    * @param pattern the LED pattern to run
    */
   public Command runPattern(LEDPattern pattern, int start, int end) {
-    return run(() -> pattern.applyTo(buffer.createView(start, end)));
+    return run(() -> pattern.applyTo(buffer.createView(start, end))); // TODO test view things
   }
 }
