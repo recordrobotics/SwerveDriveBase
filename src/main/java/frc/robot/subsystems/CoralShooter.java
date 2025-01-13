@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
+import frc.robot.utils.KillableSubsystem;
 
 public class CoralShooter extends KillableSubsystem {
   private final DigitalInput coralDetector =

@@ -7,6 +7,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.RobotContainer;
 import frc.robot.shuffleboard.ShuffleboardUI;
+import frc.robot.utils.ShuffleboardPublisher;
 import frc.robot.utils.SimpleMath;
 
 public class Limelight extends SubsystemBase implements ShuffleboardPublisher {

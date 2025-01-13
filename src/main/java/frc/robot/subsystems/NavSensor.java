@@ -5,6 +5,7 @@ import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.shuffleboard.ShuffleboardUI;
+import frc.robot.utils.ShuffleboardPublisher;
 
 public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
 

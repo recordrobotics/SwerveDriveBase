@@ -14,6 +14,7 @@ import frc.robot.control.*;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.utils.AutoPath;
+import frc.robot.utils.ShuffleboardPublisher;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

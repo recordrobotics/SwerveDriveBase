@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.utils.ModuleConstants;
+import frc.robot.utils.ShuffleboardPublisher;
 
 public class SwerveModule implements ShuffleboardPublisher {
 

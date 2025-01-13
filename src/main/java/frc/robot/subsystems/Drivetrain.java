@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.utils.DriveCommandData;
+import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.ShuffleboardPublisher;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends KillableSubsystem implements ShuffleboardPublisher {

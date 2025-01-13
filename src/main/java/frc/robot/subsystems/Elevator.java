@@ -10,6 +10,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
+import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.ShuffleboardPublisher;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
 
