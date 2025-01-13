@@ -41,14 +41,14 @@ public class ModuleConstants {
 
   public double DRIVE_FEEDFORWARD_KS;
   public double DRIVE_FEEDFORWARD_KV;
+  public double DRIVE_FEEDFORWARD_KA;
 
   public double TurnMaxAngularVelocity;
   public double TurnMaxAngularAcceleration;
 
-  public double DriveMaxAngularVelocity;
-  public double DriveMaxAngularAcceleration;
+  public double DriveMaxChangeInVelocity;
+  public double DriveMaxChangeInAcceleration;
 
-  public double RELATIVE_ENCODER_RATIO;
   public double WHEEL_DIAMETER;
 
   // Class to store types of motors
@@ -91,11 +91,10 @@ public class ModuleConstants {
     // Max Angular Acceleration & Velocity
     this.TurnMaxAngularVelocity = Constants.Swerve.TurnMaxAngularVelocity;
     this.TurnMaxAngularAcceleration = Constants.Swerve.TurnMaxAngularAcceleration;
-    this.DriveMaxAngularVelocity = Constants.Swerve.DriveMaxAngularVelocity;
-    this.DriveMaxAngularAcceleration = Constants.Swerve.DriveMaxAngularAcceleration;
+    this.DriveMaxChangeInVelocity = Constants.Swerve.DriveMaxChangeInVelocity;
+    this.DriveMaxChangeInAcceleration = Constants.Swerve.DriveMaxChangeInAcceleration;
 
     // Shared miscellaneous variables
-    this.RELATIVE_ENCODER_RATIO = Constants.Swerve.RELATIVE_ENCODER_RATIO;
     this.WHEEL_DIAMETER = Constants.Swerve.WHEEL_DIAMETER;
 
     // Turn Motor Constants
@@ -122,6 +121,7 @@ public class ModuleConstants {
         this.DRIVE_KD = Constants.Swerve.FALCON_DRIVE_KD;
         this.DRIVE_FEEDFORWARD_KS = Constants.Swerve.FALCON_DRIVE_FEEDFORWARD_KS;
         this.DRIVE_FEEDFORWARD_KV = Constants.Swerve.FALCON_DRIVE_FEEDFORWARD_KV;
+        this.DRIVE_FEEDFORWARD_KA = Constants.Swerve.FALCON_DRIVE_FEEDFORWARD_KA;
         this.DRIVE_GEAR_RATIO = Constants.Swerve.FALCON_DRIVE_GEAR_RATIO;
         break;
       case Kraken:
@@ -130,6 +130,7 @@ public class ModuleConstants {
         this.DRIVE_KD = Constants.Swerve.KRAKEN_DRIVE_KD;
         this.DRIVE_FEEDFORWARD_KS = Constants.Swerve.KRAKEN_DRIVE_FEEDFORWARD_KS;
         this.DRIVE_FEEDFORWARD_KV = Constants.Swerve.KRAKEN_DRIVE_FEEDFORWARD_KV;
+        this.DRIVE_FEEDFORWARD_KA = Constants.Swerve.KRAKEN_DRIVE_FEEDFORWARD_KA;
         this.DRIVE_GEAR_RATIO = Constants.Swerve.KRAKEN_DRIVE_GEAR_RATIO;
         break;
     }

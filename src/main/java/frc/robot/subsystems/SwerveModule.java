@@ -67,10 +67,11 @@ public class SwerveModule implements ShuffleboardPublisher {
             m.DRIVE_KI,
             m.DRIVE_KD,
             new TrapezoidProfile.Constraints(
-                m.DriveMaxAngularVelocity, m.DriveMaxAngularAcceleration));
+                m.DriveMaxChangeInVelocity, m.DriveMaxChangeInAcceleration));
 
     this.driveFeedForward =
-        new SimpleMotorFeedforward(m.DRIVE_FEEDFORWARD_KS, m.DRIVE_FEEDFORWARD_KV);
+        new SimpleMotorFeedforward(
+            m.DRIVE_FEEDFORWARD_KS, m.DRIVE_FEEDFORWARD_KV, m.DRIVE_FEEDFORWARD_KA);
 
     this.turningPIDController =
         new ProfiledPIDController(
@@ -94,7 +95,6 @@ public class SwerveModule implements ShuffleboardPublisher {
    * @return The current offset absolute position of the wheel's turn
    */
   private double getAbsWheelTurnOffset() {
-    // TODO I think get is absolute?
     double absEncoderPosition = (absoluteTurningMotorEncoder.get() - turningEncoderOffset + 1) % 1;
     double absWheelPositionOffset = absEncoderPosition * TURN_GEAR_RATIO;
     return absWheelPositionOffset;
@@ -179,10 +179,7 @@ public class SwerveModule implements ShuffleboardPublisher {
     return new SwerveModulePosition(getDriveWheelDistance(), getTurnWheelRotation2d());
   }
 
-  /** resets drive motor position */
-  public void resetDriveMotorPosition() {
-    m_driveMotor.setPosition(0);
-  }
+  private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
 
   /**
    * Sets the desired state for the module.
@@ -198,7 +195,9 @@ public class SwerveModule implements ShuffleboardPublisher {
     // motor.
     double drivePIDOutput =
         drivePIDController.calculate(getDriveWheelVelocity(), desiredState.speedMetersPerSecond);
-    double driveFeedforwardOutput = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
+    double driveFeedforwardOutput =
+        driveFeedForward.calculateWithVelocities(
+            currentSetpoint.velocity, drivePIDController.getSetpoint().velocity);
     m_driveMotor.setVoltage(
         drivePIDOutput + driveFeedforwardOutput); // Feed forward runs on voltage control
 
@@ -211,6 +210,8 @@ public class SwerveModule implements ShuffleboardPublisher {
         turningPIDController.calculate(
             getTurnWheelRotation2d().getRotations(), desiredState.angle.getRotations());
     m_turningMotor.set(turnOutput); // PID uses -1 to 1 speed range
+
+    currentSetpoint = drivePIDController.getSetpoint();
   }
 
   public void stop() {
@@ -220,16 +221,12 @@ public class SwerveModule implements ShuffleboardPublisher {
 
   @Override
   public void setupShuffleboard() {
-    ShuffleboardUI.Test.addSlider("Drive " + driveMotorChannel, m_driveMotor.get(), -90, 90)
+    ShuffleboardUI.Test.addSlider("Drive " + driveMotorChannel, m_driveMotor.get(), -1, 1)
         .subscribe(m_driveMotor::set);
 
-    ShuffleboardUI.Test.addSlider(
-            "Turn " + turningMotorChannel,
-            m_turningMotor.get(),
-            -90,
-            90) // LEFT set slider to show value between -90 and 90
+    ShuffleboardUI.Test.addSlider("Turn " + turningMotorChannel, m_turningMotor.get(), -1, 1)
         .subscribe(m_driveMotor::set);
-    // TODO same thing here
+
     ShuffleboardUI.Test.addNumber(
         "Encoder " + absoluteTurningMotorEncoder.getSourceChannel(),
         absoluteTurningMotorEncoder::get);

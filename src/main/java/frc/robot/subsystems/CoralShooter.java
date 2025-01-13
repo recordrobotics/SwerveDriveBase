@@ -6,13 +6,20 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
 
 public class CoralShooter extends KillableSubsystem {
 
-  private SparkMax motor;
+  private final SparkMax motor;
+  private final PIDController pid =
+      new PIDController(
+          Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
+  private final SimpleMotorFeedforward feedForward =
+      new SimpleMotorFeedforward(Constants.CoralShooter.kS, Constants.CoralShooter.kV);
 
   public CoralShooter() {
     motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
@@ -26,9 +33,13 @@ public class CoralShooter extends KillableSubsystem {
     OFF;
   }
 
+  public double getWheelVelocity() {
+    return motor.getEncoder().getVelocity() / 60.0; /* RPM -> RPS */
+  }
+
   /** Set the current shooter speed on both wheels to speed */
   public void toggle(double speed) {
-    motor.set(speed);
+    pid.setSetpoint(speed);
   }
 
   /** Set the shooter speed to the preset ShooterStates state */
@@ -48,8 +59,16 @@ public class CoralShooter extends KillableSubsystem {
   }
 
   @Override
+  public void periodic() {
+    double pidOutput = pid.calculate(getWheelVelocity());
+    double feedforwardOutput = feedForward.calculate(pid.getSetpoint());
+    motor.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+  }
+
+  @Override
   public void kill() {
     toggle(CoralShooterStates.OFF);
+    motor.setVoltage(0);
   }
 
   /** frees up all hardware allocations */

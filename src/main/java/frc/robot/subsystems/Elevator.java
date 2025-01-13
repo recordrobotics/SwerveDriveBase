@@ -18,9 +18,6 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private final DigitalInput bottomEndStop;
   private final DigitalInput topEndStop;
 
-  private double leftMotorOffset;
-  private double rightMotorOffset;
-
   // Create a PID controller whose setpoint's change is subject to maximum
   // velocity and acceleration constraints.
   private final TrapezoidProfile.Constraints constraints =
@@ -52,20 +49,12 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     bottomEndStop = new DigitalInput(RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
     topEndStop = new DigitalInput(RobotMap.Elevator.TOP_ENDSTOP_ID);
 
-    leftMotorOffset = 0;
-    rightMotorOffset = 0;
-
     controller.setTolerance(
         Constants.Elevator.AT_GOAL_POSITION_TOLERANCE,
         Constants.Elevator.AT_GOAL_VELOCITY_TOLERANCE);
-  }
 
-  public double getAbsLeftRotation() {
-    return motorLeft.getPosition().getValueAsDouble() - leftMotorOffset;
-  }
-
-  public double getAbsRightRotation() {
-    return motorRight.getPosition().getValueAsDouble() - rightMotorOffset;
+    motorLeft.setPosition(0);
+    motorRight.setPosition(0);
   }
 
   private double getCurrentHeightLeft() {

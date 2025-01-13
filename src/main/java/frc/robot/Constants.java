@@ -101,28 +101,34 @@ public final class Constants {
   }
 
   public final class Elevator {
-    public static double kDt = 0.02;
-    public static double kMaxVelocity = 1.00;
-    public static double kMaxAcceleration = 0.75;
-    public static double kP = 1.3;
-    public static double kI = 0.0;
-    public static double kD = 0.7;
-    public static double kS = 1.1;
-    public static double kG = 1.2;
-    public static double kV = 1.3;
-    public static double kA = 0.2;
+    public static final double kDt = 0.02;
+    public static final double kMaxVelocity = 1.00;
+    public static final double kMaxAcceleration = 0.75;
+    public static final double kP = 1.3;
+    public static final double kI = 0.0;
+    public static final double kD = 0.7;
+    public static final double kS = 1.1;
+    public static final double kG = 1.2;
+    public static final double kV = 1.3;
+    public static final double kA = 0.2;
 
-    public static double DIFFERENCE_P = 0.1;
-    public static double DIFFERENCE_I = 0.0;
-    public static double DIFFERENCE_D = 0.0;
+    public static final double DIFFERENCE_P = 0.1;
+    public static final double DIFFERENCE_I = 0.0;
+    public static final double DIFFERENCE_D = 0.0;
 
-    public static double METERS_PER_ROTATION = 1;
+    public static final double METERS_PER_ROTATION = 1;
 
-    public static double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values
-    public static double AT_GOAL_VELOCITY_TOLERANCE = 0.05; // TODO test different values
+    public static final double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values
+    public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05; // TODO test different values
   }
 
   public final class CoralShooter {
+    public static final double kP = 0.07;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kS = 0.12;
+    public static final double kV = 0.14;
+
     public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
     public static final double INTAKE_SPEED = 0.2; // TODO should this be negative?
 
@@ -213,6 +219,7 @@ public final class Constants {
 
     public static final double FALCON_DRIVE_FEEDFORWARD_KS = 0.274308;
     public static final double FALCON_DRIVE_FEEDFORWARD_KV = 2.49683;
+    public static final double FALCON_DRIVE_FEEDFORWARD_KA = 0.1;
 
     public static final double KRAKEN_TURN_KP = 2.3;
     public static final double KRAKEN_TURN_KI = 0;
@@ -224,19 +231,16 @@ public final class Constants {
 
     public static final double KRAKEN_DRIVE_FEEDFORWARD_KS = 0.1586;
     public static final double KRAKEN_DRIVE_FEEDFORWARD_KV = 2.4408;
-
-    // Same between Falcon and Kraken since they share the same encoders
-    public static final double RELATIVE_ENCODER_RATIO = 2048;
+    public static final double KRAKEN_DRIVE_FEEDFORWARD_KA = 0.1;
 
     // Wheel diameter
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
 
     // Turn & Drive max velocity and acceleration
-    public static final double TurnMaxAngularVelocity = 40; // ROTATIONS / SECOND
-    public static final double TurnMaxAngularAcceleration = 200; // ROTATIONS^2 / SECOND
-    public static final double DriveMaxAngularVelocity = 15; // Drivetrain.kMaxAngularSpeed;
-    public static final double DriveMaxAngularAcceleration =
-        30; // 2 * Math.PI; // radians per second squared
+    public static final double TurnMaxAngularVelocity = 20; // ROTATIONS / SECOND
+    public static final double TurnMaxAngularAcceleration = 100; // ROTATIONS / SECOND / SECOND
+    public static final double DriveMaxChangeInVelocity = 11.6; // Max robot acceleration in m/s^2
+    public static final double DriveMaxChangeInAcceleration = 30; // Max robot jerk in m/s^3
 
     /** The max speed the robot is allowed to travel */
     public static final double robotMaxSpeed = 4.7;
