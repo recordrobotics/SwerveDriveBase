@@ -135,6 +135,14 @@ public final class Constants {
     public static final double SHOOT_TIME = 0.1; // TODO make correct
   }
 
+  public final class Lights {
+    public static final int length = 150;
+
+    public static final double multiplier = 100; // In precent
+
+    public static final int pulsateFrequency = 1; // Seconds
+  }
+
   public final class FieldConstants {
 
     // Field width and length

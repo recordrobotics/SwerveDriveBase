@@ -27,7 +27,7 @@ public class LightSignal extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.lights.setMode(mode);
+    RobotContainer.lights.setGlobalMode(mode);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
