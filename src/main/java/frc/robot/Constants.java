@@ -130,7 +130,7 @@ public final class Constants {
     public static final double kV = 0.14;
 
     public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = 0.2; // TODO should this be negative?
+    public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
   }
