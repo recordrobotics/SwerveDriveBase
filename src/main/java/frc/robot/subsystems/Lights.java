@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotMap;
 
 public class Lights extends SubsystemBase {
   public enum LightMode {
@@ -23,7 +24,7 @@ public class Lights extends SubsystemBase {
   private AddressableLEDBuffer buffer;
 
   public Lights() {
-    LEDs = new AddressableLED(-1); // TODO do port stuff
+    LEDs = new AddressableLED(RobotMap.Lights.LED_ID);
     buffer = new AddressableLEDBuffer(Constants.Lights.length);
     LEDs.setLength(Constants.Lights.length);
     LEDs.start();
