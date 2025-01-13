@@ -218,8 +218,8 @@ public final class Constants {
     public static final double FALCON_DRIVE_KD = 0;
 
     public static final double FALCON_DRIVE_FEEDFORWARD_KS = 0.274308;
-    public static final double FALCON_DRIVE_FEEDFORWARD_KV = 2.49683;
-    public static final double FALCON_DRIVE_FEEDFORWARD_KA = 0.1;
+    public static final double FALCON_DRIVE_FEEDFORWARD_KV = 2.60;
+    public static final double FALCON_DRIVE_FEEDFORWARD_KA = 0.13;
 
     public static final double KRAKEN_TURN_KP = 2.3;
     public static final double KRAKEN_TURN_KI = 0;
