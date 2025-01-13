@@ -1,4 +1,4 @@
-package frc.robot.commands.manual;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -8,8 +8,8 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.CoralShooter.CoralShooterStates;
 
-public class ManualCoralShoot extends SequentialCommandGroup {
-  public ManualCoralShoot(CoralShooterStates targetState) {
+public class CoralShoot extends SequentialCommandGroup {
+  public CoralShoot(CoralShooterStates targetState) {
     addRequirements(RobotContainer.coralShooter);
     boolean previousHasCoral = RobotContainer.coralShooter.hasCoral();
 
