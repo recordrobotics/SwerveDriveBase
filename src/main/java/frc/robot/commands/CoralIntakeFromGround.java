@@ -17,6 +17,8 @@ public class CoralIntakeFromGround extends SequentialCommandGroup {
         new InstantCommand(() -> RobotContainer.elevator.moveTo(ElevatorHeight.INTAKE)),
         new InstantCommand(() -> RobotContainer.coralIntake.toggleServo(IntakeServoStates.DOWN)),
         new WaitUntilCommand(() -> RobotContainer.coralIntake.servoAtGoal()),
+        new InstantCommand(() -> RobotContainer.coralIntake.toggleServo(IntakeServoStates.UP)),
+        new WaitUntilCommand(() -> RobotContainer.coralIntake.servoAtGoal()),
         new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.INTAKE)),
         new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral()),
