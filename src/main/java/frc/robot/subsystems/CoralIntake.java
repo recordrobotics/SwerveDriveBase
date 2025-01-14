@@ -15,34 +15,34 @@ import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.utils.KillableSubsystem;
 
-public class CoralAquisition extends KillableSubsystem {
+public class CoralIntake extends KillableSubsystem {
   private final SparkMax motor;
   private final SparkMax servo;
   private final ProfiledPIDController servoPID =
       new ProfiledPIDController(
-          Constants.CoralAquisition.sP, Constants.CoralAquisition.sI, Constants.CoralAquisition.sD, new Constraints(Constants.CoralAquisition.v, Constants.CoralAquisition.a));
+          Constants.CoralIntake.sP, Constants.CoralIntake.sI, Constants.CoralIntake.sD, new Constraints(Constants.CoralIntake.v, Constants.CoralIntake.a));
   private final PIDController pid =
       new PIDController(
           Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
   private final SimpleMotorFeedforward feedForward =
       new SimpleMotorFeedforward(Constants.CoralShooter.kS, Constants.CoralShooter.kV);
 
-  public CoralAquisition() {
+  public CoralIntake() {
     motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
     servo = new SparkMax(RobotMap.CoralShooter.SERVO_ID, MotorType.kBrushless);
-    toggle(CoralAquisitionStates.OFF); // initialize as off
-    ShuffleboardUI.Test.addSlider("Coral Aquisition", motor.get(), -1, 1).subscribe(motor::set);
-    ShuffleboardUI.Test.addSlider("Coral Aquisition Pos", motor.getEncoder().getPosition(), -1, 1)
+    toggle(CoralIntakeStates.OFF); // initialize as off
+    ShuffleboardUI.Test.addSlider("Coral Intake", motor.get(), -1, 1).subscribe(motor::set);
+    ShuffleboardUI.Test.addSlider("Coral Intake Pos", motor.getEncoder().getPosition(), -1, 1)
         .subscribe(this::toggleServo);
   }
 
-  public enum CoralAquisitionStates {
+  public enum CoralIntakeStates {
     REVERSE,
     ACQUIRE,
     OFF;
   }
 
-  public enum AquisitionServoStates {
+  public enum IntakeServoStates {
     UP,
     DOWN,
     OFF;
@@ -65,13 +65,13 @@ public class CoralAquisition extends KillableSubsystem {
     return servoPID.atGoal();
   }
 
-  public void toggleServo(AquisitionServoStates state) {
+  public void toggleServo(IntakeServoStates state) {
     switch (state) {
       case UP:
-        toggleServo(Constants.CoralAquisition.SERVO_UP);
+        toggleServo(Constants.CoralIntake.SERVO_UP);
         break;
       case DOWN:
-        toggleServo(Constants.CoralAquisition.SERVO_DOWN);
+        toggleServo(Constants.CoralIntake.SERVO_DOWN);
         break;
       case OFF:
       default:
@@ -85,13 +85,13 @@ public class CoralAquisition extends KillableSubsystem {
   }
 
   /** Set the shooter speed to the preset ShooterStates state */
-  public void toggle(CoralAquisitionStates state) {
+  public void toggle(CoralIntakeStates state) {
     switch (state) {
       case REVERSE:
-        toggle(Constants.CoralAquisition.REVERSE_SPEED);
+        toggle(Constants.CoralIntake.REVERSE_SPEED);
         break;
       case ACQUIRE:
-        toggle(Constants.CoralAquisition.ACQUIRE_SPEED);
+        toggle(Constants.CoralIntake.ACQUIRE_SPEED);
         break;
       case OFF: // Off
       default: // should never happen
@@ -111,7 +111,7 @@ public class CoralAquisition extends KillableSubsystem {
 
   @Override
   public void kill() {
-    toggle(CoralAquisitionStates.OFF);
+    toggle(CoralIntakeStates.OFF);
     motor.setVoltage(0);
     servo.setVoltage(0);
   }

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.CoralIntake.CoralIntakeStates;
+import frc.robot.subsystems.CoralShooter.CoralShooterStates;
 
 public class CoralIntakeFromSource extends SequentialCommandGroup {
   public CoralIntakeFromSource() {
@@ -14,7 +15,7 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> RobotContainer.elevator.moveTo(ElevatorHeight.INTAKE)),
         new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
-        new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.ACQUIRE)),
+        new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.INTAKE)),
         new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral()),
         new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.OFF)));
   }
