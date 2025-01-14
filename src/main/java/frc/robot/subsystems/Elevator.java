@@ -73,8 +73,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return topEndStop.get();
   }
 
-  private TrapezoidProfile.State currentSetpoint =
-      new TrapezoidProfile.State(); // TODO why is this inbetween functions
+  private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
 
   @Override
   public void periodic() {
@@ -84,7 +83,6 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
         feedforward.calculateWithVelocities(
             currentSetpoint.velocity, controller.getSetpoint().velocity);
 
-    // TODO dosen't this cause wierd unintentionall bang-bang shenanigans if it hits the top?
     if ((!getTopEndStopPressed() || pidVal <= 0) && (!getBottomEndStopPressed() || pidVal >= 0)) {
       motorLeft.setVoltage(pidVal + fwVal);
       motorRight.setVoltage(pidVal + fwVal);
