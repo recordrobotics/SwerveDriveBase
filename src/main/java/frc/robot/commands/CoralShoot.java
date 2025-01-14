@@ -13,10 +13,10 @@ public class CoralShoot extends SequentialCommandGroup {
     addRequirements(RobotContainer.coralShooter);
 
     addCommands(
-        new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.)),
+        new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OUT)),
         new WaitCommand(Constants.CoralShooter.SHOOT_TIME),
-        // Make sure coral status has changed
-        new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral() != previousHasCoral),
+        // Make sure coral left
+        new WaitUntilCommand(() -> (RobotContainer.coralShooter.hasCoral() != false)),
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OFF)));
   }
 }
