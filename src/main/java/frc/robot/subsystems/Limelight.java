@@ -57,17 +57,13 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       }
     }
 
-    // TODO: what does this do?
-    // double timeSinceAuto = Timer.getFPGATimestamp() - Robot.getAutoStartTime();
-
-    // if (timeSinceAuto > 1
-    //     && measurement
-    //             .pose
-    //             .getTranslation()
-    //             .getDistance(RobotContainer.poseTracker.getEstimatedPosition().getTranslation())
-    //         > 2) {
-    //   confidence = 0;
-    // }
+    if (measurement
+            .pose
+            .getTranslation()
+            .getDistance(RobotContainer.poseTracker.getEstimatedPosition().getTranslation())
+        > 2) {
+      confidence = 0;
+    }
 
     handleMeasurement(measurement, confidence);
   }
@@ -81,7 +77,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     } else {
       hasVision = false;
       ShuffleboardUI.Autonomous.setVisionPose(new Pose2d());
-      // TODO should it set confidence to 99999999999 because there is no vision?
+      currentConfidence = 9999999;
     }
   }
 

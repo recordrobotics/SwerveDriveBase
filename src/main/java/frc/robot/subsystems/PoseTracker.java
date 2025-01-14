@@ -64,9 +64,6 @@ public class PoseTracker extends SubsystemBase {
 
   /** Resets the pose to FrontSpeakerClose (shooter facing towards speaker) */
   public void resetDriverPose() {
-    poseFilter.resetPosition(
-        nav.getAdjustedAngle(),
-        getModulePositions(),
-        Constants.FieldStartingLocation.AutoStart.getPose());
+    setToPose(Constants.FieldStartingLocation.AutoStart.getPose());
   }
 }
