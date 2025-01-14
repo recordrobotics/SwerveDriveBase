@@ -9,15 +9,14 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.CoralShooter.CoralShooterStates;
 
 public class CoralShoot extends SequentialCommandGroup {
-  public CoralShoot(CoralShooterStates targetState) {
+  public CoralShoot() {
     addRequirements(RobotContainer.coralShooter);
-    boolean previousHasCoral = RobotContainer.coralShooter.hasCoral();
 
     addCommands(
-        new InstantCommand(() -> RobotContainer.coralShooter.toggle(targetState)),
+        new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OUT)),
+        // Make sure coral left
+        new WaitUntilCommand(() -> (RobotContainer.coralShooter.hasCoral() != false)),
         new WaitCommand(Constants.CoralShooter.SHOOT_TIME),
-        // Make sure coral status has changed
-        new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral() != previousHasCoral),
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OFF)));
   }
 }

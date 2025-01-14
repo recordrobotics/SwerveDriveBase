@@ -43,11 +43,12 @@ public class ModuleConstants {
   public double DRIVE_FEEDFORWARD_KV;
   public double DRIVE_FEEDFORWARD_KA;
 
+  public double TURN_FEEDFORWARD_KS;
+  public double TURN_FEEDFORWARD_KV;
+  public double TURN_FEEDFORWARD_KA;
+
   public double TurnMaxAngularVelocity;
   public double TurnMaxAngularAcceleration;
-
-  public double DriveMaxChangeInVelocity;
-  public double DriveMaxChangeInAcceleration;
 
   public double WHEEL_DIAMETER;
 
@@ -91,8 +92,6 @@ public class ModuleConstants {
     // Max Angular Acceleration & Velocity
     this.TurnMaxAngularVelocity = Constants.Swerve.TurnMaxAngularVelocity;
     this.TurnMaxAngularAcceleration = Constants.Swerve.TurnMaxAngularAcceleration;
-    this.DriveMaxChangeInVelocity = Constants.Swerve.DriveMaxChangeInVelocity;
-    this.DriveMaxChangeInAcceleration = Constants.Swerve.DriveMaxChangeInAcceleration;
 
     // Shared miscellaneous variables
     this.WHEEL_DIAMETER = Constants.Swerve.WHEEL_DIAMETER;
@@ -103,12 +102,18 @@ public class ModuleConstants {
         this.TURN_KP = Constants.Swerve.FALCON_TURN_KP;
         this.TURN_KI = Constants.Swerve.FALCON_TURN_KI;
         this.TURN_KD = Constants.Swerve.FALCON_TURN_KD;
+        this.TURN_FEEDFORWARD_KS = Constants.Swerve.FALCON_TURN_FEEDFORWARD_KS;
+        this.TURN_FEEDFORWARD_KV = Constants.Swerve.FALCON_TURN_FEEDFORWARD_KV;
+        this.TURN_FEEDFORWARD_KA = Constants.Swerve.FALCON_TURN_FEEDFORWARD_KA;
         this.TURN_GEAR_RATIO = Constants.Swerve.FALCON_TURN_GEAR_RATIO;
         break;
       case Kraken:
         this.TURN_KP = Constants.Swerve.KRAKEN_TURN_KP;
         this.TURN_KI = Constants.Swerve.KRAKEN_TURN_KI;
         this.TURN_KD = Constants.Swerve.KRAKEN_TURN_KD;
+        this.TURN_FEEDFORWARD_KS = Constants.Swerve.KRAKEN_TURN_FEEDFORWARD_KS;
+        this.TURN_FEEDFORWARD_KV = Constants.Swerve.KRAKEN_TURN_FEEDFORWARD_KV;
+        this.TURN_FEEDFORWARD_KA = Constants.Swerve.KRAKEN_TURN_FEEDFORWARD_KA;
         this.TURN_GEAR_RATIO = Constants.Swerve.KRAKEN_TURN_GEAR_RATIO;
         break;
     }

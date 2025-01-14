@@ -7,7 +7,10 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
@@ -16,9 +19,16 @@ import frc.robot.utils.KillableSubsystem;
 public class CoralIntake extends KillableSubsystem {
   private final SparkMax motor;
   private final SparkMax servo;
-  private final PIDController servoPID =
-      new PIDController(
-          Constants.CoralIntake.sP, Constants.CoralIntake.sI, Constants.CoralIntake.sD);
+  private final DigitalInput coralDetector =
+      new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
+  private final ProfiledPIDController servoPID =
+      new ProfiledPIDController(
+          Constants.CoralIntake.sP,
+          Constants.CoralIntake.sI,
+          Constants.CoralIntake.sD,
+          new Constraints(
+              Constants.CoralIntake.MAX_SERVO_VELOCITY,
+              Constants.CoralIntake.MAX_SERVO_ACCELERATION));
   private final PIDController pid =
       new PIDController(
           Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
@@ -36,8 +46,12 @@ public class CoralIntake extends KillableSubsystem {
 
   public enum CoralIntakeStates {
     REVERSE,
-    ACQUIRE,
+    INTAKE,
     OFF;
+  }
+
+  public boolean hasCoral() {
+    return coralDetector.get();
   }
 
   public enum IntakeServoStates {
@@ -56,7 +70,11 @@ public class CoralIntake extends KillableSubsystem {
   }
 
   public void toggleServo(double pos) {
-    servoPID.setSetpoint(pos);
+    servoPID.setGoal(pos);
+  }
+
+  public boolean atGoal() {
+    return servoPID.atGoal();
   }
 
   public void toggleServo(IntakeServoStates state) {
@@ -74,14 +92,18 @@ public class CoralIntake extends KillableSubsystem {
     }
   }
 
+  public boolean servoAtGoal() {
+    return servoPID.atSetpoint();
+  }
+
   /** Set the shooter speed to the preset ShooterStates state */
   public void toggle(CoralIntakeStates state) {
     switch (state) {
       case REVERSE:
         toggle(Constants.CoralIntake.REVERSE_SPEED);
         break;
-      case ACQUIRE:
-        toggle(Constants.CoralIntake.ACQUIRE_SPEED);
+      case INTAKE:
+        toggle(Constants.CoralIntake.INTAKE_SPEED);
         break;
       case OFF: // Off
       default: // should never happen
