@@ -195,15 +195,6 @@ public final class Constants {
 
     public static final double XBOX_SPIN_ROT_THRESHOLD = 0.1;
     public static final double XBOX_SPIN_ROT_SENSITIVITY = 1.0;
-
-    // Tablet drive constants
-    public final class Tablet {
-      // Will fill in later, but for now it's convenient to have it in the TabletDrive
-      public static final double PRESSURE_THRESHOLD = 0.2;
-      public static final double MIN_SPEED = 0.2;
-      public static final double STEEPNESS =
-          2.6; // Linear = 1, <1 = faster scaling, >1 = slower scaling
-    }
   }
 
   public final class Frame {
@@ -212,9 +203,9 @@ public final class Constants {
      * Distance between wheels (width aka between left and right and length aka between front and
      * back). Used for calculating wheel locations on the robot
      */
-    public static final double ROBOT_WHEEL_DISTANCE_WIDTH = 0.46;
+    public static final double ROBOT_WHEEL_DISTANCE_WIDTH = 0.5969;
 
-    public static final double ROBOT_WHEEL_DISTANCE_LENGTH = 0.46;
+    public static final double ROBOT_WHEEL_DISTANCE_LENGTH = 0.5969;
   }
 
   public final class Swerve {
@@ -239,9 +230,9 @@ public final class Constants {
     public static final double KRAKEN_DRIVE_GEAR_RATIO = 6.75; // X1 12 pinion
 
     // PID Values
-    public static final double FALCON_TURN_KP = 3.2;
+    public static final double FALCON_TURN_KP = 0.1;
     public static final double FALCON_TURN_KI = 0;
-    public static final double FALCON_TURN_KD = 0.01;
+    public static final double FALCON_TURN_KD = 0;
 
     public static final double FALCON_DRIVE_KP = 0.2850;
     public static final double FALCON_DRIVE_KI = 0;
@@ -251,7 +242,11 @@ public final class Constants {
     public static final double FALCON_DRIVE_FEEDFORWARD_KV = 2.60;
     public static final double FALCON_DRIVE_FEEDFORWARD_KA = 0.13;
 
-    public static final double KRAKEN_TURN_KP = 2.3;
+    public static final double FALCON_TURN_FEEDFORWARD_KS = 0.1;
+    public static final double FALCON_TURN_FEEDFORWARD_KV = 1.0;
+    public static final double FALCON_TURN_FEEDFORWARD_KA = 0;
+
+    public static final double KRAKEN_TURN_KP = 0.1;
     public static final double KRAKEN_TURN_KI = 0;
     public static final double KRAKEN_TURN_KD = 0;
 
@@ -263,14 +258,16 @@ public final class Constants {
     public static final double KRAKEN_DRIVE_FEEDFORWARD_KV = 2.4408;
     public static final double KRAKEN_DRIVE_FEEDFORWARD_KA = 0.1;
 
+    public static final double KRAKEN_TURN_FEEDFORWARD_KS = 0.1;
+    public static final double KRAKEN_TURN_FEEDFORWARD_KV = 1.0;
+    public static final double KRAKEN_TURN_FEEDFORWARD_KA = 0;
+
     // Wheel diameter
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
 
     // Turn & Drive max velocity and acceleration
     public static final double TurnMaxAngularVelocity = 20; // ROTATIONS / SECOND
     public static final double TurnMaxAngularAcceleration = 100; // ROTATIONS / SECOND / SECOND
-    public static final double DriveMaxChangeInVelocity = 11.6; // Max robot acceleration in m/s^2
-    public static final double DriveMaxChangeInAcceleration = 30; // Max robot jerk in m/s^3
 
     /** The max speed the robot is allowed to travel */
     public static final double robotMaxSpeed = 4.7;
@@ -280,8 +277,8 @@ public final class Constants {
 
     public static final RobotConfig PPDefaultConfig =
         new RobotConfig(
-            74.088,
-            6.883,
+            29.1,
+            0.29,
             new ModuleConfig(0.048, 5.45, 1.2, DCMotor.getFalcon500(1), 100, 500),
             frontLeftLocation,
             frontRightLocation,
