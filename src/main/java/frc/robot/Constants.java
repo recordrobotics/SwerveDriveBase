@@ -135,6 +135,20 @@ public final class Constants {
     public static final double SHOOT_TIME = 0.1; // TODO make correct
   }
 
+  public final class CoralAquisition {
+    // TODO: need correct values
+    public static final double kP = 0.07;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kS = 0.12;
+    public static final double kV = 0.14;
+
+    public static final double REVERSE_SPEED = 0.2; // TODO this is probably too slow
+    public static final double ACQUIRE_SPEED = -0.2; // TODO ^^^^^^^^^^^
+
+    public static final double ACQUIRE_TIME = 0.1; // TODO make correct
+  }
+
   public final class Lights {
     public static final int length = 150;
 

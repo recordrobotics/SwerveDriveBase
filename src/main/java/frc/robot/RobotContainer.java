@@ -30,6 +30,7 @@ public class RobotContainer {
   public static final Limelight limelight = new Limelight();
   public static final Elevator elevator = new Elevator();
   public static final CoralShooter coralShooter = new CoralShooter();
+  public static final CoralAquisition coralAquisition = new CoralAquisition();
   public static final Lights lights = new Lights();
 
   // Autonomous
@@ -100,5 +101,6 @@ public class RobotContainer {
     limelight.close();
     elevator.close();
     coralShooter.close();
+    coralAquisition.close();
   }
 }
