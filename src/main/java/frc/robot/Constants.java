@@ -29,8 +29,8 @@ import frc.robot.utils.ModuleConstants.MotorType;
  */
 public final class Constants {
 
-  public final class NeoSim {
-    public static final int NEO_MOTOR_KV = 473;
+  public final class GroundAlgae {
+    public static final double DEFAULT_SPEED = 0.1; // TODO tune
   }
 
   public enum ElevatorHeight {
