@@ -12,12 +12,14 @@ import frc.robot.subsystems.CoralShooter.CoralShooterStates;
 public class CoralIntakeFromGround extends SequentialCommandGroup {
   public CoralIntakeFromGround() {
     addRequirements(RobotContainer.coralIntake);
+    addRequirements(RobotContainer.coralShooter);
+    addRequirements(RobotContainer.elevator);
 
     addCommands(
         new InstantCommand(() -> RobotContainer.elevator.moveTo(ElevatorHeight.INTAKE)),
         new InstantCommand(() -> RobotContainer.coralIntake.toggleServo(IntakeServoStates.DOWN)),
         new WaitUntilCommand(() -> RobotContainer.coralIntake.servoAtGoal()),
-        new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.ACQUIRE)),
+        new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.INTAKE)),
         new WaitUntilCommand(() -> RobotContainer.coralIntake.hasCoral()),
         new InstantCommand(() -> RobotContainer.coralIntake.toggleServo(IntakeServoStates.UP)),
         new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.OFF)),

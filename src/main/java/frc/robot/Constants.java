@@ -147,9 +147,9 @@ public final class Constants {
     public static final double MAX_SERVO_ACCELERATION = 0.1; // TODO do the thing
 
     public static final double REVERSE_SPEED = 0.2; // TODO this is probably too slow
-    public static final double ACQUIRE_SPEED = -0.2; // TODO ^^^^^^^^^^^
+    public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
 
-    public static final double ACQUIRE_TIME = 0.1; // TODO make correct
+    public static final double INTAKE_TIME = 0.1; // TODO make correct
     public static final double sP = 0;
     public static final double sI = 0;
     public static final double sD = 0;

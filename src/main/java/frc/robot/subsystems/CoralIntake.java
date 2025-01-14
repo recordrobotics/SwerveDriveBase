@@ -43,7 +43,7 @@ public class CoralIntake extends KillableSubsystem {
 
   public enum CoralIntakeStates {
     REVERSE,
-    ACQUIRE,
+    INTAKE,
     OFF;
   }
 
@@ -95,8 +95,8 @@ public class CoralIntake extends KillableSubsystem {
       case REVERSE:
         toggle(Constants.CoralIntake.REVERSE_SPEED);
         break;
-      case ACQUIRE:
-        toggle(Constants.CoralIntake.ACQUIRE_SPEED);
+      case INTAKE:
+        toggle(Constants.CoralIntake.INTAKE_SPEED);
         break;
       case OFF: // Off
       default: // should never happen
