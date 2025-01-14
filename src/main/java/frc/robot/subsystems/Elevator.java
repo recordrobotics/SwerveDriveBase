@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -39,12 +38,6 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
           Constants.Elevator.kV,
           Constants.Elevator.kA);
 
-  private final PIDController differenceController =
-      new PIDController(
-          Constants.Elevator.DIFFERENCE_P,
-          Constants.Elevator.DIFFERENCE_I,
-          Constants.Elevator.DIFFERENCE_D);
-
   public Elevator() {
     motorLeft = new TalonFX(RobotMap.Elevator.MOTOR_LEFT_ID);
     motorRight = new TalonFX(RobotMap.Elevator.MOTOR_RIGHT_ID);
@@ -72,12 +65,6 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return (getCurrentHeightLeft() + getCurrentHeightRight()) / 2;
   }
 
-  /** Left height - right height */
-  private double getCurrentHeightDifference() {
-    // subtract the two to get differnce
-    return getCurrentHeightLeft() - getCurrentHeightRight();
-  }
-
   private boolean getBottomEndStopPressed() {
     return bottomEndStop.get();
   }
@@ -86,7 +73,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return topEndStop.get();
   }
 
-  private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
+  private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State(); // TODO why is this inbetween functions
 
   @Override
   public void periodic() {
@@ -96,16 +83,11 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
         feedforward.calculateWithVelocities(
             currentSetpoint.velocity, controller.getSetpoint().velocity);
 
-    double diffVal =
-        differenceController.calculate(
-            getCurrentHeightDifference(), 0 /* target is no difference between heights */);
 
+    // TODO dosen't this cause wierd unintentionall bang-bang shenanigans if it hits the top?
     if ((!getTopEndStopPressed() || pidVal <= 0) && (!getBottomEndStopPressed() || pidVal >= 0)) {
-      motorLeft.setVoltage(pidVal + fwVal + diffVal);
-      motorRight.setVoltage(
-          pidVal
-              + fwVal
-              - diffVal /* right side reduces difference by correcting in opposite direction */);
+      motorLeft.setVoltage(pidVal + fwVal);
+      motorRight.setVoltage(pidVal + fwVal);
     }
 
     currentSetpoint = controller.getSetpoint();
