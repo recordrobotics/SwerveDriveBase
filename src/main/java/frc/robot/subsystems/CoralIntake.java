@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
@@ -18,6 +19,8 @@ import frc.robot.utils.KillableSubsystem;
 public class CoralIntake extends KillableSubsystem {
   private final SparkMax motor;
   private final SparkMax servo;
+  private final DigitalInput coralDetector =
+      new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
   private final ProfiledPIDController servoPID =
       new ProfiledPIDController(
           Constants.CoralIntake.sP,
@@ -45,6 +48,10 @@ public class CoralIntake extends KillableSubsystem {
     REVERSE,
     INTAKE,
     OFF;
+  }
+
+  public boolean hasCoral() {
+    return coralDetector.get();
   }
 
   public enum IntakeServoStates {
