@@ -7,7 +7,9 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
@@ -16,9 +18,9 @@ import frc.robot.utils.KillableSubsystem;
 public class CoralAquisition extends KillableSubsystem {
   private final SparkMax motor;
   private final SparkMax servo;
-  private final PIDController servoPID =
-      new PIDController(
-          Constants.CoralAquisition.sP, Constants.CoralAquisition.sI, Constants.CoralAquisition.sD);
+  private final ProfiledPIDController servoPID =
+      new ProfiledPIDController(
+          Constants.CoralAquisition.sP, Constants.CoralAquisition.sI, Constants.CoralAquisition.sD, new Constraints(Constants.CoralAquisition.v, Constants.CoralAquisition.a));
   private final PIDController pid =
       new PIDController(
           Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
@@ -56,7 +58,11 @@ public class CoralAquisition extends KillableSubsystem {
   }
 
   public void toggleServo(double pos) {
-    servoPID.setSetpoint(pos);
+    servoPID.setGoal(pos);
+  }
+
+  public boolean atGoal() {
+    return servoPID.atGoal();
   }
 
   public void toggleServo(AquisitionServoStates state) {
@@ -72,6 +78,10 @@ public class CoralAquisition extends KillableSubsystem {
         servo.setVoltage(0);
         break;
     }
+  }
+
+  public boolean servoAtGoal() {
+    return servoPID.atSetpoint();
   }
 
   /** Set the shooter speed to the preset ShooterStates state */
