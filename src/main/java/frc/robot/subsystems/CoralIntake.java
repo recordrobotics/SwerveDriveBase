@@ -20,7 +20,12 @@ public class CoralIntake extends KillableSubsystem {
   private final SparkMax servo;
   private final ProfiledPIDController servoPID =
       new ProfiledPIDController(
-          Constants.CoralIntake.sP, Constants.CoralIntake.sI, Constants.CoralIntake.sD, new Constraints(Constants.CoralIntake.v, Constants.CoralIntake.a));
+          Constants.CoralIntake.sP,
+          Constants.CoralIntake.sI,
+          Constants.CoralIntake.sD,
+          new Constraints(
+              Constants.CoralIntake.MAX_SERVO_VELOCITY,
+              Constants.CoralIntake.MAX_SERVO_ACCELERATION));
   private final PIDController pid =
       new PIDController(
           Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
