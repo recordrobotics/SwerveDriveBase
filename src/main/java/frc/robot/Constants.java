@@ -135,7 +135,7 @@ public final class Constants {
     public static final double SHOOT_TIME = 0.1; // TODO make correct
   }
 
-  public final class CoralAquisition {
+  public final class CoralIntake {
     // TODO: need correct values
     public static final double kP = 0.07;
     public static final double kI = 0.0;
