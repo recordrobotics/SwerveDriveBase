@@ -20,5 +20,6 @@ public final class RobotMap {
 
   public static final class GroundAlgae {
     public static final int MOTOR_ID = -1; // TODO get actual port number
+    public static final int LIMIT_SWITCH_ID = -1; // TODO get actual DIO port number
   }
 }
