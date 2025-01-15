@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -9,12 +10,8 @@ import frc.robot.utils.ShuffleboardPublisher;
 
 public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublisher {
   private Spark motor = new Spark(RobotMap.GroundAlgae.MOTOR_ID);
+  private DigitalInput algaeDetector = new DigitalInput(RobotMap.GroundAlgae.LIMIT_SWITCH_ID);
   private static final double defaultSpeed = Constants.GroundAlgae.DEFAULT_SPEED;
-  private GroundAlgaeStates groundAlgaeState = GroundAlgaeStates.OFF;
-
-  public GroundAlgaeStates getGroundAlgaeState() {
-    return groundAlgaeState;
-  }
 
   public GroundAlgae() {
     toggle(GroundAlgaeStates.OFF);
@@ -27,7 +24,6 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
   }
 
   public void toggle(GroundAlgaeStates state, double speed) {
-    groundAlgaeState = state;
     switch (state) {
       case IN: // take in note
         motor.set(speed);
@@ -44,6 +40,10 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
 
   public void toggle(GroundAlgaeStates state) {
     toggle(state, defaultSpeed);
+  }
+
+  public boolean hasAlgae() {
+    return algaeDetector.get();
   }
 
   @Override
