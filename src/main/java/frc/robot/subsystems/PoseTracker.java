@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.shuffleboard.ShuffleboardUI;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseTracker extends SubsystemBase {
 
@@ -48,6 +49,7 @@ public class PoseTracker extends SubsystemBase {
     return RobotContainer.drivetrain.getModulePositions();
   }
 
+  @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getEstimatedPosition() {
     return poseFilter.getEstimatedPosition();
   }
