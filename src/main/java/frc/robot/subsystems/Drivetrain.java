@@ -4,12 +4,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.utils.DriveCommandData;
+import frc.robot.utils.DriveCommandDataAutoLogged;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
+import org.littletonrobotics.junction.Logger;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends KillableSubsystem implements ShuffleboardPublisher {
@@ -18,6 +19,8 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
   private final SwerveModule m_frontRight = new SwerveModule(Constants.Swerve.frontRightConstants);
   private final SwerveModule m_backLeft = new SwerveModule(Constants.Swerve.backLeftConstants);
   private final SwerveModule m_backRight = new SwerveModule(Constants.Swerve.backRightConstants);
+
+  private DriveCommandDataAutoLogged driveCommandDataAutoLogged = new DriveCommandDataAutoLogged();
 
   // Creates swerve kinematics
   private final SwerveDriveKinematics m_kinematics =
@@ -49,7 +52,11 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
     // Calculates swerveModuleStates given optimal ChassisSpeeds given by control
     // scheme
 
-    SmartDashboard.putNumber("rotation", rot);
+    driveCommandDataAutoLogged.fieldRelative = fieldRelative;
+    driveCommandDataAutoLogged.xSpeed = xSpeed;
+    driveCommandDataAutoLogged.ySpeed = ySpeed;
+    driveCommandDataAutoLogged.rot = rot;
+    Logger.processInputs("Drive/Input", driveCommandDataAutoLogged);
 
     SwerveModuleState[] swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
@@ -69,6 +76,8 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
+
+    Logger.recordOutput("SwerveStates/Setpoints", swerveModuleStates);
   }
 
   /**

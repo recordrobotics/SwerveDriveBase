@@ -1,6 +1,9 @@
 package frc.robot.utils;
 
+import org.littletonrobotics.junction.AutoLog;
+
 /** An object that contains all relevant information for the drivetrain to drive */
+@AutoLog
 public class DriveCommandData {
 
   public double xSpeed;
@@ -14,5 +17,10 @@ public class DriveCommandData {
     this.ySpeed = ySpeed;
     this.rot = rot;
     this.fieldRelative = fieldRelative;
+  }
+
+  // Empty constructor */
+  public DriveCommandData() {
+    this(0, 0, 0, false);
   }
 }

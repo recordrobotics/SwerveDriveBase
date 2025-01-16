@@ -6,19 +6,19 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldStartingLocation;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class AutonomousLayout extends AbstractLayout {
 
   private static final Field2d field = new Field2d();
-  private static SendableChooser<Command> autoChooser;
-  private static SendableChooser<FieldStartingLocation> fieldStartingLocationChooser =
-      new SendableChooser<>();
+  private static LoggedDashboardChooser<Command> autoChooser;
+  private static LoggedDashboardChooser<FieldStartingLocation> fieldStartingLocationChooser =
+      new LoggedDashboardChooser<>("Starting Location");
 
   private static final Map<Integer, TuningData> velocityGraphData = new HashMap<>();
 
@@ -27,7 +27,7 @@ public class AutonomousLayout extends AbstractLayout {
 
     EnumSet.allOf(FieldStartingLocation.class)
         .forEach(v -> fieldStartingLocationChooser.addOption(v.name(), v));
-    fieldStartingLocationChooser.setDefaultOption(
+    fieldStartingLocationChooser.addDefaultOption(
         FieldStartingLocation.AutoStart.name(), FieldStartingLocation.AutoStart);
 
     // Creates the UI for starting location
@@ -44,7 +44,7 @@ public class AutonomousLayout extends AbstractLayout {
   }
 
   public void setupAutoChooser() {
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = new LoggedDashboardChooser<>("Auto Code", AutoBuilder.buildAutoChooser());
 
     // Creates the UI for auto routines
     getTab()
@@ -73,11 +73,11 @@ public class AutonomousLayout extends AbstractLayout {
   }
 
   public Command getAutoChooser() {
-    return autoChooser.getSelected();
+    return autoChooser.get();
   }
 
   public FieldStartingLocation getStartingLocation() {
-    if (fieldStartingLocationChooser.getSelected() == null) return FieldStartingLocation.AutoStart;
-    return fieldStartingLocationChooser.getSelected();
+    if (fieldStartingLocationChooser.get() == null) return FieldStartingLocation.AutoStart;
+    return fieldStartingLocationChooser.get();
   }
 }
