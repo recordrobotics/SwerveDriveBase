@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -45,6 +47,16 @@ public class Robot extends LoggedRobot {
     }
 
     Logger.start();
+
+    if (Constants.RobotState.MOTOR_LOGGING_ENABLED) {
+      for (int i = 0; i < 10; i++) {
+        DriverStation.reportWarning(
+            "[WARNING] Motor logging enabled, DON'T FORGET to delete old logs to make space on disk.\n"
+                + "[WARNING] During competition, set MOTOR_LOGGING_ENABLED to false since logging is enabled automatically.",
+            false);
+      }
+      SignalLogger.start();
+    }
   }
 
   /**

@@ -329,6 +329,8 @@ public final class Constants {
       return RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
     }
 
+    public static final boolean MOTOR_LOGGING_ENABLED = false;
+
     public static enum Mode {
       REAL,
       REPLAY
