@@ -3,12 +3,12 @@ package frc.robot.shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.control.AbstractControl;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class OverviewLayout extends AbstractLayout {
 
@@ -24,10 +24,10 @@ public class OverviewLayout extends AbstractLayout {
     }
   }
 
-  private static SendableChooser<DriverOrientation> driverOrientation =
-      new SendableChooser<DriverOrientation>();
-  private static SendableChooser<AbstractControl> driveMode =
-      new SendableChooser<AbstractControl>();
+  private static LoggedDashboardChooser<DriverOrientation> driverOrientation =
+      new LoggedDashboardChooser<DriverOrientation>("Driver Orientation");
+  private static LoggedDashboardChooser<AbstractControl> driveMode =
+      new LoggedDashboardChooser<AbstractControl>("Drive Mode");
   private static AbstractControl _defaultControl;
 
   // private Supplier<Boolean> poseCertainValue = () -> false;
@@ -104,11 +104,11 @@ public class OverviewLayout extends AbstractLayout {
     for (AbstractControl abstractControl : controls) {
       driveMode.addOption(abstractControl.getClass().getSimpleName(), abstractControl);
     }
-    driveMode.setDefaultOption(defaultControl.getClass().getSimpleName(), defaultControl);
+    driveMode.addDefaultOption(defaultControl.getClass().getSimpleName(), defaultControl);
 
     EnumSet.allOf(DriverOrientation.class)
         .forEach(v -> driverOrientation.addOption(v.display_name, v));
-    driverOrientation.setDefaultOption(
+    driverOrientation.addDefaultOption(
         DriverOrientation.XAxisTowardsTrigger.display_name, DriverOrientation.XAxisTowardsTrigger);
 
     // Creates the UI for driverOrientation
@@ -164,11 +164,11 @@ public class OverviewLayout extends AbstractLayout {
   }
 
   public DriverOrientation getDriverOrientation() {
-    return driverOrientation.getSelected();
+    return driverOrientation.get();
   }
 
   public AbstractControl getControl() {
-    if (driveMode.getSelected() == null) return _defaultControl;
-    return driveMode.getSelected();
+    if (driveMode.get() == null) return _defaultControl;
+    return driveMode.get();
   }
 }
