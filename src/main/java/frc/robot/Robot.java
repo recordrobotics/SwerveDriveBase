@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,12 +29,16 @@ public class Robot extends LoggedRobot {
 
   private static double autoStartTimestamp;
 
+  private static final String defaultPathRio = "/home/lvuser/logs";
+  private static final String defaultPathSim = "logs";
+
   public Robot() {
     Logger.recordMetadata("ProjectName", "2025_Control");
 
     if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REPLAY) {
       setUseTiming(true); // Run at standard robot speed (20 ms)
-      Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+      Logger.addDataReceiver(
+          new WPILOGWriter(RobotBase.isSimulation() ? defaultPathSim : defaultPathRio));
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     } else {
       setUseTiming(false); // Run as fast as possible
