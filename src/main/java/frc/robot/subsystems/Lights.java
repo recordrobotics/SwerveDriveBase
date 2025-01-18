@@ -19,7 +19,8 @@ public class Lights extends SubsystemBase {
     RUNNING,
     SUCCESS,
     FAIL,
-    RAINBOW
+    RAINBOW,
+    CHASE
   }
 
   private AddressableLED LEDs;
@@ -67,6 +68,9 @@ public class Lights extends SubsystemBase {
       case RAINBOW:
         pattern = LEDPattern.rainbow(255, 255).scrollAtRelativeSpeed(Percent.per(Second).of((25)));
         break;
+      case CHASE:
+        pattern = LEDPattern.rainbow(255, 255).mask(LEDPattern.progressMaskLayer(()->0.2).scrollAtRelativeSpeed(Percent.per(Second).of((105)))).scrollAtRelativeSpeed(Percent.per(Second).of((-30)));
+        break;
       case OFF:
       default:
         pattern = LEDPattern.solid(Color.kBlack);
@@ -90,6 +94,6 @@ public class Lights extends SubsystemBase {
    * @param end the end index of the LED strip to run the pattern on (inclusive)
    */
   public Command runPattern(LEDPattern pattern, int start, int end) {
-    return run(() -> pattern.applyTo(buffer.createView(start, end))); // TODO test view things
+    return run(() -> pattern.applyTo(buffer.createView(start, end))).ignoringDisable(true); // TODO test view things
   }
 }

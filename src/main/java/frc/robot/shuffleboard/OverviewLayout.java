@@ -113,14 +113,14 @@ public class OverviewLayout extends AbstractLayout {
 
     // Creates the UI for driverOrientation
     getTab()
-        .add("Driver Orientation", driverOrientation)
+        .add("Driver Orientation", driverOrientation.getSendableChooser())
         .withWidget(BuiltInWidgets.kSplitButtonChooser)
         .withPosition(0, 0)
         .withSize(3, 1);
 
     // Creates the UI for drive mode
     getTab()
-        .add("Drive Mode", driveMode)
+        .add("Drive Mode", driveMode.getSendableChooser())
         .withWidget(BuiltInWidgets.kSplitButtonChooser)
         .withPosition(0, 1)
         .withSize(3, 1);

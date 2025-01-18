@@ -98,6 +98,8 @@ public class RobotContainer {
         .onTrue(new CoralIntakeFromSource());
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getAcquireAlgae());
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getAcquireAlgae())
+        .onTrue(new LightSignal(LightMode.CHASE));
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getReefAlgae())
         .onTrue(new LightSignal(LightMode.RAINBOW));
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getReefAlgae());
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getScoreAlgae());

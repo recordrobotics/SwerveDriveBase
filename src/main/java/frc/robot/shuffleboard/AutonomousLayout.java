@@ -32,7 +32,7 @@ public class AutonomousLayout extends AbstractLayout {
 
     // Creates the UI for starting location
     getTab()
-        .add("Starting Location", fieldStartingLocationChooser)
+        .add("Starting Location", fieldStartingLocationChooser.getSendableChooser())
         .withWidget(BuiltInWidgets.kSplitButtonChooser)
         .withSize(6, 1)
         .withPosition(0, 3);
@@ -48,7 +48,7 @@ public class AutonomousLayout extends AbstractLayout {
 
     // Creates the UI for auto routines
     getTab()
-        .add("Auto Code", autoChooser)
+        .add("Auto Code", autoChooser.getSendableChooser())
         .withWidget(BuiltInWidgets.kComboBoxChooser)
         .withSize(3, 1)
         .withPosition(6, 1);
