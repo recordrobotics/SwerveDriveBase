@@ -12,11 +12,13 @@ import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ElevatorMove;
 // Local imports
 import frc.robot.commands.KillSpecified;
+import frc.robot.commands.LightSignal;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.manual.*;
 import frc.robot.control.*;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Lights.LightMode;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.ShuffleboardPublisher;
 
@@ -95,6 +97,8 @@ public class RobotContainer {
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralSourceAcquire())
         .onTrue(new CoralIntakeFromSource());
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getAcquireAlgae());
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getAcquireAlgae())
+        .onTrue(new LightSignal(LightMode.RAINBOW));
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getReefAlgae());
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getScoreAlgae());
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getClimb());
