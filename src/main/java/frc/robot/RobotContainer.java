@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ElevatorHeight;
+import frc.robot.commands.CoralIntakeFromGround;
+import frc.robot.commands.CoralIntakeFromSource;
+import frc.robot.commands.ElevatorMove;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.auto.*;
@@ -49,8 +53,7 @@ public class RobotContainer {
     ShuffleboardUI.Autonomous.setupAutoChooser();
 
     // Sets up Control scheme chooser
-    ShuffleboardUI.Overview.addControls(
-        new JoystickXbox(2, 0), new DoubleXbox(0, 1), new DoubleXboxSpin(0, 1));
+    ShuffleboardUI.Overview.addControls(new JoystickXbox(2, 0));
 
     // Bindings and Teleop
     configureButtonBindings();
@@ -78,6 +81,23 @@ public class RobotContainer {
     // Reset pose trigger
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getPoseReset())
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
+
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL1())
+        .onTrue(new ElevatorMove(ElevatorHeight.L1));
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL2())
+        .onTrue(new ElevatorMove(ElevatorHeight.L2));
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL3())
+        .onTrue(new ElevatorMove(ElevatorHeight.L3));
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL4())
+        .onTrue(new ElevatorMove(ElevatorHeight.L4));
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralGroundAcquire())
+        .onTrue(new CoralIntakeFromGround());
+    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralSourceAcquire())
+        .onTrue(new CoralIntakeFromSource());
+    // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getAcquireAlgae());
+    // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getReefAlgae());
+    // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getScoreAlgae());
+    // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getClimb());
   }
 
   /**

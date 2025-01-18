@@ -8,14 +8,16 @@ import frc.robot.Constants;
 import frc.robot.utils.DriveCommandData;
 import frc.robot.utils.SimpleMath;
 
-public class JoystickXbox extends AbstractControl {
+public class JoystickXboxKeypad extends AbstractControl {
 
   private Joystick joystick;
   private XboxController xbox_controller;
+  private MacroPad keypad;
 
-  public JoystickXbox(int joystickPort, int xboxPort) {
+  public JoystickXboxKeypad(int joystickPort, int xboxPort, int keypadPort) {
     joystick = new Joystick(joystickPort);
     xbox_controller = new XboxController(xboxPort);
+    keypad = new MacroPad(keypadPort);
   }
 
   @Override
@@ -90,22 +92,22 @@ public class JoystickXbox extends AbstractControl {
 
   @Override
   public Boolean getCoralShootL1() {
-    return xbox_controller.getAButton();
+    return keypad.getND();
   }
 
   @Override
   public Boolean getCoralShootL2() {
-    return xbox_controller.getXButton();
+    return keypad.getNC();
   }
 
   @Override
   public Boolean getCoralShootL3() {
-    return xbox_controller.getBButton();
+    return keypad.getNB();
   }
 
   @Override
   public Boolean getCoralShootL4() {
-    return xbox_controller.getYButton();
+    return keypad.getNA();
   }
 
   @Override

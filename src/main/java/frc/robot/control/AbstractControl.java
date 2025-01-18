@@ -16,7 +16,31 @@ public abstract class AbstractControl {
 
   public abstract Boolean getKill();
 
-  public abstract Boolean getKillCompressor();
+  // Shoot coral
+  public abstract Boolean getCoralShootL1();
+
+  public abstract Boolean getCoralShootL2();
+
+  public abstract Boolean getCoralShootL3();
+
+  public abstract Boolean getCoralShootL4();
+
+  // Acquire coral
+  public abstract Boolean getCoralGroundAcquire();
+
+  public abstract Boolean getCoralSourceAcquire();
+
+  // Acquire algae
+  public abstract Boolean getAcquireAlgae();
+
+  // Reef algae
+  public abstract Boolean getReefAlgae();
+
+  // Score algae
+  public abstract Boolean getScoreAlgae();
+
+  // Climb
+  public abstract Boolean getClimb();
 
   public abstract void vibrate(double value);
 
