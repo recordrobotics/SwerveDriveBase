@@ -17,8 +17,9 @@ import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.ShuffleboardPublisher;
 
-public class CoralIntake extends KillableSubsystem {
+public class CoralIntake extends KillableSubsystem implements ShuffleboardPublisher {
   private final SparkMax motor;
   private final SparkMax servo;
 
@@ -50,9 +51,6 @@ public class CoralIntake extends KillableSubsystem {
     motor = new SparkMax(RobotMap.CoralIntake.MOTOR_ID, MotorType.kBrushless);
     servo = new SparkMax(RobotMap.CoralIntake.SERVO_ID, MotorType.kBrushless);
     toggle(CoralIntakeStates.OFF); // initialize as off
-    ShuffleboardUI.Test.addSlider("Coral Intake", motor.get(), -1, 1).subscribe(motor::set);
-    ShuffleboardUI.Test.addSlider("Coral Intake Pos", servo.getEncoder().getPosition(), -1, 1)
-        .subscribe(this::toggleServo);
   }
 
   public enum CoralIntakeStates {
@@ -140,6 +138,13 @@ public class CoralIntake extends KillableSubsystem {
 
     lastSpeed = pid.getSetpoint();
     currentSetpoint = servoPID.getSetpoint();
+  }
+
+  @Override
+  public void setupShuffleboard() {
+    ShuffleboardUI.Test.addSlider("Coral Intake", motor.get(), -1, 1).subscribe(motor::set);
+    ShuffleboardUI.Test.addSlider("Coral Intake Pos", servo.getEncoder().getPosition(), -1, 1)
+        .subscribe(this::toggleServo);
   }
 
   @Override
