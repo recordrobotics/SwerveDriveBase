@@ -13,8 +13,9 @@ import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.ShuffleboardPublisher;
 
-public class CoralShooter extends KillableSubsystem {
+public class CoralShooter extends KillableSubsystem implements ShuffleboardPublisher {
   private final DigitalInput coralDetector =
       new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
 
@@ -28,7 +29,6 @@ public class CoralShooter extends KillableSubsystem {
   public CoralShooter() {
     motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
     toggle(CoralShooterStates.OFF); // initialize as off
-    ShuffleboardUI.Test.addSlider("Coral Shooter", motor.get(), -1, 1).subscribe(motor::set);
   }
 
   public enum CoralShooterStates {
@@ -71,6 +71,11 @@ public class CoralShooter extends KillableSubsystem {
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculate(pid.getSetpoint());
     motor.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+  }
+
+  @Override
+  public void setupShuffleboard() {
+    ShuffleboardUI.Test.addSlider("Coral Shooter", motor.get(), -1, 1).subscribe(motor::set);
   }
 
   @Override
