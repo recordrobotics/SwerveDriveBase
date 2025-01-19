@@ -58,15 +58,18 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
     driveCommandDataAutoLogged.rot = rot;
     Logger.processInputs("Drive/Input", driveCommandDataAutoLogged);
 
-    SwerveModuleState[] swerveModuleStates =
-        m_kinematics.toSwerveModuleStates(
-            fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed,
-                    ySpeed,
-                    rot,
-                    RobotContainer.poseTracker.getEstimatedPosition().getRotation())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    ChassisSpeeds chassisSpeeds =
+        fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed,
+                ySpeed,
+                rot,
+                RobotContainer.poseTracker.getEstimatedPosition().getRotation())
+            : new ChassisSpeeds(xSpeed, ySpeed, rot);
+
+    chassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+
+    SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(chassisSpeeds);
 
     // Desaturates wheel speeds
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.robotMaxSpeed);
