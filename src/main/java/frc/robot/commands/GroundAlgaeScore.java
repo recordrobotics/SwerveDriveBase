@@ -1,4 +1,3 @@
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -14,7 +13,6 @@ public class GroundAlgaeScore extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(() -> RobotContainer.groundAlgae.toggle(GroundAlgaeStates.OUT)),
         new WaitUntilCommand(() -> RobotContainer.groundAlgae.hasAlgae()),
-        new InstantCommand(() -> RobotContainer.groundAlgae.toggle(GroundAlgaeStates.OFF))
-    );
+        new InstantCommand(() -> RobotContainer.groundAlgae.toggle(GroundAlgaeStates.OFF)));
   }
 }

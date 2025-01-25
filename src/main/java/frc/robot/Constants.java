@@ -8,6 +8,7 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,6 +30,21 @@ import frc.robot.utils.ModuleConstants.MotorType;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public final class HybridConstants {
+    // Create the constraints to use while pathfinding. The constraints defined in the path will
+    // only
+    // be used for the path.
+    // docs are here:
+    // http://gabybot.com/RobotCoreDoc/classcom_1_1pathplanner_1_1lib_1_1path_1_1_path_constraints.html
+    public static final PathConstraints constraints =
+        new PathConstraints(
+            0.5, // Max velocity meters per second
+            4.0, // Max acceleration meters per second per second
+            Units.degreesToRadians(540), // Max angular velocity radians per second
+            Units.degreesToRadians(720)); // Max angular acceleration radians per second per second
+
+    public static final double processorTriggerDistance = 3.0;
+  }
 
   public final class GroundAlgae {
     public static final double DEFAULT_SPEED = 0.1; // TODO tune
@@ -54,6 +70,22 @@ public final class Constants {
   }
 
   public enum FieldPosition {
+    LeftSourceOuterSpot(
+        Constants.FieldConstants.TEAM_RED_LEFT_SOURCE_OUTER_SPOT,
+        Constants.FieldConstants.TEAM_BLUE_LEFT_SOURCE_OUTER_SPOT),
+    LeftSourceInnerSpot(
+        Constants.FieldConstants.TEAM_RED_LEFT_SOURCE_INNER_SPOT,
+        Constants.FieldConstants.TEAM_BLUE_LEFT_SOURCE_INNER_SPOT),
+
+    RightSourceOuterSpot(
+        Constants.FieldConstants.TEAM_RED_RIGHT_SOURCE_OUTER_SPOT,
+        Constants.FieldConstants.TEAM_BLUE_RIGHT_SOURCE_OUTER_SPOT),
+    RightSourceInnerSpot(
+        Constants.FieldConstants.TEAM_RED_RIGHT_SOURCE_INNER_SPOT,
+        Constants.FieldConstants.TEAM_BLUE_RIGHT_SOURCE_INNER_SPOT),
+
+    Processor(
+        Constants.FieldConstants.TEAM_RED_PROCESSOR, Constants.FieldConstants.TEAM_BLUE_PROCESSOR),
     ;
 
     private Translation2d red;
@@ -173,6 +205,27 @@ public final class Constants {
   }
 
   public final class FieldConstants {
+
+    public static final Translation2d TEAM_RED_LEFT_SOURCE_OUTER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_BLUE_LEFT_SOURCE_OUTER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_RED_LEFT_SOURCE_INNER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_BLUE_LEFT_SOURCE_INNER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_RED_RIGHT_SOURCE_OUTER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_BLUE_RIGHT_SOURCE_OUTER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_RED_RIGHT_SOURCE_INNER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_BLUE_RIGHT_SOURCE_INNER_SPOT =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_RED_PROCESSOR =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_BLUE_PROCESSOR =
+        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
 
     // Field width and length
     public static final double FIELD_X_DIMENSION = 17.548; // Length
