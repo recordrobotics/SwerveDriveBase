@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.FieldPosition;
 import frc.robot.Constants.ReefCoralPosition;
-import frc.robot.commands.GroundAlgaeScore;
+import frc.robot.commands.ElevatorMoveThenCoralShoot;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
 @TriggerDistance(
@@ -20,7 +21,7 @@ public class ReefScoreCoral extends SequentialCommandGroup {
 
   private Alert pathNotFoundAlert = new Alert("", AlertType.kError);
 
-  public ReefScoreCoral(ReefCoralPosition reefCoralPosition) {
+  public ReefScoreCoral(ReefCoralPosition reefCoralPosition, ElevatorHeight reefCoralHeight) {
     try {
       path = PathPlannerPath.fromPathFile(reefCoralPosition.getApproachPathName());
     } catch (Exception e) {
@@ -30,6 +31,6 @@ public class ReefScoreCoral extends SequentialCommandGroup {
 
     addCommands(
         AutoBuilder.pathfindThenFollowPath(path, Constants.HybridConstants.constraints),
-        new GroundAlgaeScore());
+        new ElevatorMoveThenCoralShoot(reefCoralHeight));
   }
 }
