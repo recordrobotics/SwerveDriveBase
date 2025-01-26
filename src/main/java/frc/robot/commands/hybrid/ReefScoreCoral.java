@@ -16,15 +16,15 @@ import frc.robot.utils.TriggerProcessor.TriggerDistance;
     position = FieldPosition.ReefCenter)
 public class ReefScoreCoral extends SequentialCommandGroup {
 
-  // Load the path we want to pathfind to and follow
   private PathPlannerPath path;
 
-  private Alert pathNotFoundAlert = new Alert("Path Not Found: ProcessorScore", AlertType.kError);
+  private Alert pathNotFoundAlert = new Alert("", AlertType.kError);
 
   public ReefScoreCoral(ReefCoralPosition reefCoralPosition) {
     try {
-      path = PathPlannerPath.fromPathFile("ProcessorScore");
+      path = PathPlannerPath.fromPathFile(reefCoralPosition.getApproachPathName());
     } catch (Exception e) {
+      pathNotFoundAlert.setText("Path Not Found: " + reefCoralPosition.getApproachPathName());
       pathNotFoundAlert.set(true);
     }
 
