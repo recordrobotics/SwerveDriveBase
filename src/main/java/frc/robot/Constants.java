@@ -51,6 +51,19 @@ public final class Constants {
     public static final double DEFAULT_SPEED = 0.1; // TODO tune
   }
 
+  public final class ElevatorAlgae {
+    public static final double kP = 0.07; // TODO idk where these numbers came from
+    public static final double kI = 0.0;  // TODO idk where these numbers came from
+    public static final double kD = 0.0;  // TODO idk where these numbers came from
+    public static final double kS = 0.12; // TODO idk where these numbers came from
+    public static final double kV = 0.14; // TODO idk where these numbers came from
+
+    public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
+    public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
+
+    public static final double SHOOT_TIME = 0.1; // TODO make correct
+  }
+
   public enum ElevatorHeight {
     INTAKE(0),
     L1(0.03),
