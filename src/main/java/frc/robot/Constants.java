@@ -180,25 +180,49 @@ public final class Constants {
   }
 
   public enum ReefAlgaePosition {
-    AB(Constants.FieldConstants.TEAM_RED_REEF_AB, Constants.FieldConstants.TEAM_BLUE_REEF_AB),
-    CD(Constants.FieldConstants.TEAM_RED_REEF_CD, Constants.FieldConstants.TEAM_BLUE_REEF_CD),
-    EF(Constants.FieldConstants.TEAM_RED_REEF_EF, Constants.FieldConstants.TEAM_BLUE_REEF_EF),
-    GH(Constants.FieldConstants.TEAM_RED_REEF_GH, Constants.FieldConstants.TEAM_BLUE_REEF_GH),
-    IJ(Constants.FieldConstants.TEAM_RED_REEF_IJ, Constants.FieldConstants.TEAM_BLUE_REEF_IJ),
-    KL(Constants.FieldConstants.TEAM_RED_REEF_KL, Constants.FieldConstants.TEAM_BLUE_REEF_KL),
+    AB(
+        Constants.FieldConstants.TEAM_RED_REEF_AB,
+        Constants.FieldConstants.TEAM_BLUE_REEF_AB,
+        "Approach Algae AB"),
+    CD(
+        Constants.FieldConstants.TEAM_RED_REEF_CD,
+        Constants.FieldConstants.TEAM_BLUE_REEF_CD,
+        "Approach Algae CD"),
+    EF(
+        Constants.FieldConstants.TEAM_RED_REEF_EF,
+        Constants.FieldConstants.TEAM_BLUE_REEF_EF,
+        "Approach Algae EF"),
+    GH(
+        Constants.FieldConstants.TEAM_RED_REEF_GH,
+        Constants.FieldConstants.TEAM_BLUE_REEF_GH,
+        "Approach Algae GH"),
+    IJ(
+        Constants.FieldConstants.TEAM_RED_REEF_IJ,
+        Constants.FieldConstants.TEAM_BLUE_REEF_IJ,
+        "Approach Algae IJ"),
+    KL(
+        Constants.FieldConstants.TEAM_RED_REEF_KL,
+        Constants.FieldConstants.TEAM_BLUE_REEF_KL,
+        "Approach Algae KL"),
     ;
 
     private Translation2d red;
     private Translation2d blue;
+    private String approachPathName;
 
-    private ReefAlgaePosition(Translation2d red, Translation2d blue) {
+    private ReefAlgaePosition(Translation2d red, Translation2d blue, String approachPathName) {
       this.red = red;
       this.blue = blue;
+      this.approachPathName = approachPathName;
     }
 
     public Translation2d getPose() {
       if (DriverStationUtils.getCurrentAlliance() == Alliance.Red) return red;
       else return blue;
+    }
+
+    public String getApproachPathName() {
+      return approachPathName;
     }
   }
 
