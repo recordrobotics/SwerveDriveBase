@@ -75,7 +75,8 @@ public class ElevatorAlgae extends KillableSubsystem implements ShuffleboardPubl
 
   @Override
   public void setupShuffleboard() {
-    ShuffleboardUI.Test.addSlider("Algae on the Elevator", motor.get(), -1, 1).subscribe(motor::set);
+    ShuffleboardUI.Test.addSlider("Algae on the Elevator", motor.get(), -1, 1)
+        .subscribe(motor::set);
   }
 
   @Override

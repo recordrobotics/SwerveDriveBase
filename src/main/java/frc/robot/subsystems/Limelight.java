@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.RobotContainer;
@@ -13,6 +14,7 @@ import frc.robot.utils.SimpleMath;
 public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
   private static final String name = "limelight";
+  private static final double SCORE_DISTANCE = 1;
   private int numTags = 0;
   private double confidence = 0;
   private boolean hasVision = false;
@@ -66,6 +68,31 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     }
 
     handleMeasurement(measurement, confidence);
+    updateCrop();
+  }
+
+  private void updateCrop() {
+    Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
+    double reefAngle =
+        Math.atan2(
+            pose.getTranslation().getY() - Constants.FieldPosition.ReefCenter.getPose().getY(),
+            pose.getTranslation().getX() - Constants.FieldPosition.ReefCenter.getPose().getX());
+    double processorAngle =
+        Math.atan2(
+            pose.getTranslation().getY() - Constants.FieldPosition.Processor.getPose().getY(),
+            pose.getTranslation().getX() - Constants.FieldPosition.Processor.getPose().getX());
+
+    if (pose.getTranslation().getDistance(Constants.FieldPosition.ReefCenter.getPose())
+            < SCORE_DISTANCE
+        || Math.abs(reefAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
+      setCrop(cropZones.REEF);
+    } else if (pose.getTranslation().getDistance(Constants.FieldPosition.Processor.getPose())
+            < SCORE_DISTANCE
+        || Math.abs(processorAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
+      setCrop(cropZones.PROCESSOR);
+    } else {
+      setCrop(cropZones.Default);
+    }
   }
 
   private void handleMeasurement(PoseEstimate estimate, double confidence) {
@@ -78,6 +105,28 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       hasVision = false;
       ShuffleboardUI.Autonomous.setVisionPose(new Pose2d());
       currentConfidence = 9999999;
+    }
+  }
+
+  private void setCrop(cropZones zone) {
+    LimelightHelpers.setCropWindow(name, zone.x1, zone.x2, zone.y1, zone.y2);
+    LimelightHelpers.SetFiducialDownscalingOverride(name, zone.scale);
+  }
+
+  private enum cropZones {
+    // x1, x2, y1, y2
+    REEF(-1, 1, -1, 0, 1),
+    PROCESSOR(-1, 1, 0, 1, 1),
+    Default(-1, 1, -1, 1, 2);
+    double x1, x2, y1, y2;
+    float scale;
+
+    cropZones(double x1, double x2, double y1, double y2, float scale) {
+      this.x1 = x1;
+      this.x2 = x2;
+      this.y1 = y1;
+      this.y2 = y2;
+      this.scale = scale;
     }
   }
 
