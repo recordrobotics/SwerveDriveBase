@@ -88,5 +88,6 @@ public class ElevatorAlgae extends KillableSubsystem implements ShuffleboardPubl
   /** frees up all hardware allocations */
   public void close() {
     motor.close();
+    algaeDetector.close();
   }
 }

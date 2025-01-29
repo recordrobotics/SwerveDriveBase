@@ -158,5 +158,6 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
   public void close() {
     motor.close();
     servo.close();
+    coralDetector.close();
   }
 }

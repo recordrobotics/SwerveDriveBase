@@ -87,5 +87,6 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
   /** frees up all hardware allocations */
   public void close() {
     motor.close();
+    coralDetector.close();
   }
 }

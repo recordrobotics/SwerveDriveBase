@@ -14,7 +14,7 @@ import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ShuffleboardPublisher;
 
-public class SwerveModule implements ShuffleboardPublisher {
+public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
 
   // Creates variables for motors and absolute encoders
   private int driveMotorChannel;

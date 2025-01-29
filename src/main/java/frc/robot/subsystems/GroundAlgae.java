@@ -55,6 +55,7 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
   @Override
   public void close() {
     motor.close();
+    algaeDetector.close();
   }
 
   @Override

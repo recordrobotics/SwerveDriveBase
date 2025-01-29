@@ -120,6 +120,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   public void close() {
     motorLeft.close();
     motorRight.close();
+    bottomEndStop.close();
+    topEndStop.close();
   }
 
   @Override

@@ -11,7 +11,7 @@ import frc.robot.RobotContainer;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import org.littletonrobotics.junction.AutoLogOutput;
 
-public class PoseTracker extends SubsystemBase {
+public class PoseTracker extends SubsystemBase implements AutoCloseable {
 
   public final NavSensor nav = new NavSensor();
 
@@ -67,5 +67,9 @@ public class PoseTracker extends SubsystemBase {
   /** Resets the pose to FrontSpeakerClose (shooter facing towards speaker) */
   public void resetDriverPose() {
     setToPose(Constants.FieldStartingLocation.AutoStart.getPose());
+  }
+
+  public void close() {
+    nav.close();
   }
 }

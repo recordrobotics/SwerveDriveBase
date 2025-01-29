@@ -135,7 +135,6 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
 
   /** frees up all hardware allocations */
   public void close() {
-    NavSensor.getInstance().close();
     m_backLeft.close();
     m_backRight.close();
     m_frontLeft.close();

@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
-public class Lights extends SubsystemBase {
+public class Lights extends SubsystemBase implements AutoCloseable {
   public enum LightMode {
     OFF,
     RUNNING,
@@ -101,5 +101,9 @@ public class Lights extends SubsystemBase {
   public Command runPattern(LEDPattern pattern, int start, int end) {
     return run(() -> pattern.applyTo(buffer.createView(start, end)))
         .ignoringDisable(true); // TODO test view things
+  }
+
+  public void close() {
+    LEDs.close();
   }
 }

@@ -77,7 +77,9 @@ public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
   }
 
   /** frees up all hardware allocations */
-  public void close() {}
+  public void close() {
+    _nav.close();
+  }
 
   @Override
   public void setupShuffleboard() {
