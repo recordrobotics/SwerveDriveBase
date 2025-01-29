@@ -2,11 +2,10 @@ package frc.robot.commands.hybrid;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
@@ -51,16 +50,7 @@ public class ReefScoreCoral extends SequentialCommandGroup {
     Translation2d swerve_translation =
         RobotContainer.poseTracker.getEstimatedPosition().getTranslation();
     for (PathPlannerPath path : paths) {
-      Translation2d path_translation =
-          path.getStartingHolonomicPose()
-              .orElseGet(
-                  () ->
-                      new Pose2d(
-                          new Translation2d(
-                              999999,
-                              999999), // Far away place that will never be chosen as closest
-                          new Rotation2d()))
-              .getTranslation();
+      Translation2d path_translation = path.getStartingHolonomicPose().get().getTranslation();
       double distance = swerve_translation.getDistance(path_translation);
       if (distance < lowestDistance) {
         lowestDistance = distance;
@@ -69,7 +59,10 @@ public class ReefScoreCoral extends SequentialCommandGroup {
     }
 
     addCommands(
-        AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints),
+        AutoBuilder.pathfindToPose(
+            shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
+        new InstantCommand(() -> RobotContainer.elevator.moveTo(reefCoralHeight)),
+        AutoBuilder.followPath(shortestPath),
         new ElevatorMoveThenCoralShoot(reefCoralHeight));
   }
 }

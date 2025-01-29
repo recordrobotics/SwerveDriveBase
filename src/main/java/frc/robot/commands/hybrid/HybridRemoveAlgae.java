@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
@@ -62,11 +63,16 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
       }
     }
 
+    ElevatorHeight algaeHeight =
+        Constants.HybridConstants.isAlgaeInHighPosition.get(shortestPath.name)
+            ? ElevatorHeight.HIGH_ALGAE
+            : ElevatorHeight.LOW_ALGAE;
+
     addCommands(
-        AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints),
-        new ElevatorMoveThenAlgaeGrab(
-            Constants.HybridConstants.isAlgaeInHighPosition.get(shortestPath.name)
-                ? ElevatorHeight.HIGH_ALGAE
-                : ElevatorHeight.LOW_ALGAE));
+        AutoBuilder.pathfindToPose(
+            shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
+        new InstantCommand(() -> RobotContainer.elevator.moveTo(algaeHeight)),
+        AutoBuilder.followPath(shortestPath),
+        new ElevatorMoveThenAlgaeGrab(algaeHeight));
   }
 }
