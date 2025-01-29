@@ -20,6 +20,7 @@ import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ModuleConstants.MotorLocation;
 import frc.robot.utils.ModuleConstants.MotorType;
+import java.util.Map;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -45,6 +46,15 @@ public final class Constants {
 
     public static final double processorTriggerDistance = 3.0;
     public static final double reefTriggerDistance = 3.0;
+
+    public static final Map<String, Boolean> isAlgaeInHighPosition =
+        Map.of(
+            "AB", true,
+            "CD", false,
+            "EF", true,
+            "GH", false,
+            "IJ", true,
+            "KL", false);
   }
 
   public final class GroundAlgae {
@@ -68,7 +78,9 @@ public final class Constants {
     INTAKE(0),
     L1(0.03),
     L2(0.07),
+    LOW_ALGAE(0.09),
     L3(0.11),
+    HIGH_ALGAE(0.13),
     L4(0.17),
     OFF(0);
 
