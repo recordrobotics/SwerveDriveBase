@@ -37,6 +37,7 @@ public class RobotContainer {
   public static final Elevator elevator = new Elevator();
   public static final CoralShooter coralShooter = new CoralShooter();
   public static final CoralIntake coralIntake = new CoralIntake();
+  public static final ElevatorAlgae elevatorAlgae = new ElevatorAlgae();
   public static final GroundAlgae groundAlgae = new GroundAlgae();
   public static final Lights lights = new Lights();
   public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
@@ -130,6 +131,7 @@ public class RobotContainer {
     elevator.close();
     coralShooter.close();
     coralIntake.close();
+    elevatorAlgae.close();
     groundAlgae.close();
     pdp.close();
   }
