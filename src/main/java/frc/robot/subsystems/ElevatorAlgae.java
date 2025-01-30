@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -18,6 +19,9 @@ import frc.robot.utils.ShuffleboardPublisher;
 public class ElevatorAlgae extends KillableSubsystem implements ShuffleboardPublisher {
   private final DigitalInput algaeDetector =
       new DigitalInput(RobotMap.ElevatorAlgae.LIMIT_SWITCH_ID);
+  private static Boolean debounced_value = false;
+  private Debouncer m_debouncer =
+      new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final SparkMax motor;
   private final PIDController pid =
@@ -63,7 +67,7 @@ public class ElevatorAlgae extends KillableSubsystem implements ShuffleboardPubl
   }
 
   public boolean hasAlgae() {
-    return algaeDetector.get();
+    return debounced_value;
   }
 
   @Override
@@ -71,6 +75,8 @@ public class ElevatorAlgae extends KillableSubsystem implements ShuffleboardPubl
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculate(pid.getSetpoint());
     motor.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+
+    debounced_value = !m_debouncer.calculate(algaeDetector.get());
   }
 
   @Override

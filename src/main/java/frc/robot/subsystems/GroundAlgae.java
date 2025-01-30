@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Constants;
@@ -11,6 +12,10 @@ import frc.robot.utils.ShuffleboardPublisher;
 public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublisher {
   private Spark motor = new Spark(RobotMap.GroundAlgae.MOTOR_ID);
   private DigitalInput algaeDetector = new DigitalInput(RobotMap.GroundAlgae.LIMIT_SWITCH_ID);
+  private static Boolean debounced_value = false;
+  private Debouncer m_debouncer =
+      new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+
   private static final double defaultSpeed = Constants.GroundAlgae.DEFAULT_SPEED;
 
   public GroundAlgae() {
