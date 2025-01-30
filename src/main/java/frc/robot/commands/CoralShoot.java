@@ -10,7 +10,10 @@ import frc.robot.subsystems.CoralShooter.CoralShooterStates;
 
 public class CoralShoot extends SequentialCommandGroup {
   public CoralShoot() {
-    addRequirements(RobotContainer.coralShooter);
+    addRequirements(
+        RobotContainer.coralShooter,
+        RobotContainer
+            .drivetrain); // Drivetrain so that drivetrain doesn't move when the shooter shoots
 
     addCommands(
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OUT)),

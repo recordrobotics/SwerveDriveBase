@@ -26,7 +26,8 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
 
   private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralIntake.LIMIT_SWITCH_ID);
   private static Boolean debounced_value = false;
-  private Debouncer m_debouncer = new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+  private Debouncer m_debouncer =
+      new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final ProfiledPIDController servoPID =
       new ProfiledPIDController(
@@ -141,7 +142,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
 
     lastSpeed = pid.getSetpoint();
     currentSetpoint = servoPID.getSetpoint();
-    
+
     debounced_value = !m_debouncer.calculate(coralDetector.get());
   }
 

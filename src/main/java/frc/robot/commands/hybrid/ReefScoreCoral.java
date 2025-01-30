@@ -22,6 +22,8 @@ public class ReefScoreCoral extends SequentialCommandGroup {
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
 
   public ReefScoreCoral(ElevatorHeight reefCoralHeight) {
+    addRequirements(RobotContainer.elevator);
+
     try {
       paths =
           new PathPlannerPath[] {
