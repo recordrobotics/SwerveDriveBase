@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -24,6 +25,8 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
   private final SparkMax servo;
 
   private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralIntake.LIMIT_SWITCH_ID);
+  private static Boolean debounced_value = false;
+  private Debouncer m_debouncer = new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final ProfiledPIDController servoPID =
       new ProfiledPIDController(
@@ -60,7 +63,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
   }
 
   public boolean hasCoral() {
-    return coralDetector.get();
+    return debounced_value;
   }
 
   public enum IntakeServoStates {
@@ -138,12 +141,14 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
 
     lastSpeed = pid.getSetpoint();
     currentSetpoint = servoPID.getSetpoint();
+    
+    debounced_value = !m_debouncer.calculate(coralDetector.get());
   }
 
   @Override
   public void setupShuffleboard() {
-    ShuffleboardUI.Test.addSlider("Coral Intake", motor.get(), -1, 1).subscribe(motor::set);
-    ShuffleboardUI.Test.addSlider("Coral Intake Pos", servo.getEncoder().getPosition(), -1, 1)
+    ShuffleboardUI.Test.addSlider("Coral Intake Motor", motor.get(), -1, 1).subscribe(motor::set);
+    ShuffleboardUI.Test.addSlider("Coral Intake Servo Pos", servo.getEncoder().getPosition(), -1, 1)
         .subscribe(this::toggleServo);
   }
 

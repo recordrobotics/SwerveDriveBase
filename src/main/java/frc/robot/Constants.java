@@ -467,6 +467,8 @@ public final class Constants {
 
     public static final double SERVO_UP = Math.PI / 2;
     public static final double SERVO_DOWN = 0;
+
+    public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
   }
 
   public final class Lights {
