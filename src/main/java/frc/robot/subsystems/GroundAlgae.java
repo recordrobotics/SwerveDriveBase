@@ -48,7 +48,11 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
   }
 
   public boolean hasAlgae() {
-    return algaeDetector.get();
+    return debounced_value;
+  }
+
+  public void periodic() {
+    debounced_value = !m_debouncer.calculate(algaeDetector.get());
   }
 
   @Override
