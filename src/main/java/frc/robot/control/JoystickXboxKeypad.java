@@ -111,17 +111,17 @@ public class JoystickXboxKeypad extends AbstractControl {
   }
 
   @Override
-  public Boolean getCoralGroundAcquire() {
+  public Boolean getCoralGroundIntake() {
     return xbox_controller.getLeftTriggerAxis() > 0.3;
   }
 
   @Override
-  public Boolean getCoralSourceAcquire() {
+  public Boolean getCoralSourceIntake() {
     return xbox_controller.getLeftBumperButton();
   }
 
   @Override
-  public Boolean getAcquireAlgae() {
+  public Boolean getIntakeAlgae() {
     return xbox_controller.getRightTriggerAxis() > 0.3;
   }
 

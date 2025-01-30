@@ -9,7 +9,7 @@ Read through `Command-Based Progamming <https://docs.wpilib.org/en/stable/docs/s
     :maxdepth: 1
 
     subsystems/drivetrain
-    subsystems/acquisition
+    subsystems/intake
     subsystems/channel
     subsystems/climbers
     subsystems/crashbar

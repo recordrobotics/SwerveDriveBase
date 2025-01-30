@@ -6,19 +6,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ElevatorHeight;
-import frc.robot.commands.CoralIntakeFromGround;
-import frc.robot.commands.CoralIntakeFromSource;
-import frc.robot.commands.ElevatorMove;
 // Local imports
 import frc.robot.commands.KillSpecified;
-import frc.robot.commands.LightSignal;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.manual.*;
 import frc.robot.control.*;
 import frc.robot.shuffleboard.ShuffleboardUI;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Lights.LightMode;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.ShuffleboardPublisher;
 
@@ -86,23 +80,23 @@ public class RobotContainer {
     new Trigger(() -> ShuffleboardUI.Overview.getControl().getPoseReset())
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
 
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL1())
-        .onTrue(new ElevatorMove(ElevatorHeight.L1));
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL2())
-        .onTrue(new ElevatorMove(ElevatorHeight.L2));
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL3())
-        .onTrue(new ElevatorMove(ElevatorHeight.L3));
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL4())
-        .onTrue(new ElevatorMove(ElevatorHeight.L4));
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralGroundAcquire())
-        .onTrue(new CoralIntakeFromGround());
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralSourceAcquire())
-        .onTrue(new CoralIntakeFromSource());
-    // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getAcquireAlgae());
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getAcquireAlgae())
-        .onTrue(new LightSignal(LightMode.CHASE));
-    new Trigger(() -> ShuffleboardUI.Overview.getControl().getReefAlgae())
-        .onTrue(new LightSignal(LightMode.RAINBOW));
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL1())
+    //     .onTrue(new ElevatorMove(ElevatorHeight.L1));
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL2())
+    //     .onTrue(new ElevatorMove(ElevatorHeight.L2));
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL3())
+    //     .onTrue(new ElevatorMove(ElevatorHeight.L3));
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralShootL4())
+    //     .onTrue(new ElevatorMove(ElevatorHeight.L4));
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralGroundIntake())
+    //     .onTrue(new CoralIntakeFromGround());
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getCoralSourceIntake())
+    //     .onTrue(new CoralIntakeFromSource());
+    // // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getIntakeAlgae());
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getIntakeAlgae())
+    //     .onTrue(new LightSignal(LightMode.CHASE));
+    // new Trigger(() -> ShuffleboardUI.Overview.getControl().getReefAlgae())
+    //     .onTrue(new LightSignal(LightMode.RAINBOW));
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getReefAlgae());
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getScoreAlgae());
     // TODO: new Trigger(() -> ShuffleboardUI.Overview.getControl().getClimb());

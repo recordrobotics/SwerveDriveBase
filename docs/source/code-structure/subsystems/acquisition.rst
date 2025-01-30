@@ -1,16 +1,16 @@
-Acquisition
+Intake
 =============================
-``public class Acquisition extends KillableSubsystem``
+``public class Intake extends KillableSubsystem``
 Section of the Robot resposible for collecting notes from the field
 
 Spins 1 DC motor
 
 Aquisition can be spinning into the note channel (IN), out of the note channel (REVERSE), or not moving(OFF).
 On Start up defaults to off
-The state of the acquisition is changed through calling ``toggle(AcquisitionStates state)``.
+The state of the Intake is changed through calling ``toggle(IntakeStates state)``.
 
-**public void toggle(AcquisitionStates state, double speed))**
-	Changes the speed of the acquisition in the inputed direction
-**public void toggle(AcquisitionStates state)**
-	Wrapper around general toggle this function turns the acquisition in the inputed direction and sets it to the default speed
+**public void toggle(IntakeStates state, double speed))**
+	Changes the speed of the Intake in the inputed direction
+**public void toggle(IntakeStates state)**
+	Wrapper around general toggle this function turns the Intake in the inputed direction and sets it to the default speed
 

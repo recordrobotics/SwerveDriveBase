@@ -25,13 +25,13 @@ public abstract class AbstractControl {
 
   public abstract Boolean getCoralShootL4();
 
-  // Acquire coral
-  public abstract Boolean getCoralGroundAcquire();
+  // Intake coral
+  public abstract Boolean getCoralGroundIntake();
 
-  public abstract Boolean getCoralSourceAcquire();
+  public abstract Boolean getCoralSourceIntake();
 
-  // Acquire algae
-  public abstract Boolean getAcquireAlgae();
+  // Intake algae
+  public abstract Boolean getIntakeAlgae();
 
   // Reef algae
   public abstract Boolean getReefAlgae();
