@@ -378,7 +378,7 @@ public final class Constants {
   public enum FieldStartingLocation {
     AutoStart(
         new Pose2d(15.305, 4.001, new Rotation2d(Math.PI)),
-        new Pose2d(1.235, 4.001, new Rotation2d(0)));
+        new Pose2d(1.235, 4.001, new Rotation2d(0))); // TODO is old?
 
     private final Pose2d m_transformRed;
     private final Pose2d m_transformBlue;

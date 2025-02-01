@@ -77,7 +77,8 @@ public class AutonomousLayout extends AbstractLayout {
   }
 
   public FieldStartingLocation getStartingLocation() {
-    if (fieldStartingLocationChooser.get() == null) return FieldStartingLocation.AutoStart;
-    return fieldStartingLocationChooser.get();
+    return fieldStartingLocationChooser.get() == null
+        ? FieldStartingLocation.AutoStart
+        : fieldStartingLocationChooser.get();
   }
 }
