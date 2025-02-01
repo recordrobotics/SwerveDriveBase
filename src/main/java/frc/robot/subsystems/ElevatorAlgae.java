@@ -21,7 +21,7 @@ public class ElevatorAlgae extends KillableSubsystem implements ShuffleboardPubl
       new DigitalInput(RobotMap.ElevatorAlgae.LIMIT_SWITCH_ID);
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
-      new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+      new Debouncer(Constants.ElevatorAlgae.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final SparkMax motor;
   private final PIDController pid =

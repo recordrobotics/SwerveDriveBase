@@ -14,7 +14,7 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
   private DigitalInput algaeDetector = new DigitalInput(RobotMap.GroundAlgae.LIMIT_SWITCH_ID);
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
-      new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+      new Debouncer(Constants.GroundAlgae.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private static final double defaultSpeed = Constants.GroundAlgae.DEFAULT_SPEED;
 

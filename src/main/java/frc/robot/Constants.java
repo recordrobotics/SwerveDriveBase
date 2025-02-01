@@ -59,6 +59,8 @@ public final class Constants {
 
   public final class GroundAlgae {
     public static final double DEFAULT_SPEED = 0.1; // TODO tune
+
+    public static final double DEBOUNCE_TIME = 0.1; // TODO idk where these numbers came from
   }
 
   public final class ElevatorAlgae {
@@ -72,6 +74,8 @@ public final class Constants {
     public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
+
+    public static final double DEBOUNCE_TIME = 0.1; // TODO idk where these numbers came from
   }
 
   public enum ElevatorHeight {
