@@ -84,11 +84,11 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
     if (pose.getTranslation().getDistance(Constants.FieldPosition.ReefCenter.getPose())
             < SCORE_DISTANCE
-        || Math.abs(reefAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
+        && Math.abs(reefAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
       setCrop(cropZones.REEF);
     } else if (pose.getTranslation().getDistance(Constants.FieldPosition.Processor.getPose())
             < SCORE_DISTANCE
-        || Math.abs(processorAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
+        && Math.abs(processorAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
       setCrop(cropZones.PROCESSOR);
     } else {
       setCrop(cropZones.Default);
@@ -114,7 +114,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
   }
 
   private enum cropZones {
-    // x1, x2, y1, y2
+    // x1, x2, y1, y2, downscale factor
     REEF(-1, 1, -1, 0, 1),
     PROCESSOR(-1, 1, 0, 1, 1),
     Default(-1, 1, -1, 1, 2);
