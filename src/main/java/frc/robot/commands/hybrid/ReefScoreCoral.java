@@ -5,12 +5,12 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.FieldPosition;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ElevatorMove;
 import frc.robot.commands.ElevatorMoveThenCoralShoot;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
@@ -22,8 +22,6 @@ public class ReefScoreCoral extends SequentialCommandGroup {
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
 
   public ReefScoreCoral(ElevatorHeight reefCoralHeight) {
-    addRequirements(RobotContainer.elevator);
-
     try {
       paths =
           new PathPlannerPath[] {
@@ -63,8 +61,7 @@ public class ReefScoreCoral extends SequentialCommandGroup {
     addCommands(
         AutoBuilder.pathfindToPose(
             shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
-        new InstantCommand(() -> RobotContainer.elevator.moveTo(reefCoralHeight)),
-        AutoBuilder.followPath(shortestPath),
+        AutoBuilder.followPath(shortestPath).alongWith(new ElevatorMove(reefCoralHeight)),
         new ElevatorMoveThenCoralShoot(reefCoralHeight));
   }
 }
