@@ -51,8 +51,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private LoggedMechanismRoot2d root =
       mechanism.getRoot(
           "elevator_root",
-          Constants.Elevator.ROOT_MECHANISM_POSE.getX(),
-          Constants.Elevator.ROOT_MECHANISM_POSE.getZ());
+          Constants.Elevator.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
+          Constants.Elevator.ROOT_MECHANISM_POSE.getY());
   private LoggedMechanismLigament2d elevator =
       root.append(
           new LoggedMechanismLigament2d(
@@ -71,8 +71,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private LoggedMechanismRoot2d root_setpoint =
       mechanism_setpoint.getRoot(
           "elevator_root",
-          Constants.Elevator.ROOT_MECHANISM_POSE.getX(),
-          Constants.Elevator.ROOT_MECHANISM_POSE.getZ());
+          Constants.Elevator.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
+          Constants.Elevator.ROOT_MECHANISM_POSE.getY());
   private LoggedMechanismLigament2d elevator_setpoint =
       root_setpoint.append(
           new LoggedMechanismLigament2d(

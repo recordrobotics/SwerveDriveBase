@@ -191,8 +191,7 @@ public final class Constants {
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05; // TODO test different values
 
-    public static final Pose3d ROOT_MECHANISM_POSE =
-        new Pose3d(-0.3, 0, 0, new Rotation3d(0, 0, 0));
+    public static final Pose3d ROOT_MECHANISM_POSE = new Pose3d(0.3, 0, 0, new Rotation3d(0, 0, 0));
     public static final double MIN_LENGTH = 0.6;
   }
 
@@ -239,6 +238,11 @@ public final class Constants {
     public static final double ARM_DOWN = 0;
 
     public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
+
+    public static final Pose3d ROOT_MECHANISM_POSE =
+        new Pose3d(-0.3, 0.5, 0, new Rotation3d(0, 0, 0));
+    public static final double LENGTH = 0.6;
+    public static final double ANGLE_OFFSET = 15;
   }
 
   public final class Lights {
