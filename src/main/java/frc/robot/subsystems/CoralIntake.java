@@ -22,27 +22,27 @@ import frc.robot.utils.ShuffleboardPublisher;
 
 public class CoralIntake extends KillableSubsystem implements ShuffleboardPublisher {
   private final SparkMax motor;
-  private final SparkMax servo;
+  private final SparkMax arm;
 
   private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralIntake.LIMIT_SWITCH_ID);
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
       new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
-  private final ProfiledPIDController servoPID =
+  private final ProfiledPIDController armPID =
       new ProfiledPIDController(
           Constants.CoralIntake.sP,
           Constants.CoralIntake.sI,
           Constants.CoralIntake.sD,
           new Constraints(
-              Constants.CoralIntake.MAX_SERVO_VELOCITY,
-              Constants.CoralIntake.MAX_SERVO_ACCELERATION));
-  private final ArmFeedforward servoFeedForward =
+              Constants.CoralIntake.MAX_ARM_VELOCITY,
+              Constants.CoralIntake.MAX_ARM_ACCELERATION));
+  private final ArmFeedforward armFeedForward =
       new ArmFeedforward(
           Constants.CoralIntake.sS,
           Constants.CoralIntake.sG,
           Constants.CoralIntake.sV,
-          Constants.CoralIntake.sA); // Feedforward for servo
+          Constants.CoralIntake.sA); // Feedforward for arm
 
   private final PIDController pid =
       new PIDController(
@@ -53,7 +53,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
 
   public CoralIntake() {
     motor = new SparkMax(RobotMap.CoralIntake.MOTOR_ID, MotorType.kBrushless);
-    servo = new SparkMax(RobotMap.CoralIntake.SERVO_ID, MotorType.kBrushless);
+    arm = new SparkMax(RobotMap.CoralIntake.ARM_ID, MotorType.kBrushless);
     toggle(CoralIntakeStates.OFF); // initialize as off
   }
 
@@ -67,7 +67,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
     return debounced_value;
   }
 
-  public enum IntakeServoStates {
+  public enum IntakeArmStates {
     UP,
     DOWN,
     OFF;
@@ -77,8 +77,8 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
     return motor.getEncoder().getVelocity() / 60.0; /* RPM -> RPS */
   }
 
-  public double getServoAngle() {
-    return servo.getEncoder().getPosition() * Math.PI * 2;
+  public double getArmAngle() {
+    return arm.getEncoder().getPosition() * Math.PI * 2;
   }
 
   /** Set the current shooter speed on both wheels to speed */
@@ -86,25 +86,25 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
     pid.setSetpoint(speed);
   }
 
-  public void toggleServo(double pos) {
-    servoPID.setGoal(pos);
+  public void toggleArm(double pos) {
+    armPID.setGoal(pos);
   }
 
   public boolean atGoal() {
-    return servoPID.atGoal();
+    return armPID.atGoal();
   }
 
-  public void toggleServo(IntakeServoStates state) {
+  public void toggleArm(IntakeArmStates state) {
     switch (state) {
       case UP:
-        toggleServo(Constants.CoralIntake.SERVO_UP);
+        toggleArm(Constants.CoralIntake.ARM_UP);
         break;
       case DOWN:
-        toggleServo(Constants.CoralIntake.SERVO_DOWN);
+        toggleArm(Constants.CoralIntake.ARM_DOWN);
         break;
       case OFF:
       default:
-        servo.setVoltage(0);
+        arm.setVoltage(0);
         break;
     }
   }
@@ -131,17 +131,17 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
   @Override
   public void periodic() {
     double pidOutput = pid.calculate(getWheelVelocity());
-    double pidOutputServo = servoPID.calculate(getServoAngle());
+    double pidOutputArm = armPID.calculate(getArmAngle());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    double servoFeedforwardOutput =
-        servoFeedForward.calculateWithVelocities(
-            getServoAngle(), currentSetpoint.velocity, servoPID.getSetpoint().velocity);
+    double armFeedforwardOutput =
+        armFeedForward.calculateWithVelocities(
+            getArmAngle(), currentSetpoint.velocity, armPID.getSetpoint().velocity);
 
     motor.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
-    servo.setVoltage(pidOutputServo + servoFeedforwardOutput);
+    arm.setVoltage(pidOutputArm + armFeedforwardOutput);
 
     lastSpeed = pid.getSetpoint();
-    currentSetpoint = servoPID.getSetpoint();
+    currentSetpoint = armPID.getSetpoint();
 
     debounced_value = !m_debouncer.calculate(coralDetector.get());
   }
@@ -149,21 +149,21 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
   @Override
   public void setupShuffleboard() {
     DashboardUI.Test.addSlider("Coral Intake Motor", motor.get(), -1, 1).subscribe(motor::set);
-    DashboardUI.Test.addSlider("Coral Intake Servo Pos", servo.getEncoder().getPosition(), -1, 1)
-        .subscribe(this::toggleServo);
+    DashboardUI.Test.addSlider("Coral Intake Arm Pos", arm.getEncoder().getPosition(), -1, 1)
+        .subscribe(this::toggleArm);
   }
 
   @Override
   public void kill() {
     toggle(CoralIntakeStates.OFF);
     motor.setVoltage(0);
-    servo.setVoltage(0);
+    arm.setVoltage(0);
   }
 
   /** frees up all hardware allocations */
   public void close() {
     motor.close();
-    servo.close();
+    arm.close();
     coralDetector.close();
   }
 }

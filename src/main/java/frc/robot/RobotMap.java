@@ -19,7 +19,7 @@ public final class RobotMap {
   }
 
   public static final class CoralIntake {
-    public static final int SERVO_ID = 11;
+    public static final int ARM_ID = 11;
     public static final int MOTOR_ID = 12; // TODO get actual CAN number
     public static final int LIMIT_SWITCH_ID = 9; // TODO get actual DIO port number
   }
