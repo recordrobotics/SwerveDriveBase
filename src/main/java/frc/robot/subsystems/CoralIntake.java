@@ -41,7 +41,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
           Constants.CoralIntake.sS,
           Constants.CoralIntake.sG,
           Constants.CoralIntake.sV,
-          Constants.CoralIntake.sA); // Feedforward for arm
+          Constants.CoralIntake.sA);
 
   private final PIDController pid =
       new PIDController(
@@ -125,7 +125,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
   }
 
   private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
-  private double lastSpeed = 0;
+  private double lastSpeed = 0; // TODO why is this here?
 
   @Override
   public void periodic() {
