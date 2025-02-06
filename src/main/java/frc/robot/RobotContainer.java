@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.auto.*;
-import frc.robot.commands.manual.*;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
@@ -60,10 +59,7 @@ public class RobotContainer {
     ShuffleboardPublisher.setup(poseTracker.nav, drivetrain, limelight);
   }
 
-  public void teleopInit() {
-    // Sets default command for manual swerve. It is the only one right now
-    drivetrain.setDefaultCommand(new ManualSwerve());
-  }
+  public void teleopInit() {}
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by

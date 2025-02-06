@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.manual.ManualSwerve;
 import frc.robot.utils.DriveCommandData;
 import frc.robot.utils.DriveCommandDataAutoLogged;
 import frc.robot.utils.KillableSubsystem;
@@ -30,7 +31,9 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
           Constants.Swerve.backLeftConstants.wheelLocation,
           Constants.Swerve.backRightConstants.wheelLocation);
 
-  public Drivetrain() {}
+  public Drivetrain() {
+    setDefaultCommand(new ManualSwerve());
+  }
 
   /**
    * Drives the robot using joystick info.
