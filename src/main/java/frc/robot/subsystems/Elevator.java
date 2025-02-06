@@ -5,12 +5,18 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotMap;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
 
@@ -37,6 +43,46 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
           Constants.Elevator.kG,
           Constants.Elevator.kV,
           Constants.Elevator.kA);
+
+  @AutoLogOutput
+  private LoggedMechanism2d mechanism =
+      new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
+
+  private LoggedMechanismRoot2d root =
+      mechanism.getRoot(
+          "elevator_root",
+          Constants.Elevator.ROOT_MECHANISM_POSE.getX(),
+          Constants.Elevator.ROOT_MECHANISM_POSE.getZ());
+  private LoggedMechanismLigament2d elevator =
+      root.append(
+          new LoggedMechanismLigament2d(
+              "elevator", Constants.Elevator.MIN_LENGTH, 90, 10, new Color8Bit(Color.kBlue)));
+  // TODO: should the elevator attachments be defined in here or should there be a separate
+  // ElevatorMechanism class that holds all the parts?
+  private LoggedMechanismLigament2d coralShooter =
+      elevator.append(
+          new LoggedMechanismLigament2d(
+              "coralShooter", Constants.CoralShooter.LENGTH, 0, 10, new Color8Bit(Color.kGreen)));
+
+  @AutoLogOutput
+  private LoggedMechanism2d mechanism_setpoint =
+      new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
+
+  private LoggedMechanismRoot2d root_setpoint =
+      mechanism_setpoint.getRoot(
+          "elevator_root",
+          Constants.Elevator.ROOT_MECHANISM_POSE.getX(),
+          Constants.Elevator.ROOT_MECHANISM_POSE.getZ());
+  private LoggedMechanismLigament2d elevator_setpoint =
+      root_setpoint.append(
+          new LoggedMechanismLigament2d(
+              "elevator", Constants.Elevator.MIN_LENGTH, 90, 10, new Color8Bit(Color.kBlue)));
+  // TODO: should the elevator attachments be defined in here or should there be a separate
+  // ElevatorMechanism class that holds all the parts?
+  private LoggedMechanismLigament2d coralShooter_setpoint =
+      elevator_setpoint.append(
+          new LoggedMechanismLigament2d(
+              "coralShooter", Constants.CoralShooter.LENGTH, 0, 10, new Color8Bit(Color.kGreen)));
 
   public Elevator() {
     motorLeft = new TalonFX(RobotMap.Elevator.MOTOR_LEFT_ID);
@@ -89,6 +135,10 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     }
 
     currentSetpoint = controller.getSetpoint();
+
+    // Update mechanism
+    elevator.setLength(Constants.Elevator.MIN_LENGTH + getCurrentHeight());
+    elevator_setpoint.setLength(Constants.Elevator.MIN_LENGTH + currentSetpoint.position);
   }
 
   public void toggle(double heightMeters) {

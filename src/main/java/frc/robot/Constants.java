@@ -10,7 +10,9 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -188,6 +190,10 @@ public final class Constants {
 
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05; // TODO test different values
+
+    public static final Pose3d ROOT_MECHANISM_POSE =
+        new Pose3d(-0.3, 0, 0, new Rotation3d(0, 0, 0));
+    public static final double MIN_LENGTH = 0.6;
   }
 
   public final class CoralShooter {
@@ -201,6 +207,8 @@ public final class Constants {
     public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
+
+    public static final double LENGTH = 0.1;
   }
 
   public final class CoralIntake {
@@ -275,6 +283,9 @@ public final class Constants {
     public static final double ROBOT_WHEEL_DISTANCE_WIDTH = 0.5969;
 
     public static final double ROBOT_WHEEL_DISTANCE_LENGTH = 0.5969;
+
+    public static final double BUMPER_WIDTH = 0.7;
+    public static final double MAX_MECHANISM_HEIGHT = 2.1336;
   }
 
   public final class Swerve {
