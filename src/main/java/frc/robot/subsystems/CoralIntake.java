@@ -14,17 +14,12 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
-import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class CoralIntake extends KillableSubsystem implements ShuffleboardPublisher {
   private final SparkMax motor;
@@ -55,42 +50,6 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
 
   private final SimpleMotorFeedforward feedForward =
       new SimpleMotorFeedforward(Constants.CoralIntake.kS, Constants.CoralIntake.kV);
-
-  @AutoLogOutput
-  private LoggedMechanism2d mechanism =
-      new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
-
-  private LoggedMechanismRoot2d root =
-      mechanism.getRoot(
-          "coralintake_root",
-          Constants.CoralIntake.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
-          Constants.CoralIntake.ROOT_MECHANISM_POSE.getY());
-  private LoggedMechanismLigament2d coralintake =
-      root.append(
-          new LoggedMechanismLigament2d(
-              "coralintake",
-              Constants.CoralIntake.LENGTH,
-              Constants.CoralIntake.ANGLE_OFFSET,
-              10,
-              new Color8Bit(Color.kPurple)));
-
-  @AutoLogOutput
-  private LoggedMechanism2d mechanism_setpoint =
-      new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
-
-  private LoggedMechanismRoot2d root_setpoint =
-      mechanism_setpoint.getRoot(
-          "coralintake_root",
-          Constants.CoralIntake.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
-          Constants.CoralIntake.ROOT_MECHANISM_POSE.getY());
-  private LoggedMechanismLigament2d coralintake_setpoint =
-      root_setpoint.append(
-          new LoggedMechanismLigament2d(
-              "coralintake",
-              Constants.CoralIntake.LENGTH,
-              Constants.CoralIntake.ANGLE_OFFSET,
-              10,
-              new Color8Bit(Color.kPurple)));
 
   public CoralIntake() {
     motor = new SparkMax(RobotMap.CoralIntake.MOTOR_ID, MotorType.kBrushless);
@@ -184,8 +143,9 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
     lastSpeed = pid.getSetpoint();
     currentSetpoint = armPID.getSetpoint();
 
-    coralintake.setAngle(Constants.CoralIntake.ANGLE_OFFSET + getArmAngle());
-    coralintake_setpoint.setAngle(Constants.CoralIntake.ANGLE_OFFSET + currentSetpoint.position);
+    // Update mechanism
+    RobotContainer.model.coralIntake.update(getArmAngle());
+    RobotContainer.model.coralIntake.updateSetpoint(currentSetpoint.position);
 
     debounced_value = !m_debouncer.calculate(coralDetector.get());
   }

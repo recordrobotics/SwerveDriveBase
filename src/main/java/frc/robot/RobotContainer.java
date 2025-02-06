@@ -24,6 +24,8 @@ import frc.robot.utils.ShuffleboardPublisher;
  */
 public class RobotContainer {
 
+  public static final RobotModel model = new RobotModel();
+
   // Subsystems
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final PoseTracker poseTracker = new PoseTracker();
