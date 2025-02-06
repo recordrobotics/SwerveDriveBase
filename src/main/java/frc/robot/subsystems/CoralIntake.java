@@ -35,8 +35,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
           Constants.CoralIntake.sI,
           Constants.CoralIntake.sD,
           new Constraints(
-              Constants.CoralIntake.MAX_ARM_VELOCITY,
-              Constants.CoralIntake.MAX_ARM_ACCELERATION));
+              Constants.CoralIntake.MAX_ARM_VELOCITY, Constants.CoralIntake.MAX_ARM_ACCELERATION));
   private final ArmFeedforward armFeedForward =
       new ArmFeedforward(
           Constants.CoralIntake.sS,
