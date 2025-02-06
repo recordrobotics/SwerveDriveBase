@@ -4,6 +4,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 // Local imports
@@ -74,7 +75,16 @@ public class RobotContainer {
 
     // Command to kill robot
     new Trigger(() -> DashboardUI.Overview.getControl().getKill())
-        .whileTrue(new KillSpecified(drivetrain));
+        .whileTrue(new KillSpecified(drivetrain))
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    CommandScheduler.getInstance()
+                        .cancel(
+                            CommandScheduler.getInstance()
+                                .requiring(
+                                    drivetrain)))); // kill any commands that require drivetrain
+    // (used for killing hybrid commands)
 
     // Reset pose trigger
     new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
