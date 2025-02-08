@@ -240,13 +240,15 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
 
   public Command sysIdQuasistaticDriveMotors(SysIdRoutine.Direction direction) {
     return sysIdRoutineDriveMotors
-        .quasistatic(direction).raceWith(Commands.run(()->drive(new DriveCommandData())));
+        .quasistatic(direction)
+        .raceWith(Commands.run(() -> drive(new DriveCommandData())));
     // run pids with zero velocity for 0.5 seconds in order to align wheels;
   }
 
   public Command sysIdDynamicDriveMotors(SysIdRoutine.Direction direction) {
     return sysIdRoutineDriveMotors
-        .dynamic(direction).raceWith(Commands.run(()->drive(new DriveCommandData())));
+        .dynamic(direction)
+        .raceWith(Commands.run(() -> drive(new DriveCommandData())));
     // run pids with zero velocity for 0.5 seconds in order to align wheels;
   }
 
