@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,6 +20,7 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.Lights.LightMode;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.ShuffleboardPublisher;
+import org.photonvision.PhotonCamera;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,11 +38,13 @@ public class RobotContainer {
   public static final Limelight limelight = new Limelight();
   public static final Elevator elevator = null; // new Elevator();
   public static final CoralShooter coralShooter = null; // = new CoralShooter();
-  public static final CoralIntake coralIntake = null; // = new CoralIntake();
+  public static final CoralIntake coralIntake = new CoralIntake();
   public static final ElevatorAlgae elevatorAlgae = null; // new ElevatorAlgae();
   public static final GroundAlgae groundAlgae = null; // new GroundAlgae();
   public static final Lights lights = new Lights();
   public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
+
+  public static final PhotonCamera camera = new PhotonCamera("photonvision");
 
   // Autonomous
   @SuppressWarnings("unused")
@@ -66,6 +70,12 @@ public class RobotContainer {
     ShuffleboardPublisher.setup(poseTracker.nav, drivetrain, limelight);
 
     drivetrain.setDefaultCommand(new ManualSwerve());
+
+    // camera exposure fix
+    camera.setDriverMode(false);
+    NetworkTableInstance.getDefault().flush();
+    camera.setDriverMode(true);
+    NetworkTableInstance.getDefault().flush();
   }
 
   public void teleopInit() {}
@@ -176,7 +186,7 @@ public class RobotContainer {
     limelight.close();
     // elevator.close();
     // coralShooter.close();
-    // coralIntake.close();
+    coralIntake.close();
     // elevatorAlgae.close();
     // groundAlgae.close();
     pdp.close();
