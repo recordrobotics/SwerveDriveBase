@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 // Local imports
@@ -152,13 +151,15 @@ public class RobotContainer {
     // }
     // return autoCommand;
 
-    return drivetrain.run(()->drivetrain.drive(new DriveCommandData())).withTimeout(0.4)
+    return drivetrain
+        .run(() -> drivetrain.drive(new DriveCommandData()))
+        .withTimeout(0.4)
         .andThen(drivetrain.sysIdQuasistaticDriveMotors(Direction.kForward))
-        .andThen(drivetrain.run(()->drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
+        .andThen(drivetrain.run(() -> drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
         .andThen(drivetrain.sysIdQuasistaticDriveMotors(Direction.kReverse))
-        .andThen(drivetrain.run(()->drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
+        .andThen(drivetrain.run(() -> drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
         .andThen(drivetrain.sysIdDynamicDriveMotors(Direction.kForward))
-        .andThen(drivetrain.run(()->drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
+        .andThen(drivetrain.run(() -> drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
         .andThen(drivetrain.sysIdDynamicDriveMotors(Direction.kReverse));
   }
 

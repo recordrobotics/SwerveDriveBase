@@ -124,10 +124,10 @@ public final class Constants {
     public static final Translation2d TEAM_BLUE_PROCESSOR =
         new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
 
-    public static final Translation2d SOURCE_1 = new Translation2d(0, 0);
-    public static final Translation2d SOURCE_2 = new Translation2d(0, 0);
-    public static final Translation2d SOURCE_12 = new Translation2d(0, 0);
-    public static final Translation2d SOURCE_13 = new Translation2d(0, 0);
+    public static final Translation2d SOURCE_1 = new Translation2d(16.994, 0.355);
+    public static final Translation2d SOURCE_2 = new Translation2d(16.725, 7.518);
+    public static final Translation2d SOURCE_12 = new Translation2d(0.648, 0.489);
+    public static final Translation2d SOURCE_13 = new Translation2d(0.702, 7.545);
 
     // Field width and length
     public static final double FIELD_X_DIMENSION = 17.548; // Length

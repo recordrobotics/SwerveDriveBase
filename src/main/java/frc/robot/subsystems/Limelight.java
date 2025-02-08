@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -15,7 +18,7 @@ import frc.robot.utils.libraries.LimelightHelpers.PoseEstimate;
 public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
   private static final String name = "limelight";
-  private static final double SCORE_DISTANCE = 1;
+  private static final double SCORE_DISTANCE = 3.0;
   private int numTags = 0;
   private double confidence = 0;
   private boolean hasVision = false;
@@ -107,21 +110,28 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
             pose.getTranslation().getY() - source2Pose.getY(),
             pose.getTranslation().getX() - source2Pose.getX());
 
+    double closestSourceDistance = pose.getTranslation().getDistance(source1Pose);
     double closestSourceAngle = sourceAngle1;
     Translation2d closestSourcePose = source1Pose;
 
-    if (sourceAngle2 < closestSourceAngle) {
+    if (pose.getTranslation().getDistance(source2Pose) < closestSourceDistance) {
       closestSourceAngle = sourceAngle2;
       closestSourcePose = source2Pose;
+      closestSourceDistance = pose.getTranslation().getDistance(source2Pose);
     }
-    if (sourceAngle12 < closestSourceAngle) {
+    if (pose.getTranslation().getDistance(source12Pose) < closestSourceDistance) {
       closestSourceAngle = sourceAngle12;
       closestSourcePose = source12Pose;
+      closestSourceDistance = pose.getTranslation().getDistance(source12Pose);
     }
-    if (sourceAngle13 < closestSourceAngle) {
+    if (pose.getTranslation().getDistance(source13Pose) < closestSourceDistance) {
       closestSourceAngle = sourceAngle13;
       closestSourcePose = source13Pose;
+      closestSourceDistance = pose.getTranslation().getDistance(source13Pose);
     }
+
+    Logger.recordOutput("closestSource", closestSourcePose);
+    Logger.recordOutput("sourceAngle", closestSourceAngle);
 
     if (pose.getTranslation().getDistance(Constants.FieldPosition.ReefCenter.getPose())
             < SCORE_DISTANCE
@@ -132,8 +142,9 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
         && Math.abs(processorAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
       setCrop(cropZones.PROCESSOR);
     } else if (pose.getTranslation().getDistance(closestSourcePose) < SCORE_DISTANCE
-        && Math.abs(closestSourceAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
-      setCrop(cropZones.PROCESSOR);
+        && MathUtil.angleModulus(closestSourceAngle - pose.getRotation().getRadians())
+            < Math.PI / 4) {
+      setCrop(cropZones.SOURCE);
     } else {
       setCrop(cropZones.Default);
     }
