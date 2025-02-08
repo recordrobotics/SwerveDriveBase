@@ -124,6 +124,11 @@ public final class Constants {
     public static final Translation2d TEAM_BLUE_PROCESSOR =
         new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
 
+    public static final Translation2d SOURCE_1 = new Translation2d(0, 0);
+    public static final Translation2d SOURCE_2 = new Translation2d(0, 0);
+    public static final Translation2d SOURCE_12 = new Translation2d(0, 0);
+    public static final Translation2d SOURCE_13 = new Translation2d(0, 0);
+
     // Field width and length
     public static final double FIELD_X_DIMENSION = 17.548; // Length
     public static final double FIELD_Y_DIMENSION = 8.052; // Width
@@ -135,8 +140,7 @@ public final class Constants {
         Constants.FieldConstants.TEAM_BLUE_REEF_CENTER),
 
     Processor(
-        Constants.FieldConstants.TEAM_RED_PROCESSOR, Constants.FieldConstants.TEAM_BLUE_PROCESSOR),
-    ;
+        Constants.FieldConstants.TEAM_RED_PROCESSOR, Constants.FieldConstants.TEAM_BLUE_PROCESSOR);
 
     private Translation2d red;
     private Translation2d blue;
