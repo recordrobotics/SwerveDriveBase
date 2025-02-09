@@ -4,7 +4,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,7 +36,7 @@ public class RobotModel extends SubsystemBase {
         mechanism.getRoot(
             "elevator_root",
             Constants.Elevator.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
-            Constants.Elevator.ROOT_MECHANISM_POSE.getZ());
+            Constants.Elevator.ROOT_MECHANISM_POSE.getY());
     private LoggedMechanismLigament2d elevator =
         root.append(
             new LoggedMechanismLigament2d(
@@ -42,7 +44,11 @@ public class RobotModel extends SubsystemBase {
     private LoggedMechanismLigament2d coralShooter =
         elevator.append(
             new LoggedMechanismLigament2d(
-                "coralShooter", Constants.CoralShooter.LENGTH, 0, 10, new Color8Bit(Color.kGreen)));
+                "coralShooter",
+                Constants.CoralShooter.LENGTH,
+                -90,
+                10,
+                new Color8Bit(Color.kGreen)));
 
     @AutoLogOutput
     private LoggedMechanism2d mechanism_setpoint =
@@ -52,15 +58,23 @@ public class RobotModel extends SubsystemBase {
         mechanism_setpoint.getRoot(
             "elevator_root",
             Constants.Elevator.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
-            Constants.Elevator.ROOT_MECHANISM_POSE.getZ());
+            Constants.Elevator.ROOT_MECHANISM_POSE.getY());
     private LoggedMechanismLigament2d elevator_setpoint =
         root_setpoint.append(
             new LoggedMechanismLigament2d(
-                "elevator", Constants.Elevator.MIN_LENGTH, 90, 10, new Color8Bit(Color.kBlue)));
+                "elevator",
+                Constants.Elevator.MIN_LENGTH,
+                90,
+                10,
+                new Color8Bit(Color.kBlueViolet)));
     private LoggedMechanismLigament2d coralShooter_setpoint =
         elevator_setpoint.append(
             new LoggedMechanismLigament2d(
-                "coralShooter", Constants.CoralShooter.LENGTH, 0, 10, new Color8Bit(Color.kGreen)));
+                "coralShooter",
+                Constants.CoralShooter.LENGTH,
+                -90,
+                10,
+                new Color8Bit(Color.kGreenYellow)));
 
     public void update(double height) {
       elevator.setLength(Constants.Elevator.MIN_LENGTH + height);
@@ -81,13 +95,18 @@ public class RobotModel extends SubsystemBase {
 
       // First stage
       poses[i++] =
-          Constants.Elevator.ROOT_MECHANISM_POSE.transformBy(
-              new Transform3d(0, elevator.getLength(), 0, new Rotation3d(0, 0, 0)));
+          new Pose3d(
+              new Translation3d(0, 0, (1 + Math.cos(2 * Timer.getFPGATimestamp())) / 2.0 * 0.8),
+              new Rotation3d(0, 0, 0));
 
       // Second stage
       poses[i++] =
           poses[i - 2].transformBy(
-              new Transform3d(0, elevator.getLength() * 0.1, 0, new Rotation3d(0, 0, 0)));
+              new Transform3d(
+                  0,
+                  0,
+                  (1 + Math.cos(2 * Timer.getFPGATimestamp())) / 2.0 * 0.675,
+                  new Rotation3d(0, 0, 0)));
     }
   }
 
@@ -102,7 +121,7 @@ public class RobotModel extends SubsystemBase {
         mechanism.getRoot(
             "coralintake_root",
             Constants.CoralIntake.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
-            Constants.CoralIntake.ROOT_MECHANISM_POSE.getZ());
+            Constants.CoralIntake.ROOT_MECHANISM_POSE.getY());
     private LoggedMechanismLigament2d coralintake =
         root.append(
             new LoggedMechanismLigament2d(
@@ -120,7 +139,7 @@ public class RobotModel extends SubsystemBase {
         mechanism_setpoint.getRoot(
             "coralintake_root",
             Constants.CoralIntake.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
-            Constants.CoralIntake.ROOT_MECHANISM_POSE.getZ());
+            Constants.CoralIntake.ROOT_MECHANISM_POSE.getY());
     private LoggedMechanismLigament2d coralintake_setpoint =
         root_setpoint.append(
             new LoggedMechanismLigament2d(
@@ -128,7 +147,7 @@ public class RobotModel extends SubsystemBase {
                 Constants.CoralIntake.LENGTH,
                 Constants.CoralIntake.ANGLE_OFFSET,
                 10,
-                new Color8Bit(Color.kPurple)));
+                new Color8Bit(Color.kViolet)));
 
     public void update(double angle) {
       coralintake.setAngle(Constants.CoralIntake.ANGLE_OFFSET + angle);
@@ -146,8 +165,11 @@ public class RobotModel extends SubsystemBase {
     @Override
     public void updatePoses(Pose3d[] poses, int i) {
       poses[i] =
-          Constants.CoralIntake.ROOT_MECHANISM_POSE.transformBy(
-              new Transform3d(0, 0, 0, new Rotation3d(0, 0, coralintake.getAngle())));
+          new Pose3d(0, 0, 0, new Rotation3d())
+              .rotateAround(
+                  new Translation3d(0, 0.334669, 0.456817),
+                  new Rotation3d(
+                      coralintake.getAngle() + Math.cos(2 * Timer.getFPGATimestamp()), 0, 0));
     }
   }
 

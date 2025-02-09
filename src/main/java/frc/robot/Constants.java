@@ -14,9 +14,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -214,8 +212,8 @@ public final class Constants {
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05; // TODO test different values
 
-    public static final Pose3d ROOT_MECHANISM_POSE = new Pose3d(0.3, 0, 0, new Rotation3d(0, 0, 0));
-    public static final double MIN_LENGTH = 0.6;
+    public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0.15, 0, Rotation2d.fromDegrees(0));
+    public static final double MIN_LENGTH = 0.65;
 
     public static final double MAX_HEIGHT = 1; // TODO ummmmmmmmmmmmm idk
   }
@@ -232,7 +230,7 @@ public final class Constants {
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
-    public static final double LENGTH = 0.1;
+    public static final double LENGTH = 0.25;
   }
 
   public final class CoralIntake {
@@ -266,7 +264,7 @@ public final class Constants {
 
     public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
 
-    public static final Pose3d ROOT_MECHANISM_POSE = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+    public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
     public static final double LENGTH = 0.6;
     public static final double ANGLE_OFFSET = 0;
   }
