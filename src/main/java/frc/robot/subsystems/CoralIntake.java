@@ -22,11 +22,13 @@ import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.CoralIntakeIO;
 import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class CoralIntake extends KillableSubsystem implements ShuffleboardPublisher {
+public class CoralIntake extends KillableSubsystem
+    implements ShuffleboardPublisher, PoweredSubsystem {
 
   private final CoralIntakeIO io;
 
@@ -245,5 +247,10 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
   /** frees up all hardware allocations */
   public void close() throws Exception {
     io.close();
+  }
+
+  @Override
+  public double getCurrentDrawAmps() {
+    return io.getWheelCurrentDrawAmps() + io.getArmCurrentDrawAmps();
   }
 }

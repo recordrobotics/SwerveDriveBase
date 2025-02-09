@@ -32,5 +32,9 @@ public interface SwerveModuleIO extends AutoCloseable {
 
   public void setTurnMotorPosition(double newValue);
 
+  public double getDriveMotorCurrentDrawAmps();
+
+  public double getTurnMotorCurrentDrawAmps();
+
   public void simulationPeriodic();
 }

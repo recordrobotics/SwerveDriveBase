@@ -165,6 +165,16 @@ public class SwerveModuleSim implements SwerveModuleIO {
   }
 
   @Override
+  public double getDriveMotorCurrentDrawAmps() {
+    return m_driveMotor.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
+  public double getTurnMotorCurrentDrawAmps() {
+    return m_turningMotor.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
   public void close() throws Exception {
     m_driveMotor.close();
     m_turningMotor.close();

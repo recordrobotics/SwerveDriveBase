@@ -18,12 +18,14 @@ import frc.robot.subsystems.io.SwerveModuleSim;
 import frc.robot.utils.DriveCommandData;
 import frc.robot.utils.DriveCommandDataAutoLogged;
 import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 /** Represents a swerve drive style drivetrain. */
-public class Drivetrain extends KillableSubsystem implements ShuffleboardPublisher {
+public class Drivetrain extends KillableSubsystem
+    implements ShuffleboardPublisher, PoweredSubsystem {
   // Creates swerve module objects
   private final SwerveModule m_frontLeft;
   private final SwerveModule m_frontRight;
@@ -322,5 +324,13 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
     for (SwerveModule module : modules) {
       module.setupShuffleboard();
     }
+  }
+
+  @Override
+  public double getCurrentDrawAmps() {
+    return m_frontLeft.getCurrentDrawAmps()
+        + m_frontRight.getCurrentDrawAmps()
+        + m_backLeft.getCurrentDrawAmps()
+        + m_backRight.getCurrentDrawAmps();
   }
 }

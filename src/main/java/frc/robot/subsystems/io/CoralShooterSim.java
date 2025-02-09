@@ -92,6 +92,11 @@ public class CoralShooterSim implements CoralShooterIO {
   }
 
   @Override
+  public double getWheelCurrentDrawAmps() {
+    return wheelSimModel.getCurrentDrawAmps();
+  }
+
+  @Override
   public void close() throws Exception {
     wheel.close();
     coralDetector.close();

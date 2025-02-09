@@ -93,6 +93,11 @@ public class ElevatorAlgaeSim implements ElevatorAlgaeIO {
   }
 
   @Override
+  public double getWheelCurrentDrawAmps() {
+    return wheelSimModel.getCurrentDrawAmps();
+  }
+
+  @Override
   public void close() throws Exception {
     wheel.close();
     algaeDetector.close();

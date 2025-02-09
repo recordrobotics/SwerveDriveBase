@@ -34,5 +34,9 @@ public interface ElevatorIO extends AutoCloseable {
 
   public boolean getBottomEndStop();
 
+  public double getLeftMotorCurrentDraw();
+
+  public double getRightMotorCurrentDraw();
+
   public void simulationPeriodic();
 }

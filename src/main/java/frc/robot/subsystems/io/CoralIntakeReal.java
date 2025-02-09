@@ -88,6 +88,16 @@ public class CoralIntakeReal implements CoralIntakeIO {
   }
 
   @Override
+  public double getWheelCurrentDrawAmps() {
+    return wheel.getOutputCurrent();
+  }
+
+  @Override
+  public double getArmCurrentDrawAmps() {
+    return arm.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
   public void close() throws Exception {
     wheel.close();
     arm.close();

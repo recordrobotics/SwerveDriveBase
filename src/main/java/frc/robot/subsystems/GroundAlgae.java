@@ -17,11 +17,13 @@ import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
 import frc.robot.subsystems.io.GroundAlgaeIO;
 import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublisher {
+public class GroundAlgae extends KillableSubsystem
+    implements ShuffleboardPublisher, PoweredSubsystem {
 
   private final GroundAlgaeIO io;
 
@@ -224,5 +226,10 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
     // TODO more shuffleboard stuff
     DashboardUI.Test.addSlider("Ground Algae", io.getWheelPercent(), -1, 1)
         .subscribe(io::setWheelPercent);
+  }
+
+  @Override
+  public double getCurrentDrawAmps() {
+    return io.getWheelCurrentDrawAmps() + io.getArmCurrentDrawAmps();
   }
 }

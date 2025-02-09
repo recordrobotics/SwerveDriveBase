@@ -18,5 +18,7 @@ public interface CoralShooterIO extends AutoCloseable {
 
   public boolean getCoralDetector();
 
+  public double getWheelCurrentDrawAmps();
+
   public void simulationPeriodic();
 }

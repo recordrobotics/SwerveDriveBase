@@ -105,5 +105,15 @@ public class SwerveModuleReal implements SwerveModuleIO {
   }
 
   @Override
+  public double getDriveMotorCurrentDrawAmps() {
+    return m_driveMotor.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
+  public double getTurnMotorCurrentDrawAmps() {
+    return m_turningMotor.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
   public void simulationPeriodic() {}
 }

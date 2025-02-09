@@ -21,10 +21,11 @@ import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.SwerveModuleIO;
 import frc.robot.utils.ModuleConstants;
+import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
+public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, PoweredSubsystem {
 
   // Creates variables for motors and absolute encoders
   private int driveMotorChannel;
@@ -418,5 +419,10 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
   public void close() throws Exception {
     m_notifier.close();
     io.close();
+  }
+
+  @Override
+  public double getCurrentDrawAmps() {
+    return io.getDriveMotorCurrentDrawAmps() + io.getTurnMotorCurrentDrawAmps();
   }
 }

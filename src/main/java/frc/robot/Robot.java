@@ -175,6 +175,11 @@ public class Robot extends LoggedRobot {
     m_robotContainer.testPeriodic();
   }
 
+  @Override
+  public void simulationPeriodic() {
+    m_robotContainer.simulationPeriodic();
+  }
+
   public static double getAutoStartTime() {
     return autoStartTimestamp;
   }

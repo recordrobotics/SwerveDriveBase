@@ -87,6 +87,16 @@ public class GroundAlgaeReal implements GroundAlgaeIO {
   }
 
   @Override
+  public double getWheelCurrentDrawAmps() {
+    return wheel.getOutputCurrent();
+  }
+
+  @Override
+  public double getArmCurrentDrawAmps() {
+    return arm.getOutputCurrent();
+  }
+
+  @Override
   public void close() throws Exception {
     wheel.close();
     arm.close();

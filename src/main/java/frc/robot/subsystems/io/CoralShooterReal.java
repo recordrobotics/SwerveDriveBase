@@ -60,6 +60,11 @@ public class CoralShooterReal implements CoralShooterIO {
   }
 
   @Override
+  public double getWheelCurrentDrawAmps() {
+    return wheel.getOutputCurrent();
+  }
+
+  @Override
   public void close() throws Exception {
     wheel.close();
     coralDetector.close();

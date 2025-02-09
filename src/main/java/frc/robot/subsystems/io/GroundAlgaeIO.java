@@ -28,5 +28,9 @@ public interface GroundAlgaeIO extends AutoCloseable {
 
   public boolean getAlgaeDetector();
 
+  public double getWheelCurrentDrawAmps();
+
+  public double getArmCurrentDrawAmps();
+
   public void simulationPeriodic();
 }

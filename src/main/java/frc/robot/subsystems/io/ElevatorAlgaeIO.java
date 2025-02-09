@@ -18,5 +18,7 @@ public interface ElevatorAlgaeIO extends AutoCloseable {
 
   public boolean getAlgaeDetector();
 
+  public double getWheelCurrentDrawAmps();
+
   public void simulationPeriodic();
 }

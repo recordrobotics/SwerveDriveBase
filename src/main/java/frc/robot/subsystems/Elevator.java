@@ -22,11 +22,12 @@ import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.ElevatorIO;
 import frc.robot.utils.KillableSubsystem;
+import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
+public class Elevator extends KillableSubsystem implements ShuffleboardPublisher, PoweredSubsystem {
 
   private final ElevatorIO io;
 
@@ -239,5 +240,10 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   public void setupShuffleboard() {
     DashboardUI.Test.addSlider("Elevator Target", m_goal.position, 0, ElevatorHeight.L4.getHeight())
         .subscribe(this::toggle);
+  }
+
+  @Override
+  public double getCurrentDrawAmps() {
+    return io.getLeftMotorCurrentDraw() + io.getRightMotorCurrentDraw();
   }
 }

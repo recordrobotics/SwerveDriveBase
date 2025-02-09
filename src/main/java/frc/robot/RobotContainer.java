@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -21,6 +23,7 @@ import frc.robot.subsystems.io.ElevatorAlgaeSim;
 import frc.robot.subsystems.io.ElevatorSim;
 import frc.robot.subsystems.io.GroundAlgaeSim;
 import frc.robot.utils.AutoPath;
+import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.photonvision.PhotonCamera;
 
@@ -165,6 +168,20 @@ public class RobotContainer {
 
   public void testPeriodic() {
     DashboardUI.Test.testPeriodic();
+  }
+
+  public void simulationPeriodic() {
+    updateSimulationBattery(
+        drivetrain, elevator, coralShooter, coralIntake, elevatorAlgae, groundAlgae);
+  }
+
+  public void updateSimulationBattery(PoweredSubsystem... subsystems) {
+    double[] currents = new double[subsystems.length];
+    for (int i = 0; i < subsystems.length; i++) {
+      currents[i] = subsystems[i].getCurrentDrawAmps();
+    }
+
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(currents));
   }
 
   /** frees up all hardware allocations */

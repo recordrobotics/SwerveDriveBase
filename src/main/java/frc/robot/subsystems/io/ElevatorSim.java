@@ -152,6 +152,16 @@ public class ElevatorSim implements ElevatorIO {
   }
 
   @Override
+  public double getLeftMotorCurrentDraw() {
+    return motorLeft.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
+  public double getRightMotorCurrentDraw() {
+    return motorRight.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
   public void close() throws Exception {
     motorLeft.close();
     motorRight.close();
