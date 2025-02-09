@@ -1,15 +1,16 @@
 package frc.robot.subsystems;
 
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.dashboard.DashboardUI;
+import frc.robot.subsystems.io.NavSensorIO;
 import frc.robot.utils.ShuffleboardPublisher;
 
 public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
 
   private static double period = 0.02;
+
+  private final NavSensorIO io;
 
   /**
    * The magnitude of a derivative of a vector is not equal to the derivative of a magnitude of a
@@ -24,10 +25,8 @@ public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
   private double jerkX;
   private double jerkY;
 
-  public static AHRS _nav = new AHRS(NavXComType.kUSB1);
-
   // variable to keep track of a reference angle whenever you reset
-  private static double referenceAngle = _nav.getAngle();
+  private double referenceAngle;
 
   private static NavSensor instance;
 
@@ -35,24 +34,24 @@ public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
     return instance;
   }
 
-  public NavSensor() {
+  public NavSensor(NavSensorIO io) {
     instance = this;
-  }
+    this.io = io;
 
-  // Resets nav
-  static {
-    _nav.reset();
-    _nav.resetDisplacement(); // Technically not necessary but whatever
+    io.reset();
+    io.resetDisplacement(); // Technically not necessary but whatever
+
+    referenceAngle = io.getAngle();
   }
 
   // Stores the reference angle as whatever the angle is currently measured to be
   public void resetAngleAdjustment() {
-    referenceAngle = _nav.getAngle();
+    referenceAngle = io.getAngle();
   }
 
   // Gets the angle minus the reference angle
   public Rotation2d getAdjustedAngle() {
-    return Rotation2d.fromDegrees(-(_nav.getAngle() - referenceAngle));
+    return Rotation2d.fromDegrees(-(io.getAngle() - referenceAngle));
   }
 
   public double getJerkMagnitude() {
@@ -61,22 +60,27 @@ public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
 
   @Override
   public void periodic() {
-    double accelX = _nav.getWorldLinearAccelX();
-    double accelY = _nav.getWorldLinearAccelY();
+    double accelX = io.getWorldLinearAccelX();
+    double accelY = io.getWorldLinearAccelY();
     jerkX = (accelX - last_accelX) / period;
     jerkY = (accelY - last_accelY) / period;
     last_accelX = accelX;
     last_accelY = accelY;
   }
 
+  @Override
+  public void simulationPeriodic() {
+    io.simulationPeriodic();
+  }
+
   /** frees up all hardware allocations */
-  public void close() {
-    _nav.close();
+  public void close() throws Exception {
+    io.close();
   }
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Overview.setNavSensor(NavSensor._nav::isConnected);
-    DashboardUI.Test.addBoolean("Nav Sensor", NavSensor._nav::isConnected);
+    DashboardUI.Overview.setNavSensor(io::isConnected);
+    DashboardUI.Test.addBoolean("Nav Sensor", io::isConnected);
   }
 }

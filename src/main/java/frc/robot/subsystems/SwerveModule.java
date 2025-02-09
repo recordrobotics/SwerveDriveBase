@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -16,11 +15,11 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
+import frc.robot.subsystems.io.SwerveModuleIO;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.Logger;
@@ -30,9 +29,10 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
   // Creates variables for motors and absolute encoders
   private int driveMotorChannel;
   private int turningMotorChannel;
-  private final TalonFX m_driveMotor;
-  private final TalonFX m_turningMotor;
-  private final DutyCycleEncoder absoluteTurningMotorEncoder;
+  private int encoderChannel;
+
+  private final SwerveModuleIO io;
+
   private final double turningEncoderOffset;
 
   private final PIDController drivePIDController;
@@ -83,16 +83,15 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
    * @param m - a ModuleConstants object that contains all constants relevant for creating a swerve
    *     module. Look at ModuleConstants.java for what variables are contained
    */
-  public SwerveModule(ModuleConstants m) {
+  public SwerveModule(ModuleConstants m, SwerveModuleIO io) {
+    this.io = io;
 
     // Creates TalonFX objects
     driveMotorChannel = m.driveMotorChannel;
     turningMotorChannel = m.turningMotorChannel;
-    m_driveMotor = new TalonFX(m.driveMotorChannel);
-    m_turningMotor = new TalonFX(m.turningMotorChannel);
+    encoderChannel = m.absoluteTurningMotorEncoderChannel;
 
     // Creates Motor Encoder object and gets offset
-    absoluteTurningMotorEncoder = new DutyCycleEncoder(m.absoluteTurningMotorEncoderChannel);
     turningEncoderOffset = m.turningEncoderOffset;
 
     // Creates other variables
@@ -104,8 +103,8 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
     Timer.delay(2.3);
 
     // Sets motor speeds to 0
-    m_driveMotor.set(0);
-    m_turningMotor.set(0);
+    io.setDriveMotorPercent(0);
+    io.setTurnMotorPercent(0);
 
     // Creates PID Controllers
     this.drivePIDController = new PIDController(m.DRIVE_KP, m.DRIVE_KI, m.DRIVE_KD);
@@ -181,7 +180,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
     turn_kS = m.TURN_KS;
 
     // Corrects for offset in absolute motor position
-    m_turningMotor.setPosition(getAbsWheelTurnOffset());
+    io.setTurnMotorPosition(getAbsWheelTurnOffset());
 
     m_notifier = new Notifier(this::controllerPeriodic);
     // m_notifier.startPeriodic(Constants.Swerve.kDt);
@@ -193,7 +192,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
    * @return The current offset absolute position of the wheel's turn
    */
   private double getAbsWheelTurnOffset() {
-    double absEncoderPosition = (absoluteTurningMotorEncoder.get() - turningEncoderOffset + 1) % 1;
+    double absEncoderPosition = (io.getAbsoluteEncoder() - turningEncoderOffset + 1) % 1;
     double absWheelPositionOffset = absEncoderPosition * TURN_GEAR_RATIO;
     return absWheelPositionOffset;
   }
@@ -205,7 +204,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
    */
   public Rotation2d getTurnWheelRotation2d() {
     // Get the turning motor's current position in rotations
-    double numMotorRotations = m_turningMotor.getPosition().getValueAsDouble();
+    double numMotorRotations = io.getTurnMotorPosition();
 
     // Convert motor rotations to radians
     double motorRadians = numMotorRotations * 2 * Math.PI;
@@ -227,14 +226,14 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
 
   public double getTurnWheelVelocity() {
     // RPS
-    double turnMotorRotationsPerSecond = m_turningMotor.getVelocity().getValueAsDouble();
+    double turnMotorRotationsPerSecond = io.getTurnMotorVelocity();
     return turnMotorRotationsPerSecond / TURN_GEAR_RATIO;
   }
 
   // meters per second
   public double getDriveWheelVelocity() {
     // Get the drive motor velocity in rotations per second
-    double driveMotorRotationsPerSecond = m_driveMotor.getVelocity().getValueAsDouble();
+    double driveMotorRotationsPerSecond = io.getDriveMotorVelocity();
 
     // Calculate wheel rotations per second by adjusting for the gear ratio
     double driveWheelRotationsPerSecond = driveMotorRotationsPerSecond / DRIVE_GEAR_RATIO;
@@ -250,7 +249,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
 
   public double getDriveWheelDistance() {
     // Get the drive motor's current position in rotations
-    double numRotationsDriveMotor = m_driveMotor.getPosition().getValueAsDouble();
+    double numRotationsDriveMotor = io.getDriveMotorPosition();
 
     // Adjust for the gear ratio to get the number of wheel rotations
     double numRotationsDriveWheel = numRotationsDriveMotor / DRIVE_GEAR_RATIO;
@@ -324,7 +323,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
     double driveFeedforwardOutput =
         driveFeedForward.calculateWithVelocities(
             lastSpeedMetersPerSecond, drivePIDController.getSetpoint());
-    m_driveMotor.setVoltage(
+    io.setDriveMotorVoltage(
         drivePIDOutput + driveFeedforwardOutput); // Feed forward runs on voltage control
 
     // Calculate the turning motor output from the turning PID controller then set
@@ -363,57 +362,61 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable {
 
     // double nextVoltage = turnPid + turnFeedforwardOutput;
 
-    m_turningMotor.setVoltage(nextVoltage);
+    io.setTurnMotorVoltage(nextVoltage);
 
-    Logger.recordOutput("TargetVel_" + m_turningMotor.getDeviceID(), m_setpoint.velocity);
-    Logger.recordOutput("TargetPos_" + m_turningMotor.getDeviceID(), m_setpoint.position);
-    Logger.recordOutput("CurrentVel_" + m_turningMotor.getDeviceID(), getTurnWheelVelocity());
+    Logger.recordOutput("TargetVel_" + turningMotorChannel, m_setpoint.velocity);
+    Logger.recordOutput("TargetPos_" + turningMotorChannel, m_setpoint.position);
+    Logger.recordOutput("CurrentVel_" + turningMotorChannel, getTurnWheelVelocity());
     Logger.recordOutput(
-        "CurrentPos_" + m_turningMotor.getDeviceID(), getTurnWheelRotation2d().getRotations());
+        "CurrentPos_" + turningMotorChannel, getTurnWheelRotation2d().getRotations());
+
+    Logger.recordOutput("TargetVel_" + driveMotorChannel, drivePIDController.getSetpoint());
+    Logger.recordOutput("CurrentVel_" + driveMotorChannel, getDriveWheelVelocity());
 
     lastSpeedMetersPerSecond = drivePIDController.getSetpoint();
   }
 
+  public void simulationPeriodic() {
+    io.simulationPeriodic();
+  }
+
   public void stop() {
     drivePIDController.setSetpoint(0);
-    m_driveMotor.setVoltage(0); // Feed forward runs on voltage control
-    m_turningMotor.setVoltage(0);
+    io.setDriveMotorVoltage(0); // Feed forward runs on voltage control
+    io.setTurnMotorVoltage(0);
   }
 
   public void setDriveMotorVoltsSysIdOnly(double volts) {
-    m_driveMotor.setVoltage(volts);
+    io.setDriveMotorVoltage(volts);
   }
 
   public double getDriveMotorVoltsSysIdOnly() {
-    return m_driveMotor.getMotorVoltage().getValueAsDouble();
+    return io.getDriveMotorVoltage();
   }
 
   public void setTurnMotorVoltsSysIdOnly(double volts) {
-    m_turningMotor.setVoltage(volts);
+    io.setTurnMotorVoltage(volts);
+    ;
   }
 
   public double getTurnMotorVoltsSysIdOnly() {
-    return m_turningMotor.getMotorVoltage().getValueAsDouble();
+    return io.getTurnMotorVoltage();
   }
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Drive " + driveMotorChannel, m_driveMotor.get(), -1, 1)
-        .subscribe(m_driveMotor::set);
+    DashboardUI.Test.addSlider("Drive " + driveMotorChannel, io.getDriveMotorPercent(), -1, 1)
+        .subscribe(io::setDriveMotorPercent);
 
-    DashboardUI.Test.addSlider("Turn " + turningMotorChannel, m_turningMotor.get(), -1, 1)
-        .subscribe(m_turningMotor::set);
+    DashboardUI.Test.addSlider("Turn " + turningMotorChannel, io.getTurnMotorPercent(), -1, 1)
+        .subscribe(io::setTurnMotorPercent);
 
-    DashboardUI.Test.addNumber(
-        "Encoder " + absoluteTurningMotorEncoder.getSourceChannel(),
-        absoluteTurningMotorEncoder::get);
+    DashboardUI.Test.addNumber("Encoder " + encoderChannel, io::getAbsoluteEncoder);
   }
 
   /** frees up all hardware allocations */
-  public void close() {
+  public void close() throws Exception {
     m_notifier.close();
-    m_driveMotor.close();
-    m_turningMotor.close();
-    absoluteTurningMotorEncoder.close();
+    io.close();
   }
 }

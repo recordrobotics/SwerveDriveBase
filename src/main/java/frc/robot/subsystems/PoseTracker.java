@@ -7,13 +7,18 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotState.Mode;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
+import frc.robot.subsystems.io.NavSensorReal;
+import frc.robot.subsystems.io.NavSensorSim;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseTracker extends SubsystemBase implements AutoCloseable {
 
-  public final NavSensor nav = new NavSensor();
+  public final NavSensor nav =
+      new NavSensor(
+          Constants.RobotState.getMode() == Mode.REAL ? new NavSensorReal() : new NavSensorSim());
 
   private static SwerveDrivePoseEstimator poseFilter;
 
@@ -69,7 +74,7 @@ public class PoseTracker extends SubsystemBase implements AutoCloseable {
     setToPose(Constants.FieldStartingLocation.AutoStart.getPose());
   }
 
-  public void close() {
+  public void close() throws Exception {
     nav.close();
   }
 }

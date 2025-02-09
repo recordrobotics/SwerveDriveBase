@@ -11,7 +11,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotState.Mode;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.io.SwerveModuleReal;
+import frc.robot.subsystems.io.SwerveModuleSim;
 import frc.robot.utils.DriveCommandData;
 import frc.robot.utils.DriveCommandDataAutoLogged;
 import frc.robot.utils.KillableSubsystem;
@@ -22,10 +25,10 @@ import org.littletonrobotics.junction.Logger;
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends KillableSubsystem implements ShuffleboardPublisher {
   // Creates swerve module objects
-  private final SwerveModule m_frontLeft = new SwerveModule(Constants.Swerve.frontLeftConstants);
-  private final SwerveModule m_frontRight = new SwerveModule(Constants.Swerve.frontRightConstants);
-  private final SwerveModule m_backLeft = new SwerveModule(Constants.Swerve.backLeftConstants);
-  private final SwerveModule m_backRight = new SwerveModule(Constants.Swerve.backRightConstants);
+  private final SwerveModule m_frontLeft;
+  private final SwerveModule m_frontRight;
+  private final SwerveModule m_backLeft;
+  private final SwerveModule m_backRight;
 
   private DriveCommandDataAutoLogged driveCommandDataAutoLogged = new DriveCommandDataAutoLogged();
 
@@ -41,6 +44,42 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
           Constants.Swerve.backRightConstants.wheelLocation);
 
   public Drivetrain() {
+    if (Constants.RobotState.getMode() == Mode.REAL) {
+      m_frontLeft =
+          new SwerveModule(
+              Constants.Swerve.frontLeftConstants,
+              new SwerveModuleReal(Constants.Swerve.kDt, Constants.Swerve.frontLeftConstants));
+      m_frontRight =
+          new SwerveModule(
+              Constants.Swerve.frontRightConstants,
+              new SwerveModuleReal(Constants.Swerve.kDt, Constants.Swerve.frontRightConstants));
+      m_backLeft =
+          new SwerveModule(
+              Constants.Swerve.backLeftConstants,
+              new SwerveModuleReal(Constants.Swerve.kDt, Constants.Swerve.backLeftConstants));
+      m_backRight =
+          new SwerveModule(
+              Constants.Swerve.backRightConstants,
+              new SwerveModuleReal(Constants.Swerve.kDt, Constants.Swerve.backRightConstants));
+    } else {
+      m_frontLeft =
+          new SwerveModule(
+              Constants.Swerve.frontLeftConstants,
+              new SwerveModuleSim(Constants.Swerve.kDt, Constants.Swerve.frontLeftConstants));
+      m_frontRight =
+          new SwerveModule(
+              Constants.Swerve.frontRightConstants,
+              new SwerveModuleSim(Constants.Swerve.kDt, Constants.Swerve.frontRightConstants));
+      m_backLeft =
+          new SwerveModule(
+              Constants.Swerve.backLeftConstants,
+              new SwerveModuleSim(Constants.Swerve.kDt, Constants.Swerve.backLeftConstants));
+      m_backRight =
+          new SwerveModule(
+              Constants.Swerve.backRightConstants,
+              new SwerveModuleSim(Constants.Swerve.kDt, Constants.Swerve.backRightConstants));
+    }
+
     sysIdRoutineDriveMotors =
         new SysIdRoutine(
             // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
@@ -112,6 +151,14 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
     m_backRight.setDesiredState(swerveModuleStates[3]);
 
     Logger.recordOutput("SwerveStates/Setpoints", swerveModuleStates);
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    m_frontLeft.simulationPeriodic();
+    m_frontRight.simulationPeriodic();
+    m_backLeft.simulationPeriodic();
+    m_backRight.simulationPeriodic();
   }
 
   public void SysIdOnlyDriveMotors(Voltage volts) {
@@ -212,6 +259,7 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
    *
    * @return The current relative chassis speeds as a ChassisSpeeds object.
    */
+  @AutoLogOutput
   public ChassisSpeeds getChassisSpeeds() {
     return m_kinematics.toChassisSpeeds(
         m_frontLeft.getModuleState(),
@@ -261,7 +309,7 @@ public class Drivetrain extends KillableSubsystem implements ShuffleboardPublish
   }
 
   /** frees up all hardware allocations */
-  public void close() {
+  public void close() throws Exception {
     m_backLeft.close();
     m_backRight.close();
     m_frontLeft.close();

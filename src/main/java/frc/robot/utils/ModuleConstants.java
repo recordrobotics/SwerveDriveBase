@@ -61,6 +61,9 @@ public class ModuleConstants {
 
   public double WHEEL_DIAMETER;
 
+  public MotorType driveMotorType;
+  public MotorType turnMotorType;
+
   // Class to store types of motors
   public enum MotorType {
     Falcon,
@@ -88,6 +91,9 @@ public class ModuleConstants {
       Translation2d wheelLocation,
       MotorType turnMotorType,
       MotorType driveMotorType) {
+
+    this.driveMotorType = driveMotorType;
+    this.turnMotorType = turnMotorType;
 
     // Encoder nums
     this.driveMotorChannel = driveMotorChannel;
