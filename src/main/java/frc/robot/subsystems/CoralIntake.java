@@ -63,6 +63,7 @@ public class CoralIntake extends KillableSubsystem
 
     io.setArmPosition(0);
     toggle(CoralIntakeStates.OFF);
+    toggleArm(IntakeArmStates.UP);
 
     sysIdRoutineWheel =
         new SysIdRoutine(
@@ -102,8 +103,7 @@ public class CoralIntake extends KillableSubsystem
 
   public enum IntakeArmStates {
     UP,
-    DOWN,
-    OFF;
+    DOWN;
   }
 
   @AutoLogOutput
@@ -152,7 +152,6 @@ public class CoralIntake extends KillableSubsystem
       case DOWN:
         toggleArm(Constants.CoralIntake.ARM_DOWN);
         break;
-      case OFF:
       default:
         io.setArmVoltage(0);
         break;
@@ -180,8 +179,6 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void periodic() {
-    toggleArm(SmartDashboard.getNumber("CoralIntakeArm", 0));
-
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
     io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control

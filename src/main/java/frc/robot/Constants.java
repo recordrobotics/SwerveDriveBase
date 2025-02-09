@@ -295,8 +295,8 @@ public final class Constants {
     public static final double sV = 0.52909;
     public static final double sA = 0.035848;
 
-    public static final double ARM_UP = 0.5; // TODO make correct
-    public static final double ARM_DOWN = 0; // TODO make correct
+    public static final double ARM_UP = 1.5; // TODO make correct
+    public static final double ARM_DOWN = -1.4; // TODO make correct
 
     public static final double ARM_GEAR_RATIO = 33.18;
 

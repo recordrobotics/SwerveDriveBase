@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
-import frc.robot.subsystems.CoralIntake.IntakeArmStates;
+import frc.robot.subsystems.CoralIntake.IntakeArmStates; // TODO what????????????
 import frc.robot.subsystems.io.GroundAlgaeIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
@@ -156,7 +156,6 @@ public class GroundAlgae extends KillableSubsystem
       case DOWN:
         toggleArm(Constants.CoralIntake.ARM_DOWN);
         break;
-      case OFF:
       default:
         io.setArmVoltage(0);
         break;
