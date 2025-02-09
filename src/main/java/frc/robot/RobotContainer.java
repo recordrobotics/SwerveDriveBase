@@ -19,6 +19,7 @@ import frc.robot.subsystems.io.CoralIntakeSim;
 import frc.robot.subsystems.io.CoralShooterSim;
 import frc.robot.subsystems.io.ElevatorAlgaeSim;
 import frc.robot.subsystems.io.ElevatorSim;
+import frc.robot.subsystems.io.GroundAlgaeSim;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.photonvision.PhotonCamera;
@@ -42,7 +43,7 @@ public class RobotContainer {
   public static final CoralShooter coralShooter = new CoralShooter(new CoralShooterSim(0.02));
   public static final CoralIntake coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
   public static final ElevatorAlgae elevatorAlgae = new ElevatorAlgae(new ElevatorAlgaeSim(0.02));
-  public static final GroundAlgae groundAlgae = null; // new GroundAlgae();
+  public static final GroundAlgae groundAlgae = new GroundAlgae(new GroundAlgaeSim(0.02));
   public static final Lights lights = new Lights();
   public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 
@@ -174,7 +175,7 @@ public class RobotContainer {
     coralShooter.close();
     coralIntake.close();
     elevatorAlgae.close();
-    // groundAlgae.close();
+    groundAlgae.close();
     pdp.close();
   }
 }

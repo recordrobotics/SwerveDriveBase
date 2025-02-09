@@ -53,7 +53,8 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
           Constants.CoralIntake.kP, Constants.CoralIntake.kI, Constants.CoralIntake.kD);
 
   private final SimpleMotorFeedforward feedForward =
-      new SimpleMotorFeedforward(Constants.CoralIntake.kS, Constants.CoralIntake.kV);
+      new SimpleMotorFeedforward(
+          Constants.CoralIntake.kS, Constants.CoralIntake.kV, Constants.CoralIntake.kA);
 
   public CoralIntake(CoralIntakeIO io) {
     this.io = io;
@@ -110,7 +111,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
 
   @AutoLogOutput
   public double getWheelPosition() {
-    return io.getWheelPosition() / 60.0; /* RPM -> RPS */
+    return io.getWheelPosition();
   }
 
   @AutoLogOutput

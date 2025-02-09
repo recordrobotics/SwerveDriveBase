@@ -1,68 +1,86 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.RobotMap;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
+import frc.robot.subsystems.io.GroundAlgaeIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-// TODO arm
 public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublisher {
-  private SparkMax motor;
-  private final SparkMax arm;
 
-  private DigitalInput algaeDetector = new DigitalInput(RobotMap.GroundAlgae.LIMIT_SWITCH_ID);
+  private final GroundAlgaeIO io;
+
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
       new Debouncer(Constants.GroundAlgae.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
-  private static final double defaultSpeed = Constants.GroundAlgae.DEFAULT_SPEED;
-
   private final ProfiledPIDController armPID =
       new ProfiledPIDController(
-          Constants.CoralIntake.sP,
-          Constants.CoralIntake.sI,
-          Constants.CoralIntake.sD,
+          Constants.GroundAlgae.sP,
+          Constants.GroundAlgae.sI,
+          Constants.GroundAlgae.sD,
           new Constraints(
-              Constants.CoralIntake.MAX_ARM_VELOCITY, Constants.CoralIntake.MAX_ARM_ACCELERATION));
+              Constants.GroundAlgae.MAX_ARM_VELOCITY, Constants.GroundAlgae.MAX_ARM_ACCELERATION));
   private final ArmFeedforward armFeedForward =
       new ArmFeedforward(
-          Constants.CoralIntake.sS,
-          Constants.CoralIntake.sG,
-          Constants.CoralIntake.sV,
-          Constants.CoralIntake.sA);
+          Constants.GroundAlgae.sS,
+          Constants.GroundAlgae.sG,
+          Constants.GroundAlgae.sV,
+          Constants.GroundAlgae.sA);
   private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
 
-  public GroundAlgae() {
-    motor = new SparkMax(RobotMap.GroundAlgae.MOTOR_ID, MotorType.kBrushless);
-    arm = new SparkMax(RobotMap.CoralIntake.ARM_ID, MotorType.kBrushless);
+  private final PIDController pid =
+      new PIDController(
+          Constants.GroundAlgae.kP, Constants.GroundAlgae.kI, Constants.GroundAlgae.kD);
+
+  private final SimpleMotorFeedforward feedForward =
+      new SimpleMotorFeedforward(
+          Constants.GroundAlgae.kS, Constants.GroundAlgae.kV, Constants.GroundAlgae.kA);
+
+  public GroundAlgae(GroundAlgaeIO io) {
+    this.io = io;
+
     toggle(GroundAlgaeStates.OFF);
 
-    sysIdRoutine =
+    sysIdRoutineWheel =
         new SysIdRoutine(
             // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
             new SysIdRoutine.Config(
                 null,
                 null,
                 null,
-                (state -> Logger.recordOutput("GroundAlgae/SysIdTestState", state.toString()))),
-            new SysIdRoutine.Mechanism(motor::setVoltage, null, this));
+                (state ->
+                    Logger.recordOutput("GroundAlgae/Wheel/SysIdTestState", state.toString()))),
+            new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.magnitude()), null, this));
+
+    sysIdRoutineArm =
+        new SysIdRoutine(
+            // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+            new SysIdRoutine.Config(
+                Volts.of(3).per(Second),
+                Volts.of(1.7),
+                Seconds.of(1),
+                (state -> Logger.recordOutput("GroundAlgae/Arm/SysIdTestState", state.toString()))),
+            new SysIdRoutine.Mechanism(v -> io.setArmVoltage(v.magnitude()), null, this));
   }
 
-  private final SysIdRoutine sysIdRoutine;
+  private final SysIdRoutine sysIdRoutineWheel;
+  private final SysIdRoutine sysIdRoutineArm;
 
   public enum GroundAlgaeStates {
     IN,
@@ -79,34 +97,49 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
   public void toggle(GroundAlgaeStates state, double speed) {
     switch (state) {
       case IN:
-        motor.set(speed);
+        pid.setSetpoint(speed);
         break;
       case OUT:
-        motor.set(-speed);
+        pid.setSetpoint(-speed);
         break;
       case OFF:
       default:
-        motor.set(0);
+        pid.setSetpoint(0);
         break;
     }
   }
 
   public void toggle(GroundAlgaeStates state) {
-    toggle(state, defaultSpeed);
+    toggle(state, Constants.GroundAlgae.WHEEL_VELOCITY);
   }
 
   @AutoLogOutput
   public double getWheelPosition() {
-    return motor.getEncoder().getPosition();
+    return io.getWheelPosition();
   }
 
   @AutoLogOutput
   public double getWheelVelocity() {
-    return motor.getEncoder().getVelocity();
+    return io.getWheelVelocity() / 60.0 /* RPM -> RPS */;
   }
 
+  @AutoLogOutput
   public double getArmAngle() {
-    return arm.getEncoder().getPosition() * Math.PI * 2;
+    return io.getArmPosition() / Constants.CoralIntake.ARM_GEAR_RATIO * 2 * Math.PI;
+  }
+
+  @AutoLogOutput
+  public double getArmVelocity() {
+    return io.getArmVelocity()
+        / 60.0 /* RPM -> RPS */
+        / Constants.CoralIntake.ARM_GEAR_RATIO
+        * 2
+        * Math.PI;
+  }
+
+  @AutoLogOutput
+  public double getArmSetTo() {
+    return io.getArmPercent() * RobotController.getBatteryVoltage();
   }
 
   public void toggleArm(double pos) {
@@ -123,7 +156,7 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
         break;
       case OFF:
       default:
-        arm.setVoltage(0);
+        io.setArmVoltage(0);
         break;
     }
   }
@@ -132,49 +165,64 @@ public class GroundAlgae extends KillableSubsystem implements ShuffleboardPublis
     return armPID.atGoal();
   }
 
+  @AutoLogOutput
   public boolean hasAlgae() {
     return debounced_value;
   }
 
+  private double lastSpeed = 0;
+
   public void periodic() {
-    debounced_value = !m_debouncer.calculate(algaeDetector.get());
+    debounced_value = !m_debouncer.calculate(io.getAlgaeDetector());
+
+    double pidOutput = pid.calculate(getWheelVelocity());
+    double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
+    io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    lastSpeed = pid.getSetpoint();
 
     double pidOutputArm = armPID.calculate(getArmAngle());
     double armFeedforwardOutput =
         armFeedForward.calculateWithVelocities(
             getArmAngle(), currentSetpoint.velocity, armPID.getSetpoint().velocity);
-    arm.setVoltage(pidOutputArm + armFeedforwardOutput);
+    io.setArmVoltage(pidOutputArm + armFeedforwardOutput);
     currentSetpoint = armPID.getSetpoint();
   }
 
-  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.quasistatic(direction);
+  public Command sysIdQuasistaticWheel(SysIdRoutine.Direction direction) {
+    return sysIdRoutineWheel.quasistatic(direction);
   }
 
-  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.dynamic(direction);
+  public Command sysIdDynamicWheel(SysIdRoutine.Direction direction) {
+    return sysIdRoutineWheel.dynamic(direction);
+  }
+
+  public Command sysIdQuasistaticArm(SysIdRoutine.Direction direction) {
+    return sysIdRoutineArm.quasistatic(direction);
+  }
+
+  public Command sysIdDynamicArm(SysIdRoutine.Direction direction) {
+    return sysIdRoutineArm.dynamic(direction);
   }
 
   @Override
   public void kill() {
     toggle(GroundAlgaeStates.OFF);
-    motor.setVoltage(0);
-    arm.setVoltage(0);
+    io.setWheelVoltage(0);
+    io.setArmVoltage(0);
   }
 
   /** frees up all hardware allocations */
   @Override
-  public void close() {
-    motor.close();
-    arm.close();
-    algaeDetector.close();
+  public void close() throws Exception {
+    io.close();
   }
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Ground Algae Arm Pos", arm.getEncoder().getPosition(), -1, 1)
+    DashboardUI.Test.addSlider("Ground Algae Arm Pos", io.getArmPosition(), -1, 1)
         .subscribe(this::toggleArm);
     // TODO more shuffleboard stuff
-    DashboardUI.Test.addSlider("Ground Algae", motor.get(), -1, 1).subscribe(motor::set);
+    DashboardUI.Test.addSlider("Ground Algae", io.getWheelPercent(), -1, 1)
+        .subscribe(io::setWheelPercent);
   }
 }

@@ -111,6 +111,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    // TODO: reenable when doing sysid - allows logs to be saved on disable
     if (hasRun && false) {
       Logger.end();
       SignalLogger.stop();

@@ -9,12 +9,12 @@ public final class RobotMap {
   }
 
   public static final class CoralShooter {
-    public static final int MOTOR_ID = 15; // TODO get actual CAN number
+    public static final int MOTOR_ID = 16; // TODO get actual CAN number
     public static final int LIMIT_SWITCH_ID = 6; // TODO get actual DIO port number
   }
 
   public static final class ElevatorAlgae {
-    public static final int MOTOR_ID = 14; // TODO get actual CAN number
+    public static final int MOTOR_ID = 15; // TODO get actual CAN number
     public static final int LIMIT_SWITCH_ID = 5; // TODO get actual DIO port number
   }
 
@@ -30,6 +30,7 @@ public final class RobotMap {
 
   public static final class GroundAlgae {
     public static final int MOTOR_ID = 13; // TODO get actual port number
+    public static final int ARM_ID = 14; // TODO get actual port number
     public static final int LIMIT_SWITCH_ID = 4; // TODO get actual DIO port number
   }
 }
