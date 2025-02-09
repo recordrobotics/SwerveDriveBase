@@ -3,11 +3,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +40,8 @@ public class RobotModel extends SubsystemBase {
         root.append(
             new LoggedMechanismLigament2d(
                 "elevator", Constants.Elevator.MIN_LENGTH, 90, 10, new Color8Bit(Color.kBlue)));
+
+    @SuppressWarnings("unused")
     private LoggedMechanismLigament2d coralShooter =
         elevator.append(
             new LoggedMechanismLigament2d(
@@ -68,6 +68,8 @@ public class RobotModel extends SubsystemBase {
                 90,
                 10,
                 new Color8Bit(Color.kBlueViolet)));
+
+    @SuppressWarnings("unused")
     private LoggedMechanismLigament2d coralShooter_setpoint =
         elevator_setpoint.append(
             new LoggedMechanismLigament2d(
@@ -97,17 +99,19 @@ public class RobotModel extends SubsystemBase {
       // First stage
       poses[i++] =
           new Pose3d(
-              new Translation3d(0, 0, (1 + Math.cos(2 * Timer.getFPGATimestamp())) / 2.0 * 0.8),
+              new Translation3d(
+                  0,
+                  0,
+                  (elevator.getLength() - Constants.Elevator.MIN_LENGTH)
+                      / Constants.Elevator.MAX_HEIGHT
+                      * 0.760967),
               new Rotation3d(0, 0, 0));
 
       // Second stage
       poses[i++] =
-          poses[i - 2].transformBy(
-              new Transform3d(
-                  0,
-                  0,
-                  (1 + Math.cos(2 * Timer.getFPGATimestamp())) / 2.0 * 0.675,
-                  new Rotation3d(0, 0, 0)));
+          new Pose3d(
+              new Translation3d(0, 0, elevator.getLength() - Constants.Elevator.MIN_LENGTH),
+              new Rotation3d(0, 0, 0));
     }
   }
 

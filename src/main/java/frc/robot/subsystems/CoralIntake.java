@@ -92,6 +92,7 @@ public class CoralIntake extends KillableSubsystem implements ShuffleboardPublis
     OFF;
   }
 
+  @AutoLogOutput
   public boolean hasCoral() {
     return debounced_value;
   }

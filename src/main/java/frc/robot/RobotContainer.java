@@ -16,8 +16,8 @@ import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.io.CoralIntakeSim;
+import frc.robot.subsystems.io.ElevatorSim;
 import frc.robot.utils.AutoPath;
-import frc.robot.utils.DriveCommandData;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.photonvision.PhotonCamera;
 
@@ -35,7 +35,7 @@ public class RobotContainer {
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final PoseTracker poseTracker = new PoseTracker();
   public static final Limelight limelight = new Limelight();
-  public static final Elevator elevator = null; // new Elevator();
+  public static final Elevator elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
   public static final CoralShooter coralShooter = null; // = new CoralShooter();
   public static final CoralIntake coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
   public static final ElevatorAlgae elevatorAlgae = null; // new ElevatorAlgae();
@@ -152,16 +152,11 @@ public class RobotContainer {
     // }
     // return autoCommand;
 
-    return drivetrain
-        .run(() -> drivetrain.drive(new DriveCommandData()))
-        .withTimeout(0.4)
-        .andThen(drivetrain.sysIdQuasistaticDriveMotors(Direction.kForward))
-        .andThen(drivetrain.run(() -> drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
-        .andThen(drivetrain.sysIdQuasistaticDriveMotors(Direction.kReverse))
-        .andThen(drivetrain.run(() -> drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
-        .andThen(drivetrain.sysIdDynamicDriveMotors(Direction.kForward))
-        .andThen(drivetrain.run(() -> drivetrain.drive(new DriveCommandData())).withTimeout(0.4))
-        .andThen(drivetrain.sysIdDynamicDriveMotors(Direction.kReverse));
+    return elevator
+        .sysIdQuasistatic(Direction.kForward)
+        .andThen(elevator.sysIdQuasistatic(Direction.kReverse))
+        .andThen(elevator.sysIdDynamic(Direction.kForward))
+        .andThen(elevator.sysIdDynamic(Direction.kReverse));
   }
 
   public void testPeriodic() {
@@ -172,7 +167,7 @@ public class RobotContainer {
   public void close() throws Exception {
     drivetrain.close();
     limelight.close();
-    // elevator.close();
+    elevator.close();
     // coralShooter.close();
     coralIntake.close();
     // elevatorAlgae.close();

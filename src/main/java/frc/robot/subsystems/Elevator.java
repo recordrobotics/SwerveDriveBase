@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -14,14 +13,14 @@ import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
-import frc.robot.RobotMap;
 import frc.robot.dashboard.DashboardUI;
+import frc.robot.subsystems.io.ElevatorIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -29,10 +28,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher {
 
-  private final TalonFX motorLeft;
-  private final TalonFX motorRight;
-  private final DigitalInput bottomEndStop;
-  private final DigitalInput topEndStop;
+  private final ElevatorIO io;
 
   // Maximum elevator velocity and acceleration constraints
   private final TrapezoidProfile.Constraints constraints =
@@ -94,61 +90,67 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private final LinearSystemLoop<N2, N1, N2> loop =
       new LinearSystemLoop<>(elevatorSystem, controller, observer, 12.0, Constants.Elevator.kDt);
 
-  public Elevator() {
-    motorLeft = new TalonFX(RobotMap.Elevator.MOTOR_LEFT_ID);
-    motorRight = new TalonFX(RobotMap.Elevator.MOTOR_RIGHT_ID);
-    bottomEndStop = new DigitalInput(RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
-    topEndStop = new DigitalInput(RobotMap.Elevator.TOP_ENDSTOP_ID);
+  public Elevator(ElevatorIO io) {
+    this.io = io;
 
-    motorLeft.setPosition(0);
-    motorRight.setPosition(0);
+    io.setLeftMotorPosition(0);
+    io.setRightMotorPosition(0);
 
     sysIdRoutine =
         new SysIdRoutine(
             // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
             new SysIdRoutine.Config(
-                Volts.of(6).per(Second),
-                Volts.of(7),
-                Seconds.of(1.5),
+                Volts.of(4.5).per(Second),
+                Volts.of(4),
+                Seconds.of(1.7),
                 (state -> Logger.recordOutput("Elevator/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::setBothMotors, null, this));
+
+    controller.latencyCompensate(elevatorSystem, Constants.Elevator.kDt, 0.024066);
+
+    SmartDashboard.putNumber("Elevator", 0);
   }
 
   private final SysIdRoutine sysIdRoutine;
 
   private double getCurrentRotationalVelocity() {
-    return (motorLeft.getVelocity().getValueAsDouble()
-            + motorRight.getVelocity().getValueAsDouble())
-        / 2;
+    return (io.getLeftMotorVelocity() + io.getRightMotorVelocity()) / 2;
   }
 
   private double getCurrentRotation() {
-    return (motorLeft.getPosition().getValueAsDouble()
-            + motorRight.getPosition().getValueAsDouble())
-        / 2;
+    return (io.getLeftMotorPosition() + io.getRightMotorPosition()) / 2;
   }
 
-  /** Average of the left and right heights of the elevator */
+  /** Average of the left and right heights of the elevator in meters */
   @AutoLogOutput
   public double getCurrentHeight() {
-    return getCurrentRotation() / Constants.Elevator.METERS_PER_ROTATION;
+    return getCurrentRotation() * Constants.Elevator.METERS_PER_ROTATION;
   }
 
   @AutoLogOutput
   public double getCurrentVelocity() {
-    return getCurrentRotationalVelocity() / Constants.Elevator.METERS_PER_ROTATION;
+    return getCurrentRotationalVelocity() * Constants.Elevator.METERS_PER_ROTATION;
   }
 
+  @AutoLogOutput
+  public double getCurrentVoltage() {
+    return (io.getLeftMotorVoltage() + io.getRightMotorVoltage()) / 2;
+  }
+
+  @AutoLogOutput
   private boolean getBottomEndStopPressed() {
-    return bottomEndStop.get();
+    return io.getBottomEndStop();
   }
 
+  @AutoLogOutput
   private boolean getTopEndStopPressed() {
-    return topEndStop.get();
+    return io.getTopEndStop();
   }
 
   @Override
   public void periodic() {
+    toggle(SmartDashboard.getNumber("Elevator", 0));
+
     // Get next setpoint from profile.
     m_setpoint = m_profile.calculate(Constants.Elevator.kDt, m_setpoint, m_goal);
 
@@ -179,9 +181,14 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     RobotContainer.model.elevator.updateSetpoint(m_setpoint.position);
   }
 
+  @Override
+  public void simulationPeriodic() {
+    io.simulationPeriodic();
+  }
+
   private void setBothMotors(double voltage) {
-    motorLeft.setVoltage(voltage);
-    motorRight.setVoltage(voltage);
+    io.setLeftMotorVoltage(voltage);
+    io.setRightMotorVoltage(voltage);
   }
 
   private void setBothMotors(Voltage voltage) {
@@ -219,16 +226,13 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   @Override
   public void kill() {
-    motorLeft.setVoltage(0);
-    motorRight.setVoltage(0);
+    io.setLeftMotorVoltage(0);
+    io.setRightMotorVoltage(0);
   }
 
   @Override
-  public void close() {
-    motorLeft.close();
-    motorRight.close();
-    bottomEndStop.close();
-    topEndStop.close();
+  public void close() throws Exception {
+    io.close();
   }
 
   @Override

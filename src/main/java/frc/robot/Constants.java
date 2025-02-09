@@ -187,35 +187,37 @@ public final class Constants {
 
   public final class Elevator {
     public static final double kDt = 0.02;
-    public static final double kMaxVelocity = 0.6;
-    public static final double kMaxAcceleration = 1.0;
-    public static final double kV = 1.3;
-    public static final double kA = 0.05;
-    public static final double kG = 0.04;
-    public static final double kS = 0.01;
+    public static final double kMaxVelocity = 8;
+    public static final double kMaxAcceleration = 10;
+    public static final double kV = 4.6044;
+    public static final double kA = 0.15294;
+    public static final double kG = 0.17494;
+    public static final double kS = 0.001;
 
-    public static final double STD_STATE_POSITION = 100.0; // m
-    public static final double STD_STATE_VELOCITY = 100.0; // m/s
+    public static final double STD_STATE_POSITION = 3.0; // m
+    public static final double STD_STATE_VELOCITY = 3.0; // m/s
     public static final double STD_ENCODER_POSITION = 0.001; // m
     public static final double STD_ENCODER_VELOCITY = 0.001; // m/s
 
     public static final double REGULATOR_POSITION_ERROR_TOLERANCE =
-        2.4; // (m) tolerance for error, decrease to make regulator more aggressive
+        0.03; // (m) tolerance for error, decrease to make regulator more aggressive
     public static final double REGULATOR_VELOCITY_ERROR_TOLERANCE =
-        2.0; // (m/s) tolerance for error, decrease to make regulator more aggressive
+        0.63514; // (m/s) tolerance for error, decrease to make regulator more aggressive
 
     public static final double REGULATOR_CONTROL_EFFORT_TOLERANCE =
-        7.0; // (V) max control effort, decrease to make regulator more lazy
+        12.0; // (V) max control effort, decrease to make regulator more lazy
 
-    public static final double METERS_PER_ROTATION = 8;
+    public static final double GEAR_RATIO = 5;
+    public static final double DRUM_RADIUS = Units.inchesToMeters(0.810681);
+    // 2 * pi * r / gear ratio because same as getting distance a wheel moved, just vertically
+    public static final double METERS_PER_ROTATION = DRUM_RADIUS * 2 * Math.PI / GEAR_RATIO;
 
-    public static final double AT_GOAL_POSITION_TOLERANCE = 0.01; // TODO test different values
-    public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05; // TODO test different values
+    public static final double AT_GOAL_POSITION_TOLERANCE = REGULATOR_POSITION_ERROR_TOLERANCE;
+    public static final double AT_GOAL_VELOCITY_TOLERANCE = REGULATOR_VELOCITY_ERROR_TOLERANCE;
 
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0.15, 0, Rotation2d.fromDegrees(0));
     public static final double MIN_LENGTH = 0.65;
-
-    public static final double MAX_HEIGHT = 1; // TODO ummmmmmmmmmmmm idk
+    public static final double MAX_HEIGHT = 1.443284;
   }
 
   public final class CoralShooter {
