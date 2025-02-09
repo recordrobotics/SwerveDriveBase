@@ -45,6 +45,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
     if (measurement == null || measurement_m2 == null) {
       limelightConnected = false;
+      updateCrop();
       return;
     } else {
       limelightConnected = true;
@@ -76,10 +77,29 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
   private void updateCrop() {
     Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
-    double reefAngle =
-        Math.atan2(
-            pose.getTranslation().getY() - Constants.FieldPosition.ReefCenter.getPose().getY(),
-            pose.getTranslation().getX() - Constants.FieldPosition.ReefCenter.getPose().getX());
+
+    Translation2d reefBluePose = Constants.FieldConstants.TEAM_BLUE_REEF_CENTER;
+    Translation2d reefRedPose = Constants.FieldConstants.TEAM_RED_REEF_CENTER;
+
+    double reefBlueAngle = Math.atan2(
+      pose.getTranslation().getY() - reefBluePose.getY(),
+      pose.getTranslation().getX() - reefBluePose.getX());
+      double reefRedAngle = Math.atan2(
+      pose.getTranslation().getY() - reefRedPose.getY(),
+      pose.getTranslation().getX() - reefRedPose.getX());
+
+      double closestReefDistance = pose.getTranslation().getDistance(reefBluePose);
+    double closestReefAngle = reefBlueAngle;
+    Translation2d closestReefPose = reefBluePose;
+
+    if (pose.getTranslation().getDistance(reefRedPose) < closestReefDistance) {
+      closestReefAngle = reefRedAngle;
+      closestReefPose = reefRedPose;
+      closestReefDistance = pose.getTranslation().getDistance(reefRedPose);
+    }
+
+    closestReefAngle = MathUtil.angleModulus(closestReefAngle - pose.getRotation().getRadians());
+
     double processorAngle =
         Math.atan2(
             pose.getTranslation().getY() - Constants.FieldPosition.Processor.getPose().getY(),
@@ -129,20 +149,25 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       closestSourceDistance = pose.getTranslation().getDistance(source13Pose);
     }
 
+    closestSourceAngle = MathUtil.angleModulus(closestSourceAngle - pose.getRotation().getRadians());
+
     Logger.recordOutput("closestSource", closestSourcePose);
     Logger.recordOutput("sourceAngle", closestSourceAngle);
 
-    if (pose.getTranslation().getDistance(Constants.FieldPosition.ReefCenter.getPose())
+    Logger.recordOutput("closestReef", closestReefPose);
+    Logger.recordOutput("reefAngle", closestReefAngle);
+
+    if (pose.getTranslation().getDistance(closestReefPose)
             < SCORE_DISTANCE
-        && Math.abs(reefAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
+        && Math.abs(closestReefAngle - pose.getRotation().getRadians()) <  Units.degreesToRadians(40)) {
       setCrop(cropZones.REEF);
     } else if (pose.getTranslation().getDistance(Constants.FieldPosition.Processor.getPose())
             < SCORE_DISTANCE
-        && Math.abs(processorAngle - pose.getRotation().getRadians()) < Math.PI / 4) {
+        && Math.abs(processorAngle - pose.getRotation().getRadians()) <  Units.degreesToRadians(40)) {
       setCrop(cropZones.PROCESSOR);
     } else if (pose.getTranslation().getDistance(closestSourcePose) < SCORE_DISTANCE
-        && MathUtil.angleModulus(closestSourceAngle - pose.getRotation().getRadians())
-            < Math.PI / 4) {
+        && closestSourceAngle
+            < Units.degreesToRadians(40)) {
       setCrop(cropZones.SOURCE);
     } else {
       setCrop(cropZones.Default);
