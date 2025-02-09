@@ -29,7 +29,8 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
       new PIDController(
           Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
   private final SimpleMotorFeedforward feedForward =
-      new SimpleMotorFeedforward(Constants.CoralShooter.kS, Constants.CoralShooter.kV);
+      new SimpleMotorFeedforward(
+          Constants.CoralShooter.kS, Constants.CoralShooter.kV, Constants.CoralShooter.kA);
   private CoralShooterStates currentState = CoralShooterStates.OFF;
 
   public CoralShooter(CoralShooterIO io) {
@@ -106,12 +107,15 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
     return debounced_value;
   }
 
+  private double lastSpeed = 0;
+
   @Override
   public void periodic() {
     double pidOutput = pid.calculate(getWheelVelocity());
-    double feedforwardOutput = feedForward.calculate(pid.getSetpoint());
+    double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
     io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
 
+    lastSpeed = pid.getSetpoint();
     debounced_value = !m_debouncer.calculate(io.getCoralDetector());
   }
 
