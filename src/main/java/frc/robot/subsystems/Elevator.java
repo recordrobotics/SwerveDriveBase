@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -93,6 +95,15 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   public Elevator(ElevatorIO io) {
     this.io = io;
+
+    io.applyTalonFXConfig(
+        new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(Constants.Elevator.SUPPLY_CURRENT_LIMIT)
+                    .withStatorCurrentLimit(Constants.Elevator.STATOR_CURRENT_LIMIT)
+                    .withSupplyCurrentLimitEnable(true)
+                    .withStatorCurrentLimitEnable(true)));
 
     io.setLeftMotorPosition(0);
     io.setRightMotorPosition(0);

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState;
@@ -87,6 +88,16 @@ public class SwerveModuleSim implements SwerveModuleIO {
     m_turningMotorSim = m_turningMotor.getSimState();
 
     m_turningMotorSim.Orientation = ChassisReference.Clockwise_Positive;
+  }
+
+  @Override
+  public void applyDriveTalonFXConfig(TalonFXConfiguration configuration) {
+    m_driveMotor.getConfigurator().apply(configuration);
+  }
+
+  @Override
+  public void applyTurnTalonFXConfig(TalonFXConfiguration configuration) {
+    m_turningMotor.getConfigurator().apply(configuration);
   }
 
   @Override

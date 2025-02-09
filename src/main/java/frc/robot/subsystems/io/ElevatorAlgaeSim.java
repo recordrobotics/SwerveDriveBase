@@ -44,8 +44,12 @@ public class ElevatorAlgaeSim implements ElevatorAlgaeIO {
     wheel = new SparkMax(RobotMap.ElevatorAlgae.MOTOR_ID, MotorType.kBrushless);
     wheelSim = new SparkMaxSim(wheel, wheelMotor);
 
-    algaeDetectorSimValue = algaeDetectorSim.createBoolean("Value", Direction.kOutput, false);
-    algaeDetector.setSimDevice(algaeDetectorSim);
+    if (algaeDetectorSim != null)
+      algaeDetectorSimValue = algaeDetectorSim.createBoolean("Value", Direction.kOutput, false);
+    else algaeDetectorSimValue = null;
+
+    if (algaeDetectorSim != null) algaeDetector.setSimDevice(algaeDetectorSim);
+    else algaeDetector.close();
   }
 
   @Override
@@ -85,11 +89,12 @@ public class ElevatorAlgaeSim implements ElevatorAlgaeIO {
 
   @Override
   public boolean getAlgaeDetector() {
-    return algaeDetector.get();
+    if (algaeDetectorSim != null) return algaeDetector.get();
+    else return false;
   }
 
   public void setAlgaeDetectorSim(boolean newValue) {
-    algaeDetectorSimValue.set(newValue);
+    if (algaeDetectorSimValue != null) algaeDetectorSimValue.set(newValue);
   }
 
   @Override
@@ -100,8 +105,10 @@ public class ElevatorAlgaeSim implements ElevatorAlgaeIO {
   @Override
   public void close() throws Exception {
     wheel.close();
-    algaeDetector.close();
-    algaeDetectorSim.close();
+    if (algaeDetectorSim != null) {
+      algaeDetectorSim.close();
+      algaeDetector.close();
+    }
   }
 
   @Override

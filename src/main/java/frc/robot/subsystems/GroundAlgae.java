@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
-import frc.robot.subsystems.CoralIntake.IntakeArmStates; // TODO what????????????
 import frc.robot.subsystems.io.GroundAlgaeIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
@@ -127,14 +126,14 @@ public class GroundAlgae extends KillableSubsystem
 
   @AutoLogOutput
   public double getArmAngle() {
-    return io.getArmPosition() / Constants.CoralIntake.ARM_GEAR_RATIO * 2 * Math.PI;
+    return io.getArmPosition() / Constants.GroundAlgae.ARM_GEAR_RATIO * 2 * Math.PI;
   }
 
   @AutoLogOutput
   public double getArmVelocity() {
     return io.getArmVelocity()
         / 60.0 /* RPM -> RPS */
-        / Constants.CoralIntake.ARM_GEAR_RATIO
+        / Constants.GroundAlgae.ARM_GEAR_RATIO
         * 2
         * Math.PI;
   }
@@ -148,13 +147,13 @@ public class GroundAlgae extends KillableSubsystem
     armPID.setGoal(pos);
   }
 
-  public void toggleArm(IntakeArmStates state) {
+  public void toggleArm(GroundAlgaeArmStates state) {
     switch (state) {
       case UP:
-        toggleArm(Constants.CoralIntake.ARM_UP);
+        toggleArm(Constants.GroundAlgae.ARM_UP);
         break;
       case DOWN:
-        toggleArm(Constants.CoralIntake.ARM_DOWN);
+        toggleArm(Constants.GroundAlgae.ARM_DOWN);
         break;
       default:
         io.setArmVoltage(0);

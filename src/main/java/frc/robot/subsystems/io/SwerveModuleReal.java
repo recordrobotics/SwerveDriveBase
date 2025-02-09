@@ -1,5 +1,6 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.utils.ModuleConstants;
@@ -20,6 +21,16 @@ public class SwerveModuleReal implements SwerveModuleIO {
     m_turningMotor = new TalonFX(m.turningMotorChannel);
 
     absoluteTurningMotorEncoder = new DutyCycleEncoder(m.absoluteTurningMotorEncoderChannel);
+  }
+
+  @Override
+  public void applyDriveTalonFXConfig(TalonFXConfiguration configuration) {
+    m_driveMotor.getConfigurator().apply(configuration);
+  }
+
+  @Override
+  public void applyTurnTalonFXConfig(TalonFXConfiguration configuration) {
+    m_turningMotor.getConfigurator().apply(configuration);
   }
 
   @Override

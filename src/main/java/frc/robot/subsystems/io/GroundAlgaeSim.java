@@ -62,8 +62,12 @@ public class GroundAlgaeSim implements GroundAlgaeIO {
     wheelSim = new SparkMaxSim(wheel, wheelMotor);
     armSim = new SparkMaxSim(arm, armMotor);
 
-    algaeDetectorSimValue = algaeDetectorSim.createBoolean("Value", Direction.kOutput, false);
-    algaeDetector.setSimDevice(algaeDetectorSim);
+    if (algaeDetectorSim != null)
+      algaeDetectorSimValue = algaeDetectorSim.createBoolean("Value", Direction.kOutput, false);
+    else algaeDetectorSimValue = null;
+
+    if (algaeDetectorSim != null) algaeDetector.setSimDevice(algaeDetectorSim);
+    else algaeDetector.close();
   }
 
   @Override
@@ -128,11 +132,12 @@ public class GroundAlgaeSim implements GroundAlgaeIO {
 
   @Override
   public boolean getAlgaeDetector() {
-    return algaeDetector.get();
+    if (algaeDetectorSim != null) return algaeDetector.get();
+    else return false;
   }
 
   public void setAlgaeDetectorSim(boolean newValue) {
-    algaeDetectorSimValue.set(newValue);
+    if (algaeDetectorSimValue != null) algaeDetectorSimValue.set(newValue);
   }
 
   @Override
@@ -149,8 +154,10 @@ public class GroundAlgaeSim implements GroundAlgaeIO {
   public void close() throws Exception {
     wheel.close();
     arm.close();
-    algaeDetector.close();
-    algaeDetectorSim.close();
+    if (algaeDetectorSim != null) {
+      algaeDetector.close();
+      algaeDetectorSim.close();
+    }
   }
 
   @Override
@@ -171,10 +178,10 @@ public class GroundAlgaeSim implements GroundAlgaeIO {
     wheelSim.setVelocity(Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()));
 
     armSim.setPosition(
-        Constants.CoralIntake.ARM_GEAR_RATIO
+        Constants.GroundAlgae.ARM_GEAR_RATIO
             * Units.radiansToRotations(armSimModel.getAngleRads()));
     armSim.setVelocity(
-        Constants.CoralIntake.ARM_GEAR_RATIO
+        Constants.GroundAlgae.ARM_GEAR_RATIO
             * Units.radiansToRotations(armSimModel.getVelocityRadPerSec()));
   }
 }

@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
 import java.io.File;
@@ -30,6 +31,12 @@ public class ModuleConstants {
 
   public double TURN_GEAR_RATIO;
   public double DRIVE_GEAR_RATIO;
+
+  public Current turnMotorSupplyCurrentLimit;
+  public Current turnMotorStatorCurrentLimit;
+
+  public Current driveMotorSupplyCurrentLimit;
+  public Current driveMotorStatorCurrentLimit;
 
   public double DRIVE_KP;
   public double DRIVE_KI;
@@ -128,12 +135,9 @@ public class ModuleConstants {
         this.TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE =
             Constants.Swerve.FALCON_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE;
         this.TURN_GEAR_RATIO = Constants.Swerve.FALCON_TURN_GEAR_RATIO;
-        // this.TURN_KP = Constants.Swerve.FALCON_TURN_KP;
-        // this.TURN_KI = Constants.Swerve.FALCON_TURN_KI;
-        // this.TURN_KD = Constants.Swerve.FALCON_TURN_KD;
-        // this.TURN_FEEDFORWARD_KS = Constants.Swerve.FALCON_TURN_FEEDFORWARD_KS;
-        // this.TURN_FEEDFORWARD_KV = Constants.Swerve.FALCON_TURN_FEEDFORWARD_KV;
-        // this.TURN_FEEDFORWARD_KA = Constants.Swerve.FALCON_TURN_FEEDFORWARD_KA;
+
+        this.turnMotorStatorCurrentLimit = Constants.Swerve.FALCON_TURN_STATOR_CURRENT_LIMIT;
+        this.turnMotorSupplyCurrentLimit = Constants.Swerve.FALCON_TURN_SUPPLY_CURRENT_LIMIT;
         break;
       case Kraken:
         this.TURN_KV = Constants.Swerve.KRAKEN_TURN_KV;
@@ -150,6 +154,9 @@ public class ModuleConstants {
         this.TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE =
             Constants.Swerve.KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE;
         this.TURN_GEAR_RATIO = Constants.Swerve.KRAKEN_TURN_GEAR_RATIO;
+
+        this.turnMotorStatorCurrentLimit = Constants.Swerve.KRAKEN_TURN_STATOR_CURRENT_LIMIT;
+        this.turnMotorSupplyCurrentLimit = Constants.Swerve.KRAKEN_TURN_SUPPLY_CURRENT_LIMIT;
         break;
     }
 
@@ -163,6 +170,9 @@ public class ModuleConstants {
         this.DRIVE_FEEDFORWARD_KV = Constants.Swerve.FALCON_DRIVE_FEEDFORWARD_KV;
         this.DRIVE_FEEDFORWARD_KA = Constants.Swerve.FALCON_DRIVE_FEEDFORWARD_KA;
         this.DRIVE_GEAR_RATIO = Constants.Swerve.FALCON_DRIVE_GEAR_RATIO;
+
+        this.driveMotorStatorCurrentLimit = Constants.Swerve.FALCON_DRIVE_STATOR_CURRENT_LIMIT;
+        this.driveMotorSupplyCurrentLimit = Constants.Swerve.FALCON_DRIVE_SUPPLY_CURRENT_LIMIT;
         break;
       case Kraken:
         this.DRIVE_KP = Constants.Swerve.KRAKEN_DRIVE_KP;
@@ -172,6 +182,9 @@ public class ModuleConstants {
         this.DRIVE_FEEDFORWARD_KV = Constants.Swerve.KRAKEN_DRIVE_FEEDFORWARD_KV;
         this.DRIVE_FEEDFORWARD_KA = Constants.Swerve.KRAKEN_DRIVE_FEEDFORWARD_KA;
         this.DRIVE_GEAR_RATIO = Constants.Swerve.KRAKEN_DRIVE_GEAR_RATIO;
+
+        this.driveMotorStatorCurrentLimit = Constants.Swerve.KRAKEN_DRIVE_STATOR_CURRENT_LIMIT;
+        this.driveMotorSupplyCurrentLimit = Constants.Swerve.KRAKEN_DRIVE_SUPPLY_CURRENT_LIMIT;
         break;
     }
   }

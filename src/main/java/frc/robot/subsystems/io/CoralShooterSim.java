@@ -43,8 +43,12 @@ public class CoralShooterSim implements CoralShooterIO {
     wheel = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
     wheelSim = new SparkMaxSim(wheel, wheelMotor);
 
-    coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, false);
-    coralDetector.setSimDevice(coralDetectorSim);
+    if (coralDetectorSim != null)
+      coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, false);
+    else coralDetectorSimValue = null;
+
+    if (coralDetectorSim != null) coralDetector.setSimDevice(coralDetectorSim);
+    else coralDetector.close();
   }
 
   @Override
@@ -84,11 +88,12 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public boolean getCoralDetector() {
-    return coralDetector.get();
+    if (coralDetectorSim != null) return coralDetector.get();
+    else return false;
   }
 
   public void setCoralDetectorSim(boolean newValue) {
-    coralDetectorSimValue.set(newValue);
+    if (coralDetectorSimValue != null) coralDetectorSimValue.set(newValue);
   }
 
   @Override
@@ -99,8 +104,10 @@ public class CoralShooterSim implements CoralShooterIO {
   @Override
   public void close() throws Exception {
     wheel.close();
-    coralDetector.close();
-    coralDetectorSim.close();
+    if (coralDetectorSim != null) {
+      coralDetectorSim.close();
+      coralDetector.close();
+    }
   }
 
   @Override

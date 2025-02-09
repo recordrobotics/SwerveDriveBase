@@ -1,5 +1,6 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.RobotMap;
@@ -21,6 +22,12 @@ public class ElevatorReal implements ElevatorIO {
     motorRight = new TalonFX(RobotMap.Elevator.MOTOR_RIGHT_ID);
     bottomEndStop = new DigitalInput(RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
     topEndStop = new DigitalInput(RobotMap.Elevator.TOP_ENDSTOP_ID);
+  }
+
+  @Override
+  public void applyTalonFXConfig(TalonFXConfiguration configuration) {
+    motorLeft.getConfigurator().apply(configuration);
+    motorRight.getConfigurator().apply(configuration);
   }
 
   @Override

@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.commands.CoralIntakeFromGround;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ElevatorMove;
 // Local imports
 import frc.robot.commands.KillSpecified;
+import frc.robot.commands.auto.PlannedAuto;
 import frc.robot.commands.manual.ManualSwerve;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
@@ -72,7 +72,7 @@ public class RobotContainer {
     DashboardUI.Autonomous.setupAutoChooser();
 
     // Sets up Control scheme chooser
-    DashboardUI.Overview.addControls(new JoystickXbox(2, 0));
+    DashboardUI.Overview.addControls(new JoystickXbox(2, 0), new JoystickXboxKeypad(2, 0, 3));
 
     // Bindings and Teleop
     configureButtonBindings();
@@ -141,16 +141,16 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // if (autoCommand == null) {
-    //   autoCommand = new PlannedAuto();
-    // }
-    // return autoCommand;
+    if (autoCommand == null) {
+      autoCommand = new PlannedAuto();
+    }
+    return autoCommand;
 
-    return elevator
-        .sysIdQuasistatic(Direction.kForward)
-        .andThen(elevator.sysIdQuasistatic(Direction.kReverse))
-        .andThen(elevator.sysIdDynamic(Direction.kForward))
-        .andThen(elevator.sysIdDynamic(Direction.kReverse));
+    // return elevator
+    //     .sysIdQuasistatic(Direction.kForward)
+    //     .andThen(elevator.sysIdQuasistatic(Direction.kReverse))
+    //     .andThen(elevator.sysIdDynamic(Direction.kForward))
+    //     .andThen(elevator.sysIdDynamic(Direction.kReverse));
   }
 
   public void testPeriodic() {
@@ -163,12 +163,15 @@ public class RobotContainer {
   }
 
   public void updateSimulationBattery(PoweredSubsystem... subsystems) {
+    double totalCurrent = 0;
     double[] currents = new double[subsystems.length];
     for (int i = 0; i < subsystems.length; i++) {
       currents[i] = subsystems[i].getCurrentDrawAmps();
+      totalCurrent += currents[i];
     }
 
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(currents));
+    RoboRioSim.setVInCurrent(totalCurrent);
   }
 
   /** frees up all hardware allocations */

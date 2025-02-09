@@ -1,5 +1,6 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -20,6 +21,11 @@ public class CoralIntakeReal implements CoralIntakeIO {
 
     wheel = new SparkMax(RobotMap.CoralIntake.WHEEL_ID, MotorType.kBrushless);
     arm = new TalonFX(RobotMap.CoralIntake.ARM_ID);
+  }
+
+  @Override
+  public void applyArmTalonFXConfig(TalonFXConfiguration configuration) {
+    arm.getConfigurator().apply(configuration);
   }
 
   @Override

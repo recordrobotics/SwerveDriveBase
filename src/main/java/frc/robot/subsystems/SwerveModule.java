@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -99,6 +104,29 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     this.TURN_GEAR_RATIO = m.TURN_GEAR_RATIO;
     this.DRIVE_GEAR_RATIO = m.DRIVE_GEAR_RATIO;
     this.WHEEL_DIAMETER = m.WHEEL_DIAMETER;
+
+    io.applyDriveTalonFXConfig(
+        new TalonFXConfiguration()
+            .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake))
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(m.driveMotorSupplyCurrentLimit)
+                    .withStatorCurrentLimit(m.driveMotorStatorCurrentLimit)
+                    .withSupplyCurrentLimitEnable(true)
+                    .withStatorCurrentLimitEnable(true)));
+
+    io.applyTurnTalonFXConfig(
+        new TalonFXConfiguration()
+            .withMotorOutput(
+                new MotorOutputConfigs()
+                    .withInverted(InvertedValue.Clockwise_Positive)
+                    .withNeutralMode(NeutralModeValue.Brake))
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(m.turnMotorSupplyCurrentLimit)
+                    .withStatorCurrentLimit(m.turnMotorStatorCurrentLimit)
+                    .withSupplyCurrentLimitEnable(true)
+                    .withStatorCurrentLimitEnable(true)));
 
     // ~2 Seconds delay per swerve module to wait for encoder values to stabilize
     Timer.delay(2.3);

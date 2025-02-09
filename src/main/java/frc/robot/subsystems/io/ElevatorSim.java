@@ -1,5 +1,6 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.hal.SimBoolean;
@@ -52,11 +53,25 @@ public class ElevatorSim implements ElevatorIO {
     motorLeftSim = motorLeft.getSimState();
     motorRightSim = motorRight.getSimState();
 
-    bottomEndStopSimValue = bottomEndStopSim.createBoolean("Value", Direction.kOutput, false);
-    topEndStopSimValue = topEndStopSim.createBoolean("Value", Direction.kOutput, false);
+    if (bottomEndStopSim != null)
+      bottomEndStopSimValue = bottomEndStopSim.createBoolean("Value", Direction.kOutput, false);
+    else bottomEndStopSimValue = null;
 
-    bottomEndStop.setSimDevice(bottomEndStopSim);
-    topEndStop.setSimDevice(topEndStopSim);
+    if (topEndStopSim != null)
+      topEndStopSimValue = topEndStopSim.createBoolean("Value", Direction.kOutput, false);
+    else topEndStopSimValue = null;
+
+    if (bottomEndStopSim != null) bottomEndStop.setSimDevice(bottomEndStopSim);
+    else bottomEndStop.close();
+
+    if (topEndStopSim != null) topEndStop.setSimDevice(topEndStopSim);
+    else topEndStop.close();
+  }
+
+  @Override
+  public void applyTalonFXConfig(TalonFXConfiguration configuration) {
+    motorLeft.getConfigurator().apply(configuration);
+    motorRight.getConfigurator().apply(configuration);
   }
 
   @Override
@@ -133,22 +148,24 @@ public class ElevatorSim implements ElevatorIO {
 
   @Override
   public boolean getTopEndStop() {
-    return topEndStopSimValue.get();
+    if (topEndStopSimValue != null) return topEndStopSimValue.get();
+    else return false;
     // return topEndStop.get();
   }
 
   @Override
   public boolean getBottomEndStop() {
-    return bottomEndStopSimValue.get();
+    if (bottomEndStopSimValue != null) return bottomEndStopSimValue.get();
+    else return false;
     // return bottomEndStop.get();
   }
 
   public void setTopEndStopSim(boolean newValue) {
-    topEndStopSimValue.set(newValue);
+    if (topEndStopSimValue != null) topEndStopSimValue.set(newValue);
   }
 
   public void setBottomEndStopSim(boolean newValue) {
-    bottomEndStopSimValue.set(newValue);
+    if (bottomEndStopSimValue != null) bottomEndStopSimValue.set(newValue);
   }
 
   @Override
@@ -165,10 +182,15 @@ public class ElevatorSim implements ElevatorIO {
   public void close() throws Exception {
     motorLeft.close();
     motorRight.close();
-    bottomEndStop.close();
-    topEndStop.close();
-    bottomEndStopSim.close();
-    topEndStopSim.close();
+
+    if (bottomEndStopSim != null) {
+      bottomEndStopSim.close();
+      bottomEndStop.close();
+    }
+    if (topEndStopSim != null) {
+      topEndStopSim.close();
+      topEndStop.close();
+    }
   }
 
   @Override

@@ -1,6 +1,10 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
 public interface CoralIntakeIO extends AutoCloseable {
+
+  public void applyArmTalonFXConfig(TalonFXConfiguration configuration);
 
   public void setWheelVoltage(double outputVolts);
 

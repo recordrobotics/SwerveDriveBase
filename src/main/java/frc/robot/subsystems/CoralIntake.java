@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -60,6 +62,15 @@ public class CoralIntake extends KillableSubsystem
 
   public CoralIntake(CoralIntakeIO io) {
     this.io = io;
+
+    io.applyArmTalonFXConfig(
+        new TalonFXConfiguration()
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withSupplyCurrentLimit(Constants.CoralIntake.ARM_SUPPLY_CURRENT_LIMIT)
+                    .withStatorCurrentLimit(Constants.CoralIntake.ARM_STATOR_CURRENT_LIMIT)
+                    .withSupplyCurrentLimitEnable(true)
+                    .withStatorCurrentLimitEnable(true)));
 
     io.setArmPosition(0);
     toggle(CoralIntakeStates.OFF);

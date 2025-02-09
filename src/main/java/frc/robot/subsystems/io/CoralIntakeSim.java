@@ -1,5 +1,6 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.revrobotics.sim.SparkMaxSim;
@@ -64,8 +65,17 @@ public class CoralIntakeSim implements CoralIntakeIO {
     wheelSim = new SparkMaxSim(wheel, wheelMotor);
     armSim = arm.getSimState();
 
-    coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, false);
-    coralDetector.setSimDevice(coralDetectorSim);
+    if (coralDetectorSim != null)
+      coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, false);
+    else coralDetectorSimValue = null;
+
+    if (coralDetectorSim != null) coralDetector.setSimDevice(coralDetectorSim);
+    else coralDetector.close();
+  }
+
+  @Override
+  public void applyArmTalonFXConfig(TalonFXConfiguration configuration) {
+    arm.getConfigurator().apply(configuration);
   }
 
   @Override
@@ -130,11 +140,12 @@ public class CoralIntakeSim implements CoralIntakeIO {
 
   @Override
   public boolean getCoralDetector() {
-    return coralDetector.get();
+    if (coralDetectorSim != null) return coralDetector.get();
+    else return false;
   }
 
   public void setCoralDetectorSim(boolean newValue) {
-    coralDetectorSimValue.set(newValue);
+    if (coralDetectorSimValue != null) coralDetectorSimValue.set(newValue);
   }
 
   @Override
@@ -151,8 +162,10 @@ public class CoralIntakeSim implements CoralIntakeIO {
   public void close() throws Exception {
     wheel.close();
     arm.close();
-    coralDetector.close();
-    coralDetectorSim.close();
+    if (coralDetectorSim != null) {
+      coralDetectorSim.close();
+      coralDetector.close();
+    }
   }
 
   @Override

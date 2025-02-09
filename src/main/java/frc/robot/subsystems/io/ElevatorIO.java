@@ -1,6 +1,10 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
 public interface ElevatorIO extends AutoCloseable {
+
+  public void applyTalonFXConfig(TalonFXConfiguration configuration);
 
   public void setLeftMotorVoltage(double outputVolts);
 

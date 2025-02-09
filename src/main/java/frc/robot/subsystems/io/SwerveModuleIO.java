@@ -1,6 +1,12 @@
 package frc.robot.subsystems.io;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
 public interface SwerveModuleIO extends AutoCloseable {
+
+  public void applyDriveTalonFXConfig(TalonFXConfiguration configuration);
+
+  public void applyTurnTalonFXConfig(TalonFXConfiguration configuration);
 
   public void setDriveMotorVoltage(double newValue);
 

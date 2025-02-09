@@ -4,8 +4,7 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Percent;
-import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.*;
 
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -18,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -225,6 +225,9 @@ public final class Constants {
     public static final double kG = 0.17494;
     public static final double kS = 0.001;
 
+    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(40);
+    public static final Current STATOR_CURRENT_LIMIT = Amps.of(120);
+
     public static final double STD_STATE_POSITION = 3.0; // m
     public static final double STD_STATE_VELOCITY = 3.0; // m/s
     public static final double STD_ENCODER_POSITION = 0.001; // m
@@ -268,6 +271,10 @@ public final class Constants {
   }
 
   public final class CoralIntake {
+
+    public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(15);
+    public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
+
     // TODO: need correct values
     public static final double kP = 0.07;
     public static final double kI = 0.0;
@@ -440,6 +447,16 @@ public final class Constants {
 
     public static final double KRAKEN_TURN_GEAR_RATIO = 13.3714;
     public static final double KRAKEN_DRIVE_GEAR_RATIO = 6.75; // X1 12 pinion
+
+    public static final Current FALCON_TURN_STATOR_CURRENT_LIMIT = Amps.of(100);
+    public static final Current FALCON_TURN_SUPPLY_CURRENT_LIMIT = Amps.of(25);
+    public static final Current FALCON_DRIVE_STATOR_CURRENT_LIMIT = Amps.of(120);
+    public static final Current FALCON_DRIVE_SUPPLY_CURRENT_LIMIT = Amps.of(32);
+
+    public static final Current KRAKEN_TURN_STATOR_CURRENT_LIMIT = Amps.of(100);
+    public static final Current KRAKEN_TURN_SUPPLY_CURRENT_LIMIT = Amps.of(25);
+    public static final Current KRAKEN_DRIVE_STATOR_CURRENT_LIMIT = Amps.of(120);
+    public static final Current KRAKEN_DRIVE_SUPPLY_CURRENT_LIMIT = Amps.of(32);
 
     // PID Values
     public static final double FALCON_DRIVE_KP = 0.59821;
