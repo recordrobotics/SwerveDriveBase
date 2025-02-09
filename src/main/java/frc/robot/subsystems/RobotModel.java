@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
@@ -128,7 +129,7 @@ public class RobotModel extends SubsystemBase {
                 "coralintake",
                 Constants.CoralIntake.LENGTH,
                 Constants.CoralIntake.ANGLE_OFFSET,
-                10,
+                3,
                 new Color8Bit(Color.kPurple)));
 
     @AutoLogOutput
@@ -146,15 +147,16 @@ public class RobotModel extends SubsystemBase {
                 "coralintake",
                 Constants.CoralIntake.LENGTH,
                 Constants.CoralIntake.ANGLE_OFFSET,
-                10,
+                3,
                 new Color8Bit(Color.kViolet)));
 
     public void update(double angle) {
-      coralintake.setAngle(Constants.CoralIntake.ANGLE_OFFSET + angle);
+      coralintake.setAngle(Units.radiansToDegrees(Constants.CoralIntake.ANGLE_OFFSET + angle));
     }
 
     public void updateSetpoint(double angle) {
-      coralintake_setpoint.setAngle(Constants.CoralIntake.ANGLE_OFFSET + angle);
+      coralintake_setpoint.setAngle(
+          Units.radiansToDegrees(Constants.CoralIntake.ANGLE_OFFSET + angle));
     }
 
     @Override
@@ -168,8 +170,7 @@ public class RobotModel extends SubsystemBase {
           new Pose3d(0, 0, 0, new Rotation3d())
               .rotateAround(
                   new Translation3d(0, 0.334669, 0.456817),
-                  new Rotation3d(
-                      coralintake.getAngle() + Math.cos(2 * Timer.getFPGATimestamp()), 0, 0));
+                  new Rotation3d(Units.degreesToRadians(coralintake.getAngle()), 0, 0));
     }
   }
 

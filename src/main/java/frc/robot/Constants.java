@@ -240,9 +240,10 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double kS = 0.12;
     public static final double kV = 0.14;
+    public static final double kA = 0.03;
 
-    public static final double MAX_ARM_VELOCITY = 30;
-    public static final double MAX_ARM_ACCELERATION = 30;
+    public static final double MAX_ARM_VELOCITY = 8;
+    public static final double MAX_ARM_ACCELERATION = 22;
 
     public static final double REVERSE_SPEED = 0.2; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
@@ -252,8 +253,11 @@ public final class Constants {
     public static final double sP = 4.4651;
     public static final double sI = 0;
     public static final double sD = 0.48808;
-    public static final double sG = 0.024867;
-    public static final double sS = 0.16213;
+    // TODO: changed sG and sS to fit simulation better
+    // Is the simulation wrong or was the test arm so loose
+    // that it hid the innacuracies?
+    public static final double sG = 0.754867;
+    public static final double sS = 0.0016213;
     public static final double sV = 0.52909;
     public static final double sA = 0.035848;
 
