@@ -124,12 +124,12 @@ public final class Constants {
 
   public enum ElevatorHeight {
     INTAKE(0),
-    L1(0.03),
-    L2(0.07),
-    LOW_ALGAE(0.09),
-    L3(0.11),
-    HIGH_ALGAE(0.13),
-    L4(0.17),
+    L1(0.06),
+    L2(0.18),
+    LOW_ALGAE(0.465),
+    L3(0.75),
+    HIGH_ALGAE(1.035),
+    L4(1.32),
     OFF(0);
 
     private double height;

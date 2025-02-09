@@ -127,18 +127,6 @@ public class RobotContainer {
         .onTrue(new CoralIntakeFromGround());
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(new CoralIntakeFromSource());
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
-        .onTrue(new ElevatorMove(ElevatorHeight.L1));
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
-        .onTrue(new ElevatorMove(ElevatorHeight.L2));
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
-        .onTrue(new ElevatorMove(ElevatorHeight.L3));
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
-        .onTrue(new ElevatorMove(ElevatorHeight.L4));
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
-        .onTrue(new CoralIntakeFromGround());
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
-        .onTrue(new CoralIntakeFromSource());
     new Trigger(() -> DashboardUI.Overview.getControl().getIntakeAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getIntakeAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae());

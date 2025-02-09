@@ -150,8 +150,6 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   @Override
   public void periodic() {
-    toggle(SmartDashboard.getNumber("Elevator", 0));
-
     // Get next setpoint from profile.
     m_setpoint = m_profile.calculate(Constants.Elevator.kDt, m_setpoint, m_goal);
 
