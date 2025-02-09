@@ -16,6 +16,7 @@ import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.io.CoralIntakeSim;
+import frc.robot.subsystems.io.CoralShooterSim;
 import frc.robot.subsystems.io.ElevatorSim;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -32,11 +33,12 @@ public class RobotContainer {
   public static final RobotModel model = new RobotModel();
 
   // Subsystems
+  // TODO: replace with check if in simulation mode once subsystems actually connected
   public static final Drivetrain drivetrain = new Drivetrain();
   public static final PoseTracker poseTracker = new PoseTracker();
   public static final Limelight limelight = new Limelight();
   public static final Elevator elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
-  public static final CoralShooter coralShooter = null; // = new CoralShooter();
+  public static final CoralShooter coralShooter = new CoralShooter(new CoralShooterSim(0.02));
   public static final CoralIntake coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
   public static final ElevatorAlgae elevatorAlgae = null; // new ElevatorAlgae();
   public static final GroundAlgae groundAlgae = null; // new GroundAlgae();
@@ -168,7 +170,7 @@ public class RobotContainer {
     drivetrain.close();
     limelight.close();
     elevator.close();
-    // coralShooter.close();
+    coralShooter.close();
     coralIntake.close();
     // elevatorAlgae.close();
     // groundAlgae.close();

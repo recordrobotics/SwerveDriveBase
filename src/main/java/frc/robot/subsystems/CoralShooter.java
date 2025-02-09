@@ -4,30 +4,27 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.RobotMap;
 import frc.robot.dashboard.DashboardUI;
+import frc.robot.subsystems.io.CoralShooterIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class CoralShooter extends KillableSubsystem implements ShuffleboardPublisher {
-  private final DigitalInput coralDetector =
-      new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
+
+  private final CoralShooterIO io;
+
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
       new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
-  private SparkMax motor;
   private final PIDController pid =
       new PIDController(
           Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
@@ -35,10 +32,12 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
       new SimpleMotorFeedforward(Constants.CoralShooter.kS, Constants.CoralShooter.kV);
   private CoralShooterStates currentState = CoralShooterStates.OFF;
 
-  public CoralShooter() {
-    motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
+  public CoralShooter(CoralShooterIO io) {
+    this.io = io;
+
     toggle(CoralShooterStates.OFF); // initialize as off
-    DashboardUI.Test.addSlider("Coral Shooter", motor.get(), -1, 1).subscribe(motor::set);
+    DashboardUI.Test.addSlider("Coral Shooter", io.getWheelPercent(), -1, 1)
+        .subscribe(io::setWheelPercent);
 
     sysIdRoutine =
         new SysIdRoutine(
@@ -48,7 +47,7 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
                 null,
                 null,
                 (state -> Logger.recordOutput("CoralShooter/SysIdTestState", state.toString()))),
-            new SysIdRoutine.Mechanism(motor::setVoltage, null, this));
+            new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.magnitude()), null, this));
   }
 
   private final SysIdRoutine sysIdRoutine;
@@ -61,12 +60,17 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
 
   @AutoLogOutput
   public double getWheelVelocity() {
-    return motor.getEncoder().getVelocity() / 60.0; /* RPM -> RPS */
+    return io.getWheelVelocity() / 60.0; /* RPM -> RPS */
   }
 
   @AutoLogOutput
   public double getWheelPosition() {
-    return motor.getEncoder().getPosition();
+    return io.getWheelPosition();
+  }
+
+  @AutoLogOutput
+  public double getWheelVoltage() {
+    return io.getWheelVoltage();
   }
 
   /** Set the current shooter speed on both wheels to speed */
@@ -97,6 +101,7 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
     return currentState;
   }
 
+  @AutoLogOutput
   public boolean hasCoral() {
     return debounced_value;
   }
@@ -105,9 +110,14 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
   public void periodic() {
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculate(pid.getSetpoint());
-    motor.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
 
-    debounced_value = !m_debouncer.calculate(coralDetector.get());
+    debounced_value = !m_debouncer.calculate(io.getCoralDetector());
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    io.simulationPeriodic();
   }
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
@@ -120,18 +130,18 @@ public class CoralShooter extends KillableSubsystem implements ShuffleboardPubli
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Coral Shooter", motor.get(), -1, 1).subscribe(motor::set);
+    DashboardUI.Test.addSlider("Coral Shooter", io.getWheelPercent(), -1, 1)
+        .subscribe(io::setWheelPercent);
   }
 
   @Override
   public void kill() {
     toggle(CoralShooterStates.OFF);
-    motor.setVoltage(0);
+    io.setWheelVoltage(0);
   }
 
   /** frees up all hardware allocations */
-  public void close() {
-    motor.close();
-    coralDetector.close();
+  public void close() throws Exception {
+    io.close();
   }
 }

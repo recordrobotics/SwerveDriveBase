@@ -224,8 +224,9 @@ public final class Constants {
     public static final double kP = 0.07;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kS = 0.12;
-    public static final double kV = 0.14;
+    public static final double kS = 0.01;
+    public static final double kV = 0.1;
+    public static final double kA = 0.04;
 
     public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
