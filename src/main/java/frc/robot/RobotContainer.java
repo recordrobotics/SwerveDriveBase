@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
@@ -163,15 +164,13 @@ public class RobotContainer {
   }
 
   public void updateSimulationBattery(PoweredSubsystem... subsystems) {
-    double totalCurrent = 0;
     double[] currents = new double[subsystems.length];
     for (int i = 0; i < subsystems.length; i++) {
       currents[i] = subsystems[i].getCurrentDrawAmps();
-      totalCurrent += currents[i];
     }
 
-    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(currents));
-    RoboRioSim.setVInCurrent(totalCurrent);
+    RoboRioSim.setVInVoltage(
+        MathUtil.clamp(BatterySim.calculateDefaultBatteryLoadedVoltage(currents), 0, 13));
   }
 
   /** frees up all hardware allocations */
