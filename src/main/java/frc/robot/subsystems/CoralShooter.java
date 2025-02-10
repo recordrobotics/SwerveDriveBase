@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.CoralShooterIO;
+import frc.robot.subsystems.io.CoralShooterSim;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -51,6 +52,14 @@ public class CoralShooter extends KillableSubsystem
                 null,
                 (state -> Logger.recordOutput("CoralShooter/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.magnitude()), null, this));
+  }
+
+  public CoralShooterSim getSimIO() throws Exception {
+    if (io instanceof CoralShooterSim) {
+      return (CoralShooterSim) io;
+    } else {
+      throw new Exception("CoralShooterIO is not a simulation");
+    }
   }
 
   private final SysIdRoutine sysIdRoutine;

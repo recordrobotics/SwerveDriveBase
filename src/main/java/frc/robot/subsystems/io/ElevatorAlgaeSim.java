@@ -113,14 +113,14 @@ public class ElevatorAlgaeSim implements ElevatorAlgaeIO {
 
   @Override
   public void simulationPeriodic() {
-    wheelSim.setBusVoltage(RobotController.getBatteryVoltage());
-
     var wheelVoltage = wheelSim.getAppliedOutput() * wheelSim.getBusVoltage();
 
     wheelSimModel.setInputVoltage(wheelVoltage);
     wheelSimModel.update(periodicDt);
 
-    wheelSim.setPosition(wheelSimModel.getAngularPositionRotations());
-    wheelSim.setVelocity(Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()));
+    wheelSim.iterate(
+        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+        RobotController.getBatteryVoltage(),
+        periodicDt);
   }
 }

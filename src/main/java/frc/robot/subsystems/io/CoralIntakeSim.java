@@ -46,9 +46,9 @@ public class CoralIntakeSim implements CoralIntakeIO {
           Constants.CoralIntake.ARM_GEAR_RATIO,
           Units.inchesToMeters(28),
           -1.1,
-          Math.PI,
+          Math.PI / 2,
           true,
-          0,
+          Constants.CoralIntake.ARM_START_POS,
           0.001,
           0.001);
 
@@ -66,7 +66,7 @@ public class CoralIntakeSim implements CoralIntakeIO {
     armSim = arm.getSimState();
 
     if (coralDetectorSim != null)
-      coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, false);
+      coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, true);
     else coralDetectorSimValue = null;
 
     if (coralDetectorSim != null) coralDetector.setSimDevice(coralDetectorSim);
@@ -140,7 +140,8 @@ public class CoralIntakeSim implements CoralIntakeIO {
 
   @Override
   public boolean getCoralDetector() {
-    if (coralDetectorSim != null) return coralDetector.get();
+    // TODO: coralDetector.get() does not update
+    if (coralDetectorSim != null) return coralDetectorSimValue.get();
     else return false;
   }
 
@@ -170,7 +171,6 @@ public class CoralIntakeSim implements CoralIntakeIO {
 
   @Override
   public void simulationPeriodic() {
-    wheelSim.setBusVoltage(RobotController.getBatteryVoltage());
     armSim.setSupplyVoltage(RobotController.getBatteryVoltage());
 
     var wheelVoltage = wheelSim.getAppliedOutput() * wheelSim.getBusVoltage();
@@ -182,12 +182,15 @@ public class CoralIntakeSim implements CoralIntakeIO {
     armSimModel.setInputVoltage(armVoltage);
     armSimModel.update(periodicDt);
 
-    wheelSim.setPosition(wheelSimModel.getAngularPositionRotations());
-    wheelSim.setVelocity(Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()));
+    wheelSim.iterate(
+        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+        RobotController.getBatteryVoltage(),
+        periodicDt);
 
     armSim.setRawRotorPosition(
         Constants.CoralIntake.ARM_GEAR_RATIO
-            * Units.radiansToRotations(armSimModel.getAngleRads()));
+            * Units.radiansToRotations(
+                armSimModel.getAngleRads() - Constants.CoralIntake.ARM_START_POS));
     armSim.setRotorVelocity(
         Constants.CoralIntake.ARM_GEAR_RATIO
             * Units.radiansToRotations(armSimModel.getVelocityRadPerSec()));

@@ -162,7 +162,6 @@ public class GroundAlgaeSim implements GroundAlgaeIO {
 
   @Override
   public void simulationPeriodic() {
-    wheelSim.setBusVoltage(RobotController.getBatteryVoltage());
     armSim.setBusVoltage(RobotController.getBatteryVoltage());
 
     var wheelVoltage = wheelSim.getAppliedOutput() * wheelSim.getBusVoltage();
@@ -174,8 +173,10 @@ public class GroundAlgaeSim implements GroundAlgaeIO {
     armSimModel.setInputVoltage(armVoltage);
     armSimModel.update(periodicDt);
 
-    wheelSim.setPosition(wheelSimModel.getAngularPositionRotations());
-    wheelSim.setVelocity(Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()));
+    wheelSim.iterate(
+        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+        RobotController.getBatteryVoltage(),
+        periodicDt);
 
     armSim.setPosition(
         Constants.GroundAlgae.ARM_GEAR_RATIO

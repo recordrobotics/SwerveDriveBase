@@ -258,8 +258,8 @@ public final class Constants {
     public static final double kV = 0.1;
     public static final double kA = 0.04;
 
-    public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
+    public static final double OUT_SPEED = 4; // TODO this is probably too slow
+    public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
@@ -282,8 +282,8 @@ public final class Constants {
     public static final double MAX_ARM_VELOCITY = 8;
     public static final double MAX_ARM_ACCELERATION = 22;
 
-    public static final double REVERSE_SPEED = 0.2; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
+    public static final double REVERSE_SPEED = 4; // TODO this is probably too slow
+    public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
 
     public static final double INTAKE_TIME = 0.1; // TODO make correct
 
@@ -298,8 +298,9 @@ public final class Constants {
     public static final double sV = 0.52909;
     public static final double sA = 0.035848;
 
-    public static final double ARM_UP = 1.5; // TODO make correct
-    public static final double ARM_DOWN = -1.4; // TODO make correct
+    public static final double ARM_UP = Math.PI / 2;
+    public static final double ARM_DOWN = -1.1;
+    public static final double ARM_START_POS = Math.PI / 2;
 
     public static final double ARM_GEAR_RATIO = 33.18;
 

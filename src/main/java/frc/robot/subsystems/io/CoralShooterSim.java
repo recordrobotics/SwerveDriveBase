@@ -44,7 +44,7 @@ public class CoralShooterSim implements CoralShooterIO {
     wheelSim = new SparkMaxSim(wheel, wheelMotor);
 
     if (coralDetectorSim != null)
-      coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, false);
+      coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, true);
     else coralDetectorSimValue = null;
 
     if (coralDetectorSim != null) coralDetector.setSimDevice(coralDetectorSim);
@@ -88,7 +88,8 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public boolean getCoralDetector() {
-    if (coralDetectorSim != null) return coralDetector.get();
+    // TODO: coralDetector.get() does not update
+    if (coralDetectorSim != null) return coralDetectorSimValue.get();
     else return false;
   }
 
@@ -112,14 +113,14 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public void simulationPeriodic() {
-    wheelSim.setBusVoltage(RobotController.getBatteryVoltage());
-
     var wheelVoltage = wheelSim.getAppliedOutput() * wheelSim.getBusVoltage();
 
     wheelSimModel.setInputVoltage(wheelVoltage);
     wheelSimModel.update(periodicDt);
 
-    wheelSim.setPosition(wheelSimModel.getAngularPositionRotations());
-    wheelSim.setVelocity(Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()));
+    wheelSim.iterate(
+        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+        RobotController.getBatteryVoltage(),
+        periodicDt);
   }
 }

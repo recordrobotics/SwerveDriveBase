@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +24,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.CoralIntakeIO;
+import frc.robot.subsystems.io.CoralIntakeSim;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -72,9 +74,13 @@ public class CoralIntake extends KillableSubsystem
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
 
-    io.setArmPosition(0);
+    io.setArmPosition(
+        Constants.CoralIntake.ARM_GEAR_RATIO
+            * Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS));
     toggle(CoralIntakeStates.OFF);
     toggleArm(IntakeArmStates.UP);
+
+    armPID.setTolerance(0.15, 1.05);
 
     sysIdRoutineWheel =
         new SysIdRoutine(
@@ -96,6 +102,14 @@ public class CoralIntake extends KillableSubsystem
             new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.magnitude()), null, this));
 
     SmartDashboard.putNumber("CoralIntakeArm", 0);
+  }
+
+  public CoralIntakeSim getSimIO() throws Exception {
+    if (io instanceof CoralIntakeSim) {
+      return (CoralIntakeSim) io;
+    } else {
+      throw new Exception("CoralIntakeIO is not a simulation");
+    }
   }
 
   private final SysIdRoutine sysIdRoutineWheel;

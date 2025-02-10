@@ -2,6 +2,7 @@ package frc.robot.subsystems.io;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
@@ -52,6 +53,9 @@ public class ElevatorSim implements ElevatorIO {
 
     motorLeftSim = motorLeft.getSimState();
     motorRightSim = motorRight.getSimState();
+
+    motorLeftSim.Orientation = ChassisReference.Clockwise_Positive;
+    motorRightSim.Orientation = ChassisReference.Clockwise_Positive;
 
     if (bottomEndStopSim != null)
       bottomEndStopSimValue = bottomEndStopSim.createBoolean("Value", Direction.kOutput, false);
