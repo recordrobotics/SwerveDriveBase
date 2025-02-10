@@ -18,7 +18,8 @@ public class CoralIntakeFromGroundTimeBased extends SequentialCommandGroup
     NamedCoral coral =
         new NamedCoral(
             "CoralIntakeFromGroundTimeBased/Coral",
-            RobotContainer.model.coralIntake.getCoralTargetPose());
+            RobotContainer.model.coralIntake.getCoralTargetPose(0.06));
+
     addCommands(
         new WaitCommand(secondsUntilCoralAcquired),
         new InstantCommand(() -> RobotContainer.model.addCoral(coral)),

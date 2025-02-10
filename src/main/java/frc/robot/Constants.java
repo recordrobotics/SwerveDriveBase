@@ -307,7 +307,7 @@ public final class Constants {
     public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
 
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
-    public static final double LENGTH = 0.6;
+    public static final double LENGTH = 0.431;
     public static final double ANGLE_OFFSET = 0;
   }
 

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -179,8 +181,24 @@ public class RobotModel extends SubsystemBase {
                   new Rotation3d(Units.degreesToRadians(coralintake.getAngle()), 0, 0));
     }
 
-    public Pose3d getCoralTargetPose() {
-      return new Pose3d(0, 0, 0, new Rotation3d());
+    public Pose3d getCoralTargetPose(double distance) {
+      Pose3d robotOrigin = new Pose3d();
+      if (RobotContainer.poseTracker != null)
+        robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
+      Pose3d coralIntakePose =
+          robotOrigin.transformBy(
+              new Transform3d(
+                  0,
+                  0.334669,
+                  0.456817,
+                  new Rotation3d(Units.degreesToRadians(coralintake.getAngle()), 0, 0)));
+
+      return coralIntakePose.transformBy(
+          new Transform3d(
+              -0.1,
+              distance + Constants.CoralIntake.LENGTH,
+              0.038,
+              new Rotation3d()));
     }
   }
 
@@ -192,12 +210,16 @@ public class RobotModel extends SubsystemBase {
 
   @AutoLogOutput public Pose2d robot = new Pose2d();
 
+  private NamedCoral tmp = new NamedCoral("test", new Pose3d());
+
   public RobotModel() {
     periodic();
+    addCoral(tmp);
   }
 
   @Override
   public void periodic() {
+    tmp.pose = coralIntake.getCoralTargetPose(0);
     updatePoses(elevator, coralIntake);
   }
 
