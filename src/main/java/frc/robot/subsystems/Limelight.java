@@ -12,18 +12,22 @@ import frc.robot.utils.ShuffleboardPublisher;
 import frc.robot.utils.SimpleMath;
 import frc.robot.utils.libraries.LimelightHelpers;
 import frc.robot.utils.libraries.LimelightHelpers.PoseEstimate;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
   private static final String name = "limelight";
   private static final double SCORE_DISTANCE = 3.0;
+  private static final double FOV = 80;
   private int numTags = 0;
   private double confidence = 0;
   private boolean hasVision = false;
   private boolean limelightConnected = false;
   private PoseEstimate currentEstimate = new PoseEstimate();
   private double currentConfidence = 9999999; // large number means less confident
+
+  @AutoLogOutput private CropZone currentCropZone = CropZone.Default;
 
   public Limelight() {
     LimelightHelpers.setPipelineIndex(name, 0);
@@ -102,10 +106,30 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
     closestReefAngle = MathUtil.angleModulus(closestReefAngle - pose.getRotation().getRadians());
 
-    double processorAngle =
+    Translation2d processorBluePose = Constants.FieldConstants.TEAM_BLUE_PROCESSOR;
+    Translation2d processorRedPose = Constants.FieldConstants.TEAM_RED_PROCESSOR;
+
+    double processorBlueAngle =
         Math.atan2(
-            pose.getTranslation().getY() - Constants.FieldPosition.Processor.getPose().getY(),
-            pose.getTranslation().getX() - Constants.FieldPosition.Processor.getPose().getX());
+            pose.getTranslation().getY() - processorBluePose.getY(),
+            pose.getTranslation().getX() - processorBluePose.getX());
+    double processorRedAngle =
+        Math.atan2(
+            pose.getTranslation().getY() - processorRedPose.getY(),
+            pose.getTranslation().getX() - processorRedPose.getX());
+
+    double closestProcessorDistance = pose.getTranslation().getDistance(processorBluePose);
+    double closestProcessorAngle = processorBlueAngle;
+    Translation2d closestProcessorPose = processorBluePose;
+
+    if (pose.getTranslation().getDistance(processorRedPose) < closestProcessorDistance) {
+      closestProcessorAngle = processorRedAngle;
+      closestProcessorPose = processorRedPose;
+      closestProcessorDistance = pose.getTranslation().getDistance(processorRedPose);
+    }
+
+    closestProcessorAngle =
+        MathUtil.angleModulus(closestProcessorAngle - pose.getRotation().getRadians());
 
     Translation2d source12Pose = Constants.FieldConstants.SOURCE_12;
     Translation2d source13Pose = Constants.FieldConstants.SOURCE_13;
@@ -160,20 +184,20 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     Logger.recordOutput("closestReef", closestReefPose);
     Logger.recordOutput("reefAngle", closestReefAngle);
 
-    if (pose.getTranslation().getDistance(closestReefPose) < SCORE_DISTANCE
-        && Math.abs(closestReefAngle - pose.getRotation().getRadians())
-            < Units.degreesToRadians(40)) {
-      setCrop(cropZones.REEF);
-    } else if (pose.getTranslation().getDistance(Constants.FieldPosition.Processor.getPose())
-            < SCORE_DISTANCE
-        && Math.abs(processorAngle - pose.getRotation().getRadians())
-            < Units.degreesToRadians(40)) {
-      setCrop(cropZones.PROCESSOR);
-    } else if (pose.getTranslation().getDistance(closestSourcePose) < SCORE_DISTANCE
-        && closestSourceAngle < Units.degreesToRadians(40)) {
-      setCrop(cropZones.SOURCE);
+    Logger.recordOutput("closestProcessor", closestProcessorPose);
+    Logger.recordOutput("processorAngle", closestProcessorAngle);
+
+    if (closestReefDistance < SCORE_DISTANCE
+        && Math.abs(closestReefAngle) < Units.degreesToRadians(FOV / 2.0)) {
+      setCrop(CropZone.REEF);
+    } else if (closestProcessorDistance < SCORE_DISTANCE
+        && Math.abs(closestProcessorAngle) < Units.degreesToRadians(FOV / 2.0)) {
+      setCrop(CropZone.PROCESSOR);
+    } else if (closestSourceDistance < SCORE_DISTANCE
+        && Math.abs(closestSourceAngle) < Units.degreesToRadians(FOV / 2.0)) {
+      setCrop(CropZone.SOURCE);
     } else {
-      setCrop(cropZones.Default);
+      setCrop(CropZone.Default);
     }
   }
 
@@ -190,12 +214,13 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     }
   }
 
-  private void setCrop(cropZones zone) {
+  private void setCrop(CropZone zone) {
+    currentCropZone = zone;
     LimelightHelpers.setCropWindow(name, zone.x1, zone.x2, zone.y1, zone.y2);
     LimelightHelpers.SetFiducialDownscalingOverride(name, zone.scale);
   }
 
-  private enum cropZones {
+  private enum CropZone {
     // x1, x2, y1, y2, downscale factor
     REEF(-1, 1, -1, 0, 1),
     PROCESSOR(-1, 1, 0, 1, 1),
@@ -204,7 +229,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     double x1, x2, y1, y2;
     float scale;
 
-    cropZones(double x1, double x2, double y1, double y2, float scale) {
+    CropZone(double x1, double x2, double y1, double y2, float scale) {
       this.x1 = x1;
       this.x2 = x2;
       this.y1 = y1;

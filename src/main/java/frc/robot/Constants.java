@@ -144,14 +144,10 @@ public final class Constants {
   }
 
   public final class FieldConstants {
-    public static final Translation2d TEAM_RED_REEF_CENTER =
-        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
-    public static final Translation2d TEAM_BLUE_REEF_CENTER =
-        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
-    public static final Translation2d TEAM_RED_PROCESSOR =
-        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
-    public static final Translation2d TEAM_BLUE_PROCESSOR =
-        new Translation2d(0, 0); // TODO TODO TODO TODO TODO TODO TODO TODO
+    public static final Translation2d TEAM_RED_REEF_CENTER = new Translation2d(13.071, 4.078);
+    public static final Translation2d TEAM_BLUE_REEF_CENTER = new Translation2d(4.501, 4.078);
+    public static final Translation2d TEAM_RED_PROCESSOR = new Translation2d(6.026, 0);
+    public static final Translation2d TEAM_BLUE_PROCESSOR = new Translation2d(11.585, 8.062);
 
     public static final Translation2d SOURCE_1 = new Translation2d(16.994, 0.355);
     public static final Translation2d SOURCE_2 = new Translation2d(16.725, 7.518);
