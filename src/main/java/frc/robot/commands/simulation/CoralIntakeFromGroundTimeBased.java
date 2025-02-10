@@ -1,9 +1,11 @@
 package frc.robot.commands.simulation;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.RobotContainer;
@@ -15,17 +17,27 @@ public class CoralIntakeFromGroundTimeBased extends SequentialCommandGroup
   public CoralIntakeFromGroundTimeBased(double secondsUntilCoralAcquired) {
     if (Constants.RobotState.getMode() == Mode.REAL) return;
 
-    NamedCoral coral =
-        new NamedCoral(
-            "CoralIntakeFromGroundTimeBased/Coral",
-            RobotContainer.model.coralIntake.getCoralTargetPose(0.06));
+    Pose3d robotOrigin = new Pose3d();
+    if (RobotContainer.poseTracker != null)
+      robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
+    Pose3d coralPose =
+        robotOrigin.transformBy(new Transform3d(-0.1, 0.834669, 0.08, new Rotation3d(0, 0, 0)));
+
+    NamedCoral coral = new NamedCoral("CoralIntakeFromGroundTimeBased/Coral", coralPose);
 
     addCommands(
-        new WaitCommand(secondsUntilCoralAcquired),
         new InstantCommand(() -> RobotContainer.model.addCoral(coral)),
-        // TODO: move coral to intake
+        new PoseAnimator(
+            coralPose,
+            () -> RobotContainer.model.coralIntake.getCoralTargetPose(),
+            p -> coral.pose = () -> p,
+            secondsUntilCoralAcquired),
         // mark coral for use for the elevator
-        new InstantCommand(() -> coral.name = "CoralIntakeToElevator/Coral"),
+        new InstantCommand(
+            () -> {
+              coral.name = "CoralIntakeToElevator/Coral";
+              coral.pose = () -> RobotContainer.model.coralIntake.getCoralTargetPose();
+            }),
         // set has coral (NC)
         new InstantCommand(
             () -> {

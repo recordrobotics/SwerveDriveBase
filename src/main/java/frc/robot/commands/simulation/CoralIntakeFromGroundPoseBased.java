@@ -31,11 +31,12 @@ public class CoralIntakeFromGroundPoseBased extends SequentialCommandGroup
 
               closestCoral = coralPoses[0];
               double closestCoralDistance =
-                  closestCoral.pose.getTranslation().toTranslation2d().getDistance(pose);
+                  closestCoral.pose.get().getTranslation().toTranslation2d().getDistance(pose);
 
               for (int i = 1; i < coralPoses.length; i++) {
                 NamedCoral coral = coralPoses[i];
-                double distance = coral.pose.getTranslation().toTranslation2d().getDistance(pose);
+                double distance =
+                    coral.pose.get().getTranslation().toTranslation2d().getDistance(pose);
                 if (distance < closestCoralDistance) {
                   closestCoral = coral;
                   closestCoralDistance = distance;
