@@ -3,7 +3,10 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -98,6 +101,10 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
     io.applyTalonFXConfig(
         new TalonFXConfiguration()
+            .withMotorOutput(
+                new MotorOutputConfigs()
+                    .withInverted(InvertedValue.Clockwise_Positive)
+                    .withNeutralMode(NeutralModeValue.Coast))
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(Constants.Elevator.SUPPLY_CURRENT_LIMIT)
@@ -210,14 +217,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public void moveTo(ElevatorHeight height) {
-    switch (height) {
-      case OFF:
-        kill();
-        break;
-      default:
-        toggle(height.getHeight());
-        break;
-    }
+    toggle(height.getHeight());
   }
 
   public boolean atGoal() {

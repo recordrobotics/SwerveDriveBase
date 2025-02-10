@@ -130,7 +130,7 @@ public final class Constants {
     L3(0.75),
     HIGH_ALGAE(1.035),
     L4(1.32),
-    OFF(0);
+    BOTTOM(0);
 
     private double height;
 
