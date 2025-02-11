@@ -324,7 +324,8 @@ public final class Constants {
       ELEVATOR,
       GROUND_ALGAE,
       CORAL_INTAKE,
-      CORAL_SHOOTER
+      CORAL_SHOOTER, 
+      HYBRID_STATES
     }
 
     public static final Map<LightSegments, Pair<Integer, Integer>> PART_INDECIES =
@@ -332,7 +333,8 @@ public final class Constants {
             LightSegments.ELEVATOR, Pair.of(0, 5),
             LightSegments.GROUND_ALGAE, Pair.of(6, 10),
             LightSegments.CORAL_INTAKE, Pair.of(11, 15),
-            LightSegments.CORAL_SHOOTER, Pair.of(16, 20));
+            LightSegments.CORAL_SHOOTER, Pair.of(16, 20),
+            LightSegments.HYBRID_STATES, Pair.of(21, 25));
 
     public static final LEDPattern PULSATING_ORANGE =
         LEDPattern.solid(Color.kOrange)
@@ -374,6 +376,13 @@ public final class Constants {
             (RobotContainer.coralShooter.getCurrentState() == CoralShooterStates.OFF)
                 ? PULSATING_GREEN
                 : PULSATING_ORANGE;
+
+    public static final LEDPattern sourcePattern = LEDPattern.solid(Color.kRed);
+    public static final LEDPattern reefScorePattern = LEDPattern.solid(Color.kBlue);
+    public static final LEDPattern algaeScorePattern = LEDPattern.solid(Color.kPurple);
+    public static final LEDPattern cagePattern = LEDPattern.solid(Color.kOrange);
+    public static final LEDPattern removeAlgaePattern = LEDPattern.solid(Color.kYellowGreen);
+    public static final LEDPattern coralScorePattern = LEDPattern.solid(Color.kAqua);
 
     public static final Map<LightSegments, Supplier<LEDPattern>> DEFAULT_PATTERNS =
         Map.of(

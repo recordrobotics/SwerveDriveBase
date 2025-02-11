@@ -5,11 +5,14 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
+import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CoralIntakeFromSource;
+import frc.robot.commands.SuccessfulCompletion;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
 @TriggerDistance(
@@ -20,6 +23,15 @@ public class HybridSource extends SequentialCommandGroup {
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
 
   public HybridSource() {
+    addCommands(
+        new InstantCommand(
+            () ->
+                new SequentialCommandGroup(
+                        new InstantCommand(
+                            () ->
+                                RobotContainer.lights.patterns.put(
+                                    LightSegments.HYBRID_STATES, () -> Constants.Lights.sourcePattern)))
+                    .schedule()));
     try {
       paths =
           new PathPlannerPath[] {
@@ -50,6 +62,9 @@ public class HybridSource extends SequentialCommandGroup {
 
     addCommands(
         AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints),
-        new CoralIntakeFromSource());
+        new CoralIntakeFromSource(),
+        new SuccessfulCompletion(
+            false, false, true, false, true)
+        );
   }
 }

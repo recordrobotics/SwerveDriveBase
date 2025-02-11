@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.FieldPosition;
+import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
+import frc.robot.commands.SuccessfulCompletion;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
 @TriggerDistance(
@@ -22,6 +24,15 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
 
   public HybridRemoveAlgae() {
+    addCommands(
+        new InstantCommand(
+            () ->
+                new SequentialCommandGroup(
+                        new InstantCommand(
+                            () ->
+                                RobotContainer.lights.patterns.put(
+                                    LightSegments.HYBRID_STATES, () -> Constants.Lights.removeAlgaePattern)))
+                    .schedule()));
     try {
       paths =
           new PathPlannerPath[] {
@@ -62,6 +73,9 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
             shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
         new InstantCommand(() -> RobotContainer.elevator.moveTo(algaeHeight)),
         AutoBuilder.followPath(shortestPath),
-        new ElevatorMoveThenAlgaeGrab(algaeHeight));
+        new ElevatorMoveThenAlgaeGrab(algaeHeight),
+        new SuccessfulCompletion(
+            true, false, true, false, true)
+        );
   }
 }
