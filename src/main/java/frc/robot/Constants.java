@@ -170,11 +170,99 @@ public final class Constants {
     BB1(0, 1, 0),
     BB2(0, 1, 1),
     BB3(0, 1, 2),
-    BB4(0, 1, 3);
+    BB4(0, 1, 3),
+    BC1(1, 0, 0),
+    BC2(1, 0, 1),
+    BC3(1, 0, 2),
+    BC4(1, 0, 3),
+    BD1(1, 1, 0),
+    BD2(1, 1, 1),
+    BD3(1, 1, 2),
+    BD4(1, 1, 3),
+    BE1(2, 0, 0),
+    BE2(2, 0, 1),
+    BE3(2, 0, 2),
+    BE4(2, 0, 3),
+    BF1(2, 1, 0),
+    BF2(2, 1, 1),
+    BF3(2, 1, 2),
+    BF4(2, 1, 3),
+    BG1(3, 0, 0),
+    BG2(3, 0, 1),
+    BG3(3, 0, 2),
+    BG4(3, 0, 3),
+    BH1(3, 1, 0),
+    BH2(3, 1, 1),
+    BH3(3, 1, 2),
+    BH4(3, 1, 3),
+    BI1(4, 0, 0),
+    BI2(4, 0, 1),
+    BI3(4, 0, 2),
+    BI4(4, 0, 3),
+    BJ1(4, 1, 0),
+    BJ2(4, 1, 1),
+    BJ3(4, 1, 2),
+    BJ4(4, 1, 3),
+    BK1(5, 0, 0),
+    BK2(5, 0, 1),
+    BK3(5, 0, 2),
+    BK4(5, 0, 3),
+    BL1(5, 1, 0),
+    BL2(5, 1, 1),
+    BL3(5, 1, 2),
+    BL4(5, 1, 3),
+    RA1(6, 0, 0),
+    RA2(6, 0, 1),
+    RA3(6, 0, 2),
+    RA4(6, 0, 3),
+    RB1(6, 1, 0),
+    RB2(6, 1, 1),
+    RB3(6, 1, 2),
+    RB4(6, 1, 3),
+    RC1(7, 0, 0),
+    RC2(7, 0, 1),
+    RC3(7, 0, 2),
+    RC4(7, 0, 3),
+    RD1(7, 1, 0),
+    RD2(7, 1, 1),
+    RD3(7, 1, 2),
+    RD4(7, 1, 3),
+    RE1(8, 0, 0),
+    RE2(8, 0, 1),
+    RE3(8, 0, 2),
+    RE4(8, 0, 3),
+    RF1(8, 1, 0),
+    RF2(8, 1, 1),
+    RF3(8, 1, 2),
+    RF4(8, 1, 3),
+    RG1(9, 0, 0),
+    RG2(9, 0, 1),
+    RG3(9, 0, 2),
+    RG4(9, 0, 3),
+    RH1(9, 1, 0),
+    RH2(9, 1, 1),
+    RH3(9, 1, 2),
+    RH4(9, 1, 3),
+    RI1(10, 0, 0),
+    RI2(10, 0, 1),
+    RI3(10, 0, 2),
+    RI4(10, 0, 3),
+    RJ1(10, 1, 0),
+    RJ2(10, 1, 1),
+    RJ3(10, 1, 2),
+    RJ4(10, 1, 3),
+    RK1(11, 0, 0),
+    RK2(11, 0, 1),
+    RK3(11, 0, 2),
+    RK4(11, 0, 3),
+    RL1(11, 1, 0),
+    RL2(11, 1, 1),
+    RL3(11, 1, 2),
+    RL4(11, 1, 3);
 
-    private int side;
-    private int index;
-    private int height;
+    private final int side;
+    private final int index;
+    private final int height;
 
     private ReefScoringPose(int side, int index, int height) {
       this.side = side;
@@ -183,33 +271,38 @@ public final class Constants {
     }
 
     private static final double SIDE_LENGTH = 0.3;
+    private static final double L1_OFFSET = 0.7;
+    private static final double LEVEL_SPACING = 0.4;
 
     public Pose3d getPose() {
-      if(side < 6){ // blue
-        double theta = -side * Math.PI / 3;
-        double theta2 = theta + Math.PI / 2;
-        double x = FieldConstants.TEAM_BLUE_REEF_CENTER.getX() - Math.cos(theta);
-        double y = FieldConstants.TEAM_BLUE_REEF_CENTER.getY() + Math.sin(theta);
+      double sideRelative = side % 6;
+      double theta = -sideRelative * Math.PI / 3;
+      double theta2 = theta + Math.PI / 2;
 
-        double len = SIDE_LENGTH;
+      double cx;
+      double cy;
 
-        if(index == 1)
-          len = -len;
-
-        double rx = x + len * Math.cos(theta2);
-        double ry = y - len * Math.sin(theta2);
-
-        return new Pose3d(
-            new Translation3d(
-                rx, ry, 0),
-            new Rotation3d(0,0,0));
-      } else { // red
-        return new Pose3d(
-            new Translation2d(
-                FieldConstants.TEAM_RED_REEF_CENTER.getX() - (index * 0.3048),
-                FieldConstants.TEAM_RED_REEF_CENTER.getY() + ((side - 6) * 0.3048)),
-            new Rotation2d());
+      if (side < 6) {
+        cx = FieldConstants.TEAM_BLUE_REEF_CENTER.getX();
+        cy = FieldConstants.TEAM_BLUE_REEF_CENTER.getY();
+      } else {
+        cx = FieldConstants.TEAM_RED_REEF_CENTER.getX();
+        cy = FieldConstants.TEAM_RED_REEF_CENTER.getY();
       }
+
+      double x = cx - Math.cos(theta);
+      double y = cy + Math.sin(theta);
+
+      double len = SIDE_LENGTH;
+
+      if (index == 1) len = -len;
+
+      double rx = x + len * Math.cos(theta2);
+      double ry = y - len * Math.sin(theta2);
+
+      double height = L1_OFFSET + this.height * LEVEL_SPACING;
+
+      return new Pose3d(new Translation3d(rx, ry, height), new Rotation3d(0, 0, theta));
     }
   }
 
