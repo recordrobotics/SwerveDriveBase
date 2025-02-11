@@ -270,9 +270,8 @@ public final class Constants {
       this.height = height;
     }
 
-    private static final double SIDE_LENGTH = 0.3;
-    private static final double L1_OFFSET = 0.7;
-    private static final double LEVEL_SPACING = 0.4;
+    private static final double SIDE_LENGTH = 0.2;
+    private static final double RADIUS = 0.7;
 
     public Pose3d getPose() {
       double sideRelative = side % 6;
@@ -290,8 +289,8 @@ public final class Constants {
         cy = FieldConstants.TEAM_RED_REEF_CENTER.getY();
       }
 
-      double x = cx - Math.cos(theta);
-      double y = cy + Math.sin(theta);
+      double x = cx - RADIUS * Math.cos(theta);
+      double y = cy + RADIUS * Math.sin(theta);
 
       double len = SIDE_LENGTH;
 
@@ -300,9 +299,27 @@ public final class Constants {
       double rx = x + len * Math.cos(theta2);
       double ry = y - len * Math.sin(theta2);
 
-      double height = L1_OFFSET + this.height * LEVEL_SPACING;
+      double height;
+      switch (this.height) {
+        case 0:
+          height = 0.5;
+          break;
+        case 1:
+          height = 0.7;
+          break;
+        case 2:
+          height = 1.1;
+          break;
+        case 3:
+          height = 1.8;
+          break;
+        default:
+          height = 0.0;
+          break;
+      }
 
-      return new Pose3d(new Translation3d(rx, ry, height), new Rotation3d(0, 0, theta));
+      return new Pose3d(
+          new Translation3d(rx, ry, height), new Rotation3d(0, Units.degreesToRadians(32), -theta));
     }
   }
 
