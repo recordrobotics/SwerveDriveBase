@@ -128,9 +128,9 @@ public final class Constants {
   public enum ElevatorHeight {
     INTAKE(0),
     L1(0.06),
-    L2(0.18),
+    L2(0.2),
     LOW_ALGAE(0.465),
-    L3(0.75),
+    L3(0.72),
     HIGH_ALGAE(1.035),
     L4(1.32),
     BOTTOM(0);
@@ -292,6 +292,19 @@ public final class Constants {
       this.side = side;
       this.index = index;
       this.height = height;
+    }
+
+    public static ReefScoringPose closestTo(Pose3d pose, double maxDistance) {
+      ReefScoringPose closest = null;
+      double closestDistance = Double.MAX_VALUE;
+      for (ReefScoringPose reef : ReefScoringPose.values()) {
+        double distance = reef.getPose().getTranslation().getDistance(pose.getTranslation());
+        if (distance <= maxDistance && distance < closestDistance) {
+          closest = reef;
+          closestDistance = distance;
+        }
+      }
+      return closest;
     }
 
     private static final double SIDE_LENGTH = 0.16;

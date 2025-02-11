@@ -263,9 +263,6 @@ public class RobotModel extends SubsystemBase {
   public RobotModel() {
     periodic();
     // addCoral(tmp);
-    for (Constants.ReefScoringPose reefScoringPose : Constants.ReefScoringPose.values()) {
-      addCoral(new NamedCoral(reefScoringPose.name(), reefScoringPose.getPose()));
-    }
   }
 
   @Override

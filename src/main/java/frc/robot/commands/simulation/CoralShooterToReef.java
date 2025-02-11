@@ -1,13 +1,13 @@
 package frc.robot.commands.simulation;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
+import frc.robot.Constants.ReefScoringPose;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.RobotModel.NamedCoral;
@@ -33,28 +33,29 @@ public class CoralShooterToReef extends SequentialCommandGroup implements Simula
             }),
         // move coral to elevator
         new DeferredCommand(
-            () ->
-                new PoseAnimator(
-                    coral
-                        .pose
-                        .get()
-                        .relativeTo(new Pose3d(RobotContainer.poseTracker.getEstimatedPosition())),
-                    () ->
-                        RobotContainer.model
-                            .elevator
-                            .getCoralIntakeEjectPose()
-                            .relativeTo(
-                                new Pose3d(RobotContainer.poseTracker.getEstimatedPosition())),
-                    p ->
-                        coral.pose =
-                            () ->
-                                new Pose3d(RobotContainer.poseTracker.getEstimatedPosition())
-                                    .plus(new Transform3d(p.getTranslation(), p.getRotation())),
-                    0.1),
+            () -> {
+              ReefScoringPose reefPose = ReefScoringPose.closestTo(coral.pose.get(), 10.1);
+              if (reefPose == null) {
+                // invalid shooting position, throw away coral
+                return new InstantCommand(
+                    () -> {
+                      RobotContainer.model.removeCoral(coral);
+                      coral = null;
+                    });
+              }
+
+              return new PoseAnimator(
+                  coral != null ? coral.pose.get() : new Pose3d(),
+                  () -> reefPose.getPose(),
+                  p -> {
+                    if (coral != null) coral.pose = () -> p;
+                  },
+                  0.5);
+            },
             new HashSet<Subsystem>()),
         new InstantCommand(
             () -> {
-              coral.name = "Reef/Coral";
+              if (coral != null) coral.name = "Reef/BA2/Coral";
             }));
   }
 

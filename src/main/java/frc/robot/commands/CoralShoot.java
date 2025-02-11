@@ -6,19 +6,18 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.simulation.CoralShooterToReef;
 import frc.robot.subsystems.CoralShooter.CoralShooterStates;
 
 public class CoralShoot extends SequentialCommandGroup {
   public CoralShoot() {
-    addRequirements(
-        RobotContainer.coralShooter,
-        RobotContainer
-            .drivetrain); // Drivetrain so that drivetrain doesn't move when the shooter shoots
+    addRequirements(RobotContainer.coralShooter);
 
     addCommands(
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OUT)),
         // Make sure coral left
-        new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral()),
+        new CoralShooterToReef()
+            .simulateFor(new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral())),
         new WaitCommand(Constants.CoralShooter.SHOOT_TIME),
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OFF)));
   }
