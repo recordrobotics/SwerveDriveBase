@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.commands.CoralIntakeFromGround;
 import frc.robot.commands.CoralIntakeFromSource;
-import frc.robot.commands.ElevatorMove;
+import frc.robot.commands.ElevatorMoveThenCoralShoot;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.auto.PlannedAuto;
@@ -117,13 +117,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
-        .onTrue(new ElevatorMove(ElevatorHeight.L1));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L1));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
-        .onTrue(new ElevatorMove(ElevatorHeight.L2));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L2));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
-        .onTrue(new ElevatorMove(ElevatorHeight.L3));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L3));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
-        .onTrue(new ElevatorMove(ElevatorHeight.L4));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L4));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
         .onTrue(new CoralIntakeFromGround());
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())

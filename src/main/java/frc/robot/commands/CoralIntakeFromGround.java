@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -18,6 +19,10 @@ public class CoralIntakeFromGround extends SequentialCommandGroup {
     addRequirements(RobotContainer.elevator);
 
     addCommands(
+        new ConditionalCommand(
+            new InstantCommand(() -> this.cancel()),
+            new InstantCommand(() -> {}),
+            () -> RobotContainer.coralShooter.hasCoral()),
         // start moving elevator to intake position
         new InstantCommand(() -> RobotContainer.elevator.moveTo(ElevatorHeight.INTAKE)),
         // at the same time lower the arm

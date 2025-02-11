@@ -13,8 +13,11 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
@@ -157,6 +160,57 @@ public final class Constants {
     // Field width and length
     public static final double FIELD_X_DIMENSION = 17.548; // Length
     public static final double FIELD_Y_DIMENSION = 8.052; // Width
+  }
+
+  public enum ReefScoringPose {
+    BA1(0, 0, 0),
+    BA2(0, 0, 1),
+    BA3(0, 0, 2),
+    BA4(0, 0, 3),
+    BB1(0, 1, 0),
+    BB2(0, 1, 1),
+    BB3(0, 1, 2),
+    BB4(0, 1, 3);
+
+    private int side;
+    private int index;
+    private int height;
+
+    private ReefScoringPose(int side, int index, int height) {
+      this.side = side;
+      this.index = index;
+      this.height = height;
+    }
+
+    private static final double SIDE_LENGTH = 0.3;
+
+    public Pose3d getPose() {
+      if(side < 6){ // blue
+        double theta = -side * Math.PI / 3;
+        double theta2 = theta + Math.PI / 2;
+        double x = FieldConstants.TEAM_BLUE_REEF_CENTER.getX() - Math.cos(theta);
+        double y = FieldConstants.TEAM_BLUE_REEF_CENTER.getY() + Math.sin(theta);
+
+        double len = SIDE_LENGTH;
+
+        if(index == 1)
+          len = -len;
+
+        double rx = x + len * Math.cos(theta2);
+        double ry = y - len * Math.sin(theta2);
+
+        return new Pose3d(
+            new Translation3d(
+                rx, ry, 0),
+            new Rotation3d(0,0,0));
+      } else { // red
+        return new Pose3d(
+            new Translation2d(
+                FieldConstants.TEAM_RED_REEF_CENTER.getX() - (index * 0.3048),
+                FieldConstants.TEAM_RED_REEF_CENTER.getY() + ((side - 6) * 0.3048)),
+            new Rotation2d());
+      }
+    }
   }
 
   public enum FieldPosition {

@@ -126,6 +126,7 @@ public class CoralIntakeToElevator extends SequentialCommandGroup implements Sim
         // set has elevator coral (NC)
         new InstantCommand(
             () -> {
+              coral.name = "CoralShooter/Coral";
               coral.pose = () -> RobotContainer.model.elevator.getCoralShooterTargetPose();
               try {
                 RobotContainer.coralShooter.getSimIO().setCoralDetectorSim(false);

@@ -9,6 +9,6 @@ public class ElevatorMoveThenCoralShoot extends SequentialCommandGroup {
     addCommands(
         new ElevatorMove(targetHeight),
         new CoralShoot(),
-        new InstantCommand(() -> new ElevatorMove(ElevatorHeight.INTAKE).schedule()));
+        new InstantCommand(() -> new ElevatorMove(ElevatorHeight.BOTTOM).schedule()));
   }
 }

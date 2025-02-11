@@ -310,6 +310,11 @@ public class RobotModel extends SubsystemBase {
   }
 
   public void addCoral(NamedCoral coral) {
+    var c = getCoral(coral.name);
+    if (c != null) {
+      coralPositions.remove(c);
+    }
+
     coralPositions.add(coral);
   }
 
