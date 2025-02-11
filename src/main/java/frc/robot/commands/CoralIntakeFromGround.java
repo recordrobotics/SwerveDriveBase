@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
-import frc.robot.commands.simulation.CoralIntakeFromGroundPoseBased;
+import frc.robot.commands.simulation.CoralIntakeFromGroundSim;
 import frc.robot.commands.simulation.CoralIntakeToElevator;
 import frc.robot.subsystems.CoralIntake.CoralIntakeStates;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
@@ -31,8 +31,7 @@ public class CoralIntakeFromGround extends SequentialCommandGroup {
         // start intaking
         new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.INTAKE)),
         // wait until coral is detected
-        // new CoralIntakeFromGroundTimeBased(0.2)
-        new CoralIntakeFromGroundPoseBased(RobotContainer.model::getCorals)
+        new CoralIntakeFromGroundSim(0.2)
             .simulateFor(new WaitUntilCommand(() -> RobotContainer.coralIntake.hasCoral())),
         // raise the arm
         new InstantCommand(() -> RobotContainer.coralIntake.toggleArm(IntakeArmStates.UP)),
