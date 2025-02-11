@@ -16,6 +16,7 @@ import java.util.HashSet;
 public class CoralShooterToReef extends SequentialCommandGroup implements SimulationCommand {
 
   private NamedCoral coral;
+  private ReefScoringPose reefPose;
 
   public CoralShooterToReef() {
     if (Constants.RobotState.getMode() == Mode.REAL) return;
@@ -34,7 +35,7 @@ public class CoralShooterToReef extends SequentialCommandGroup implements Simula
         // move coral to elevator
         new DeferredCommand(
             () -> {
-              ReefScoringPose reefPose = ReefScoringPose.closestTo(coral.pose.get(), 10.1);
+              reefPose = ReefScoringPose.closestTo(coral.pose.get(), 0.5);
               if (reefPose == null) {
                 // invalid shooting position, throw away coral
                 return new InstantCommand(
@@ -50,12 +51,12 @@ public class CoralShooterToReef extends SequentialCommandGroup implements Simula
                   p -> {
                     if (coral != null) coral.pose = () -> p;
                   },
-                  0.5);
+                  0.2);
             },
             new HashSet<Subsystem>()),
         new InstantCommand(
             () -> {
-              if (coral != null) coral.name = "Reef/BA2/Coral";
+              if (coral != null) coral.name = "Reef/" + reefPose.name() + "/Coral";
             }));
   }
 
