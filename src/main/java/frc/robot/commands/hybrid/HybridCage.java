@@ -31,7 +31,8 @@ public class HybridCage extends SequentialCommandGroup {
                         new InstantCommand(
                             () ->
                                 RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES, () -> Constants.Lights.cagePattern)))
+                                    LightSegments.HYBRID_STATES,
+                                    () -> Constants.Lights.cagePattern)))
                     .schedule()));
 
     try {
@@ -72,7 +73,6 @@ public class HybridCage extends SequentialCommandGroup {
 
     addCommands(
         AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints),
-        new SuccessfulCompletion(
-            true, true, true, true, true));
+        new SuccessfulCompletion(true, true, true, true, true));
   }
 }

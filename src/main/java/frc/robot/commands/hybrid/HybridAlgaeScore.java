@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
 import frc.robot.Constants.Lights.LightSegments;
@@ -33,7 +32,8 @@ public class HybridAlgaeScore extends SequentialCommandGroup {
                         new InstantCommand(
                             () ->
                                 RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES, () -> Constants.Lights.algaeScorePattern)))
+                                    LightSegments.HYBRID_STATES,
+                                    () -> Constants.Lights.algaeScorePattern)))
                     .schedule()));
 
     try {
@@ -45,8 +45,6 @@ public class HybridAlgaeScore extends SequentialCommandGroup {
     addCommands(
         AutoBuilder.pathfindThenFollowPath(path, Constants.HybridConstants.constraints),
         new GroundAlgaeScore(),
-        new SuccessfulCompletion(
-            false, true, false, false, true));
+        new SuccessfulCompletion(false, true, false, false, true));
   }
-  
 }

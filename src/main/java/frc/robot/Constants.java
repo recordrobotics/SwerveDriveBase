@@ -324,7 +324,7 @@ public final class Constants {
       ELEVATOR,
       GROUND_ALGAE,
       CORAL_INTAKE,
-      CORAL_SHOOTER, 
+      CORAL_SHOOTER,
       HYBRID_STATES
     }
 

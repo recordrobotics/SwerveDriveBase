@@ -30,7 +30,8 @@ public class HybridSource extends SequentialCommandGroup {
                         new InstantCommand(
                             () ->
                                 RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES, () -> Constants.Lights.sourcePattern)))
+                                    LightSegments.HYBRID_STATES,
+                                    () -> Constants.Lights.sourcePattern)))
                     .schedule()));
     try {
       paths =
@@ -63,8 +64,6 @@ public class HybridSource extends SequentialCommandGroup {
     addCommands(
         AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints),
         new CoralIntakeFromSource(),
-        new SuccessfulCompletion(
-            false, false, true, false, true)
-        );
+        new SuccessfulCompletion(false, false, true, false, true));
   }
 }

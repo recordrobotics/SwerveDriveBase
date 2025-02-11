@@ -32,7 +32,8 @@ public class ReefScoreCoral extends SequentialCommandGroup {
                         new InstantCommand(
                             () ->
                                 RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES, () -> Constants.Lights.coralScorePattern)))
+                                    LightSegments.HYBRID_STATES,
+                                    () -> Constants.Lights.coralScorePattern)))
                     .schedule()));
     try {
       paths =
@@ -75,8 +76,6 @@ public class ReefScoreCoral extends SequentialCommandGroup {
             shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
         AutoBuilder.followPath(shortestPath).alongWith(new ElevatorMove(reefCoralHeight)),
         new ElevatorMoveThenCoralShoot(reefCoralHeight),
-        new SuccessfulCompletion(
-            true, false, false, true, true)
-    );
+        new SuccessfulCompletion(true, false, false, true, true));
   }
 }

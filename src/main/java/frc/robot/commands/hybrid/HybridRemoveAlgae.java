@@ -31,7 +31,8 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
                         new InstantCommand(
                             () ->
                                 RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES, () -> Constants.Lights.removeAlgaePattern)))
+                                    LightSegments.HYBRID_STATES,
+                                    () -> Constants.Lights.removeAlgaePattern)))
                     .schedule()));
     try {
       paths =
@@ -74,8 +75,6 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
         new InstantCommand(() -> RobotContainer.elevator.moveTo(algaeHeight)),
         AutoBuilder.followPath(shortestPath),
         new ElevatorMoveThenAlgaeGrab(algaeHeight),
-        new SuccessfulCompletion(
-            true, false, true, false, true)
-        );
+        new SuccessfulCompletion(true, false, true, false, true));
   }
 }
