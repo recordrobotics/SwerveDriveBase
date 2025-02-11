@@ -147,8 +147,8 @@ public final class Constants {
   }
 
   public final class FieldConstants {
-    public static final Translation2d TEAM_RED_REEF_CENTER = new Translation2d(13.071, 4.078);
-    public static final Translation2d TEAM_BLUE_REEF_CENTER = new Translation2d(4.501, 4.078);
+    public static final Translation2d TEAM_RED_REEF_CENTER = new Translation2d(13.059, 4.028);
+    public static final Translation2d TEAM_BLUE_REEF_CENTER = new Translation2d(4.489, 4.028);
     public static final Translation2d TEAM_RED_PROCESSOR = new Translation2d(6.026, 0);
     public static final Translation2d TEAM_BLUE_PROCESSOR = new Translation2d(11.585, 8.062);
 
@@ -163,102 +163,126 @@ public final class Constants {
   }
 
   public enum ReefScoringPose {
-    BA1(0, 0, 0),
-    BA2(0, 0, 1),
-    BA3(0, 0, 2),
-    BA4(0, 0, 3),
-    BB1(0, 1, 0),
-    BB2(0, 1, 1),
-    BB3(0, 1, 2),
-    BB4(0, 1, 3),
-    BC1(1, 0, 0),
-    BC2(1, 0, 1),
-    BC3(1, 0, 2),
-    BC4(1, 0, 3),
-    BD1(1, 1, 0),
-    BD2(1, 1, 1),
-    BD3(1, 1, 2),
-    BD4(1, 1, 3),
-    BE1(2, 0, 0),
-    BE2(2, 0, 1),
-    BE3(2, 0, 2),
-    BE4(2, 0, 3),
-    BF1(2, 1, 0),
-    BF2(2, 1, 1),
-    BF3(2, 1, 2),
-    BF4(2, 1, 3),
-    BG1(3, 0, 0),
-    BG2(3, 0, 1),
-    BG3(3, 0, 2),
-    BG4(3, 0, 3),
-    BH1(3, 1, 0),
-    BH2(3, 1, 1),
-    BH3(3, 1, 2),
-    BH4(3, 1, 3),
-    BI1(4, 0, 0),
-    BI2(4, 0, 1),
-    BI3(4, 0, 2),
-    BI4(4, 0, 3),
-    BJ1(4, 1, 0),
-    BJ2(4, 1, 1),
-    BJ3(4, 1, 2),
-    BJ4(4, 1, 3),
-    BK1(5, 0, 0),
-    BK2(5, 0, 1),
-    BK3(5, 0, 2),
-    BK4(5, 0, 3),
-    BL1(5, 1, 0),
-    BL2(5, 1, 1),
-    BL3(5, 1, 2),
-    BL4(5, 1, 3),
-    RA1(6, 0, 0),
-    RA2(6, 0, 1),
-    RA3(6, 0, 2),
-    RA4(6, 0, 3),
-    RB1(6, 1, 0),
-    RB2(6, 1, 1),
-    RB3(6, 1, 2),
-    RB4(6, 1, 3),
-    RC1(7, 0, 0),
-    RC2(7, 0, 1),
-    RC3(7, 0, 2),
-    RC4(7, 0, 3),
-    RD1(7, 1, 0),
-    RD2(7, 1, 1),
-    RD3(7, 1, 2),
-    RD4(7, 1, 3),
-    RE1(8, 0, 0),
-    RE2(8, 0, 1),
-    RE3(8, 0, 2),
-    RE4(8, 0, 3),
-    RF1(8, 1, 0),
-    RF2(8, 1, 1),
-    RF3(8, 1, 2),
-    RF4(8, 1, 3),
-    RG1(9, 0, 0),
-    RG2(9, 0, 1),
-    RG3(9, 0, 2),
-    RG4(9, 0, 3),
-    RH1(9, 1, 0),
-    RH2(9, 1, 1),
-    RH3(9, 1, 2),
-    RH4(9, 1, 3),
-    RI1(10, 0, 0),
-    RI2(10, 0, 1),
-    RI3(10, 0, 2),
-    RI4(10, 0, 3),
-    RJ1(10, 1, 0),
-    RJ2(10, 1, 1),
-    RJ3(10, 1, 2),
-    RJ4(10, 1, 3),
-    RK1(11, 0, 0),
-    RK2(11, 0, 1),
-    RK3(11, 0, 2),
-    RK4(11, 0, 3),
-    RL1(11, 1, 0),
-    RL2(11, 1, 1),
-    RL3(11, 1, 2),
-    RL4(11, 1, 3);
+    BA1L(0, 0, 0),
+    BA1H(0, 0, 1),
+    BA2(0, 0, 2),
+    BA3(0, 0, 3),
+    BA4(0, 0, 4),
+    BB1L(0, 1, 0),
+    BB1H(0, 1, 1),
+    BB2(0, 1, 2),
+    BB3(0, 1, 3),
+    BB4(0, 1, 4),
+    BC1L(1, 0, 0),
+    BC1H(1, 0, 1),
+    BC2(1, 0, 2),
+    BC3(1, 0, 3),
+    BC4(1, 0, 4),
+    BD1L(1, 1, 0),
+    BD1H(1, 1, 1),
+    BD2(1, 1, 2),
+    BD3(1, 1, 3),
+    BD4(1, 1, 4),
+    BE1L(2, 0, 0),
+    BE1H(2, 0, 1),
+    BE2(2, 0, 2),
+    BE3(2, 0, 3),
+    BE4(2, 0, 4),
+    BF1L(2, 1, 0),
+    BF1H(2, 1, 1),
+    BF2(2, 1, 2),
+    BF3(2, 1, 3),
+    BF4(2, 1, 4),
+    BG1L(3, 0, 0),
+    BG1H(3, 0, 1),
+    BG2(3, 0, 2),
+    BG3(3, 0, 3),
+    BG4(3, 0, 4),
+    BH1L(3, 1, 0),
+    BH1H(3, 1, 1),
+    BH2(3, 1, 2),
+    BH3(3, 1, 3),
+    BH4(3, 1, 4),
+    BI1L(4, 0, 0),
+    BI1H(4, 0, 1),
+    BI2(4, 0, 2),
+    BI3(4, 0, 3),
+    BI4(4, 0, 4),
+    BJ1L(4, 1, 0),
+    BJ1H(4, 1, 1),
+    BJ2(4, 1, 2),
+    BJ3(4, 1, 3),
+    BJ4(4, 1, 4),
+    BK1L(5, 0, 0),
+    BK1H(5, 0, 1),
+    BK2(5, 0, 2),
+    BK3(5, 0, 3),
+    BK4(5, 0, 4),
+    BL1L(5, 1, 0),
+    BL1H(5, 1, 1),
+    BL2(5, 1, 2),
+    BL3(5, 1, 3),
+    BL4(5, 1, 4),
+    RA1L(6, 0, 0),
+    RA1H(6, 0, 1),
+    RA2(6, 0, 2),
+    RA3(6, 0, 3),
+    RA4(6, 0, 4),
+    RB1L(6, 1, 0),
+    RB1H(6, 1, 1),
+    RB2(6, 1, 2),
+    RB3(6, 1, 3),
+    RB4(6, 1, 4),
+    RC1L(7, 0, 0),
+    RC1H(7, 0, 1),
+    RC2(7, 0, 2),
+    RC3(7, 0, 3),
+    RC4(7, 0, 4),
+    RD1L(7, 1, 0),
+    RD1H(7, 1, 1),
+    RD2(7, 1, 2),
+    RD3(7, 1, 3),
+    RD4(7, 1, 4),
+    RE1L(8, 0, 0),
+    RE1H(8, 0, 1),
+    RE2(8, 0, 2),
+    RE3(8, 0, 3),
+    RE4(8, 0, 4),
+    RF1L(8, 1, 0),
+    RF1H(8, 1, 1),
+    RF2(8, 1, 2),
+    RF3(8, 1, 3),
+    RF4(8, 1, 4),
+    RG1L(9, 0, 0),
+    RG1H(9, 0, 1),
+    RG2(9, 0, 2),
+    RG3(9, 0, 3),
+    RG4(9, 0, 4),
+    RH1L(9, 1, 0),
+    RH1H(9, 1, 1),
+    RH2(9, 1, 2),
+    RH3(9, 1, 3),
+    RH4(9, 1, 4),
+    RI1L(10, 0, 0),
+    RI1H(10, 0, 1),
+    RI2(10, 0, 2),
+    RI3(10, 0, 3),
+    RI4(10, 0, 4),
+    RJ1L(10, 1, 0),
+    RJ1H(10, 1, 1),
+    RJ2(10, 1, 2),
+    RJ3(10, 1, 3),
+    RJ4(10, 1, 4),
+    RK1L(11, 0, 0),
+    RK1H(11, 0, 1),
+    RK2(11, 0, 2),
+    RK3(11, 0, 3),
+    RK4(11, 0, 4),
+    RL1L(11, 1, 0),
+    RL1H(11, 1, 1),
+    RL2(11, 1, 2),
+    RL3(11, 1, 3),
+    RL4(11, 1, 4);
 
     private final int side;
     private final int index;
@@ -270,7 +294,7 @@ public final class Constants {
       this.height = height;
     }
 
-    private static final double SIDE_LENGTH = 0.2;
+    private static final double SIDE_LENGTH = 0.16;
     private static final double RADIUS = 0.7;
 
     public Pose3d getPose() {
@@ -289,8 +313,17 @@ public final class Constants {
         cy = FieldConstants.TEAM_RED_REEF_CENTER.getY();
       }
 
-      double x = cx - RADIUS * Math.cos(theta);
-      double y = cy + RADIUS * Math.sin(theta);
+      double radius = RADIUS;
+      if (height == 4) {
+        radius += 0.08;
+      } else if (height == 0) {
+        radius += 0.066;
+      } else if (height == 1) {
+        radius -= 0.04;
+      }
+
+      double x = cx - radius * Math.cos(theta);
+      double y = cy + radius * Math.sin(theta);
 
       double len = SIDE_LENGTH;
 
@@ -300,18 +333,28 @@ public final class Constants {
       double ry = y - len * Math.sin(theta2);
 
       double height;
+      double yaw = -theta;
+      double pitch = 32;
       switch (this.height) {
         case 0:
-          height = 0.5;
+          height = 0.485;
+          pitch = 0;
+          yaw = -theta2;
           break;
         case 1:
-          height = 0.7;
+          height = 0.52;
+          pitch = 0;
+          yaw = -theta2;
           break;
         case 2:
-          height = 1.1;
+          height = 0.71;
           break;
         case 3:
-          height = 1.8;
+          height = 1.11;
+          break;
+        case 4:
+          height = 1.75;
+          pitch = 90;
           break;
         default:
           height = 0.0;
@@ -319,7 +362,7 @@ public final class Constants {
       }
 
       return new Pose3d(
-          new Translation3d(rx, ry, height), new Rotation3d(0, Units.degreesToRadians(32), -theta));
+          new Translation3d(rx, ry, height), new Rotation3d(0, Units.degreesToRadians(pitch), yaw));
     }
   }
 
