@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorHeight;
+import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGround;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ElevatorMoveThenCoralShoot;
@@ -19,6 +20,7 @@ import frc.robot.commands.ElevatorMoveThenCoralShoot;
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.auto.PlannedAuto;
 import frc.robot.commands.manual.ManualSwerve;
+import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
@@ -64,6 +66,8 @@ public class RobotContainer {
   @SuppressWarnings("unused")
   private Command autoCommand;
 
+  private final GenericHID simulationController;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -74,6 +78,12 @@ public class RobotContainer {
 
     // Sets up Control scheme chooser
     DashboardUI.Overview.addControls(new JoystickXbox(2, 0), new JoystickXboxKeypad(2, 0, 3));
+
+    if (Constants.RobotState.getMode() == Mode.SIM) {
+      simulationController = new GenericHID(4);
+    } else {
+      simulationController = null;
+    }
 
     // Bindings and Teleop
     configureButtonBindings();
@@ -134,6 +144,11 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getClimb());
+
+    // Simulation control commands
+    if (Constants.RobotState.getMode() == Mode.SIM) {
+      new Trigger(() -> simulationController.getRawButton(1)).onTrue(new PlaceRandomGroundCoral());
+    }
   }
 
   /**

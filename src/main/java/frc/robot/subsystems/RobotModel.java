@@ -258,11 +258,8 @@ public class RobotModel extends SubsystemBase {
 
   @AutoLogOutput public Pose2d robot = new Pose2d();
 
-  private NamedCoral tmp = new NamedCoral("test", () -> elevator.getCoralIntakeChannelPose());
-
   public RobotModel() {
     periodic();
-    // addCoral(tmp);
   }
 
   @Override
@@ -299,6 +296,10 @@ public class RobotModel extends SubsystemBase {
   }
 
   private final List<NamedCoral> coralPositions = new ArrayList<>();
+
+  public NamedCoral[] getCorals() {
+    return coralPositions.toArray(new NamedCoral[0]);
+  }
 
   @AutoLogOutput
   private Pose3d[] getCoralPositions() {
