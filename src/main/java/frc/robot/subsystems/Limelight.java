@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.MathUtil;
+import static edu.wpi.first.units.Units.Degrees;
+
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,22 +16,15 @@ import frc.robot.utils.ShuffleboardPublisher;
 import frc.robot.utils.SimpleMath;
 import frc.robot.utils.libraries.LimelightHelpers;
 import frc.robot.utils.libraries.LimelightHelpers.PoseEstimate;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 
 public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
-
-  private static final String name = "limelight";
-  private static final double SCORE_DISTANCE = 3.0;
-  private static final double FOV = 80;
   private int numTags = 0;
   private double confidence = 0;
   private boolean hasVision = false;
+  private String name = Constants.Limelight.LIMELIGHT_NAME;
   private boolean limelightConnected = false;
-  private PoseEstimate currentEstimate = new PoseEstimate();
   private double currentConfidence = 9999999; // large number means less confident
-
-  @AutoLogOutput private CropZone currentCropZone = CropZone.Default;
+  private PoseEstimate currentEstimate = new PoseEstimate();
 
   public Limelight() {
     LimelightHelpers.setPipelineIndex(name, 0);
@@ -80,125 +77,89 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
   }
 
   private void updateCrop() {
-    Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
-
-    Translation2d reefBluePose = Constants.FieldConstants.TEAM_BLUE_REEF_CENTER;
-    Translation2d reefRedPose = Constants.FieldConstants.TEAM_RED_REEF_CENTER;
-
-    double reefBlueAngle =
-        Math.atan2(
-            pose.getTranslation().getY() - reefBluePose.getY(),
-            pose.getTranslation().getX() - reefBluePose.getX());
-    double reefRedAngle =
-        Math.atan2(
-            pose.getTranslation().getY() - reefRedPose.getY(),
-            pose.getTranslation().getX() - reefRedPose.getX());
-
-    double closestReefDistance = pose.getTranslation().getDistance(reefBluePose);
-    double closestReefAngle = reefBlueAngle;
-    Translation2d closestReefPose = reefBluePose;
-
-    if (pose.getTranslation().getDistance(reefRedPose) < closestReefDistance) {
-      closestReefAngle = reefRedAngle;
-      closestReefPose = reefRedPose;
-      closestReefDistance = pose.getTranslation().getDistance(reefRedPose);
+    if (!hasVision) { // failsafe if cropping goes wrong this will be triggered and reset the crop
+      LimelightHelpers.setCropWindow(name, -1, 1, -1, 1);
+      LimelightHelpers.SetFiducialDownscalingOverride(name, 2);
+      return;
     }
 
-    closestReefAngle = MathUtil.angleModulus(closestReefAngle - pose.getRotation().getRadians());
+    Pose2d robotPose = RobotContainer.poseTracker.getEstimatedPosition();
+    Pose3d limelightPose3d =
+        new Pose3d(
+            new Translation3d(robotPose.getTranslation())
+                .plus(Constants.Limelight.LIMELIGHT_OFFSET),
+            new Rotation3d(
+                Degrees.of(0),
+                Constants.Limelight.LIMELIGHT_ANGLE_UP,
+                robotPose.getRotation().getMeasure()));
 
-    Translation2d processorBluePose = Constants.FieldConstants.TEAM_BLUE_PROCESSOR;
-    Translation2d processorRedPose = Constants.FieldConstants.TEAM_RED_PROCESSOR;
+    boolean foundOne = false;
+    double x0 = 0;
+    double y0 = 0;
+    double x1 = 0;
+    double y1 = 0;
 
-    double processorBlueAngle =
-        Math.atan2(
-            pose.getTranslation().getY() - processorBluePose.getY(),
-            pose.getTranslation().getX() - processorBluePose.getX());
-    double processorRedAngle =
-        Math.atan2(
-            pose.getTranslation().getY() - processorRedPose.getY(),
-            pose.getTranslation().getX() - processorRedPose.getX());
+    for (AprilTag tag : Constants.Limelight.FIELD_LAYOUT.getTags()) {
+      Pose3d tagPose = tag.pose;
+      Rotation3d limelightToTagRotation =
+          limelightPose3d
+              .getRotation()
+              .minus(
+                  SimpleMath.translationToRotation(
+                      tagPose.getTranslation().minus(limelightPose3d.getTranslation())));
 
-    double closestProcessorDistance = pose.getTranslation().getDistance(processorBluePose);
-    double closestProcessorAngle = processorBlueAngle;
-    Translation2d closestProcessorPose = processorBluePose;
+      // using isNear feels cursed but if it works it works
+      boolean withinRangeVertical =
+          limelightToTagRotation
+              .getMeasureY()
+              .isNear(Degrees.of(0), Constants.Limelight.FOV_VERTICAL_FROM_CENTER);
+      boolean withinRangeHorizontal =
+          limelightToTagRotation
+              .getMeasureZ()
+              .isNear(Degrees.of(0), Constants.Limelight.FOV_HORIZONTAL_FROM_CENTER);
 
-    if (pose.getTranslation().getDistance(processorRedPose) < closestProcessorDistance) {
-      closestProcessorAngle = processorRedAngle;
-      closestProcessorPose = processorRedPose;
-      closestProcessorDistance = pose.getTranslation().getDistance(processorRedPose);
+      if (withinRangeVertical && withinRangeHorizontal) {
+        foundOne = true;
+
+        double tagCenterX =
+            limelightToTagRotation.getMeasureZ().in(Degrees)
+                / Constants.Limelight.FOV_HORIZONTAL_FROM_CENTER.in(Degrees);
+        double tagCenterY =
+            limelightToTagRotation.getMeasureY().in(Degrees)
+                / Constants.Limelight.FOV_VERTICAL_FROM_CENTER.in(Degrees);
+        double tagX0 = tagCenterX - Constants.Limelight.CROPPING_MARGIN;
+        double tagX1 = tagX0 + 2 * Constants.Limelight.CROPPING_MARGIN;
+        double tagY0 = tagCenterY - Constants.Limelight.CROPPING_MARGIN;
+        double tagY1 = tagY0 + 2 * Constants.Limelight.CROPPING_MARGIN;
+
+        if (tagX0 < x0) {
+          x0 = tagX0;
+        }
+        if (tagX1 > x1) {
+          x1 = tagX1;
+        }
+        if (tagY0 < y0) {
+          y0 = tagY0;
+        }
+        if (tagY1 > y1) {
+          y1 = tagY1;
+        }
+      }
     }
 
-    closestProcessorAngle =
-        MathUtil.angleModulus(closestProcessorAngle - pose.getRotation().getRadians());
+    // Make sure x0, x1, y0, y1 are within the range of -1 to 1
+    x0 = Math.max(-1, x0);
+    x1 = Math.min(1, x1);
+    y0 = Math.max(-1, y0);
+    y1 = Math.min(1, y1);
 
-    Translation2d source12Pose = Constants.FieldConstants.SOURCE_12.getTranslation();
-    Translation2d source13Pose = Constants.FieldConstants.SOURCE_13.getTranslation();
-    Translation2d source1Pose = Constants.FieldConstants.SOURCE_1.getTranslation();
-    Translation2d source2Pose = Constants.FieldConstants.SOURCE_2.getTranslation();
-
-    double sourceAngle12 =
-        Math.atan2(
-            pose.getTranslation().getY() - source12Pose.getY(),
-            pose.getTranslation().getX() - source12Pose.getX());
-    double sourceAngle13 =
-        Math.atan2(
-            pose.getTranslation().getY() - source13Pose.getY(),
-            pose.getTranslation().getX() - source13Pose.getX());
-
-    double sourceAngle1 =
-        Math.atan2(
-            pose.getTranslation().getY() - source1Pose.getY(),
-            pose.getTranslation().getX() - source1Pose.getX());
-
-    double sourceAngle2 =
-        Math.atan2(
-            pose.getTranslation().getY() - source2Pose.getY(),
-            pose.getTranslation().getX() - source2Pose.getX());
-
-    double closestSourceDistance = pose.getTranslation().getDistance(source1Pose);
-    double closestSourceAngle = sourceAngle1;
-    Translation2d closestSourcePose = source1Pose;
-
-    if (pose.getTranslation().getDistance(source2Pose) < closestSourceDistance) {
-      closestSourceAngle = sourceAngle2;
-      closestSourcePose = source2Pose;
-      closestSourceDistance = pose.getTranslation().getDistance(source2Pose);
+    if (!foundOne) {
+      LimelightHelpers.setCropWindow(name, -1, 1, -1, 1);
+      LimelightHelpers.SetFiducialDownscalingOverride(name, 2);
+      return;
     }
-    if (pose.getTranslation().getDistance(source12Pose) < closestSourceDistance) {
-      closestSourceAngle = sourceAngle12;
-      closestSourcePose = source12Pose;
-      closestSourceDistance = pose.getTranslation().getDistance(source12Pose);
-    }
-    if (pose.getTranslation().getDistance(source13Pose) < closestSourceDistance) {
-      closestSourceAngle = sourceAngle13;
-      closestSourcePose = source13Pose;
-      closestSourceDistance = pose.getTranslation().getDistance(source13Pose);
-    }
-
-    closestSourceAngle =
-        MathUtil.angleModulus(closestSourceAngle - pose.getRotation().getRadians());
-
-    Logger.recordOutput("closestSource", closestSourcePose);
-    Logger.recordOutput("sourceAngle", closestSourceAngle);
-
-    Logger.recordOutput("closestReef", closestReefPose);
-    Logger.recordOutput("reefAngle", closestReefAngle);
-
-    Logger.recordOutput("closestProcessor", closestProcessorPose);
-    Logger.recordOutput("processorAngle", closestProcessorAngle);
-
-    if (closestReefDistance < SCORE_DISTANCE
-        && Math.abs(closestReefAngle) < Units.degreesToRadians(FOV / 2.0)) {
-      setCrop(CropZone.REEF);
-    } else if (closestProcessorDistance < SCORE_DISTANCE
-        && Math.abs(closestProcessorAngle) < Units.degreesToRadians(FOV / 2.0)) {
-      setCrop(CropZone.PROCESSOR);
-    } else if (closestSourceDistance < SCORE_DISTANCE
-        && Math.abs(closestSourceAngle) < Units.degreesToRadians(FOV / 2.0)) {
-      setCrop(CropZone.SOURCE);
-    } else {
-      setCrop(CropZone.Default);
-    }
+    LimelightHelpers.setCropWindow(name, x0, x1, y0, y1);
+    LimelightHelpers.SetFiducialDownscalingOverride(name, 1);
   }
 
   private void handleMeasurement(PoseEstimate estimate, double confidence) {
@@ -211,30 +172,6 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       hasVision = false;
       DashboardUI.Autonomous.setVisionPose(new Pose2d());
       currentConfidence = 9999999;
-    }
-  }
-
-  private void setCrop(CropZone zone) {
-    currentCropZone = zone;
-    LimelightHelpers.setCropWindow(name, zone.x1, zone.x2, zone.y1, zone.y2);
-    LimelightHelpers.SetFiducialDownscalingOverride(name, zone.scale);
-  }
-
-  private enum CropZone {
-    // x1, x2, y1, y2, downscale factor
-    REEF(-1, 1, -1, 0, 1),
-    PROCESSOR(-1, 1, 0, 1, 1),
-    SOURCE(-0.5, 0.5, -1, 0, 1),
-    Default(-1, 1, -1, 1, 2);
-    double x1, x2, y1, y2;
-    float scale;
-
-    CropZone(double x1, double x2, double y1, double y2, float scale) {
-      this.x1 = x1;
-      this.x2 = x2;
-      this.y1 = y1;
-      this.y2 = y2;
-      this.scale = scale;
     }
   }
 

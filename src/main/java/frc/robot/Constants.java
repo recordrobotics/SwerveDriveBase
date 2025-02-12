@@ -11,6 +11,8 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -20,6 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Time;
@@ -107,6 +110,24 @@ public final class Constants {
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
     public static final double LENGTH = 0.6;
     public static final double ANGLE_OFFSET = 0;
+  }
+
+  public final class Limelight {
+    public static final Angle LIMELIGHT_ANGLE_UP = Degrees.of(23); // TODO make correct
+    public static final Translation3d LIMELIGHT_OFFSET =
+        new Translation3d(
+            Meters.of(0.2), // TODO make correct
+            Meters.of(0.2), // TODO make correct
+            Meters.of(0.4)); // TODO make correct
+
+    public static final String LIMELIGHT_NAME = "limelight";
+    public static final AprilTagFieldLayout FIELD_LAYOUT =
+        AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+    public static final Angle FOV_VERTICAL_FROM_CENTER = Degrees.of(28);
+    public static final Angle FOV_HORIZONTAL_FROM_CENTER = Degrees.of(40);
+
+    public static final double CROPPING_MARGIN = 0.2; // units are in ... um ... uh ... Numbers!
   }
 
   public final class ElevatorAlgae {

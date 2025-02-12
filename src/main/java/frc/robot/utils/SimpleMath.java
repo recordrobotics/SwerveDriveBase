@@ -2,7 +2,9 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.Constants;
 
 public class SimpleMath {
@@ -73,5 +75,23 @@ public class SimpleMath {
         && pose.getY() >= 0
         && pose.getX() <= Constants.FieldConstants.FIELD_X_DIMENSION
         && pose.getY() <= Constants.FieldConstants.FIELD_Y_DIMENSION;
+  }
+
+  public static Rotation3d translationToRotation(
+      Translation3d translation) { // TODO did yapGPT do this right?
+    double x = translation.getX();
+    double y = translation.getY();
+    double z = translation.getZ();
+
+    // Calculate yaw (rotation around Z axis)
+    double yaw = Math.atan2(y, x);
+
+    // Calculate pitch (rotation around Y axis)
+    double horizontalDistance = Math.sqrt(x * x + y * y);
+    double pitch = Math.atan2(z, horizontalDistance);
+
+    // Return a Rotation3d object with the calculated yaw and pitch
+    // Roll is set to 0 as it's not required
+    return new Rotation3d(0.0, pitch, yaw);
   }
 }
