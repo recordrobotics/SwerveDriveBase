@@ -25,10 +25,10 @@ public class PlaceRandomGroundCoral extends Command {
     Translation2d t;
     do {
       t = new Translation2d(random.nextDouble(x1, x2), random.nextDouble(y1, y2));
-    } while (t.getDistance(Constants.FieldConstants.SOURCE_1) < sourceDistance
-        || t.getDistance(Constants.FieldConstants.SOURCE_2) < sourceDistance
-        || t.getDistance(Constants.FieldConstants.SOURCE_12) < sourceDistance
-        || t.getDistance(Constants.FieldConstants.SOURCE_13) < sourceDistance
+    } while (t.getDistance(Constants.FieldConstants.SOURCE_1.getTranslation()) < sourceDistance
+        || t.getDistance(Constants.FieldConstants.SOURCE_2.getTranslation()) < sourceDistance
+        || t.getDistance(Constants.FieldConstants.SOURCE_12.getTranslation()) < sourceDistance
+        || t.getDistance(Constants.FieldConstants.SOURCE_13.getTranslation()) < sourceDistance
         || t.getDistance(Constants.FieldConstants.TEAM_BLUE_REEF_CENTER) < reefDistance
         || t.getDistance(Constants.FieldConstants.TEAM_RED_REEF_CENTER) < reefDistance);
 

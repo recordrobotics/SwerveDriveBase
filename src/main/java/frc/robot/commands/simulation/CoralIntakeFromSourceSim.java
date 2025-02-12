@@ -1,5 +1,6 @@
 package frc.robot.commands.simulation;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -24,11 +25,15 @@ public class CoralIntakeFromSourceSim extends SequentialCommandGroup implements 
     addCommands(
         new InstantCommand(
             () -> {
-              Pose3d robotOrigin = new Pose3d();
+              Pose2d robotOrigin = new Pose2d();
               if (RobotContainer.poseTracker != null)
-                robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
+                robotOrigin = RobotContainer.poseTracker.getEstimatedPosition();
+
+              Pose3d closestSource =
+                  new Pose3d(Constants.FieldConstants.closestSourceTo(robotOrigin));
+
               coralPose =
-                  robotOrigin.transformBy(
+                  closestSource.transformBy(
                       new Transform3d(-0.1, 0.834669, 0.08, new Rotation3d(0, 0, 0)));
 
               coral = new NamedCoral("CoralIntakeFromSource/Coral", coralPose);

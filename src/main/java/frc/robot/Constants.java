@@ -152,14 +152,34 @@ public final class Constants {
     public static final Translation2d TEAM_RED_PROCESSOR = new Translation2d(6.026, 0);
     public static final Translation2d TEAM_BLUE_PROCESSOR = new Translation2d(11.585, 8.062);
 
-    public static final Translation2d SOURCE_1 = new Translation2d(16.994, 0.355);
-    public static final Translation2d SOURCE_2 = new Translation2d(16.725, 7.518);
-    public static final Translation2d SOURCE_12 = new Translation2d(0.648, 0.489);
-    public static final Translation2d SOURCE_13 = new Translation2d(0.702, 7.545);
+    public static final Pose2d SOURCE_1 = new Pose2d(16.994, 0.355, Rotation2d.fromDegrees(-45));
+    public static final Pose2d SOURCE_2 = new Pose2d(16.725, 7.518, Rotation2d.fromDegrees(45));
+    public static final Pose2d SOURCE_12 = new Pose2d(0.648, 0.489, Rotation2d.fromDegrees(225));
+    public static final Pose2d SOURCE_13 = new Pose2d(0.702, 7.545, Rotation2d.fromDegrees(135));
 
     // Field width and length
     public static final double FIELD_X_DIMENSION = 17.548; // Length
     public static final double FIELD_Y_DIMENSION = 8.052; // Width
+
+    public static Pose2d closestSourceTo(Pose2d pose) {
+      Pose2d closest = SOURCE_1;
+      double closestDistance = pose.getTranslation().getDistance(SOURCE_1.getTranslation());
+      double distance = pose.getTranslation().getDistance(SOURCE_2.getTranslation());
+      if (distance < closestDistance) {
+        closest = SOURCE_2;
+        closestDistance = distance;
+      }
+      distance = pose.getTranslation().getDistance(SOURCE_12.getTranslation());
+      if (distance < closestDistance) {
+        closest = SOURCE_12;
+        closestDistance = distance;
+      }
+      distance = pose.getTranslation().getDistance(SOURCE_13.getTranslation());
+      if (distance < closestDistance) {
+        closest = SOURCE_13;
+      }
+      return closest;
+    }
   }
 
   public enum ReefScoringPose {
@@ -518,7 +538,7 @@ public final class Constants {
     public static final double sV = 0.52909;
     public static final double sA = 0.035848;
 
-    public static final double ARM_UP = Math.PI / 2;
+    public static final double ARM_UP = Units.degreesToRadians(80);
     public static final double ARM_DOWN = -1.1;
     public static final double ARM_START_POS = Math.PI / 2;
 

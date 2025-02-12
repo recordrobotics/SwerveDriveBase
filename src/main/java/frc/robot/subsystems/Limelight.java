@@ -131,10 +131,10 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     closestProcessorAngle =
         MathUtil.angleModulus(closestProcessorAngle - pose.getRotation().getRadians());
 
-    Translation2d source12Pose = Constants.FieldConstants.SOURCE_12;
-    Translation2d source13Pose = Constants.FieldConstants.SOURCE_13;
-    Translation2d source1Pose = Constants.FieldConstants.SOURCE_1;
-    Translation2d source2Pose = Constants.FieldConstants.SOURCE_2;
+    Translation2d source12Pose = Constants.FieldConstants.SOURCE_12.getTranslation();
+    Translation2d source13Pose = Constants.FieldConstants.SOURCE_13.getTranslation();
+    Translation2d source1Pose = Constants.FieldConstants.SOURCE_1.getTranslation();
+    Translation2d source2Pose = Constants.FieldConstants.SOURCE_2.getTranslation();
 
     double sourceAngle12 =
         Math.atan2(
