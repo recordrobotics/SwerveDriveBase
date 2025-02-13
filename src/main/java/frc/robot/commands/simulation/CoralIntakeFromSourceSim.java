@@ -34,7 +34,7 @@ public class CoralIntakeFromSourceSim extends SequentialCommandGroup implements 
 
               coralPose =
                   closestSource.transformBy(
-                      new Transform3d(-0.1, 0.834669, 0.08, new Rotation3d(0, 0, 0)));
+                      new Transform3d(0, 0.834669, 1.3, new Rotation3d(0, 0, 0)));
 
               coral = new NamedCoral("CoralIntakeFromSource/Coral", coralPose);
 

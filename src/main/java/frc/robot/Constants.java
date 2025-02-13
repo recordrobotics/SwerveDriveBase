@@ -175,7 +175,7 @@ public final class Constants {
 
     public static final Pose2d SOURCE_1 = new Pose2d(16.994, 0.355, Rotation2d.fromDegrees(-45));
     public static final Pose2d SOURCE_2 = new Pose2d(16.725, 7.518, Rotation2d.fromDegrees(45));
-    public static final Pose2d SOURCE_12 = new Pose2d(0.648, 0.489, Rotation2d.fromDegrees(225));
+    public static final Pose2d SOURCE_12 = new Pose2d(0.648, 0.489, Rotation2d.fromDegrees(30));
     public static final Pose2d SOURCE_13 = new Pose2d(0.702, 7.545, Rotation2d.fromDegrees(135));
 
     // Field width and length
