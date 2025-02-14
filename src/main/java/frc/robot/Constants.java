@@ -529,7 +529,7 @@ public final class Constants {
 
   public final class CoralIntake {
 
-    public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(15);
+    public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(10);
     public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
 
     // TODO: need correct values
@@ -561,9 +561,9 @@ public final class Constants {
 
     public static final double ARM_UP = Units.degreesToRadians(80);
     public static final double ARM_DOWN = -1.1;
-    public static final double ARM_START_POS = Math.PI / 2;
+    public static final double ARM_START_POS = 0; // Math.PI / 2;
 
-    public static final double ARM_GEAR_RATIO = 33.18;
+    public static final double ARM_GEAR_RATIO = 56.8889;
 
     public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
 
