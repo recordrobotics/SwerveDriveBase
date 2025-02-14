@@ -125,7 +125,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
                 (state -> Logger.recordOutput("Elevator/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::setBothMotors, null, this));
 
-    controller.latencyCompensate(elevatorSystem, Constants.Elevator.kDt, 0.020007);
+    controller.latencyCompensate(elevatorSystem, Constants.Elevator.kDt, 0.02022);
 
     SmartDashboard.putNumber("Elevator", 0);
   }
