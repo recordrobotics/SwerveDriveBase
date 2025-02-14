@@ -27,7 +27,7 @@ public class ElevatorSim implements ElevatorIO {
       new edu.wpi.first.wpilibj.simulation.ElevatorSim(
           DCMotor.getKrakenX60(2),
           Constants.Elevator.GEAR_RATIO,
-          5.137924871015,
+          1.0,
           Constants.Elevator.DRUM_RADIUS,
           0,
           Constants.Elevator.MAX_HEIGHT,

@@ -104,7 +104,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withInverted(InvertedValue.Clockwise_Positive)
-                    .withNeutralMode(NeutralModeValue.Coast))
+                    .withNeutralMode(NeutralModeValue.Brake))
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(Constants.Elevator.SUPPLY_CURRENT_LIMIT)
@@ -121,11 +121,11 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
             new SysIdRoutine.Config(
                 Volts.of(4.5).per(Second),
                 Volts.of(4),
-                Seconds.of(1.7),
+                Seconds.of(1.2),
                 (state -> Logger.recordOutput("Elevator/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::setBothMotors, null, this));
 
-    controller.latencyCompensate(elevatorSystem, Constants.Elevator.kDt, 0.024066);
+    controller.latencyCompensate(elevatorSystem, Constants.Elevator.kDt, 0.020007);
 
     SmartDashboard.putNumber("Elevator", 0);
   }
@@ -168,6 +168,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   @Override
   public void periodic() {
+    // toggle(SmartDashboard.getNumber("Elevator", 0));
     // Get next setpoint from profile.
     m_setpoint = m_profile.calculate(Constants.Elevator.kDt, m_setpoint, m_goal);
 

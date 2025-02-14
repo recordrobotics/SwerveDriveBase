@@ -477,13 +477,13 @@ public final class Constants {
     public static final double kDt = 0.02;
     public static final double kMaxVelocity = 8;
     public static final double kMaxAcceleration = 10;
-    public static final double kV = 4.6044;
-    public static final double kA = 0.15294;
-    public static final double kG = 0.17494;
-    public static final double kS = 0.001;
+    public static final double kV = 10.916;
+    public static final double kA = 0.19487;
+    public static final double kG = 0.086371;
+    public static final double kS = 0.066754;
 
-    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(40);
-    public static final Current STATOR_CURRENT_LIMIT = Amps.of(120);
+    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
+    public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
 
     public static final double STD_STATE_POSITION = 3.0; // m
     public static final double STD_STATE_VELOCITY = 3.0; // m/s
@@ -498,8 +498,8 @@ public final class Constants {
     public static final double REGULATOR_CONTROL_EFFORT_TOLERANCE =
         12.0; // (V) max control effort, decrease to make regulator more lazy
 
-    public static final double GEAR_RATIO = 5;
-    public static final double DRUM_RADIUS = Units.inchesToMeters(0.810681);
+    public static final double GEAR_RATIO = 13.4321;
+    public static final double DRUM_RADIUS = Units.inchesToMeters(0.8783343);
     // 2 * pi * r / gear ratio because same as getting distance a wheel moved, just vertically
     public static final double METERS_PER_ROTATION = DRUM_RADIUS * 2 * Math.PI / GEAR_RATIO;
 
