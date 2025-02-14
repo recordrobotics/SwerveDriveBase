@@ -122,7 +122,7 @@ public final class Constants {
 
     public static final String LIMELIGHT_NAME = "limelight";
     public static final AprilTagFieldLayout FIELD_LAYOUT =
-        AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+        AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
     public static final Angle FOV_VERTICAL_FROM_CENTER = Degrees.of(28);
     public static final Angle FOV_HORIZONTAL_FROM_CENTER = Degrees.of(40);
