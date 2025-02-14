@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGround;
@@ -18,7 +19,6 @@ import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ElevatorMoveThenCoralShoot;
 // Local imports
 import frc.robot.commands.KillSpecified;
-import frc.robot.commands.auto.PlannedAuto;
 import frc.robot.commands.manual.ManualSwerve;
 import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
@@ -157,16 +157,16 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    if (autoCommand == null) {
-      autoCommand = new PlannedAuto();
-    }
-    return autoCommand;
+    // if (autoCommand == null) {
+    //   autoCommand = new PlannedAuto();
+    // }
+    // return autoCommand;
 
-    // return elevator
-    //     .sysIdQuasistatic(Direction.kForward)
-    //     .andThen(elevator.sysIdQuasistatic(Direction.kReverse))
-    //     .andThen(elevator.sysIdDynamic(Direction.kForward))
-    //     .andThen(elevator.sysIdDynamic(Direction.kReverse));
+    return coralIntake
+        .sysIdQuasistaticArm(Direction.kForward)
+        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kReverse))
+        .andThen(coralIntake.sysIdDynamicArm(Direction.kForward))
+        .andThen(coralIntake.sysIdDynamicArm(Direction.kReverse));
   }
 
   public void testPeriodic() {
