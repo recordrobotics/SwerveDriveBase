@@ -134,10 +134,14 @@ public final class Constants {
     public static final Translation2d TEAM_RED_PROCESSOR = new Translation2d(6.026, 0);
     public static final Translation2d TEAM_BLUE_PROCESSOR = new Translation2d(11.585, 8.062);
 
-    public static final Pose2d SOURCE_1 = new Pose2d(16.994, 0.355, Rotation2d.fromDegrees(-45));
-    public static final Pose2d SOURCE_2 = new Pose2d(16.725, 7.518, Rotation2d.fromDegrees(45));
-    public static final Pose2d SOURCE_12 = new Pose2d(0.648, 0.489, Rotation2d.fromDegrees(30));
-    public static final Pose2d SOURCE_13 = new Pose2d(0.702, 7.545, Rotation2d.fromDegrees(135));
+    public static final Pose2d SOURCE_1 =
+        new Pose2d(16.994, 0.355, Rotation2d.fromDegrees(35.988608));
+    public static final Pose2d SOURCE_2 =
+        new Pose2d(16.725, 7.518, Rotation2d.fromDegrees(-215.988608));
+    public static final Pose2d SOURCE_12 =
+        new Pose2d(0.648, 0.489, Rotation2d.fromDegrees(-35.988608));
+    public static final Pose2d SOURCE_13 =
+        new Pose2d(0.702, 7.545, Rotation2d.fromDegrees(215.988608));
 
     // Field width and length
     public static final double FIELD_X_DIMENSION = 17.548; // Length
