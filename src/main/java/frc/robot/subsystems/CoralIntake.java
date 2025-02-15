@@ -203,7 +203,7 @@ public class CoralIntake extends KillableSubsystem
   }
 
   private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
-  private double lastSpeed = 0; // TODO why is this here?
+  private double lastSpeed = 0;
 
   @Override
   public void periodic() {

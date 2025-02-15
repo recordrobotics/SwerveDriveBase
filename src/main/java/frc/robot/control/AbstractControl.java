@@ -30,9 +30,6 @@ public abstract class AbstractControl {
 
   public abstract Boolean getCoralSourceIntake();
 
-  // Intake algae
-  public abstract Boolean getIntakeAlgae();
-
   // Reef algae
   public abstract Boolean getReefAlgae();
 

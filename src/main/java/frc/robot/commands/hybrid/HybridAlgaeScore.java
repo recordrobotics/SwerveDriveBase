@@ -10,7 +10,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
 import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
-import frc.robot.commands.GroundAlgaeScore;
 import frc.robot.commands.SuccessfulCompletion;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
@@ -44,7 +43,8 @@ public class HybridAlgaeScore extends SequentialCommandGroup {
 
     addCommands(
         AutoBuilder.pathfindThenFollowPath(path, Constants.HybridConstants.constraints),
-        new GroundAlgaeScore(),
+        // TODO: add ElevatorAlgae score command (move to Score height)
+        // new GroundAlgaeScore(),
         new SuccessfulCompletion(false, true, false, false, true));
   }
 }

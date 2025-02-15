@@ -44,7 +44,7 @@ public class CoralIntakeSim implements CoralIntakeIO {
           LinearSystemId.createDCMotorSystem(Constants.CoralIntake.sV, Constants.CoralIntake.sA),
           armMotor,
           Constants.CoralIntake.ARM_GEAR_RATIO,
-          Units.inchesToMeters(19),
+          Units.inchesToMeters(88), // TODO: make sure ARM_GEAR_RATIO is correct
           -1.1,
           Math.PI / 2,
           true,

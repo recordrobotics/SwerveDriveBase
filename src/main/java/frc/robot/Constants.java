@@ -73,45 +73,6 @@ public final class Constants {
             "KL", false);
   }
 
-  public final class GroundAlgae {
-    // TODO: need correct values
-    public static final double kP = 0.07;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final double kS = 0.12;
-    public static final double kV = 0.14;
-    public static final double kA = 0.03;
-
-    public static final double WHEEL_VELOCITY = 40;
-
-    public static final double MAX_ARM_VELOCITY = 8;
-    public static final double MAX_ARM_ACCELERATION = 22;
-
-    public static final double REVERSE_SPEED = 0.2; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
-
-    public static final double INTAKE_TIME = 0.1; // TODO make correct
-
-    public static final double sP = 4.4651;
-    public static final double sI = 0;
-    public static final double sD = 0.48808;
-    public static final double sG = 0.754867;
-    public static final double sS = 0.0016213;
-    public static final double sV = 0.52909;
-    public static final double sA = 0.035848;
-
-    public static final double ARM_UP = 0.5; // TODO make correct
-    public static final double ARM_DOWN = 0; // TODO make correct
-
-    public static final double ARM_GEAR_RATIO = 33.18;
-
-    public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
-
-    public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
-    public static final double LENGTH = 0.6;
-    public static final double ANGLE_OFFSET = 0;
-  }
-
   public final class Limelight {
     public static final Angle LIMELIGHT_ANGLE_UP = Degrees.of(23); // TODO make correct
     public static final Translation3d LIMELIGHT_OFFSET =
@@ -611,16 +572,6 @@ public final class Constants {
                     () ->
                         RobotContainer.elevator.getCurrentHeight() / Constants.Elevator.MAX_HEIGHT))
             .overlayOn(PULSATING_ORANGE);
-    public static final Supplier<LEDPattern> groundAlgaePattern =
-        () ->
-            LEDPattern.solid(
-                Color.lerpRGB(
-                    Color.kRed,
-                    Color.kGreen,
-                    (RobotContainer.groundAlgae.getArmAngle() - Constants.GroundAlgae.ARM_UP)
-                        / (Constants.GroundAlgae.ARM_DOWN
-                            - Constants.GroundAlgae
-                                .ARM_UP))); // TODO this is some of the worst code ive seen today
     public static final Supplier<LEDPattern> coralIntakePattern =
         () ->
             LEDPattern.solid(
