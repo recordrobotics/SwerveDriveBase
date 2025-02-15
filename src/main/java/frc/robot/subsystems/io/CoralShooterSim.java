@@ -34,11 +34,11 @@ public class CoralShooterSim implements CoralShooterIO {
           0.01,
           0.01);
   private final DCMotorSim bottomWheelSimModel =
-          new DCMotorSim(
-              LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
-              bottomWheelMotor,
-              0.01,
-              0.01);
+      new DCMotorSim(
+          LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
+          bottomWheelMotor,
+          0.01,
+          0.01);
 
   private final DigitalInput coralDetector =
       new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
@@ -160,13 +160,20 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public void simulationPeriodic() {
-    var wheelVoltage = wheelSim.getAppliedOutput() * wheelSim.getBusVoltage();
+    var topWheelVoltage = topWheelSim.getAppliedOutput() * topWheelSim.getBusVoltage();
+    var bottomWheelVoltage = bottomWheelSim.getAppliedOutput() * bottomWheelSim.getBusVoltage();
 
-    wheelSimModel.setInputVoltage(wheelVoltage);
-    wheelSimModel.update(periodicDt);
+    topWheelSimModel.setInputVoltage(topWheelVoltage);
+    topWheelSimModel.update(periodicDt);
+    bottomWheelSimModel.setInputVoltage(bottomWheelVoltage);
+    bottomWheelSimModel.update(periodicDt);
 
-    wheelSim.iterate(
-        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+    topWheelSim.iterate(
+        Units.radiansToRotations(topWheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+        RobotController.getBatteryVoltage(),
+        periodicDt);
+    bottomWheelSim.iterate(
+        Units.radiansToRotations(bottomWheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
         RobotController.getBatteryVoltage(),
         periodicDt);
   }

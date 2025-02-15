@@ -519,8 +519,10 @@ public final class Constants {
     public static final double kV = 0.1;
     public static final double kA = 0.04;
 
-    public static final double OUT_SPEED = 4; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
+    public static final double OUT_SPEED_TOP = 4; // TODO this is probably too slow
+    public static final double OUT_SPEED_BOTTOM = 4; // TODO this is probably too slow
+    public static final double INTAKE_SPEED_TOP = -4; // TODO ^^^^^^^^^^^
+    public static final double INTAKE_SPEED_BOTTOM = -4; // TODO ^^^^^^^^^^^
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
