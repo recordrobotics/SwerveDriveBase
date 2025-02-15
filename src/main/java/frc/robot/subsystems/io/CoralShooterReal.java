@@ -10,48 +10,85 @@ public class CoralShooterReal implements CoralShooterIO {
   @SuppressWarnings("unused")
   private final double periodicDt;
 
-  private final SparkMax wheel;
+  private final SparkMax topWheel;
+  private final SparkMax bottomWheel;
   private final DigitalInput coralDetector =
       new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
 
   public CoralShooterReal(double periodicDt) {
     this.periodicDt = periodicDt;
-    wheel = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
+    topWheel = new SparkMax(RobotMap.CoralShooter.TOP_MOTOR_ID, MotorType.kBrushless);
+    bottomWheel = new SparkMax(RobotMap.CoralShooter.BOTTOM_MOTOR_ID, MotorType.kBrushless);
   }
 
   @Override
-  public void setWheelVoltage(double outputVolts) {
-    wheel.setVoltage(outputVolts);
+  public void setTopWheelVoltage(double outputVolts) {
+    topWheel.setVoltage(outputVolts);
   }
 
   @Override
-  public void setWheelPosition(double newValue) {
-    wheel.getEncoder().setPosition(newValue);
+  public void setBottomWheelVoltage(double outputVolts) {
+    bottomWheel.setVoltage(outputVolts);
   }
 
   @Override
-  public double getWheelPosition() {
-    return wheel.getEncoder().getPosition();
+  public void setTopWheelPosition(double newValue) {
+    topWheel.getEncoder().setPosition(newValue);
   }
 
   @Override
-  public double getWheelVelocity() {
-    return wheel.getEncoder().getVelocity();
+  public void setBottomWheelPosition(double newValue) {
+    bottomWheel.getEncoder().setPosition(newValue);
   }
 
   @Override
-  public double getWheelVoltage() {
-    return wheel.getAppliedOutput();
+  public double getTopWheelPosition() {
+    return topWheel.getEncoder().getPosition();
   }
 
   @Override
-  public void setWheelPercent(double newValue) {
-    wheel.set(newValue);
+  public double getBottomWheelPosition() {
+    return bottomWheel.getEncoder().getPosition();
   }
 
   @Override
-  public double getWheelPercent() {
-    return wheel.get();
+  public double getTopWheelVelocity() {
+    return topWheel.getEncoder().getVelocity();
+  }
+
+  @Override
+  public double getBottomWheelVelocity() {
+    return bottomWheel.getEncoder().getVelocity();
+  }
+
+  @Override
+  public double getTopWheelVoltage() {
+    return topWheel.getAppliedOutput();
+  }
+
+  @Override
+  public double getBottomWheelVoltage() {
+    return bottomWheel.getAppliedOutput();
+  }
+
+  @Override
+  public void setTopWheelPercent(double newValue) {
+    topWheel.set(newValue);
+  }
+
+  @Override
+  public void setBottomWheelPercent(double newValue) {
+    bottomWheel.set(newValue);
+  }
+
+  @Override
+  public double getTopWheelPercent() {
+    return topWheel.get();
+  }
+
+  @Override
+  public double getBottomWheelPercent() {
+    return bottomWheel.get();
   }
 
   @Override
@@ -60,13 +97,14 @@ public class CoralShooterReal implements CoralShooterIO {
   }
 
   @Override
-  public double getWheelCurrentDrawAmps() {
-    return wheel.getOutputCurrent();
+  public double getWheelsCurrentDrawAmps() {
+    return topWheel.getOutputCurrent() + bottomWheel.getOutputCurrent();
   }
 
   @Override
   public void close() throws Exception {
-    wheel.close();
+    topWheel.close();
+    bottomWheel.close();
     coralDetector.close();
   }
 

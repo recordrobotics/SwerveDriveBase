@@ -19,17 +19,26 @@ public class CoralShooterSim implements CoralShooterIO {
 
   private final double periodicDt;
 
-  private final SparkMax wheel;
-  private final SparkMaxSim wheelSim;
+  private final SparkMax topWheel;
+  private final SparkMax bottomWheel;
+  private final SparkMaxSim topWheelSim;
+  private final SparkMaxSim bottomWheelSim;
 
-  private final DCMotor wheelMotor = DCMotor.getNeo550(1);
+  private final DCMotor topWheelMotor = DCMotor.getNeo550(1);
+  private final DCMotor bottomWheelMotor = DCMotor.getNeo550(1);
 
-  private final DCMotorSim wheelSimModel =
+  private final DCMotorSim topWheelSimModel =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
-          wheelMotor,
+          topWheelMotor,
           0.01,
           0.01);
+  private final DCMotorSim bottomWheelSimModel =
+          new DCMotorSim(
+              LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
+              bottomWheelMotor,
+              0.01,
+              0.01);
 
   private final DigitalInput coralDetector =
       new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
@@ -40,8 +49,10 @@ public class CoralShooterSim implements CoralShooterIO {
   public CoralShooterSim(double periodicDt) {
     this.periodicDt = periodicDt;
 
-    wheel = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
-    wheelSim = new SparkMaxSim(wheel, wheelMotor);
+    topWheel = new SparkMax(RobotMap.CoralShooter.TOP_MOTOR_ID, MotorType.kBrushless);
+    bottomWheel = new SparkMax(RobotMap.CoralShooter.BOTTOM_MOTOR_ID, MotorType.kBrushless);
+    topWheelSim = new SparkMaxSim(topWheel, topWheelMotor);
+    bottomWheelSim = new SparkMaxSim(bottomWheel, bottomWheelMotor);
 
     if (coralDetectorSim != null)
       coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, true);
@@ -52,38 +63,73 @@ public class CoralShooterSim implements CoralShooterIO {
   }
 
   @Override
-  public void setWheelVoltage(double outputVolts) {
-    wheel.setVoltage(outputVolts);
+  public void setTopWheelVoltage(double outputVolts) {
+    topWheel.setVoltage(outputVolts);
   }
 
   @Override
-  public void setWheelPosition(double newValue) {
-    wheel.getEncoder().setPosition(newValue);
+  public void setBottomWheelVoltage(double outputVolts) {
+    bottomWheel.setVoltage(outputVolts);
   }
 
   @Override
-  public double getWheelPosition() {
-    return wheel.getEncoder().getPosition();
+  public void setTopWheelPosition(double newValue) {
+    topWheel.getEncoder().setPosition(newValue);
   }
 
   @Override
-  public double getWheelVelocity() {
-    return wheel.getEncoder().getVelocity();
+  public void setBottomWheelPosition(double newValue) {
+    bottomWheel.getEncoder().setPosition(newValue);
   }
 
   @Override
-  public double getWheelVoltage() {
-    return wheel.getAppliedOutput();
+  public double getTopWheelPosition() {
+    return topWheel.getEncoder().getPosition();
   }
 
   @Override
-  public void setWheelPercent(double newValue) {
-    wheel.set(newValue);
+  public double getBottomWheelPosition() {
+    return bottomWheel.getEncoder().getPosition();
   }
 
   @Override
-  public double getWheelPercent() {
-    return wheel.get();
+  public double getTopWheelVelocity() {
+    return topWheel.getEncoder().getVelocity();
+  }
+
+  @Override
+  public double getBottomWheelVelocity() {
+    return bottomWheel.getEncoder().getVelocity();
+  }
+
+  @Override
+  public double getTopWheelVoltage() {
+    return topWheel.getAppliedOutput();
+  }
+
+  @Override
+  public double getBottomWheelVoltage() {
+    return bottomWheel.getAppliedOutput();
+  }
+
+  @Override
+  public void setTopWheelPercent(double newValue) {
+    topWheel.set(newValue);
+  }
+
+  @Override
+  public void setBottomWheelPercent(double newValue) {
+    bottomWheel.set(newValue);
+  }
+
+  @Override
+  public double getTopWheelPercent() {
+    return topWheel.get();
+  }
+
+  @Override
+  public double getBottomWheelPercent() {
+    return bottomWheel.get();
   }
 
   @Override
@@ -98,13 +144,14 @@ public class CoralShooterSim implements CoralShooterIO {
   }
 
   @Override
-  public double getWheelCurrentDrawAmps() {
-    return wheelSimModel.getCurrentDrawAmps();
+  public double getWheelsCurrentDrawAmps() {
+    return topWheelSimModel.getCurrentDrawAmps() + bottomWheelSimModel.getCurrentDrawAmps();
   }
 
   @Override
   public void close() throws Exception {
-    wheel.close();
+    topWheel.close();
+    bottomWheel.close();
     if (coralDetectorSim != null) {
       coralDetectorSim.close();
       coralDetector.close();
