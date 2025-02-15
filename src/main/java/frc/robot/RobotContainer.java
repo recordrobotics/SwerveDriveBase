@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
@@ -162,11 +163,12 @@ public class RobotContainer {
     // }
     // return autoCommand;
 
-    return coralIntake
-        .sysIdQuasistaticArm(Direction.kForward)
-        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kReverse))
-        .andThen(coralIntake.sysIdDynamicArm(Direction.kForward))
-        .andThen(coralIntake.sysIdDynamicArm(Direction.kReverse));
+    return new InstantCommand()
+        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kForward).andThen(new WaitCommand(0.2)))
+        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kForward).andThen(new WaitCommand(0.2)))
+        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kReverse).andThen(new WaitCommand(0.2)))
+        .andThen(coralIntake.sysIdDynamicArm(Direction.kForward).andThen(new WaitCommand(0.2)))
+        .andThen(coralIntake.sysIdDynamicArm(Direction.kReverse).andThen(new WaitCommand(0.2)));
   }
 
   public void testPeriodic() {

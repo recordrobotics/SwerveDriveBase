@@ -548,20 +548,17 @@ public final class Constants {
 
     public static final double INTAKE_TIME = 0.1; // TODO make correct
 
-    public static final double sP = 4.4651;
+    public static final double sP = 7.6661;
     public static final double sI = 0;
-    public static final double sD = 0.48808;
-    // TODO: changed sG and sS to fit simulation better
-    // Is the simulation wrong or was the test arm so loose
-    // that it hid the innacuracies?
-    public static final double sG = 0.754867;
-    public static final double sS = 0.0016213;
-    public static final double sV = 0.52909;
-    public static final double sA = 0.035848;
+    public static final double sD = 0.80357;
+    public static final double sG = 0.33478;
+    public static final double sS = 0.0094404;
+    public static final double sV = 0.98364;
+    public static final double sA = 0.086232;
 
     public static final double ARM_UP = Units.degreesToRadians(80);
     public static final double ARM_DOWN = -1.1;
-    public static final double ARM_START_POS = 0; // Math.PI / 2;
+    public static final double ARM_START_POS = Units.degreesToRadians(-25); // Math.PI / 2;
 
     public static final double ARM_GEAR_RATIO = 56.8889;
 
