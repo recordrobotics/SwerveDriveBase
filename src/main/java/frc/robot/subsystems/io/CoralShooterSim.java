@@ -19,15 +19,15 @@ public class CoralShooterSim implements CoralShooterIO {
 
   private final double periodicDt;
 
-  private final SparkMax spark;
-  private final SparkMaxSim sparkSim;
+  private final SparkMax motor;
+  private final SparkMaxSim motorSim;
 
-  private final DCMotor motor = DCMotor.getNeo550(1);
+  private final DCMotor wheelMotor = DCMotor.getNeo550(1);
 
-  private final DCMotorSim SimModel =
+  private final DCMotorSim wheelSimModel =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
-          motor,
+          wheelMotor,
           0.01,
           0.01);
 
@@ -40,8 +40,8 @@ public class CoralShooterSim implements CoralShooterIO {
   public CoralShooterSim(double periodicDt) {
     this.periodicDt = periodicDt;
 
-    spark = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
-    sparkSim = new SparkMaxSim(spark, motor);
+    motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
+    motorSim = new SparkMaxSim(motor, wheelMotor);
 
     if (coralDetectorSim != null)
       coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, true);
@@ -53,37 +53,37 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public void setVoltage(double outputVolts) {
-    spark.setVoltage(outputVolts);
+    motor.setVoltage(outputVolts);
   }
 
   @Override
   public void setPosition(double newValue) {
-    spark.getEncoder().setPosition(newValue);
+    motor.getEncoder().setPosition(newValue);
   }
 
   @Override
   public double getPosition() {
-    return spark.getEncoder().getPosition();
+    return motor.getEncoder().getPosition();
   }
 
   @Override
   public double getVelocity() {
-    return spark.getEncoder().getVelocity();
+    return motor.getEncoder().getVelocity();
   }
 
   @Override
   public double getVoltage() {
-    return spark.getAppliedOutput();
+    return motor.getAppliedOutput();
   }
 
   @Override
   public void setPercent(double newValue) {
-    spark.set(newValue);
+    motor.set(newValue);
   }
 
   @Override
   public double getPercent() {
-    return spark.get();
+    return motor.get();
   }
 
   @Override
@@ -99,12 +99,12 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public double getCurrentDrawAmps() {
-    return SimModel.getCurrentDrawAmps();
+    return wheelSimModel.getCurrentDrawAmps();
   }
 
   @Override
   public void close() throws Exception {
-    spark.close();
+    motor.close();
     if (coralDetectorSim != null) {
       coralDetectorSim.close();
       coralDetector.close();
@@ -113,13 +113,13 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public void simulationPeriodic() {
-    var Voltage = sparkSim.getAppliedOutput() * sparkSim.getBusVoltage();
+    var voltage = motorSim.getAppliedOutput() * motorSim.getBusVoltage();
 
-    SimModel.setInputVoltage(Voltage);
-    SimModel.update(periodicDt);
+    wheelSimModel.setInputVoltage(voltage);
+    wheelSimModel.update(periodicDt);
 
-    sparkSim.iterate(
-        Units.radiansToRotations(SimModel.getAngularVelocityRadPerSec()) * 60.0,
+    motorSim.iterate(
+        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
         RobotController.getBatteryVoltage(),
         periodicDt);
   }

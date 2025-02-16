@@ -41,8 +41,7 @@ public class CoralShooter extends KillableSubsystem
     this.io = io;
 
     toggle(CoralShooterStates.OFF); // initialize as off
-    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1)
-        .subscribe(io::setPercent);
+    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
 
     sysIdRoutine =
         new SysIdRoutine(
@@ -51,8 +50,7 @@ public class CoralShooter extends KillableSubsystem
                 null,
                 null,
                 null,
-                (state ->
-                    Logger.recordOutput("CoralShooter/SysIdTestState", state.toString()))),
+                (state -> Logger.recordOutput("CoralShooter/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(v -> io.setVoltage(v.magnitude()), null, this));
   }
 
@@ -125,10 +123,8 @@ public class CoralShooter extends KillableSubsystem
   @Override
   public void periodic() {
     double pidOutput = pid.calculate(getVelocity());
-    double feedforwardOutput =
-        feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    io.setVoltage(
-        pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
+    io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
 
     lastSpeed = pid.getSetpoint();
     debounced_value = !m_debouncer.calculate(io.getCoralDetector());
@@ -149,8 +145,7 @@ public class CoralShooter extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1)
-        .subscribe(io::setPercent);
+    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
   }
 
   @Override
