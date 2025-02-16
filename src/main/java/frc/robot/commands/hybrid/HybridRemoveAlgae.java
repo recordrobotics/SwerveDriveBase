@@ -47,7 +47,7 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
     } catch (Exception e) {
       pathNotFoundAlert.setText("Path Not Found! HybridRemoveAlgae");
       pathNotFoundAlert.set(true);
-      return; // TODO is this the right way to exit a command? (maybie ```end(true);``` ?)
+      cancel();
     }
 
     // Gets path closest to the robot

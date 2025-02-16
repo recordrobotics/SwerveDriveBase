@@ -44,7 +44,7 @@ public class HybridSource extends SequentialCommandGroup {
     } catch (Exception e) {
       pathNotFoundAlert.setText("Path Not Found! HybridGoToSource");
       pathNotFoundAlert.set(true);
-      return; // TODO is this the right way to exit a command? (maybie ```end(true);``` ?)
+      cancel();
     }
 
     // Gets path closest to the robot

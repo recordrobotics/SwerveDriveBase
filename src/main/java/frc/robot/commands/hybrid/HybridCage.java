@@ -27,12 +27,10 @@ public class HybridCage extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () ->
-                new SequentialCommandGroup(
-                        new InstantCommand(
-                            () ->
-                                RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES,
-                                    () -> Constants.Lights.cagePattern)))
+                new InstantCommand(
+                        () ->
+                            RobotContainer.lights.patterns.put(
+                                LightSegments.HYBRID_STATES, () -> Constants.Lights.cagePattern))
                     .schedule()));
 
     try {
@@ -45,7 +43,7 @@ public class HybridCage extends SequentialCommandGroup {
     } catch (Exception e) {
       pathNotFoundAlert.setText("Path Not Found! HybridCage");
       pathNotFoundAlert.set(true);
-      return; // TODO is this the right way to exit a command? (maybie ```end(true);``` ?)
+      cancel();
     }
 
     // Gets path closest to the robot
