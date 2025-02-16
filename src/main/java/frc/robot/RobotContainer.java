@@ -25,9 +25,13 @@ import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.io.CoralIntakeReal;
 import frc.robot.subsystems.io.CoralIntakeSim;
+import frc.robot.subsystems.io.CoralShooterReal;
 import frc.robot.subsystems.io.CoralShooterSim;
+import frc.robot.subsystems.io.ElevatorAlgaeReal;
 import frc.robot.subsystems.io.ElevatorAlgaeSim;
+import frc.robot.subsystems.io.ElevatorReal;
 import frc.robot.subsystems.io.ElevatorSim;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
@@ -44,19 +48,17 @@ public class RobotContainer {
 
   public static final RobotModel model = new RobotModel();
 
-  // Subsystems
-  // TODO: replace with check if in simulation mode once subsystems actually connected
-  public static final Drivetrain drivetrain = new Drivetrain();
-  public static final PoseTracker poseTracker = new PoseTracker();
-  public static final Limelight limelight = new Limelight();
-  public static final Elevator elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
-  public static final CoralShooter coralShooter = new CoralShooter(new CoralShooterSim(0.02));
-  public static final CoralIntake coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
-  public static final ElevatorAlgae elevatorAlgae = new ElevatorAlgae(new ElevatorAlgaeSim(0.02));
-  public static final Lights lights = new Lights();
-  public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
+  public static Drivetrain drivetrain;
+  public static PoseTracker poseTracker;
+  public static Limelight limelight;
+  public static Elevator elevator;
+  public static CoralShooter coralShooter;
+  public static CoralIntake coralIntake;
+  public static ElevatorAlgae elevatorAlgae;
+  public static Lights lights;
+  public static PowerDistributionPanel pdp;
 
-  public static final PhotonCamera camera = new PhotonCamera("photonvision");
+  public static PhotonCamera camera;
 
   // Autonomous
   @SuppressWarnings("unused")
@@ -69,6 +71,29 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    if (Constants.RobotState.getMode() == Mode.REAL) {
+      drivetrain = new Drivetrain();
+      poseTracker = new PoseTracker();
+      limelight = new Limelight();
+      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
+      coralShooter = new CoralShooter(new CoralShooterReal(0.02));
+      coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
+      elevatorAlgae = new ElevatorAlgae(new ElevatorAlgaeReal(0.02));
+      lights = new Lights();
+      pdp = new PowerDistributionPanel();
+      camera = new PhotonCamera("photonvision");
+    } else {
+      drivetrain = new Drivetrain();
+      poseTracker = new PoseTracker();
+      limelight = new Limelight();
+      elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
+      coralShooter = new CoralShooter(new CoralShooterSim(0.02));
+      coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
+      elevatorAlgae = new ElevatorAlgae(new ElevatorAlgaeSim(0.02));
+      lights = new Lights();
+      pdp = new PowerDistributionPanel();
+      camera = new PhotonCamera("photonvision");
+    }
 
     // Sets up auto path
     autoPath = new AutoPath();
