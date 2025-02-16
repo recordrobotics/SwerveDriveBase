@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -262,26 +261,6 @@ public class RobotModel extends SubsystemBase {
 
   public RobotModel() {
     periodic();
-    addCoral(
-        new NamedCoral(
-            "test",
-            () -> {
-              Pose2d robotOrigin = new Pose2d();
-              if (RobotContainer.poseTracker != null)
-                robotOrigin = RobotContainer.poseTracker.getEstimatedPosition();
-
-              Pose3d closestSource =
-                  new Pose3d(Constants.FieldConstants.closestSourceTo(robotOrigin));
-
-              Pose3d relativeRobot = new Pose3d(robotOrigin).relativeTo(closestSource);
-
-              return closestSource.transformBy(
-                  new Transform3d(
-                      MathUtil.clamp(relativeRobot.getX() + 0.1, -0.75, 0.75),
-                      0,
-                      1.16,
-                      new Rotation3d(0, 0, 0)));
-            }));
   }
 
   @Override
