@@ -32,6 +32,8 @@ import frc.robot.subsystems.io.CoralIntakeReal;
 import frc.robot.subsystems.io.CoralIntakeSim;
 import frc.robot.subsystems.io.CoralShooterReal;
 import frc.robot.subsystems.io.CoralShooterSim;
+import frc.robot.subsystems.io.ElevatorArmReal;
+import frc.robot.subsystems.io.ElevatorArmSim;
 import frc.robot.subsystems.io.ElevatorReal;
 import frc.robot.subsystems.io.ElevatorSim;
 import frc.robot.utils.AutoPath;
@@ -54,6 +56,7 @@ public class RobotContainer {
   public static PoseTracker poseTracker;
   public static Limelight limelight;
   public static Elevator elevator;
+  public static ElevatorArm elevatorArm;
   public static CoralShooter coralShooter;
   public static CoralIntake coralIntake;
   public static AlgaeGrabber algaeGrabber;
@@ -78,6 +81,7 @@ public class RobotContainer {
       poseTracker = new PoseTracker();
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
+      elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
       coralShooter = new CoralShooter(new CoralShooterReal(0.02));
       coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
       algaeGrabber = new AlgaeGrabber(new AlgaeGrabberReal(0.02));
@@ -89,6 +93,7 @@ public class RobotContainer {
       poseTracker = new PoseTracker();
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
+      elevatorArm = new ElevatorArm(new ElevatorArmSim(0.02));
       coralShooter = new CoralShooter(new CoralShooterSim(0.02));
       coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
       algaeGrabber = new AlgaeGrabber(new AlgaeGrabberSim(0.02));
@@ -245,6 +250,7 @@ public class RobotContainer {
     drivetrain.close();
     limelight.close();
     elevator.close();
+    elevatorArm.close();
     coralShooter.close();
     coralIntake.close();
     algaeGrabber.close();

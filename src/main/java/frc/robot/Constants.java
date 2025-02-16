@@ -138,23 +138,29 @@ public final class Constants {
   }
 
   public enum ElevatorHeight {
-    INTAKE(0),
-    L1(0.06),
-    L2(0.2),
-    LOW_ALGAE(0.465),
-    L3(0.72),
-    HIGH_ALGAE(1.035),
-    L4(1.32),
-    BOTTOM(0);
+    INTAKE(0, Units.degreesToRadians(-90)),
+    L1(0.06, Units.degreesToRadians(20)),
+    L2(0.2, Units.degreesToRadians(20)),
+    LOW_ALGAE(0.465, Units.degreesToRadians(-60)),
+    L3(0.72, Units.degreesToRadians(20)),
+    HIGH_ALGAE(1.035, Units.degreesToRadians(-60)),
+    L4(1.32, Units.degreesToRadians(10)),
+    BOTTOM(0, Units.degreesToRadians(-90));
 
     private double height;
+    private double armAngleRadians;
 
-    private ElevatorHeight(double heightMeters) {
+    private ElevatorHeight(double heightMeters, double armAngleRadians) {
       this.height = heightMeters;
+      this.armAngleRadians = armAngleRadians;
     }
 
     public double getHeight() {
       return height;
+    }
+
+    public double getArmAngle() {
+      return armAngleRadians;
     }
   }
 
