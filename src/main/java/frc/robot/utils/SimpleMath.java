@@ -58,12 +58,6 @@ public class SimpleMath {
     return Math.signum(input) * proportion * sensitivity;
   }
 
-  /**
-   * // TODO: fix because I think the field dimension is wrong
-   *
-   * @param location
-   * @return mirrored translation2d of the translation2d you put in
-   */
   public static Translation2d MirrorLocation(Translation2d location) {
     double mirrored_x = Constants.FieldConstants.FIELD_X_DIMENSION - location.getX();
     double mirrored_y = location.getY();
@@ -77,8 +71,19 @@ public class SimpleMath {
         && pose.getY() <= Constants.FieldConstants.FIELD_Y_DIMENSION;
   }
 
-  public static Rotation3d translationToRotation(
-      Translation3d translation) { // TODO did yapGPT do this right?
+  /**
+   * Converts a Translation3d to a Rotation3d
+   *
+   * <p>This function takes a Translation3d and returns a Rotation3d object with the yaw and pitch
+   * calculated from the translation. The roll is set to 0 as it's not required.
+   *
+   * <p>The yaw is calculated as the angle from the X axis to the point (x, y) in the XY plane. The
+   * pitch is calculated as the angle from the XY plane to the point (x, y, z) in 3D space.
+   *
+   * @param translation The Translation3d to convert
+   * @return A Rotation3d with the calculated yaw and pitch
+   */
+  public static Rotation3d translationToRotation(Translation3d translation) {
     double x = translation.getX();
     double y = translation.getY();
     double z = translation.getZ();
@@ -90,7 +95,6 @@ public class SimpleMath {
     double horizontalDistance = Math.sqrt(x * x + y * y);
     double pitch = Math.atan2(z, horizontalDistance);
 
-    // Return a Rotation3d object with the calculated yaw and pitch
     // Roll is set to 0 as it's not required
     return new Rotation3d(0.0, pitch, yaw);
   }

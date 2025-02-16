@@ -410,7 +410,7 @@ public final class Constants {
   public enum FieldStartingLocation {
     AutoStart(
         new Pose2d(15.305, 4.001, new Rotation2d(Math.PI)),
-        new Pose2d(1.235, 4.001, new Rotation2d(0))); // TODO is old?
+        new Pose2d(1.235, 4.001, new Rotation2d(0))); // TODO this is old!
 
     private final Pose2d m_transformRed;
     private final Pose2d m_transformBlue;
@@ -581,9 +581,7 @@ public final class Constants {
                     Color.kRed,
                     Color.kGreen,
                     (RobotContainer.coralIntake.getArmAngle() - Constants.CoralIntake.ARM_UP)
-                        / (Constants.CoralIntake.ARM_DOWN
-                            - Constants.CoralIntake
-                                .ARM_UP))); // TODO also bad (but not the worst ive written today)
+                        / (Constants.CoralIntake.ARM_DOWN - Constants.CoralIntake.ARM_UP)));
     public static final Supplier<LEDPattern> coralShooterPattern =
         () ->
             (RobotContainer.coralShooter.getCurrentState() == CoralShooterStates.OFF)
