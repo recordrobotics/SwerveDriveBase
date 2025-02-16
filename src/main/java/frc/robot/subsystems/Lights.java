@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotMap;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class Lights extends SubsystemBase implements AutoCloseable {
-  public Map<LightSegments, Supplier<LEDPattern>> patterns = Constants.Lights.DEFAULT_PATTERNS;
+  public HashMap<LightSegments, Supplier<LEDPattern>> patterns = Constants.Lights.DEFAULT_PATTERNS;
 
   private AddressableLED LEDs;
   private AddressableLEDBuffer buffer;
@@ -53,7 +53,7 @@ public class Lights extends SubsystemBase implements AutoCloseable {
     off(); // Clear the LED strip
 
     // loop through LightSegments
-    for (Map.Entry<LightSegments, Supplier<LEDPattern>> entry : patterns.entrySet()) {
+    for (HashMap.Entry<LightSegments, Supplier<LEDPattern>> entry : patterns.entrySet()) {
       setRangePattern( // TODO get the getValue get getkey getFirst AAAAAAAAAAAAAAAAAAAAAAA
           entry.getValue().get(),
           Constants.Lights.PART_INDECIES.get(entry.getKey()).getFirst(),

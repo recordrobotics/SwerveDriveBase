@@ -35,6 +35,7 @@ import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ModuleConstants.MotorLocation;
 import frc.robot.utils.ModuleConstants.MotorType;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -595,12 +596,13 @@ public final class Constants {
     public static final LEDPattern removeAlgaePattern = LEDPattern.solid(Color.kYellowGreen);
     public static final LEDPattern coralScorePattern = LEDPattern.solid(Color.kAqua);
 
-    public static final Map<LightSegments, Supplier<LEDPattern>> DEFAULT_PATTERNS =
-        Map.of(
-            LightSegments.ELEVATOR, () -> OFF,
-            LightSegments.GROUND_ALGAE, () -> OFF,
-            LightSegments.CORAL_INTAKE, () -> OFF,
-            LightSegments.CORAL_SHOOTER, () -> OFF);
+    public static final HashMap<LightSegments, Supplier<LEDPattern>> DEFAULT_PATTERNS =
+        new HashMap<>(
+            Map.of(
+                LightSegments.ELEVATOR, () -> OFF,
+                LightSegments.GROUND_ALGAE, () -> OFF,
+                LightSegments.CORAL_INTAKE, () -> OFF,
+                LightSegments.CORAL_SHOOTER, () -> OFF));
   }
 
   public final class Control {
