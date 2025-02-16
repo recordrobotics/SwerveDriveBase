@@ -2,37 +2,23 @@ package frc.robot.subsystems.io;
 
 public interface CoralShooterIO extends AutoCloseable {
 
-  public void setTopWheelVoltage(double outputVolts);
+  public void setVoltage(double outputVolts);
 
-  public void setBottomWheelVoltage(double outputVolts);
+  public void setPosition(double newValue);
 
-  public void setTopWheelPosition(double newValue);
+  public double getPosition();
 
-  public void setBottomWheelPosition(double newValue);
+  public double getVelocity();
 
-  public double getTopWheelPosition();
+  public double getVoltage();
 
-  public double getBottomWheelPosition();
+  public void setPercent(double newValue);
 
-  public double getTopWheelVelocity();
-
-  public double getBottomWheelVelocity();
-
-  public double getTopWheelVoltage();
-
-  public double getBottomWheelVoltage();
-
-  public void setTopWheelPercent(double newValue);
-
-  public void setBottomWheelPercent(double newValue);
-
-  public double getTopWheelPercent();
-
-  public double getBottomWheelPercent();
+  public double getPercent();
 
   public boolean getCoralDetector();
 
-  public double getWheelsCurrentDrawAmps();
+  public double getCurrentDrawAmps();
 
   public void simulationPeriodic();
 }

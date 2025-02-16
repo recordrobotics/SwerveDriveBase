@@ -19,24 +19,15 @@ public class CoralShooterSim implements CoralShooterIO {
 
   private final double periodicDt;
 
-  private final SparkMax topWheel;
-  private final SparkMax bottomWheel;
-  private final SparkMaxSim topWheelSim;
-  private final SparkMaxSim bottomWheelSim;
+  private final SparkMax spark;
+  private final SparkMaxSim sparkSim;
 
-  private final DCMotor topWheelMotor = DCMotor.getNeo550(1);
-  private final DCMotor bottomWheelMotor = DCMotor.getNeo550(1);
+  private final DCMotor motor = DCMotor.getNeo550(1);
 
-  private final DCMotorSim topWheelSimModel =
+  private final DCMotorSim SimModel =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
-          topWheelMotor,
-          0.01,
-          0.01);
-  private final DCMotorSim bottomWheelSimModel =
-      new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
-          bottomWheelMotor,
+          motor,
           0.01,
           0.01);
 
@@ -49,10 +40,8 @@ public class CoralShooterSim implements CoralShooterIO {
   public CoralShooterSim(double periodicDt) {
     this.periodicDt = periodicDt;
 
-    topWheel = new SparkMax(RobotMap.CoralShooter.TOP_MOTOR_ID, MotorType.kBrushless);
-    bottomWheel = new SparkMax(RobotMap.CoralShooter.BOTTOM_MOTOR_ID, MotorType.kBrushless);
-    topWheelSim = new SparkMaxSim(topWheel, topWheelMotor);
-    bottomWheelSim = new SparkMaxSim(bottomWheel, bottomWheelMotor);
+    spark = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
+    sparkSim = new SparkMaxSim(spark, motor);
 
     if (coralDetectorSim != null)
       coralDetectorSimValue = coralDetectorSim.createBoolean("Value", Direction.kOutput, true);
@@ -63,73 +52,38 @@ public class CoralShooterSim implements CoralShooterIO {
   }
 
   @Override
-  public void setTopWheelVoltage(double outputVolts) {
-    topWheel.setVoltage(outputVolts);
+  public void setVoltage(double outputVolts) {
+    spark.setVoltage(outputVolts);
   }
 
   @Override
-  public void setBottomWheelVoltage(double outputVolts) {
-    bottomWheel.setVoltage(outputVolts);
+  public void setPosition(double newValue) {
+    spark.getEncoder().setPosition(newValue);
   }
 
   @Override
-  public void setTopWheelPosition(double newValue) {
-    topWheel.getEncoder().setPosition(newValue);
+  public double getPosition() {
+    return spark.getEncoder().getPosition();
   }
 
   @Override
-  public void setBottomWheelPosition(double newValue) {
-    bottomWheel.getEncoder().setPosition(newValue);
+  public double getVelocity() {
+    return spark.getEncoder().getVelocity();
   }
 
   @Override
-  public double getTopWheelPosition() {
-    return topWheel.getEncoder().getPosition();
+  public double getVoltage() {
+    return spark.getAppliedOutput();
   }
 
   @Override
-  public double getBottomWheelPosition() {
-    return bottomWheel.getEncoder().getPosition();
+  public void setPercent(double newValue) {
+    spark.set(newValue);
   }
 
   @Override
-  public double getTopWheelVelocity() {
-    return topWheel.getEncoder().getVelocity();
-  }
-
-  @Override
-  public double getBottomWheelVelocity() {
-    return bottomWheel.getEncoder().getVelocity();
-  }
-
-  @Override
-  public double getTopWheelVoltage() {
-    return topWheel.getAppliedOutput();
-  }
-
-  @Override
-  public double getBottomWheelVoltage() {
-    return bottomWheel.getAppliedOutput();
-  }
-
-  @Override
-  public void setTopWheelPercent(double newValue) {
-    topWheel.set(newValue);
-  }
-
-  @Override
-  public void setBottomWheelPercent(double newValue) {
-    bottomWheel.set(newValue);
-  }
-
-  @Override
-  public double getTopWheelPercent() {
-    return topWheel.get();
-  }
-
-  @Override
-  public double getBottomWheelPercent() {
-    return bottomWheel.get();
+  public double getPercent() {
+    return spark.get();
   }
 
   @Override
@@ -144,14 +98,13 @@ public class CoralShooterSim implements CoralShooterIO {
   }
 
   @Override
-  public double getWheelsCurrentDrawAmps() {
-    return topWheelSimModel.getCurrentDrawAmps() + bottomWheelSimModel.getCurrentDrawAmps();
+  public double getCurrentDrawAmps() {
+    return SimModel.getCurrentDrawAmps();
   }
 
   @Override
   public void close() throws Exception {
-    topWheel.close();
-    bottomWheel.close();
+    spark.close();
     if (coralDetectorSim != null) {
       coralDetectorSim.close();
       coralDetector.close();
@@ -160,20 +113,13 @@ public class CoralShooterSim implements CoralShooterIO {
 
   @Override
   public void simulationPeriodic() {
-    var topWheelVoltage = topWheelSim.getAppliedOutput() * topWheelSim.getBusVoltage();
-    var bottomWheelVoltage = bottomWheelSim.getAppliedOutput() * bottomWheelSim.getBusVoltage();
+    var Voltage = sparkSim.getAppliedOutput() * sparkSim.getBusVoltage();
 
-    topWheelSimModel.setInputVoltage(topWheelVoltage);
-    topWheelSimModel.update(periodicDt);
-    bottomWheelSimModel.setInputVoltage(bottomWheelVoltage);
-    bottomWheelSimModel.update(periodicDt);
+    SimModel.setInputVoltage(Voltage);
+    SimModel.update(periodicDt);
 
-    topWheelSim.iterate(
-        Units.radiansToRotations(topWheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
-        RobotController.getBatteryVoltage(),
-        periodicDt);
-    bottomWheelSim.iterate(
-        Units.radiansToRotations(bottomWheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+    sparkSim.iterate(
+        Units.radiansToRotations(SimModel.getAngularVelocityRadPerSec()) * 60.0,
         RobotController.getBatteryVoltage(),
         periodicDt);
   }

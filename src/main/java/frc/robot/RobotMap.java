@@ -9,8 +9,7 @@ public final class RobotMap {
   }
 
   public static final class CoralShooter {
-    public static final int TOP_MOTOR_ID = 16; // TODO get actual CAN number
-    public static final int BOTTOM_MOTOR_ID = 17; // TODO get actual CAN number
+    public static final int MOTOR_ID = 16; // TODO get actual CAN number
     public static final int LIMIT_SWITCH_ID = 7; // TODO get actual DIO port number
   }
 
