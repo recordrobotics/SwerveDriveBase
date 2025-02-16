@@ -20,11 +20,11 @@ import frc.robot.utils.TriggerProcessor.TriggerDistance;
 @TriggerDistance(
     distance = Constants.HybridConstants.reefTriggerDistance,
     position = FieldPosition.ReefCenter)
-public class ReefScoreCoral extends SequentialCommandGroup {
+public class HybridScoreCoral extends SequentialCommandGroup {
   private Alert pathNotFoundAlert = new Alert("", AlertType.kError);
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
 
-  public ReefScoreCoral(ElevatorHeight reefCoralHeight) {
+  public HybridScoreCoral(ElevatorHeight reefCoralHeight) {
     addCommands(
         new InstantCommand(
             () ->
