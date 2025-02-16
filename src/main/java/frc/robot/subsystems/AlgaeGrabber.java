@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
@@ -47,7 +49,7 @@ public class AlgaeGrabber extends KillableSubsystem
                 null,
                 null,
                 (state -> Logger.recordOutput("AlgaeGrabber/SysIdTestState", state.toString()))),
-            new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.magnitude()), null, this));
+            new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.in(Volts)), null, this));
   }
 
   private final SysIdRoutine sysIdRoutine;

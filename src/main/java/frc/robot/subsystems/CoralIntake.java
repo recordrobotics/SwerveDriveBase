@@ -93,7 +93,7 @@ public class CoralIntake extends KillableSubsystem
                 null,
                 (state ->
                     Logger.recordOutput("CoralIntake/Wheel/SysIdTestState", state.toString()))),
-            new SysIdRoutine.Mechanism((v) -> io.setWheelVoltage(v.magnitude()), null, this));
+            new SysIdRoutine.Mechanism((v) -> io.setWheelVoltage(v.in(Volts)), null, this));
 
     sysIdRoutineArm =
         new SysIdRoutine(
@@ -102,7 +102,7 @@ public class CoralIntake extends KillableSubsystem
                 Volts.of(1.3),
                 Seconds.of(1.2),
                 (state -> Logger.recordOutput("CoralIntake/Arm/SysIdTestState", state.toString()))),
-            new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.magnitude()), null, this));
+            new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.in(Volts)), null, this));
 
     SmartDashboard.putNumber("CoralIntakeArm", 0);
   }

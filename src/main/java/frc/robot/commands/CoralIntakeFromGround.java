@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.CoralIntakeFromGroundSim;
@@ -44,6 +45,10 @@ public class CoralIntakeFromGround extends SequentialCommandGroup {
         // wait for elevator to have coral
         new CoralIntakeToElevator()
             .simulateFor(new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral())),
+        // move coral a set distance
+        new InstantCommand(
+            () -> RobotContainer.coralShooter.moveBy(Constants.CoralShooter.CORAL_INTAKE_DISTANCE)),
+        new WaitUntilCommand(() -> RobotContainer.coralShooter.positionAtGoal()),
         // stop elevator intake
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OFF)),
         // stop intake push out

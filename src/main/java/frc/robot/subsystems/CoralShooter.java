@@ -4,11 +4,15 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -61,7 +65,7 @@ public class CoralShooter extends KillableSubsystem
                 null,
                 null,
                 (state -> Logger.recordOutput("CoralShooter/SysIdTestState", state.toString()))),
-            new SysIdRoutine.Mechanism(v -> io.setVoltage(v.magnitude()), null, this));
+            new SysIdRoutine.Mechanism(v -> io.setVoltage(v.in(Volts)), null, this));
   }
 
   public CoralShooterSim getSimIO() throws Exception {
@@ -101,6 +105,10 @@ public class CoralShooter extends KillableSubsystem
   @AutoLogOutput
   public double getVoltage() {
     return io.getVoltage();
+  }
+
+  public void moveBy(Distance distance) {
+    moveBy(distance.in(Meters));
   }
 
   public void moveBy(double meters) {
@@ -145,6 +153,10 @@ public class CoralShooter extends KillableSubsystem
   @AutoLogOutput
   public boolean hasCoral() {
     return debounced_value;
+  }
+
+  public boolean positionAtGoal() {
+    return positionPid.atGoal();
   }
 
   private double lastSpeed = 0;

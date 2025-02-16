@@ -25,6 +25,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -490,6 +491,8 @@ public final class Constants {
 
     public static final double GEAR_RATIO = 10.0;
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.0);
+
+    public static final Distance CORAL_INTAKE_DISTANCE = Centimeters.of(5);
 
     // m/s coral
     public static final double POSITION_MODE_MAX_VELOCITY = 1;
