@@ -5,18 +5,18 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.RobotMap;
 
-public class ElevatorAlgaeReal implements ElevatorAlgaeIO {
+public class AlgaeGrabberReal implements AlgaeGrabberIO {
 
   @SuppressWarnings("unused")
   private final double periodicDt;
 
   private final SparkMax wheel;
   private final DigitalInput algaeDetector =
-      new DigitalInput(RobotMap.ElevatorAlgae.LIMIT_SWITCH_ID);
+      new DigitalInput(RobotMap.AlgaeGrabber.LIMIT_SWITCH_ID);
 
-  public ElevatorAlgaeReal(double periodicDt) {
+  public AlgaeGrabberReal(double periodicDt) {
     this.periodicDt = periodicDt;
-    wheel = new SparkMax(RobotMap.ElevatorAlgae.MOTOR_ID, MotorType.kBrushless);
+    wheel = new SparkMax(RobotMap.AlgaeGrabber.MOTOR_ID, MotorType.kBrushless);
   }
 
   @Override

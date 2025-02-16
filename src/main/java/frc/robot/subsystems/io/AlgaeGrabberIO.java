@@ -1,6 +1,6 @@
 package frc.robot.subsystems.io;
 
-public interface ElevatorAlgaeIO extends AutoCloseable {
+public interface AlgaeGrabberIO extends AutoCloseable {
 
   public void setWheelVoltage(double outputVolts);
 

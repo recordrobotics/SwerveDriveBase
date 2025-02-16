@@ -25,12 +25,12 @@ import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.io.AlgaeGrabberReal;
+import frc.robot.subsystems.io.AlgaeGrabberSim;
 import frc.robot.subsystems.io.CoralIntakeReal;
 import frc.robot.subsystems.io.CoralIntakeSim;
 import frc.robot.subsystems.io.CoralShooterReal;
 import frc.robot.subsystems.io.CoralShooterSim;
-import frc.robot.subsystems.io.ElevatorAlgaeReal;
-import frc.robot.subsystems.io.ElevatorAlgaeSim;
 import frc.robot.subsystems.io.ElevatorReal;
 import frc.robot.subsystems.io.ElevatorSim;
 import frc.robot.utils.AutoPath;
@@ -54,7 +54,7 @@ public class RobotContainer {
   public static Elevator elevator;
   public static CoralShooter coralShooter;
   public static CoralIntake coralIntake;
-  public static ElevatorAlgae elevatorAlgae;
+  public static AlgaeGrabber algaeGrabber;
   public static Lights lights;
   public static PowerDistributionPanel pdp;
 
@@ -78,7 +78,7 @@ public class RobotContainer {
       elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
       coralShooter = new CoralShooter(new CoralShooterReal(0.02));
       coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
-      elevatorAlgae = new ElevatorAlgae(new ElevatorAlgaeReal(0.02));
+      algaeGrabber = new AlgaeGrabber(new AlgaeGrabberReal(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
       camera = new PhotonCamera("photonvision");
@@ -89,7 +89,7 @@ public class RobotContainer {
       elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
       coralShooter = new CoralShooter(new CoralShooterSim(0.02));
       coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
-      elevatorAlgae = new ElevatorAlgae(new ElevatorAlgaeSim(0.02));
+      algaeGrabber = new AlgaeGrabber(new AlgaeGrabberSim(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
       camera = new PhotonCamera("photonvision");
@@ -196,7 +196,7 @@ public class RobotContainer {
   }
 
   public void simulationPeriodic() {
-    updateSimulationBattery(drivetrain, elevator, coralShooter, coralIntake, elevatorAlgae);
+    updateSimulationBattery(drivetrain, elevator, coralShooter, coralIntake, algaeGrabber);
   }
 
   public void updateSimulationBattery(PoweredSubsystem... subsystems) {
@@ -216,7 +216,7 @@ public class RobotContainer {
     elevator.close();
     coralShooter.close();
     coralIntake.close();
-    elevatorAlgae.close();
+    algaeGrabber.close();
     pdp.close();
   }
 }

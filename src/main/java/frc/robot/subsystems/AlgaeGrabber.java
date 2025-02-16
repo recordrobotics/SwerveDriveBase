@@ -11,33 +11,33 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
-import frc.robot.subsystems.io.ElevatorAlgaeIO;
+import frc.robot.subsystems.io.AlgaeGrabberIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ElevatorAlgae extends KillableSubsystem
+public class AlgaeGrabber extends KillableSubsystem
     implements ShuffleboardPublisher, PoweredSubsystem {
 
-  private final ElevatorAlgaeIO io;
+  private final AlgaeGrabberIO io;
 
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
-      new Debouncer(Constants.ElevatorAlgae.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+      new Debouncer(Constants.AlgaeGrabber.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final PIDController pid =
       new PIDController(
-          Constants.ElevatorAlgae.kP, Constants.ElevatorAlgae.kI, Constants.ElevatorAlgae.kD);
+          Constants.AlgaeGrabber.kP, Constants.AlgaeGrabber.kI, Constants.AlgaeGrabber.kD);
   private final SimpleMotorFeedforward feedForward =
       new SimpleMotorFeedforward(
-          Constants.ElevatorAlgae.kS, Constants.ElevatorAlgae.kV, Constants.ElevatorAlgae.kA);
+          Constants.AlgaeGrabber.kS, Constants.AlgaeGrabber.kV, Constants.AlgaeGrabber.kA);
 
-  public ElevatorAlgae(ElevatorAlgaeIO io) {
+  public AlgaeGrabber(AlgaeGrabberIO io) {
     this.io = io;
 
-    toggle(ElevatorAlgaeStates.OFF); // initialize as off
+    toggle(AlgaeGrabberStates.OFF); // initialize as off
 
     sysIdRoutine =
         new SysIdRoutine(
@@ -46,13 +46,13 @@ public class ElevatorAlgae extends KillableSubsystem
                 null,
                 null,
                 null,
-                (state -> Logger.recordOutput("ElevatorAlgae/SysIdTestState", state.toString()))),
+                (state -> Logger.recordOutput("AlgaeGrabber/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.magnitude()), null, this));
   }
 
   private final SysIdRoutine sysIdRoutine;
 
-  public enum ElevatorAlgaeStates {
+  public enum AlgaeGrabberStates {
     OUT,
     INTAKE,
     OFF;
@@ -79,13 +79,13 @@ public class ElevatorAlgae extends KillableSubsystem
   }
 
   /** Set the shooter speed to the preset ShooterStates state */
-  public void toggle(ElevatorAlgaeStates state) {
+  public void toggle(AlgaeGrabberStates state) {
     switch (state) {
       case OUT:
-        toggle(Constants.ElevatorAlgae.OUT_SPEED);
+        toggle(Constants.AlgaeGrabber.OUT_SPEED);
         break;
       case INTAKE:
-        toggle(Constants.ElevatorAlgae.INTAKE_SPEED);
+        toggle(Constants.AlgaeGrabber.INTAKE_SPEED);
         break;
       case OFF: // Off
       default: // should never happen
@@ -132,7 +132,7 @@ public class ElevatorAlgae extends KillableSubsystem
 
   @Override
   public void kill() {
-    toggle(ElevatorAlgaeStates.OFF);
+    toggle(AlgaeGrabberStates.OFF);
     io.setWheelVoltage(0);
   }
 

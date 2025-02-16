@@ -91,7 +91,7 @@ public final class Constants {
     public static final double CROPPING_MARGIN = 0.2; // units are in ... um ... uh ... Numbers!
   }
 
-  public final class ElevatorAlgae {
+  public final class AlgaeGrabber {
     public static final double kP = 0.07; // TODO idk where these numbers came from
     public static final double kI = 0.0; // TODO idk where these numbers came from
     public static final double kD = 0.0; // TODO idk where these numbers came from

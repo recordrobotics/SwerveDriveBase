@@ -13,7 +13,7 @@ public final class RobotMap {
     public static final int LIMIT_SWITCH_ID = 7; // TODO get actual DIO port number
   }
 
-  public static final class ElevatorAlgae {
+  public static final class AlgaeGrabber {
     public static final int MOTOR_ID = 15; // TODO get actual CAN number
     public static final int LIMIT_SWITCH_ID = 6; // TODO get actual DIO port number
   }

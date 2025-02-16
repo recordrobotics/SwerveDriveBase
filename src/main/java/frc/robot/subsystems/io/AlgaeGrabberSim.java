@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
-public class ElevatorAlgaeSim implements ElevatorAlgaeIO {
+public class AlgaeGrabberSim implements AlgaeGrabberIO {
 
   private final double periodicDt;
 
@@ -26,22 +26,21 @@ public class ElevatorAlgaeSim implements ElevatorAlgaeIO {
 
   private final DCMotorSim wheelSimModel =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(
-              Constants.ElevatorAlgae.kV, Constants.ElevatorAlgae.kA),
+          LinearSystemId.createDCMotorSystem(Constants.AlgaeGrabber.kV, Constants.AlgaeGrabber.kA),
           wheelMotor,
           0.01,
           0.01);
 
   private final DigitalInput algaeDetector =
-      new DigitalInput(RobotMap.ElevatorAlgae.LIMIT_SWITCH_ID);
+      new DigitalInput(RobotMap.AlgaeGrabber.LIMIT_SWITCH_ID);
   private final SimDevice algaeDetectorSim =
-      SimDevice.create("DigitalInput", RobotMap.ElevatorAlgae.LIMIT_SWITCH_ID);
+      SimDevice.create("DigitalInput", RobotMap.AlgaeGrabber.LIMIT_SWITCH_ID);
   private final SimBoolean algaeDetectorSimValue;
 
-  public ElevatorAlgaeSim(double periodicDt) {
+  public AlgaeGrabberSim(double periodicDt) {
     this.periodicDt = periodicDt;
 
-    wheel = new SparkMax(RobotMap.ElevatorAlgae.MOTOR_ID, MotorType.kBrushless);
+    wheel = new SparkMax(RobotMap.AlgaeGrabber.MOTOR_ID, MotorType.kBrushless);
     wheelSim = new SparkMaxSim(wheel, wheelMotor);
 
     if (algaeDetectorSim != null)
