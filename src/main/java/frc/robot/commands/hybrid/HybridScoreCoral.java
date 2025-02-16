@@ -2,9 +2,12 @@ package frc.robot.commands.hybrid;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FlippingUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -15,6 +18,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.ElevatorMove;
 import frc.robot.commands.ElevatorMoveThenCoralShoot;
 import frc.robot.commands.SuccessfulCompletion;
+import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
 @TriggerDistance(
@@ -28,13 +32,8 @@ public class HybridScoreCoral extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () ->
-                new SequentialCommandGroup(
-                        new InstantCommand(
-                            () ->
-                                RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES,
-                                    () -> Constants.Lights.coralScorePattern)))
-                    .schedule()));
+                RobotContainer.lights.patterns.put(
+                    LightSegments.HYBRID_STATES, () -> Constants.Lights.coralScorePattern)));
     try {
       paths =
           new PathPlannerPath[] {
@@ -64,6 +63,10 @@ public class HybridScoreCoral extends SequentialCommandGroup {
         RobotContainer.poseTracker.getEstimatedPosition().getTranslation();
     for (PathPlannerPath path : paths) {
       Translation2d path_translation = path.getStartingHolonomicPose().get().getTranslation();
+      if (DriverStationUtils.getCurrentAlliance() == Alliance.Red) {
+        path_translation = FlippingUtil.flipFieldPosition(path_translation);
+      }
+
       double distance = swerve_translation.getDistance(path_translation);
       if (distance < lowestDistance) {
         lowestDistance = distance;
@@ -71,9 +74,14 @@ public class HybridScoreCoral extends SequentialCommandGroup {
       }
     }
 
+    Pose2d shortestPose = shortestPath.getStartingHolonomicPose().get();
+
+    if (DriverStationUtils.getCurrentAlliance() == Alliance.Red) {
+      shortestPose = FlippingUtil.flipFieldPose(shortestPose);
+    }
+
     addCommands(
-        AutoBuilder.pathfindToPose(
-            shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
+        AutoBuilder.pathfindToPose(shortestPose, Constants.HybridConstants.constraints),
         AutoBuilder.followPath(shortestPath).alongWith(new ElevatorMove(reefCoralHeight)),
         new ElevatorMoveThenCoralShoot(reefCoralHeight),
         new SuccessfulCompletion(true, false, false, true, true));
