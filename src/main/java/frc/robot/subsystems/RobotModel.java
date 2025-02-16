@@ -251,11 +251,76 @@ public class RobotModel extends SubsystemBase {
     }
   }
 
+  public static class ElevatorArm implements RobotMechanism {
+    public static final int POSE_COUNT = 1;
+
+    @AutoLogOutput
+    private LoggedMechanism2d mechanism =
+        new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
+
+    private LoggedMechanismRoot2d root =
+        mechanism.getRoot(
+            "elevatorarm_root",
+            Constants.ElevatorArm.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
+            Constants.ElevatorArm.ROOT_MECHANISM_POSE.getY());
+    private LoggedMechanismLigament2d elevatorarm =
+        root.append(
+            new LoggedMechanismLigament2d(
+                "elevatorarm",
+                Constants.ElevatorArm.LENGTH,
+                Constants.ElevatorArm.ANGLE_OFFSET,
+                3,
+                new Color8Bit(Color.kPurple)));
+
+    @AutoLogOutput
+    private LoggedMechanism2d mechanism_setpoint =
+        new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
+
+    private LoggedMechanismRoot2d root_setpoint =
+        mechanism_setpoint.getRoot(
+            "elevatorarm_root",
+            Constants.ElevatorArm.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
+            Constants.ElevatorArm.ROOT_MECHANISM_POSE.getY());
+    private LoggedMechanismLigament2d elevatorarm_setpoint =
+        root_setpoint.append(
+            new LoggedMechanismLigament2d(
+                "elevatorarm",
+                Constants.ElevatorArm.LENGTH,
+                Constants.ElevatorArm.ANGLE_OFFSET,
+                3,
+                new Color8Bit(Color.kViolet)));
+
+    public void update(double angle) {
+      elevatorarm.setAngle(Units.radiansToDegrees(Constants.ElevatorArm.ANGLE_OFFSET + angle));
+    }
+
+    public void updateSetpoint(double angle) {
+      elevatorarm_setpoint.setAngle(
+          Units.radiansToDegrees(Constants.ElevatorArm.ANGLE_OFFSET + angle));
+    }
+
+    @Override
+    public int getPoseCount() {
+      return POSE_COUNT;
+    }
+
+    @Override
+    public void updatePoses(Pose3d[] poses, int i) {
+      poses[i] =
+          new Pose3d(0, 0, 0, new Rotation3d())
+              .rotateAround(
+                  new Translation3d(0, 0.334669, 0.456817),
+                  new Rotation3d(Units.degreesToRadians(elevatorarm.getAngle()), 0, 0));
+    }
+  }
+
   public final Elevator elevator = new Elevator();
   public final CoralIntake coralIntake = new CoralIntake();
+  public final ElevatorArm elevatorArm = new ElevatorArm();
 
   @AutoLogOutput
-  public Pose3d[] mechanismPoses = new Pose3d[Elevator.POSE_COUNT + CoralIntake.POSE_COUNT];
+  public Pose3d[] mechanismPoses =
+      new Pose3d[Elevator.POSE_COUNT + CoralIntake.POSE_COUNT + ElevatorArm.POSE_COUNT];
 
   @AutoLogOutput public Pose2d robot = new Pose2d();
 
@@ -265,7 +330,7 @@ public class RobotModel extends SubsystemBase {
 
   @Override
   public void periodic() {
-    updatePoses(elevator, coralIntake);
+    updatePoses(elevator, coralIntake, elevatorArm);
   }
 
   private void updatePoses(RobotMechanism... mechanisms) {

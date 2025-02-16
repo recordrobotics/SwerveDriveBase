@@ -93,20 +93,48 @@ public final class Constants {
     public static final double CROPPING_MARGIN = 0.2; // units are in ... um ... uh ... Numbers!
   }
 
+  public final class ElevatorArm {
+    public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(10);
+    public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
+
+    public static final double MAX_ARM_VELOCITY = 8;
+    public static final double MAX_ARM_ACCELERATION = 22;
+
+    // TODO: Sysid tuning
+    public static final double kP = 7.6661;
+    public static final double kI = 0;
+    public static final double kD = 0.80357;
+    public static final double kG = 0.33478;
+    public static final double kS = 0.0094404;
+    public static final double kV = 0.98364;
+    public static final double kA = 0.086232;
+
+    public static final double ARM_START_POS = Units.degreesToRadians(-90); // Math.PI / 2;
+
+    // TODO: verify correct
+    public static final double ARM_GEAR_RATIO = 38.4; // 16:1 * 72/32
+
+    // TODO: make correct
+    public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
+    // TODO: make correct
+    public static final double LENGTH = 0.431;
+    public static final double ANGLE_OFFSET = 0;
+  }
+
   public final class AlgaeGrabber {
-    public static final double kP = 0.07; // TODO idk where these numbers came from
-    public static final double kI = 0.0; // TODO idk where these numbers came from
-    public static final double kD = 0.0; // TODO idk where these numbers came from
-    public static final double kS = 0.02; // TODO idk where these numbers came from
-    public static final double kV = 0.14; // TODO idk where these numbers came from
-    public static final double kA = 0.09; // TODO idk where these numbers came from
+    public static final double kP = 0.07; // TODO: Sysid tuning
+    public static final double kI = 0.0; // TODO: Sysid tuning
+    public static final double kD = 0.0; // TODO: Sysid tuning
+    public static final double kS = 0.02; // TODO: Sysid tuning
+    public static final double kV = 0.14; // TODO: Sysid tuning
+    public static final double kA = 0.09; // TODO: Sysid tuning
 
     public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
-    public static final double DEBOUNCE_TIME = 0.1; // TODO idk where these numbers came from
+    public static final double DEBOUNCE_TIME = 0.1; // TODO: Sysid tuning
   }
 
   public enum ElevatorHeight {
