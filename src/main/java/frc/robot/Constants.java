@@ -56,8 +56,8 @@ public final class Constants {
     // http://gabybot.com/RobotCoreDoc/classcom_1_1pathplanner_1_1lib_1_1path_1_1_path_constraints.html
     public static final PathConstraints constraints =
         new PathConstraints(
-            0.5, // Max velocity meters per second
-            4.0, // Max acceleration meters per second per second
+            3, // Max velocity meters per second
+            9, // Max acceleration meters per second per second
             Units.degreesToRadians(540), // Max angular velocity radians per second
             Units.degreesToRadians(720)); // Max angular acceleration radians per second per second
 
