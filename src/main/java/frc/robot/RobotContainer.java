@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGround;
-import frc.robot.commands.CoralIntakeFromSource;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.hybrid.HybridScoreCoral;
+import frc.robot.commands.hybrid.HybridSource;
 import frc.robot.commands.manual.ManualSwerve;
 import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
@@ -184,8 +184,15 @@ public class RobotContainer {
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
         .onTrue(new CoralIntakeFromGround());
+
+    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
+    //     .onTrue(new CoralIntakeFromSource());
+
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
-        .onTrue(new CoralIntakeFromSource());
+        .onTrue(
+            new DeferredCommand(
+                () -> new HybridSource(), Set.of(drivetrain, elevator, coralShooter, coralIntake)));
+
     new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getClimb());
