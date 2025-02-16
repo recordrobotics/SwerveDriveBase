@@ -30,7 +30,7 @@ public class HybridCage extends SequentialCommandGroup {
                 new InstantCommand(
                         () ->
                             RobotContainer.lights.patterns.put(
-                                LightSegments.HYBRID_STATES, () -> Constants.Lights.cagePattern))
+                                LightSegments.STATE_VISUALIZER, () -> Constants.Lights.cagePattern))
                     .schedule()));
 
     try {

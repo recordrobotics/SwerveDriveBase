@@ -27,7 +27,7 @@ public class SuccessfulCompletion extends SequentialCommandGroup {
       addFlashGreenCommands(LightSegments.CORAL_SHOOTER);
     }
     if (hybridStates) {
-      addFlashGreenCommands(LightSegments.HYBRID_STATES);
+      addFlashGreenCommands(LightSegments.STATE_VISUALIZER);
     }
   }
 

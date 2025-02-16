@@ -31,7 +31,7 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
                         new InstantCommand(
                             () ->
                                 RobotContainer.lights.patterns.put(
-                                    LightSegments.HYBRID_STATES,
+                                    LightSegments.STATE_VISUALIZER,
                                     () -> Constants.Lights.removeAlgaePattern)))
                     .schedule()));
     try {

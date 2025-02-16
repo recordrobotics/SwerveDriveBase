@@ -30,7 +30,7 @@ public class HybridSource extends SequentialCommandGroup {
         new InstantCommand(
             () ->
                 RobotContainer.lights.patterns.put(
-                    LightSegments.HYBRID_STATES, () -> Constants.Lights.sourcePattern)));
+                    LightSegments.STATE_VISUALIZER, () -> Constants.Lights.sourcePattern)));
 
     try {
       paths =

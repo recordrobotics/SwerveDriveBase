@@ -33,7 +33,7 @@ public class HybridScoreCoral extends SequentialCommandGroup {
         new InstantCommand(
             () ->
                 RobotContainer.lights.patterns.put(
-                    LightSegments.HYBRID_STATES, () -> Constants.Lights.coralScorePattern)));
+                    LightSegments.STATE_VISUALIZER, () -> Constants.Lights.coralScorePattern)));
     try {
       paths =
           new PathPlannerPath[] {

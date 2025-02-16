@@ -562,7 +562,7 @@ public final class Constants {
       GROUND_ALGAE,
       CORAL_INTAKE,
       CORAL_SHOOTER,
-      HYBRID_STATES
+      STATE_VISUALIZER
     }
 
     public static final Map<LightSegments, Pair<Integer, Integer>> PART_INDECIES =
@@ -571,7 +571,7 @@ public final class Constants {
             LightSegments.GROUND_ALGAE, Pair.of(6, 10),
             LightSegments.CORAL_INTAKE, Pair.of(11, 15),
             LightSegments.CORAL_SHOOTER, Pair.of(16, 20),
-            LightSegments.HYBRID_STATES, Pair.of(21, 25));
+            LightSegments.STATE_VISUALIZER, Pair.of(21, 25));
 
     public static final LEDPattern PULSATING_ORANGE =
         LEDPattern.solid(Color.kOrange)
@@ -602,12 +602,20 @@ public final class Constants {
                 ? PULSATING_GREEN
                 : PULSATING_ORANGE;
 
-    public static final LEDPattern sourcePattern = LEDPattern.solid(Color.kRed);
-    public static final LEDPattern reefScorePattern = LEDPattern.solid(Color.kBlue);
-    public static final LEDPattern algaeScorePattern = LEDPattern.solid(Color.kPurple);
-    public static final LEDPattern cagePattern = LEDPattern.solid(Color.kOrange);
-    public static final LEDPattern removeAlgaePattern = LEDPattern.solid(Color.kYellowGreen);
-    public static final LEDPattern coralScorePattern = LEDPattern.solid(Color.kAqua);
+    public static final LEDPattern sourcePattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kBlack);
+    public static final LEDPattern reefScorePattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlue, Color.kBlack);
+    public static final LEDPattern algaeScorePattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kPurple, Color.kBlack);
+    public static final LEDPattern cagePattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kBlack);
+    public static final LEDPattern removeAlgaePattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kYellow, Color.kBlack);
+    public static final LEDPattern coralScorePattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kAqua, Color.kBlack);
+    public static final LEDPattern hybridPattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack);
 
     public static final HashMap<LightSegments, Supplier<LEDPattern>> DEFAULT_PATTERNS =
         new HashMap<>(
