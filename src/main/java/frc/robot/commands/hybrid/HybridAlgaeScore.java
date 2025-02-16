@@ -44,7 +44,6 @@ public class HybridAlgaeScore extends SequentialCommandGroup {
     addCommands(
         AutoBuilder.pathfindThenFollowPath(path, Constants.HybridConstants.constraints),
         // TODO: add AlgaeGrabber score command (move to Score height)
-        // new GroundAlgaeScore(),
         new SuccessfulCompletion(false, true, false, false, true));
   }
 }

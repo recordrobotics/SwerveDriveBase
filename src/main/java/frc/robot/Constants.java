@@ -559,7 +559,7 @@ public final class Constants {
 
     public static enum LightSegments {
       ELEVATOR,
-      GROUND_ALGAE,
+      ALGAE_GRABBER,
       CORAL_INTAKE,
       CORAL_SHOOTER,
       STATE_VISUALIZER
@@ -568,7 +568,7 @@ public final class Constants {
     public static final Map<LightSegments, Pair<Integer, Integer>> PART_INDECIES =
         Map.of(
             LightSegments.ELEVATOR, Pair.of(0, 5),
-            LightSegments.GROUND_ALGAE, Pair.of(6, 10),
+            LightSegments.ALGAE_GRABBER, Pair.of(6, 10),
             LightSegments.CORAL_INTAKE, Pair.of(11, 15),
             LightSegments.CORAL_SHOOTER, Pair.of(16, 20),
             LightSegments.STATE_VISUALIZER, Pair.of(21, 25));
@@ -621,7 +621,7 @@ public final class Constants {
         new HashMap<>(
             Map.of(
                 LightSegments.ELEVATOR, () -> OFF,
-                LightSegments.GROUND_ALGAE, () -> OFF,
+                LightSegments.ALGAE_GRABBER, () -> OFF,
                 LightSegments.CORAL_INTAKE, () -> OFF,
                 LightSegments.CORAL_SHOOTER, () -> OFF));
   }

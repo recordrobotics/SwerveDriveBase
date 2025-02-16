@@ -10,15 +10,15 @@ import frc.robot.RobotContainer;
 public class SuccessfulCompletion extends SequentialCommandGroup {
   public SuccessfulCompletion(
       boolean elevator,
-      boolean groundAlgae,
+      boolean algaeGrabber,
       boolean coralIntake,
       boolean coralShooter,
       boolean hybridStates) {
     if (elevator) {
       addFlashGreenCommands(LightSegments.ELEVATOR);
     }
-    if (groundAlgae) {
-      addFlashGreenCommands(LightSegments.GROUND_ALGAE);
+    if (algaeGrabber) {
+      addFlashGreenCommands(LightSegments.ALGAE_GRABBER);
     }
     if (coralIntake) {
       addFlashGreenCommands(LightSegments.CORAL_INTAKE);

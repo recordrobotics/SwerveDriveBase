@@ -27,10 +27,4 @@ public final class RobotMap {
   public static final class Lights {
     public static final int LED_ID = 0; // TODO get actual CAN number
   }
-
-  public static final class GroundAlgae {
-    public static final int MOTOR_ID = 13; // TODO get actual port number
-    public static final int ARM_ID = 14; // TODO get actual port number
-    public static final int LIMIT_SWITCH_ID = 5; // TODO get actual DIO port number
-  }
 }
