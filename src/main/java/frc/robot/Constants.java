@@ -481,9 +481,19 @@ public final class Constants {
     public static final double kP = 0.07;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
+    public static final double kP_position = 0.07;
+    public static final double kI_position = 0.0;
+    public static final double kD_position = 0.0;
     public static final double kS = 0.01;
     public static final double kV = 0.1;
     public static final double kA = 0.04;
+
+    public static final double GEAR_RATIO = 10.0;
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.0);
+
+    // m/s coral
+    public static final double POSITION_MODE_MAX_VELOCITY = 1;
+    public static final double POSITION_MODE_MAX_ACCELERATION = 2;
 
     public static final double OUT_SPEED = 4; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^

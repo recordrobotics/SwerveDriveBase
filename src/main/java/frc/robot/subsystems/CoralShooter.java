@@ -5,8 +5,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -31,6 +33,14 @@ public class CoralShooter extends KillableSubsystem
   private final PIDController pid =
       new PIDController(
           Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
+  private final ProfiledPIDController positionPid =
+      new ProfiledPIDController(
+          Constants.CoralShooter.kP_position,
+          Constants.CoralShooter.kI_position,
+          Constants.CoralShooter.kD_position,
+          new TrapezoidProfile.Constraints(
+              Constants.CoralShooter.POSITION_MODE_MAX_VELOCITY,
+              Constants.CoralShooter.POSITION_MODE_MAX_ACCELERATION));
   private final SimpleMotorFeedforward feedForward =
       new SimpleMotorFeedforward(
           Constants.CoralShooter.kS, Constants.CoralShooter.kV, Constants.CoralShooter.kA);
@@ -67,22 +77,36 @@ public class CoralShooter extends KillableSubsystem
   public enum CoralShooterStates {
     OUT,
     INTAKE,
+    POSITION,
     OFF;
   }
 
   @AutoLogOutput
   public double getVelocity() {
-    return io.getVelocity() / 60.0; /* RPM -> RPS */
+    return io.getVelocity()
+        / 60.0
+        / Constants.CoralShooter.GEAR_RATIO
+        * Math.PI
+        * Constants.CoralShooter.WHEEL_DIAMETER; /* RPM -> RPS */
   }
 
   @AutoLogOutput
   public double getPosition() {
-    return io.getPosition();
+    return io.getPosition()
+        / Constants.CoralShooter.GEAR_RATIO
+        * Math.PI
+        * Constants.CoralShooter.WHEEL_DIAMETER; /* Rotations -> Meters */
   }
 
   @AutoLogOutput
   public double getVoltage() {
     return io.getVoltage();
+  }
+
+  public void moveBy(double meters) {
+    toggle(0);
+    currentState = CoralShooterStates.POSITION;
+    positionPid.setGoal(getPosition() + meters);
   }
 
   /** Set shooter speed */
@@ -100,6 +124,11 @@ public class CoralShooter extends KillableSubsystem
       case INTAKE:
         currentState = CoralShooterStates.INTAKE;
         toggle(Constants.CoralShooter.INTAKE_SPEED);
+        break;
+      case POSITION:
+        currentState = CoralShooterStates.POSITION;
+        toggle(0);
+        positionPid.setGoal(getPosition());
         break;
       case OFF: // Off
       default: // should never happen
@@ -122,11 +151,19 @@ public class CoralShooter extends KillableSubsystem
 
   @Override
   public void periodic() {
-    double pidOutput = pid.calculate(getVelocity());
-    double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    if (currentState == CoralShooterStates.POSITION) {
+      double pidOutput = positionPid.calculate(getVelocity());
+      double feedforwardOutput =
+          feedForward.calculateWithVelocities(lastSpeed, positionPid.getSetpoint().velocity);
+      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      lastSpeed = positionPid.getSetpoint().velocity;
+    } else {
+      double pidOutput = pid.calculate(getVelocity());
+      double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
+      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      lastSpeed = pid.getSetpoint();
+    }
 
-    lastSpeed = pid.getSetpoint();
     debounced_value = !m_debouncer.calculate(io.getCoralDetector());
   }
 
