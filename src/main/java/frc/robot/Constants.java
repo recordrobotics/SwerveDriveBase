@@ -638,27 +638,34 @@ public final class Constants {
     public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.75); // TODO is good?
     public static final Distance LED_SPACING = Meters.of(1.0 / 30.0); // 30 LEDs per meter
 
-    public static final LEDPattern sourcePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kBlack)
-            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-    public static final LEDPattern reefScorePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlue, Color.kBlack)
-            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-    public static final LEDPattern algaeScorePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kPurple, Color.kBlack)
-            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-    public static final LEDPattern cagePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kBlack)
-            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-    public static final LEDPattern removeAlgaePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kYellow, Color.kBlack)
-            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-    public static final LEDPattern coralScorePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kAqua, Color.kBlack)
-            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-    public static final LEDPattern hybridPattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack)
-            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+    public static final Supplier<LEDPattern> sourcePattern =
+        () ->
+            LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kBlack)
+                .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+    public static final Supplier<LEDPattern> reefScorePattern =
+        () ->
+            LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlue, Color.kBlack)
+                .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+    public static final Supplier<LEDPattern> algaeScorePattern =
+        () ->
+            LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kPurple, Color.kBlack)
+                .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+    public static final Supplier<LEDPattern> cagePattern =
+        () ->
+            LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kBlack)
+                .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+    public static final Supplier<LEDPattern> removeAlgaePattern =
+        () ->
+            LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kYellow, Color.kBlack)
+                .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+    public static final Supplier<LEDPattern> coralScorePattern =
+        () ->
+            LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kAqua, Color.kBlack)
+                .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+    public static final Supplier<LEDPattern> hybridPattern =
+        () ->
+            LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack)
+                .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
 
     public static final HashMap<LightSegments, Supplier<LEDPattern>> DEFAULT_PATTERNS =
         new HashMap<>(
