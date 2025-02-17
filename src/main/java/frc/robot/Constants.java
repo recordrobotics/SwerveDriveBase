@@ -22,11 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Dimensionless;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -51,9 +47,7 @@ import java.util.function.Supplier;
 public final class Constants {
   public final class HybridConstants {
     // Create the constraints to use while pathfinding. The constraints defined in the path will
-    // only
-    // be used for the path.
-    // docs are here:
+    // only be used for the path. docs are here:
     // http://gabybot.com/RobotCoreDoc/classcom_1_1pathplanner_1_1lib_1_1path_1_1_path_constraints.html
     public static final PathConstraints constraints =
         new PathConstraints(
@@ -612,7 +606,9 @@ public final class Constants {
             .breathe(Constants.Lights.pulsateFrequency)
             .blend(LEDPattern.solid(Color.kOrange));
     public static final LEDPattern PULSATING_GREEN =
-        LEDPattern.solid(Color.kGreen).breathe(Constants.Lights.pulsateFrequency);
+        LEDPattern.solid(Color.kGreen)
+            .breathe(Constants.Lights.pulsateFrequency)
+            .blend(LEDPattern.solid(Color.kGreen));
     public static final LEDPattern OFF = LEDPattern.solid(Color.kBlack);
 
     public static final LEDPattern elevatorPattern =
@@ -636,20 +632,30 @@ public final class Constants {
                 ? PULSATING_GREEN
                 : PULSATING_ORANGE;
 
+    public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.75); // TODO is good?
+    public static final Distance LED_SPACING = Meters.of(1.0 / 30.0); // 30 LEDs per meter
+
     public static final LEDPattern sourcePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kBlack);
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kBlack)
+            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
     public static final LEDPattern reefScorePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlue, Color.kBlack);
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlue, Color.kBlack)
+            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
     public static final LEDPattern algaeScorePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kPurple, Color.kBlack);
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kPurple, Color.kBlack)
+            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
     public static final LEDPattern cagePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kBlack);
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kBlack)
+            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
     public static final LEDPattern removeAlgaePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kYellow, Color.kBlack);
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kYellow, Color.kBlack)
+            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
     public static final LEDPattern coralScorePattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kAqua, Color.kBlack);
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kAqua, Color.kBlack)
+            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
     public static final LEDPattern hybridPattern =
-        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack);
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack)
+            .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
 
     public static final HashMap<LightSegments, Supplier<LEDPattern>> DEFAULT_PATTERNS =
         new HashMap<>(
