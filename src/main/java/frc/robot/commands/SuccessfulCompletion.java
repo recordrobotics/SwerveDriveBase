@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Lights.LightSegments;
-import frc.robot.RobotContainer;
 
 public class SuccessfulCompletion extends SequentialCommandGroup {
   public SuccessfulCompletion(
@@ -36,15 +35,9 @@ public class SuccessfulCompletion extends SequentialCommandGroup {
         new InstantCommand(
             () ->
                 new SequentialCommandGroup(
-                        new InstantCommand(
-                            () ->
-                                RobotContainer.lights.patterns.put(
-                                    segment, () -> Constants.Lights.PULSATING_GREEN)),
+                        new LightsCommand(segment, Constants.Lights.PULSATING_GREEN),
                         new WaitCommand(1),
-                        new InstantCommand(
-                            () ->
-                                RobotContainer.lights.patterns.put(
-                                    segment, () -> Constants.Lights.OFF)))
+                        new LightsCommand(segment, Constants.Lights.OFF))
                     .schedule()));
   }
 }
