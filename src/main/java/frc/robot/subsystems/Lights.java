@@ -50,7 +50,7 @@ public class Lights extends SubsystemBase implements AutoCloseable {
 
     // loop through LightSegments
     for (HashMap.Entry<LightSegments, Supplier<LEDPattern>> entry : patterns.entrySet()) {
-      setRangePattern( // TODO get the getValue get getkey getFirst AAAAAAAAAAAAAAAAAAAAAAA
+      setRangePattern( // get the getValue get getkey getFirst AAAAAAAAAAAAAAAAAAAAAAA
           entry.getValue().get(),
           Constants.Lights.PART_INDECIES.get(entry.getKey()).getFirst(),
           Constants.Lights.PART_INDECIES.get(entry.getKey()).getSecond());

@@ -107,6 +107,7 @@ public final class Constants {
     public static final double ARM_START_POS = Units.degreesToRadians(-90); // Math.PI / 2;
 
     // TODO: verify correct
+    // I got 36
     public static final double ARM_GEAR_RATIO = 38.4; // 16:1 * 72/32
 
     // TODO: make correct
@@ -129,7 +130,7 @@ public final class Constants {
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
-    public static final double DEBOUNCE_TIME = 0.1; // TODO: Sysid tuning
+    public static final double DEBOUNCE_TIME = 0.1; // TODO make correct
   }
 
   public enum ElevatorHeight {
@@ -520,9 +521,9 @@ public final class Constants {
     public static final double kV = 0.1;
     public static final double kA = 0.04;
 
-    public static final double GEAR_RATIO = 10.0;
-    public static final Distance DISTANCE_BETWEEN_AXLES = Meters.of(0.1); // TODO make correct
-    public static final Distance CORAL_OUTER_DIAMETER = Inches.of(3); // TODO make correct
+    public static final double GEAR_RATIO = 10.0; // TODO make correct
+    public static final Distance DISTANCE_BETWEEN_AXLES = Inches.of(7.249923103040473);
+    public static final Distance CORAL_OUTER_DIAMETER = Inches.of(4.5);
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
@@ -537,7 +538,7 @@ public final class Constants {
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
-    public static final double LENGTH = 0.25;
+    public static final double LENGTH = 0.25; // TODO length of what???
   }
 
   public final class CoralIntake {
