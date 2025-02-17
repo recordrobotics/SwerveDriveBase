@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -617,7 +618,13 @@ public final class Constants {
         LEDPattern.solid(Color.kGreen)
             .breathe(Constants.Lights.PULSATE_FREQUENCY)
             .blend(LEDPattern.solid(Color.kGreen));
-    public static final LEDPattern OFF = LEDPattern.solid(Color.kBlack);
+
+    public static final LEDPattern OFF =
+        DriverStation.getAlliance().isPresent()
+            ? (DriverStation.getAlliance().get() == Alliance.Blue
+                ? LEDPattern.solid(Color.kBlue).blend(LEDPattern.solid(Color.kBlack))
+                : LEDPattern.solid(Color.kRed).blend(LEDPattern.solid(Color.kBlack)))
+            : LEDPattern.solid(Color.kBlack);
 
     public static final LEDPattern elevatorPattern =
         PULSATING_GREEN
