@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -17,7 +18,7 @@ import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ElevatorMove;
 import frc.robot.commands.ElevatorMoveThenCoralShoot;
-import frc.robot.commands.SuccessfulCompletion;
+import frc.robot.commands.LightsCommand;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
@@ -29,11 +30,6 @@ public class HybridScoreCoral extends SequentialCommandGroup {
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
 
   public HybridScoreCoral(ElevatorHeight reefCoralHeight) {
-    addCommands(
-        new InstantCommand(
-            () ->
-                RobotContainer.lights.patterns.put(
-                    LightSegments.STATE_VISUALIZER, () -> Constants.Lights.coralScorePattern)));
     try {
       paths =
           new PathPlannerPath[] {
@@ -81,9 +77,16 @@ public class HybridScoreCoral extends SequentialCommandGroup {
     }
 
     addCommands(
+        new ConditionalCommand( // cancel if no coral
+            new InstantCommand(() -> this.cancel()),
+            new InstantCommand(() -> {}),
+            () -> !RobotContainer.coralShooter.hasCoral()),
+        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.hybridPattern),
         AutoBuilder.pathfindToPose(shortestPose, Constants.HybridConstants.constraints),
+        new LightsCommand(LightSegments.ELEVATOR, Constants.Lights.elevatorPattern),
         AutoBuilder.followPath(shortestPath).alongWith(new ElevatorMove(reefCoralHeight)),
-        new ElevatorMoveThenCoralShoot(reefCoralHeight),
-        new SuccessfulCompletion(true, false, false, true, true));
+        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
+        new LightsCommand(LightSegments.ELEVATOR, Constants.Lights.OFF),
+        new ElevatorMoveThenCoralShoot(reefCoralHeight));
   }
 }
