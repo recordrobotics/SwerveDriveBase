@@ -13,7 +13,7 @@ import frc.robot.Constants.FieldPosition;
 import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
-import frc.robot.commands.SuccessfulCompletion;
+import frc.robot.commands.LightsCommand;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
 @TriggerDistance(
@@ -24,16 +24,6 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
 
   public HybridRemoveAlgae() {
-    addCommands(
-        new InstantCommand(
-            () ->
-                new SequentialCommandGroup(
-                        new InstantCommand(
-                            () ->
-                                RobotContainer.lights.patterns.put(
-                                    LightSegments.STATE_VISUALIZER,
-                                    () -> Constants.Lights.removeAlgaePattern)))
-                    .schedule()));
     try {
       paths =
           new PathPlannerPath[] {
@@ -66,15 +56,16 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
 
     ElevatorHeight algaeHeight =
         Constants.HybridConstants.isAlgaeInHighPosition.get(shortestPath.name)
-            ? ElevatorHeight.HIGH_ALGAE
-            : ElevatorHeight.LOW_ALGAE;
+            ? ElevatorHeight.HIGH_REEF_ALGAE
+            : ElevatorHeight.LOW_REEF_ALGAE;
 
     addCommands(
+        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.removeAlgaePattern),
         AutoBuilder.pathfindToPose(
             shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
         new InstantCommand(() -> RobotContainer.elevator.moveTo(algaeHeight)),
         AutoBuilder.followPath(shortestPath),
-        new ElevatorMoveThenAlgaeGrab(algaeHeight),
-        new SuccessfulCompletion(true, false, true, false, true));
+        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
+        new ElevatorMoveThenAlgaeGrab(algaeHeight));
   }
 }
