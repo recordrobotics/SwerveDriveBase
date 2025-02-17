@@ -35,11 +35,16 @@ public class CoralShooterToReef extends SequentialCommandGroup implements Simula
         // move coral to elevator
         new DeferredCommand(
             () -> {
+              if(coral == null)
+                return new InstantCommand(() -> {});
+
               reefPose = ReefScoringPose.closestTo(coral.pose.get(), 0.5);
               if (reefPose == null) {
                 // invalid shooting position, throw away coral
                 return new InstantCommand(
                     () -> {
+                      if(coral == null)
+                        return;
                       RobotContainer.model.removeCoral(coral);
                       coral = null;
                     });
