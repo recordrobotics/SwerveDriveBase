@@ -518,7 +518,10 @@ public final class Constants {
     public static final double kA = 0.04;
 
     public static final double GEAR_RATIO = 10.0;
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.0);
+    public static final Distance DISTANCE_BETWEEN_AXLES = Meters.of(0.1); // TODO make correct
+    public static final Distance CORAL_OUTER_DIAMETER = Inches.of(3); // TODO make correct
+    public static final Distance WHEEL_DIAMETER =
+        DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
     public static final Distance CORAL_INTAKE_DISTANCE = Centimeters.of(5);
 

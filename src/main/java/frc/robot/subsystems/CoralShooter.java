@@ -91,7 +91,7 @@ public class CoralShooter extends KillableSubsystem
         / 60.0
         / Constants.CoralShooter.GEAR_RATIO
         * Math.PI
-        * Constants.CoralShooter.WHEEL_DIAMETER; /* RPM -> RPS */
+        * Constants.CoralShooter.WHEEL_DIAMETER.in(Meters); /* RPM -> RPS */
   }
 
   @AutoLogOutput
@@ -99,7 +99,7 @@ public class CoralShooter extends KillableSubsystem
     return io.getPosition()
         / Constants.CoralShooter.GEAR_RATIO
         * Math.PI
-        * Constants.CoralShooter.WHEEL_DIAMETER; /* Rotations -> Meters */
+        * Constants.CoralShooter.WHEEL_DIAMETER.in(Meters); /* Rotations -> Meters */
   }
 
   @AutoLogOutput
