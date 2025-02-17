@@ -13,7 +13,7 @@ public class SuccessfulCompletion extends SequentialCommandGroup {
       boolean algaeGrabber,
       boolean coralIntake,
       boolean coralShooter,
-      boolean hybridStates) {
+      boolean stateVisualizer) {
     if (elevator) {
       addFlashGreenCommands(LightSegments.ELEVATOR);
     }
@@ -26,7 +26,7 @@ public class SuccessfulCompletion extends SequentialCommandGroup {
     if (coralShooter) {
       addFlashGreenCommands(LightSegments.CORAL_SHOOTER);
     }
-    if (hybridStates) {
+    if (stateVisualizer) {
       addFlashGreenCommands(LightSegments.STATE_VISUALIZER);
     }
   }

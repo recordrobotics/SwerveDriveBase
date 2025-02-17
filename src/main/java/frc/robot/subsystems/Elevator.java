@@ -44,6 +44,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
 
+  private Constants.ElevatorHeight m_height = ElevatorHeight.BOTTOM;
+
   // The plant holds a state-space model of our elevator. This system has the following properties:
   //
   // States: [position, velocity], in, meters and meters per second.
@@ -218,7 +220,12 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public void moveTo(ElevatorHeight height) {
+    m_height = height;
     toggle(height.getHeight());
+  }
+
+  public ElevatorHeight getHeight() {
+    return m_height;
   }
 
   public boolean atGoal() {
