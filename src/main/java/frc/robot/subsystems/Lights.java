@@ -21,15 +21,15 @@ public class Lights extends SubsystemBase implements AutoCloseable {
 
   public Lights() {
     LEDs = new AddressableLED(RobotMap.Lights.LED_ID);
-    buffer = new AddressableLEDBuffer(Constants.Lights.length);
+    buffer = new AddressableLEDBuffer(Constants.Lights.LENGTH);
     LEDs.setColorOrder(ColorOrder.kRGB);
-    LEDs.setLength(Constants.Lights.length);
+    LEDs.setLength(Constants.Lights.LENGTH);
     LEDs.start();
     off();
   }
 
   private void setGlobalPattern(LEDPattern pattern) {
-    setRangePattern(pattern, 0, Constants.Lights.length - 1);
+    setRangePattern(pattern, 0, Constants.Lights.LENGTH - 1);
   }
 
   /**
@@ -38,7 +38,7 @@ public class Lights extends SubsystemBase implements AutoCloseable {
    * @param end the end index of the LED strip to run the pattern on (inclusive)
    */
   private void setRangePattern(LEDPattern pattern, int start, int end) {
-    runPattern(pattern.atBrightness(Constants.Lights.multiplier), start, end).schedule();
+    runPattern(pattern.atBrightness(Constants.Lights.MULTIPLIER), start, end).schedule();
   }
 
   public void off() {

@@ -135,11 +135,13 @@ public final class Constants {
     INTAKE(0, Units.degreesToRadians(-90)),
     L1(0.06, Units.degreesToRadians(20)),
     L2(0.2, Units.degreesToRadians(20)),
-    LOW_ALGAE(0.465, Units.degreesToRadians(-60)),
+    LOW_REEF_ALGAE(0.465, Units.degreesToRadians(-60)),
     L3(0.72, Units.degreesToRadians(20)),
-    HIGH_ALGAE(1.035, Units.degreesToRadians(-60)),
+    HIGH_REEF_ALGAE(1.035, Units.degreesToRadians(-60)),
     L4(1.32, Units.degreesToRadians(10)),
-    BOTTOM(0, Units.degreesToRadians(-90));
+    BOTTOM(0, Units.degreesToRadians(-90)),
+    GROUND_ALGAE(0.465, Units.degreesToRadians(-60)),
+    PROCESSOR_SCORE(0.465, Units.degreesToRadians(-60));
 
     private double height;
     private double armAngleRadians;
@@ -580,13 +582,16 @@ public final class Constants {
   }
 
   public final class Lights {
-    public static final int length = 150;
+    public static final int LENGTH = 150;
 
-    public static final Dimensionless multiplier = Percent.of(100);
+    public static final Dimensionless MULTIPLIER = Percent.of(100);
 
-    public static final Time pulsateFrequency = Seconds.of(1);
+    public static final Time PULSATE_FREQUENCY = Seconds.of(1);
 
     public static final double FLASH_GREEN_TIME = 1; // seconds
+
+    public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.75); // TODO is good?
+    public static final Distance LED_SPACING = Meters.of(1.0 / 30.0); // 30 LEDs per meter
 
     public static enum LightSegments {
       ELEVATOR,
@@ -606,11 +611,11 @@ public final class Constants {
 
     public static final LEDPattern PULSATING_ORANGE =
         LEDPattern.solid(Color.kOrange)
-            .breathe(Constants.Lights.pulsateFrequency)
+            .breathe(Constants.Lights.PULSATE_FREQUENCY)
             .blend(LEDPattern.solid(Color.kOrange));
     public static final LEDPattern PULSATING_GREEN =
         LEDPattern.solid(Color.kGreen)
-            .breathe(Constants.Lights.pulsateFrequency)
+            .breathe(Constants.Lights.PULSATE_FREQUENCY)
             .blend(LEDPattern.solid(Color.kGreen));
     public static final LEDPattern OFF = LEDPattern.solid(Color.kBlack);
 
@@ -634,9 +639,6 @@ public final class Constants {
             (RobotContainer.coralShooter.getCurrentState() == CoralShooterStates.OFF)
                 ? PULSATING_GREEN
                 : PULSATING_ORANGE;
-
-    public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.75); // TODO is good?
-    public static final Distance LED_SPACING = Meters.of(1.0 / 30.0); // 30 LEDs per meter
 
     public static final Supplier<LEDPattern> sourcePattern =
         () ->
