@@ -31,4 +31,8 @@ public final class RobotMap {
   public static final class Lights {
     public static final int LED_ID = 0; // TODO get actual CAN number
   }
+
+  public static final class Climber {
+    public static final int MOTOR_ID = 16; // TODO get actual CAN number
+  }
 }
