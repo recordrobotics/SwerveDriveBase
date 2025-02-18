@@ -339,12 +339,15 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    desiredState.optimize(getTurnWheelRotation2d());
+    //desiredState.optimize(getTurnWheelRotation2d());
+
+    Logger.recordOutput("DesiredState_" + turningMotorChannel, desiredState.angle.getRotations());
 
     m_goal =
         new TrapezoidProfile.State(
-            updateTargetRotation(
-                desiredState.angle.getRotations(), getTurnWheelRotation2d().getRotations()),
+            // updateTargetRotation(
+            //     desiredState.angle.getRotations(), getTurnWheelRotation2d().getRotations()),
+                desiredState.angle.getRotations(),
             0);
 
     targetDriveVelocity = desiredState.speedMetersPerSecond;
@@ -374,7 +377,11 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     io.setDriveMotorVoltage(nextDriveVoltage);
 
     // Get next setpoint from profile.
+
+    Logger.recordOutput("setpoint_" + turningMotorChannel, m_setpoint.position);
+
     m_setpoint = m_profile.calculate(Constants.Swerve.kDt, m_setpoint, m_goal);
+    Logger.recordOutput("setpoint_after_"+turningMotorChannel, m_setpoint.position);
 
     // Set setpoint of the linear system (position m, velocity m/s).
     turnLoop.setNextR(VecBuilder.fill(m_setpoint.position, m_setpoint.velocity));
@@ -387,7 +394,11 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     double nextturnVoltage = turnLoop.getU(0) + turn_kS * Math.signum(m_setpoint.velocity);
 
+    Logger.recordOutput("targetvoltage_"+turningMotorChannel, nextturnVoltage);
+
     io.setTurnMotorVoltage(nextturnVoltage);
+
+    Logger.recordOutput("GoalPos_" + turningMotorChannel, m_goal.position);
 
     Logger.recordOutput("TargetVel_" + turningMotorChannel, m_setpoint.velocity);
     Logger.recordOutput("TargetPos_" + turningMotorChannel, m_setpoint.position);
