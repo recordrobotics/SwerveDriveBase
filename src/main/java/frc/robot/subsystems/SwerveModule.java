@@ -20,6 +20,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.SwerveModuleIO;
@@ -233,6 +234,8 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     // Corrects for offset in absolute motor position
     io.setTurnMotorPosition(getAbsWheelTurnOffset());
 
+    SmartDashboard.putNumber("SwerveTurn_" + turningMotorChannel, 0);
+
     m_notifier = new Notifier(this::controllerPeriodic);
     // m_notifier.startPeriodic(Constants.Swerve.kDt);
   }
@@ -339,16 +342,20 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    //desiredState.optimize(getTurnWheelRotation2d());
+    // desiredState.optimize(getTurnWheelRotation2d());
 
     Logger.recordOutput("DesiredState_" + turningMotorChannel, desiredState.angle.getRotations());
 
+    // m_goal =
+    //     new TrapezoidProfile.State(
+    //         // updateTargetRotation(
+    //         //     desiredState.angle.getRotations(), getTurnWheelRotation2d().getRotations()),
+    //             desiredState.angle.getRotations(),
+    //         0);
+
     m_goal =
         new TrapezoidProfile.State(
-            // updateTargetRotation(
-            //     desiredState.angle.getRotations(), getTurnWheelRotation2d().getRotations()),
-                desiredState.angle.getRotations(),
-            0);
+            SmartDashboard.getNumber("SwerveTurn_" + turningMotorChannel, 0), 0);
 
     targetDriveVelocity = desiredState.speedMetersPerSecond;
 
@@ -381,7 +388,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     Logger.recordOutput("setpoint_" + turningMotorChannel, m_setpoint.position);
 
     m_setpoint = m_profile.calculate(Constants.Swerve.kDt, m_setpoint, m_goal);
-    Logger.recordOutput("setpoint_after_"+turningMotorChannel, m_setpoint.position);
+    Logger.recordOutput("setpoint_after_" + turningMotorChannel, m_setpoint.position);
 
     // Set setpoint of the linear system (position m, velocity m/s).
     turnLoop.setNextR(VecBuilder.fill(m_setpoint.position, m_setpoint.velocity));
@@ -394,7 +401,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     double nextturnVoltage = turnLoop.getU(0) + turn_kS * Math.signum(m_setpoint.velocity);
 
-    Logger.recordOutput("targetvoltage_"+turningMotorChannel, nextturnVoltage);
+    Logger.recordOutput("targetvoltage_" + turningMotorChannel, nextturnVoltage);
 
     io.setTurnMotorVoltage(nextturnVoltage);
 
