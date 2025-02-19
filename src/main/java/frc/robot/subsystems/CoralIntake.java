@@ -26,7 +26,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.CoralIntakeIO;
-import frc.robot.subsystems.io.CoralIntakeSim;
+import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;

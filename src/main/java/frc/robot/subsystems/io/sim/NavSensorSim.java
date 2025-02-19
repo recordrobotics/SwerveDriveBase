@@ -1,4 +1,4 @@
-package frc.robot.subsystems.io;
+package frc.robot.subsystems.io.sim;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -6,6 +6,7 @@ import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.util.Units;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.io.NavSensorIO;
 
 public class NavSensorSim implements NavSensorIO {
 

@@ -10,8 +10,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
-import frc.robot.subsystems.io.NavSensorReal;
-import frc.robot.subsystems.io.NavSensorSim;
+import frc.robot.subsystems.io.real.NavSensorReal;
+import frc.robot.subsystems.io.sim.NavSensorSim;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class PoseTracker extends SubsystemBase implements AutoCloseable {

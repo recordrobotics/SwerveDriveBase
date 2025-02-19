@@ -1,9 +1,10 @@
-package frc.robot.subsystems.io;
+package frc.robot.subsystems.io.real;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.io.ElevatorIO;
 
 public class ElevatorReal implements ElevatorIO {
 

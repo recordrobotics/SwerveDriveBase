@@ -1,4 +1,4 @@
-package frc.robot.subsystems.io;
+package frc.robot.subsystems.io.sim;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.io.ElevatorArmIO;
 
 public class ElevatorArmSim implements ElevatorArmIO {
 

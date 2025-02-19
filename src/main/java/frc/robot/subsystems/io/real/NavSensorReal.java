@@ -1,7 +1,8 @@
-package frc.robot.subsystems.io;
+package frc.robot.subsystems.io.real;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+import frc.robot.subsystems.io.NavSensorIO;
 
 public class NavSensorReal implements NavSensorIO {
 

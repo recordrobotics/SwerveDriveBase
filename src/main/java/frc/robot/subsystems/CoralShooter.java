@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.CoralShooterIO;
-import frc.robot.subsystems.io.CoralShooterSim;
+import frc.robot.subsystems.io.sim.CoralShooterSim;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;

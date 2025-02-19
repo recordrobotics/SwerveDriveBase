@@ -1,4 +1,4 @@
-package frc.robot.subsystems.io;
+package frc.robot.subsystems.io.sim;
 
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.io.AlgaeGrabberIO;
 
 public class AlgaeGrabberSim implements AlgaeGrabberIO {
 

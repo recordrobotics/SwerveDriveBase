@@ -18,7 +18,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.ElevatorArmIO;
-import frc.robot.subsystems.io.ElevatorArmSim;
+import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
