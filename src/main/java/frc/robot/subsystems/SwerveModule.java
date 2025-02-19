@@ -342,20 +342,20 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    // desiredState.optimize(getTurnWheelRotation2d());
+    desiredState.optimize(getTurnWheelRotation2d());
 
     Logger.recordOutput("DesiredState_" + turningMotorChannel, desiredState.angle.getRotations());
 
-    // m_goal =
-    //     new TrapezoidProfile.State(
-    //         // updateTargetRotation(
-    //         //     desiredState.angle.getRotations(), getTurnWheelRotation2d().getRotations()),
-    //             desiredState.angle.getRotations(),
-    //         0);
-
     m_goal =
         new TrapezoidProfile.State(
-            SmartDashboard.getNumber("SwerveTurn_" + turningMotorChannel, 0), 0);
+            updateTargetRotation(
+                desiredState.angle.getRotations(), getTurnWheelRotation2d().getRotations()),
+            // desiredState.angle.getRotations(),
+            0);
+
+    // m_goal =
+    //     new TrapezoidProfile.State(
+    //         SmartDashboard.getNumber("SwerveTurn_" + turningMotorChannel, 0), 0);
 
     targetDriveVelocity = desiredState.speedMetersPerSecond;
 

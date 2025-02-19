@@ -1,5 +1,7 @@
 package frc.robot.subsystems.io.sim;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.ChassisReference;
@@ -77,10 +79,9 @@ public class SwerveModuleSim implements SwerveModuleIO {
             0.001,
             0.001);
 
-    // TODO: fix divide by 8 workaround
     dcTurnMotorSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(m.TURN_KV / 180, m.TURN_KA / 180), dcTurnMotor);
+            LinearSystemId.createDCMotorSystem(dcTurnMotor, 0.001, TURN_GEAR_RATIO), dcDriveMotor);
 
     m_driveMotorSim = m_driveMotor.getSimState();
     m_turningMotorSim = m_turningMotor.getSimState();
@@ -177,15 +178,15 @@ public class SwerveModuleSim implements SwerveModuleIO {
   @Override
   public double getDriveMotorCurrentDrawAmps() {
     if (m_driveMotorSim.Orientation == ChassisReference.Clockwise_Positive)
-      return -m_driveMotor.getSupplyCurrent().getValueAsDouble();
-    else return m_driveMotor.getSupplyCurrent().getValueAsDouble();
+      return m_driveMotor.getSupplyCurrent().getValueAsDouble();
+    else return -m_driveMotor.getSupplyCurrent().getValueAsDouble();
   }
 
   @Override
   public double getTurnMotorCurrentDrawAmps() {
     if (m_turningMotorSim.Orientation == ChassisReference.Clockwise_Positive)
-      return -m_turningMotor.getSupplyCurrent().getValueAsDouble();
-    else return m_turningMotor.getSupplyCurrent().getValueAsDouble();
+      return m_turningMotor.getSupplyCurrent().getValueAsDouble();
+    else return -m_turningMotor.getSupplyCurrent().getValueAsDouble();
   }
 
   @Override
@@ -201,14 +202,14 @@ public class SwerveModuleSim implements SwerveModuleIO {
     m_turningMotorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
 
     var driveMotorVoltage = m_driveMotorSim.getMotorVoltage();
-    var turnMotorVoltage = m_turningMotorSim.getMotorVoltage();
+    var turnMotorVoltage = m_turningMotorSim.getMotorVoltageMeasure();
 
     Logger.recordOutput("SwerveSimTurnVoltage_" + m_turningMotor.getDeviceID(), turnMotorVoltage);
 
     dcDriveMotorSim.setInputVoltage(driveMotorVoltage);
     dcDriveMotorSim.update(periodicDt);
 
-    dcTurnMotorSim.setInputVoltage(turnMotorVoltage);
+    dcTurnMotorSim.setInputVoltage(turnMotorVoltage.in(Volts));
     dcTurnMotorSim.update(periodicDt);
 
     m_driveMotorSim.setRawRotorPosition(
@@ -216,8 +217,8 @@ public class SwerveModuleSim implements SwerveModuleIO {
     m_driveMotorSim.setRotorVelocity(
         Units.radiansToRotations(dcDriveMotorSim.getAngularVelocityRadPerSec()) * DRIVE_GEAR_RATIO);
 
-    m_turningMotorSim.setRawRotorPosition(dcTurnMotorSim.getAngularPositionRotations());
-    m_turningMotorSim.setRotorVelocity(
-        Units.radiansToRotations(dcTurnMotorSim.getAngularVelocityRadPerSec()));
+    m_turningMotorSim.setRawRotorPosition(
+        dcTurnMotorSim.getAngularPosition().times(TURN_GEAR_RATIO));
+    m_turningMotorSim.setRotorVelocity(dcTurnMotorSim.getAngularVelocity().times(TURN_GEAR_RATIO));
   }
 }
