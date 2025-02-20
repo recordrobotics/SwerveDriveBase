@@ -82,9 +82,9 @@ public class HybridScoreCoral extends SequentialCommandGroup {
             new InstantCommand(() -> {}),
             () -> !RobotContainer.coralShooter.hasCoral()),
         new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.hybridPattern),
-        AutoBuilder.pathfindToPose(shortestPose, Constants.HybridConstants.constraints),
+        AutoBuilder.pathfindToPose(shortestPose, Constants.HybridConstants.constraints).asProxy(),
         new LightsCommand(LightSegments.ELEVATOR, Constants.Lights.elevatorPattern),
-        AutoBuilder.followPath(shortestPath).alongWith(new ElevatorMove(reefCoralHeight)),
+        AutoBuilder.followPath(shortestPath).asProxy().alongWith(new ElevatorMove(reefCoralHeight)),
         new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
         new LightsCommand(LightSegments.ELEVATOR, Constants.Lights.OFF),
         new ElevatorMoveThenCoralShoot(reefCoralHeight));

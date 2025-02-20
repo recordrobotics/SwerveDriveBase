@@ -59,7 +59,8 @@ public class HybridSource extends SequentialCommandGroup {
 
     addCommands(
         new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.hybridPattern),
-        AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints),
+        AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints)
+            .asProxy(),
         new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
         new CoralIntakeFromSource());
   }

@@ -169,23 +169,19 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
         .onTrue(
             new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L1),
-                Set.of(drivetrain, elevator, coralShooter)));
+                () -> new HybridScoreCoral(ElevatorHeight.L1), Set.of(elevator, coralShooter)));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
         .onTrue(
             new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L2),
-                Set.of(drivetrain, elevator, coralShooter)));
+                () -> new HybridScoreCoral(ElevatorHeight.L2), Set.of(elevator, coralShooter)));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
         .onTrue(
             new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L3),
-                Set.of(drivetrain, elevator, coralShooter)));
+                () -> new HybridScoreCoral(ElevatorHeight.L3), Set.of(elevator, coralShooter)));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
         .onTrue(
             new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L4),
-                Set.of(drivetrain, elevator, coralShooter)));
+                () -> new HybridScoreCoral(ElevatorHeight.L4), Set.of(elevator, coralShooter)));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
         .onTrue(new CoralIntakeFromGround());
@@ -196,7 +192,7 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(
             new DeferredCommand(
-                () -> new HybridSource(), Set.of(drivetrain, elevator, coralShooter, coralIntake)));
+                () -> new HybridSource(), Set.of(elevator, coralShooter, coralIntake)));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae());
