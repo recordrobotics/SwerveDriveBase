@@ -101,7 +101,7 @@ public final class Constants {
     public static final double kV = 0.98364;
     public static final double kA = 0.086232;
 
-    public static final double ARM_START_POS = Units.degreesToRadians(-90); // Math.PI / 2;
+    public static final double ARM_START_POS = Units.degreesToRadians(-90);
 
     // TODO: verify correct
     // I got 36
@@ -511,9 +511,9 @@ public final class Constants {
     public static final double kP = 0.07;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kP_position = 0.07;
+    public static final double kP_position = 10.5;
     public static final double kI_position = 0.0;
-    public static final double kD_position = 0.0;
+    public static final double kD_position = 0.5;
     public static final double kS = 0.01;
     public static final double kV = 0.1;
     public static final double kA = 0.04;
@@ -532,6 +532,9 @@ public final class Constants {
 
     public static final double OUT_SPEED = 4; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
+
+    public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
+    public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
@@ -613,12 +616,12 @@ public final class Constants {
                 : LEDPattern.solid(Color.kBlue).blend(LEDPattern.solid(Color.kBlack));
 
     public static final LEDPattern elevatorPattern =
-        PULSATING_GREEN
+        LEDPattern.solid(Color.kWhite)
             .mask(
                 LEDPattern.progressMaskLayer(
                     () ->
-                        RobotContainer.elevator.getCurrentHeight() / Constants.Elevator.MAX_HEIGHT))
-            .overlayOn(PULSATING_ORANGE);
+                        RobotContainer.elevator.getCurrentHeight()
+                            / Constants.Elevator.MAX_HEIGHT));
     public static final Supplier<LEDPattern> coralIntakePattern =
         () ->
             LEDPattern.solid(

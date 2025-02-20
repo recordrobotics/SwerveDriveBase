@@ -28,8 +28,8 @@ public class ElevatorArmSim implements ElevatorArmIO {
           armMotor,
           Constants.ElevatorArm.ARM_GEAR_RATIO,
           Units.inchesToMeters(88), // TODO: make sure ARM_GEAR_RATIO is correct
-          -1.1,
-          Math.PI / 2,
+          Units.degreesToRadians(-95),
+          Units.degreesToRadians(95),
           true,
           Constants.ElevatorArm.ARM_START_POS,
           0.001,

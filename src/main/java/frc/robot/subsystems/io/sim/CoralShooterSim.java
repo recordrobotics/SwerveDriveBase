@@ -27,10 +27,8 @@ public class CoralShooterSim implements CoralShooterIO {
 
   private final DCMotorSim wheelSimModel =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(Constants.CoralShooter.kV, Constants.CoralShooter.kA),
-          wheelMotor,
-          0.01,
-          0.01);
+          LinearSystemId.createDCMotorSystem(wheelMotor, 0.001, Constants.CoralShooter.GEAR_RATIO),
+          wheelMotor);
 
   private final DigitalInput coralDetector =
       new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
@@ -120,7 +118,9 @@ public class CoralShooterSim implements CoralShooterIO {
     wheelSimModel.update(periodicDt);
 
     motorSim.iterate(
-        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec())
+            * 60.0
+            * Constants.CoralShooter.GEAR_RATIO,
         RobotController.getBatteryVoltage(),
         periodicDt);
   }

@@ -57,6 +57,10 @@ public class CoralShooter extends KillableSubsystem
     toggle(CoralShooterStates.OFF); // initialize as off
     DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
 
+    positionPid.setTolerance(
+        Constants.CoralShooter.AT_GOAL_POSITION_TOLERANCE,
+        Constants.CoralShooter.AT_GOAL_VELOCITY_TOLERANCE);
+
     sysIdRoutine =
         new SysIdRoutine(
             // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
@@ -164,9 +168,13 @@ public class CoralShooter extends KillableSubsystem
   @Override
   public void periodic() {
     if (currentState == CoralShooterStates.POSITION) {
-      double pidOutput = positionPid.calculate(getVelocity());
+      double pidOutput = positionPid.calculate(getPosition());
+
+      Logger.recordOutput("CoralShooter/PositionSetpoint", positionPid.getSetpoint().position);
+
       double feedforwardOutput =
           feedForward.calculateWithVelocities(lastSpeed, positionPid.getSetpoint().velocity);
+
       io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = positionPid.getSetpoint().velocity;
     } else {
