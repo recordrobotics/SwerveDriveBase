@@ -603,7 +603,7 @@ public final class Constants {
       STATE_VISUALIZER
     }
 
-    public static final Map<LightSegments, Pair<Integer, Integer>> PART_INDECIES =
+    public static final Map<LightSegments, Pair<Integer, Integer>> PART_INDICES =
         Map.of(
             LightSegments.ELEVATOR, Pair.of(0, 5),
             LightSegments.ALGAE_GRABBER, Pair.of(6, 10),

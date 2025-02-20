@@ -52,8 +52,8 @@ public class Lights extends SubsystemBase implements AutoCloseable {
     for (HashMap.Entry<LightSegments, Supplier<LEDPattern>> entry : patterns.entrySet()) {
       setRangePattern( // get the getValue get getkey getFirst AAAAAAAAAAAAAAAAAAAAAAA
           entry.getValue().get(),
-          Constants.Lights.PART_INDECIES.get(entry.getKey()).getFirst(),
-          Constants.Lights.PART_INDECIES.get(entry.getKey()).getSecond());
+          Constants.Lights.PART_INDICES.get(entry.getKey()).getFirst(),
+          Constants.Lights.PART_INDICES.get(entry.getKey()).getSecond());
     }
 
     // Send the latest LED color data to the LED strip
