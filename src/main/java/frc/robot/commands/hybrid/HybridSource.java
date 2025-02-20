@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
@@ -16,6 +17,7 @@ import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.LightsCommand;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
+import java.util.Set;
 
 @TriggerDistance(
     distance = Constants.HybridConstants.reefTriggerDistance,
@@ -23,6 +25,12 @@ import frc.robot.utils.TriggerProcessor.TriggerDistance;
 public class HybridSource extends SequentialCommandGroup {
   private Alert pathNotFoundAlert = new Alert("", AlertType.kError);
   private PathPlannerPath[] paths = new PathPlannerPath[] {};
+
+  public static DeferredCommand deferred() {
+    return new DeferredCommand(
+        () -> new HybridSource(),
+        Set.of(RobotContainer.elevator, RobotContainer.coralShooter, RobotContainer.coralIntake));
+  }
 
   public HybridSource() {
     try {

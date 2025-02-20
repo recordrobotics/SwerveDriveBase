@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -39,7 +38,6 @@ import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
-import java.util.Set;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -167,21 +165,13 @@ public class RobotContainer {
     //     .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L4));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
-        .onTrue(
-            new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L1), Set.of(elevator, coralShooter)));
+        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L1));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
-        .onTrue(
-            new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L2), Set.of(elevator, coralShooter)));
+        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L2));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
-        .onTrue(
-            new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L3), Set.of(elevator, coralShooter)));
+        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L3));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
-        .onTrue(
-            new DeferredCommand(
-                () -> new HybridScoreCoral(ElevatorHeight.L4), Set.of(elevator, coralShooter)));
+        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L4));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
         .onTrue(new CoralIntakeFromGround());
@@ -190,9 +180,7 @@ public class RobotContainer {
     //     .onTrue(new CoralIntakeFromSource());
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
-        .onTrue(
-            new DeferredCommand(
-                () -> new HybridSource(), Set.of(elevator, coralShooter, coralIntake)));
+        .onTrue(HybridSource.deferred());
 
     new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae());
