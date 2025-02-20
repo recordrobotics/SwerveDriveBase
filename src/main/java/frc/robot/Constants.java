@@ -13,7 +13,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,7 +22,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -33,7 +31,6 @@ import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ModuleConstants.MotorLocation;
 import frc.robot.utils.ModuleConstants.MotorType;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -588,44 +585,32 @@ public final class Constants {
 
     public static final Dimensionless MULTIPLIER = Percent.of(100);
 
-    public static final Time PULSATE_FREQUENCY = Seconds.of(1);
+    public static final Time PULSATE_FREQUENCY = Seconds.of(0.4);
+    public static final Time FLASH_FREQUENCY = Seconds.of(0.2);
 
-    public static final double FLASH_GREEN_TIME = 1; // seconds
+    public static final double SUCCESS_FLASH_TIME = 1; // seconds
 
-    public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.75); // TODO is good?
+    public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.3); // TODO is good?
     public static final Distance LED_SPACING = Meters.of(1.0 / 30.0); // 30 LEDs per meter
-
-    public static enum LightSegments {
-      ELEVATOR,
-      ALGAE_GRABBER,
-      CORAL_INTAKE,
-      CORAL_SHOOTER,
-      STATE_VISUALIZER
-    }
-
-    public static final Map<LightSegments, Pair<Integer, Integer>> PART_INDICES =
-        Map.of(
-            LightSegments.ELEVATOR, Pair.of(0, 5),
-            LightSegments.ALGAE_GRABBER, Pair.of(6, 10),
-            LightSegments.CORAL_INTAKE, Pair.of(11, 15),
-            LightSegments.CORAL_SHOOTER, Pair.of(16, 20),
-            LightSegments.STATE_VISUALIZER, Pair.of(21, 25));
 
     public static final LEDPattern PULSATING_ORANGE =
         LEDPattern.solid(Color.kOrange)
             .breathe(Constants.Lights.PULSATE_FREQUENCY)
             .blend(LEDPattern.solid(Color.kOrange));
+
     public static final LEDPattern PULSATING_GREEN =
         LEDPattern.solid(Color.kGreen)
             .breathe(Constants.Lights.PULSATE_FREQUENCY)
             .blend(LEDPattern.solid(Color.kGreen));
 
-    public static final LEDPattern OFF =
-        DriverStation.getAlliance().isPresent()
-            ? (DriverStation.getAlliance().get() == Alliance.Blue
-                ? LEDPattern.solid(Color.kBlue).blend(LEDPattern.solid(Color.kBlack))
-                : LEDPattern.solid(Color.kRed).blend(LEDPattern.solid(Color.kBlack)))
-            : LEDPattern.solid(Color.kBlack);
+    public static final LEDPattern FLASHING_GREEN =
+        LEDPattern.solid(Color.kGreen).blink(Constants.Lights.FLASH_FREQUENCY);
+
+    public static final Supplier<LEDPattern> ALLIANCE_COLOR =
+        () ->
+            DriverStationUtils.getCurrentAlliance() == Alliance.Red
+                ? LEDPattern.solid(Color.kRed).blend(LEDPattern.solid(Color.kBlack))
+                : LEDPattern.solid(Color.kBlue).blend(LEDPattern.solid(Color.kBlack));
 
     public static final LEDPattern elevatorPattern =
         PULSATING_GREEN
@@ -676,14 +661,6 @@ public final class Constants {
         () ->
             LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack)
                 .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-
-    public static final HashMap<LightSegments, Supplier<LEDPattern>> DEFAULT_PATTERNS =
-        new HashMap<>(
-            Map.of(
-                LightSegments.ELEVATOR, () -> OFF,
-                LightSegments.ALGAE_GRABBER, () -> OFF,
-                LightSegments.CORAL_INTAKE, () -> OFF,
-                LightSegments.CORAL_SHOOTER, () -> OFF));
   }
 
   public final class Control {
@@ -762,8 +739,8 @@ public final class Constants {
     public static final double FALCON_DRIVE_KV = 2.5609;
     public static final double FALCON_DRIVE_KA = 0.10075;
     public static final double FALCON_DRIVE_STD_STATE_VELOCITY = 3;
-    public static final double FALCON_DRIVE_STD_ENCODER_VELOCITY = 0.01;
-    public static final double FALCON_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 1.6999;
+    public static final double FALCON_DRIVE_STD_ENCODER_VELOCITY = 0.001;
+    public static final double FALCON_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.05;
     public static final double FALCON_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
 
     public static final double FALCON_TURN_KV = 1.7518;
@@ -772,10 +749,10 @@ public final class Constants {
     public static final double FALCON_TURN_STD_STATE_POSITION = 3;
     public static final double FALCON_TURN_STD_STATE_VELOCITY = 3;
     public static final double FALCON_TURN_STD_ENCODER_POSITION = 0.01;
-    public static final double FALCON_TURN_STD_ENCODER_VELOCITY = 0.01;
+    public static final double FALCON_TURN_STD_ENCODER_VELOCITY = 0.001;
     public static final double FALCON_TURN_REGULATOR_POSITION_ERROR_TOLERANCE = 0.02;
-    public static final double FALCON_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 1.6999;
-    public static final double FALCON_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
+    public static final double FALCON_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
+    public static final double FALCON_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
 
     public static final double KRAKEN_TURN_KV = 1.7519;
     public static final double KRAKEN_TURN_KA = 0.017189;
@@ -827,8 +804,8 @@ public final class Constants {
 
     public static final PPHolonomicDriveController PPDriveController =
         new PPHolonomicDriveController(
-            new PIDConstants(10, 0.0, 0.8), // Translation PID constants
-            new PIDConstants(6, 0.0, 0.0) // Rotation PID constants
+            new PIDConstants(11, 0.0, 2.2), // Translation PID constants
+            new PIDConstants(6, 0.0, 0.3) // Rotation PID constants
             );
 
     // Module Creation

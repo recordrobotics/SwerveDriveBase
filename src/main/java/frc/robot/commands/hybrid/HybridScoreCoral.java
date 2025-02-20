@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -15,11 +16,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.FieldPosition;
-import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ElevatorMove;
 import frc.robot.commands.ElevatorMoveThenCoralShoot;
-import frc.robot.commands.LightsCommand;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 import java.util.Set;
@@ -33,8 +32,7 @@ public class HybridScoreCoral extends SequentialCommandGroup {
 
   public static DeferredCommand deferred(ElevatorHeight reefCoralHeight) {
     return new DeferredCommand(
-        () -> new HybridScoreCoral(reefCoralHeight),
-        Set.of(RobotContainer.elevator, RobotContainer.coralShooter));
+        () -> new HybridScoreCoral(reefCoralHeight), Set.of(RobotContainer.coralShooter));
   }
 
   public HybridScoreCoral(ElevatorHeight reefCoralHeight) {
@@ -84,17 +82,22 @@ public class HybridScoreCoral extends SequentialCommandGroup {
       shortestPose = FlippingUtil.flipFieldPose(shortestPose);
     }
 
+    Command stateVisualizerLightsCommand =
+        RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.hybridPattern);
+    Command elevatorLightsCommand =
+        RobotContainer.lights.elevator.runPattern(Constants.Lights.elevatorPattern);
+
     addCommands(
         new ConditionalCommand( // cancel if no coral
             new InstantCommand(() -> this.cancel()),
             new InstantCommand(() -> {}),
             () -> !RobotContainer.coralShooter.hasCoral()),
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.hybridPattern),
+        new InstantCommand(() -> stateVisualizerLightsCommand.schedule()),
         AutoBuilder.pathfindToPose(shortestPose, Constants.HybridConstants.constraints).asProxy(),
-        new LightsCommand(LightSegments.ELEVATOR, Constants.Lights.elevatorPattern),
+        new InstantCommand(() -> elevatorLightsCommand.schedule()),
         AutoBuilder.followPath(shortestPath).asProxy().alongWith(new ElevatorMove(reefCoralHeight)),
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
-        new LightsCommand(LightSegments.ELEVATOR, Constants.Lights.OFF),
+        new InstantCommand(stateVisualizerLightsCommand::cancel),
+        new InstantCommand(elevatorLightsCommand::cancel),
         new ElevatorMoveThenCoralShoot(reefCoralHeight));
   }
 }

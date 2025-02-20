@@ -8,7 +8,6 @@ import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -71,17 +70,19 @@ public class SwerveModuleSim implements SwerveModuleIO {
         break;
     }
 
-    // TODO: fix divide by 19.4 workaround (why does this fix the motor sim?)
     dcDriveMotorSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(m.DRIVE_KV / 19.4, m.DRIVE_KA / 19.4),
-            dcDriveMotor.withReduction(DRIVE_GEAR_RATIO),
+            LinearSystemId.createDCMotorSystem(dcDriveMotor, 0.01, DRIVE_GEAR_RATIO),
+            dcDriveMotor,
             0.001,
             0.001);
 
     dcTurnMotorSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(dcTurnMotor, 0.001, TURN_GEAR_RATIO), dcDriveMotor);
+            LinearSystemId.createDCMotorSystem(dcTurnMotor, 0.001, TURN_GEAR_RATIO),
+            dcDriveMotor,
+            0.001,
+            0.001);
 
     m_driveMotorSim = m_driveMotor.getSimState();
     m_turningMotorSim = m_turningMotor.getSimState();
@@ -201,21 +202,20 @@ public class SwerveModuleSim implements SwerveModuleIO {
     m_driveMotorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
     m_turningMotorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
 
-    var driveMotorVoltage = m_driveMotorSim.getMotorVoltage();
+    var driveMotorVoltage = m_driveMotorSim.getMotorVoltageMeasure();
     var turnMotorVoltage = m_turningMotorSim.getMotorVoltageMeasure();
 
     Logger.recordOutput("SwerveSimTurnVoltage_" + m_turningMotor.getDeviceID(), turnMotorVoltage);
 
-    dcDriveMotorSim.setInputVoltage(driveMotorVoltage);
+    dcDriveMotorSim.setInputVoltage(driveMotorVoltage.in(Volts));
     dcDriveMotorSim.update(periodicDt);
 
     dcTurnMotorSim.setInputVoltage(turnMotorVoltage.in(Volts));
     dcTurnMotorSim.update(periodicDt);
 
     m_driveMotorSim.setRawRotorPosition(
-        dcDriveMotorSim.getAngularPositionRotations() * DRIVE_GEAR_RATIO);
-    m_driveMotorSim.setRotorVelocity(
-        Units.radiansToRotations(dcDriveMotorSim.getAngularVelocityRadPerSec()) * DRIVE_GEAR_RATIO);
+        dcDriveMotorSim.getAngularPosition().times(DRIVE_GEAR_RATIO));
+    m_driveMotorSim.setRotorVelocity(dcDriveMotorSim.getAngularVelocity().times(DRIVE_GEAR_RATIO));
 
     m_turningMotorSim.setRawRotorPosition(
         dcTurnMotorSim.getAngularPosition().times(TURN_GEAR_RATIO));

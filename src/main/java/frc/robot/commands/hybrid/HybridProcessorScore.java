@@ -4,11 +4,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
-import frc.robot.Constants.Lights.LightSegments;
-import frc.robot.commands.LightsCommand;
+import frc.robot.RobotContainer;
 import frc.robot.commands.ProcessorScore;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
@@ -29,10 +30,13 @@ public class HybridProcessorScore extends SequentialCommandGroup {
       pathNotFoundAlert.set(true);
     }
 
+    Command lightsCommand =
+        RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.hybridPattern);
+
     addCommands(
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.hybridPattern),
+        new InstantCommand(() -> lightsCommand.schedule()),
         AutoBuilder.pathfindThenFollowPath(path, Constants.HybridConstants.constraints),
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
+        new InstantCommand(lightsCommand::cancel),
         new ProcessorScore());
   }
 }

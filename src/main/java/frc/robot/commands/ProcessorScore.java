@@ -5,16 +5,29 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
-import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
 
 public class ProcessorScore extends SequentialCommandGroup {
+
+  /** NOTE! This command HAS to be deferred */
   public ProcessorScore() {
     addRequirements(RobotContainer.algaeGrabber);
+
     addCommands(
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.algaeScorePattern),
-        new LightsCommand(LightSegments.ALGAE_GRABBER, Constants.Lights.PULSATING_ORANGE));
+        new InstantCommand(
+            () ->
+                RobotContainer.lights
+                    .stateVisualizer
+                    .runPattern(Constants.Lights.algaeScorePattern)
+                    .schedule()),
+        new InstantCommand(
+            () ->
+                RobotContainer.lights
+                    .algaeGrabber
+                    .runPattern(Constants.Lights.PULSATING_ORANGE)
+                    .schedule()));
+
     if (RobotContainer.elevator.getHeight() == ElevatorHeight.GROUND_ALGAE) {
       addCommands(
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
@@ -28,8 +41,15 @@ public class ProcessorScore extends SequentialCommandGroup {
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)));
     }
     addCommands(
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
-        new LightsCommand(LightSegments.ALGAE_GRABBER, Constants.Lights.OFF),
-        new SuccessfulCompletion(false, true, false, false, true));
+        new InstantCommand(
+            () ->
+                RobotContainer.lights
+                    .algaeGrabber
+                    .runPattern(Constants.Lights.FLASHING_GREEN)
+                    .alongWith(
+                        RobotContainer.lights.stateVisualizer.runPattern(
+                            Constants.Lights.PULSATING_GREEN))
+                    .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)
+                    .schedule()));
   }
 }

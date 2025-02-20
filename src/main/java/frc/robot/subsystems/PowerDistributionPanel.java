@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PowerDistributionPanel extends SubsystemBase {
-  private static final PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
+  private static final PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
 
   /** frees up all hardware allocations */
   public void close() {

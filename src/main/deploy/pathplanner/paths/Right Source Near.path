@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9351462311385891,
-        "y": 1.6962364324097672
+        "x": 0.6505533808176241,
+        "y": 1.2867803129687834
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7312500000000002,
-        "y": 1.3827499999999997
+        "x": 0.6895033681172943,
+        "y": 1.3503266714231688
       },
       "prevControl": {
-        "x": 0.599295294114697,
-        "y": 1.1403734320677894
+        "x": 0.8588952946346132,
+        "y": 1.5553466813995933
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": 144.0
   },
   "reversed": false,
   "folder": "Source Approaches",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": 144.0
   },
   "useDefaultConstraints": true
 }

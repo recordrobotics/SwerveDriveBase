@@ -3,18 +3,22 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLED.ColorOrder;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotMap;
-import java.util.HashMap;
-import java.util.function.Supplier;
+import frc.robot.subsystems.lights.AlgaeGrabberLights;
+import frc.robot.subsystems.lights.CoralIntakeLights;
+import frc.robot.subsystems.lights.CoralShooterLights;
+import frc.robot.subsystems.lights.ElevatorLights;
+import frc.robot.subsystems.lights.StateVisualizerLights;
 
 public class Lights extends SubsystemBase implements AutoCloseable {
-  public HashMap<LightSegments, Supplier<LEDPattern>> patterns = Constants.Lights.DEFAULT_PATTERNS;
+
+  public AlgaeGrabberLights algaeGrabber;
+  public CoralIntakeLights coralIntake;
+  public CoralShooterLights coralShooter;
+  public ElevatorLights elevator;
+  public StateVisualizerLights stateVisualizer;
 
   private AddressableLED LEDs;
   private AddressableLEDBuffer buffer;
@@ -25,51 +29,21 @@ public class Lights extends SubsystemBase implements AutoCloseable {
     LEDs.setColorOrder(ColorOrder.kRGB);
     LEDs.setLength(Constants.Lights.LENGTH);
     LEDs.start();
-    off();
-  }
 
-  private void setGlobalPattern(LEDPattern pattern) {
-    setRangePattern(pattern, 0, Constants.Lights.LENGTH - 1);
-  }
-
-  /**
-   * @param mode the mode to set the LED strip to
-   * @param start the start index of the LED strip to run the pattern on (inclusive)
-   * @param end the end index of the LED strip to run the pattern on (inclusive)
-   */
-  private void setRangePattern(LEDPattern pattern, int start, int end) {
-    runPattern(pattern.atBrightness(Constants.Lights.MULTIPLIER), start, end).schedule();
-  }
-
-  public void off() {
-    setGlobalPattern(LEDPattern.solid(Color.kBlack));
+    algaeGrabber = new AlgaeGrabberLights(this);
+    coralIntake = new CoralIntakeLights(this);
+    coralShooter = new CoralShooterLights(this);
+    elevator = new ElevatorLights(this);
+    stateVisualizer = new StateVisualizerLights(this);
   }
 
   public void periodic() {
-    off(); // Clear the LED strip
-
-    // loop through LightSegments
-    for (HashMap.Entry<LightSegments, Supplier<LEDPattern>> entry : patterns.entrySet()) {
-      setRangePattern( // get the getValue get getkey getFirst AAAAAAAAAAAAAAAAAAAAAAA
-          entry.getValue().get(),
-          Constants.Lights.PART_INDICES.get(entry.getKey()).getFirst(),
-          Constants.Lights.PART_INDICES.get(entry.getKey()).getSecond());
-    }
-
     // Send the latest LED color data to the LED strip
     LEDs.setData(buffer);
   }
 
-  /**
-   * Creates a command that runs a pattern on the entire LED strip.
-   *
-   * @param pattern the LED pattern to run
-   * @param start the start index of the LED strip to run the pattern on (inclusive)
-   * @param end the end index of the LED strip to run the pattern on (inclusive)
-   */
-  private Command runPattern(LEDPattern pattern, int start, int end) {
-    return run(() -> pattern.applyTo(buffer.createView(start, end)))
-        .ignoringDisable(true); // TODO test view things
+  public AddressableLEDBuffer getBuffer() {
+    return buffer;
   }
 
   public void close() {

@@ -5,15 +5,14 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.FieldPosition;
-import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
-import frc.robot.commands.LightsCommand;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
 @TriggerDistance(
@@ -59,13 +58,16 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
             ? ElevatorHeight.HIGH_REEF_ALGAE
             : ElevatorHeight.LOW_REEF_ALGAE;
 
+    Command lightsCommand =
+        RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.removeAlgaePattern);
+
     addCommands(
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.removeAlgaePattern),
+        new InstantCommand(() -> lightsCommand.schedule()),
         AutoBuilder.pathfindToPose(
             shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
         new InstantCommand(() -> RobotContainer.elevator.moveTo(algaeHeight)),
         AutoBuilder.followPath(shortestPath),
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
+        new InstantCommand(lightsCommand::cancel),
         new ElevatorMoveThenAlgaeGrab(algaeHeight));
   }
 }

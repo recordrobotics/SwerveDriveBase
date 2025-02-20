@@ -7,14 +7,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
-import frc.robot.Constants.Lights.LightSegments;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CoralIntakeFromSource;
-import frc.robot.commands.LightsCommand;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 import java.util.Set;
@@ -65,11 +65,14 @@ public class HybridSource extends SequentialCommandGroup {
       }
     }
 
+    Command lightsCommand =
+        RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.hybridPattern);
+
     addCommands(
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.hybridPattern),
+        new InstantCommand(() -> lightsCommand.schedule()),
         AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints)
             .asProxy(),
-        new LightsCommand(LightSegments.STATE_VISUALIZER, Constants.Lights.OFF),
+        new InstantCommand(lightsCommand::cancel),
         new CoralIntakeFromSource());
   }
 }

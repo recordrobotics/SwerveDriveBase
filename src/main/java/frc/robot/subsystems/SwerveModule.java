@@ -223,7 +223,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
                 .kDt); // Nominal time between loops. 0.020 for TimedRobot, but can be lower if
     // using notifiers.
 
-    driveController.latencyCompensate(driveSystem, Constants.Swerve.kDt, 0.020015);
+    driveController.latencyCompensate(driveSystem, Constants.Swerve.kDt, 0.000015);
 
     this.driveLoop =
         new LinearSystemLoop<>(
