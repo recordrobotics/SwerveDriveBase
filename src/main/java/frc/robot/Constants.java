@@ -86,8 +86,8 @@ public final class Constants {
   }
 
   public final class Climber {
-    public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(10);
-    public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
+    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
+    public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
 
     public static final double MAX_ARM_VELOCITY = 8;
     public static final double MAX_ARM_ACCELERATION = 22;
@@ -101,10 +101,12 @@ public final class Constants {
     public static final double kV = 0.98364;
     public static final double kA = 0.086232;
 
-    public static final double ARM_START_POS = Units.degreesToRadians(45);
+    public static final double START_POS = Units.degreesToRadians(45);
+    public static final double EXTENDED_POS = Units.degreesToRadians(90);
+    public static final double RETRACTED_POS = Units.degreesToRadians(0);
 
     // TODO: verify correct
-    public static final double ARM_GEAR_RATIO = 58;
+    public static final double GEAR_RATIO = 58;
 
     // TODO: make correct
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
