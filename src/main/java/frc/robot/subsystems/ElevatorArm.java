@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.ElevatorArmIO;
@@ -61,7 +62,7 @@ public class ElevatorArm extends KillableSubsystem
     io.setArmPosition(
         Constants.ElevatorArm.ARM_GEAR_RATIO
             * Units.radiansToRotations(Constants.ElevatorArm.ARM_START_POS));
-    toggle(0);
+    toggle(ElevatorHeight.BOTTOM.getArmAngle());
 
     pid.setTolerance(0.15, 1.05);
 

@@ -155,21 +155,6 @@ public class RobotModel extends SubsystemBase {
 
       return coralPose;
     }
-
-    public Pose3d getCoralShooterTargetPose() {
-      Pose3d robotOrigin = new Pose3d();
-      if (RobotContainer.poseTracker != null)
-        robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
-      Pose3d coralShooterPose =
-          robotOrigin.transformBy(
-              new Transform3d(
-                  0.32,
-                  0.203,
-                  elevator.getLength() - 0.015,
-                  new Rotation3d(0, Units.degreesToRadians(22), 0)));
-
-      return coralShooterPose;
-    }
   }
 
   public static class CoralIntake implements RobotMechanism {
@@ -230,7 +215,7 @@ public class RobotModel extends SubsystemBase {
       poses[i] =
           new Pose3d(0, 0, 0, new Rotation3d())
               .rotateAround(
-                  new Translation3d(0, 0.334669, 0.456817),
+                  new Translation3d(0, 0.334669, 0.436),
                   new Rotation3d(Units.degreesToRadians(coralintake.getAngle()), 0, 0));
     }
 
@@ -243,7 +228,7 @@ public class RobotModel extends SubsystemBase {
               new Transform3d(
                   0,
                   0.334669,
-                  0.456817,
+                  0.436,
                   new Rotation3d(Units.degreesToRadians(coralintake.getAngle()), 0, 0)));
 
       return coralIntakePose.transformBy(
@@ -253,6 +238,12 @@ public class RobotModel extends SubsystemBase {
 
   public static class ElevatorArm implements RobotMechanism {
     public static final int POSE_COUNT = 1;
+
+    private RobotModel model;
+
+    public ElevatorArm(RobotModel model) {
+      this.model = model;
+    }
 
     @AutoLogOutput
     private LoggedMechanism2d mechanism =
@@ -306,21 +297,128 @@ public class RobotModel extends SubsystemBase {
 
     @Override
     public void updatePoses(Pose3d[] poses, int i) {
+      var pose =
+          new Pose3d(0, 0, 0, new Rotation3d())
+              .rotateAround(
+                  new Translation3d(0.318, 0, 0.575),
+                  new Rotation3d(0, -Units.degreesToRadians(elevatorarm.getAngle()), 0));
+      poses[i] =
+          new Pose3d(
+              pose.getTranslation()
+                  .plus(
+                      new Translation3d(
+                          0,
+                          0,
+                          model.elevator.elevator.getLength() - Constants.Elevator.MIN_LENGTH)),
+              pose.getRotation());
+    }
+
+    public Pose3d getCoralShooterTargetPose() {
+      Pose3d robotOrigin = new Pose3d();
+      if (RobotContainer.poseTracker != null)
+        robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
+
+      var pose =
+          new Pose3d(0, 0, 0, new Rotation3d())
+              .rotateAround(
+                  new Translation3d(0.318, 0, 0.575),
+                  new Rotation3d(0, -Units.degreesToRadians(elevatorarm.getAngle()), 0));
+      pose =
+          new Pose3d(
+              pose.getTranslation()
+                  .plus(
+                      new Translation3d(
+                          0,
+                          0,
+                          model.elevator.elevator.getLength() - Constants.Elevator.MIN_LENGTH)),
+              pose.getRotation());
+
+      var localCoral = new Pose3d(0.55, 0.2, -0.4, new Rotation3d());
+      localCoral =
+          localCoral.transformBy(new Transform3d(pose.getTranslation(), pose.getRotation()));
+
+      Pose3d coralShooterPose =
+          robotOrigin.transformBy(
+              new Transform3d(localCoral.getTranslation(), localCoral.getRotation()));
+
+      return coralShooterPose;
+    }
+  }
+
+  public static class Climber implements RobotMechanism {
+    public static final int POSE_COUNT = 1;
+
+    @AutoLogOutput
+    private LoggedMechanism2d mechanism =
+        new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
+
+    private LoggedMechanismRoot2d root =
+        mechanism.getRoot(
+            "climber_root",
+            Constants.Climber.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
+            Constants.Climber.ROOT_MECHANISM_POSE.getY());
+    private LoggedMechanismLigament2d climber =
+        root.append(
+            new LoggedMechanismLigament2d(
+                "climber",
+                Constants.Climber.LENGTH,
+                Constants.Climber.ANGLE_OFFSET,
+                3,
+                new Color8Bit(Color.kPurple)));
+
+    @AutoLogOutput
+    private LoggedMechanism2d mechanism_setpoint =
+        new LoggedMechanism2d(Constants.Frame.BUMPER_WIDTH, Constants.Frame.MAX_MECHANISM_HEIGHT);
+
+    private LoggedMechanismRoot2d root_setpoint =
+        mechanism_setpoint.getRoot(
+            "climber_root",
+            Constants.Climber.ROOT_MECHANISM_POSE.getX() + Constants.Frame.BUMPER_WIDTH / 2.0,
+            Constants.Climber.ROOT_MECHANISM_POSE.getY());
+    private LoggedMechanismLigament2d climber_setpoint =
+        root_setpoint.append(
+            new LoggedMechanismLigament2d(
+                "climber",
+                Constants.Climber.LENGTH,
+                Constants.Climber.ANGLE_OFFSET,
+                3,
+                new Color8Bit(Color.kViolet)));
+
+    public void update(double angle) {
+      climber.setAngle(Units.radiansToDegrees(Constants.Climber.ANGLE_OFFSET + angle));
+    }
+
+    public void updateSetpoint(double angle) {
+      climber_setpoint.setAngle(Units.radiansToDegrees(Constants.Climber.ANGLE_OFFSET + angle));
+    }
+
+    @Override
+    public int getPoseCount() {
+      return POSE_COUNT;
+    }
+
+    @Override
+    public void updatePoses(Pose3d[] poses, int i) {
       poses[i] =
           new Pose3d(0, 0, 0, new Rotation3d())
               .rotateAround(
                   new Translation3d(0, 0.334669, 0.456817),
-                  new Rotation3d(Units.degreesToRadians(elevatorarm.getAngle()), 0, 0));
+                  new Rotation3d(Units.degreesToRadians(climber.getAngle()), 0, 0));
     }
   }
 
   public final Elevator elevator = new Elevator();
   public final CoralIntake coralIntake = new CoralIntake();
-  public final ElevatorArm elevatorArm = new ElevatorArm();
+  public final ElevatorArm elevatorArm = new ElevatorArm(this);
+  public final Climber climber = new Climber();
 
   @AutoLogOutput
   public Pose3d[] mechanismPoses =
-      new Pose3d[Elevator.POSE_COUNT + CoralIntake.POSE_COUNT + ElevatorArm.POSE_COUNT];
+      new Pose3d
+          [Elevator.POSE_COUNT
+              + ElevatorArm.POSE_COUNT
+              + CoralIntake.POSE_COUNT
+              + Climber.POSE_COUNT];
 
   @AutoLogOutput public Pose2d robot = new Pose2d();
 
@@ -330,7 +428,7 @@ public class RobotModel extends SubsystemBase {
 
   @Override
   public void periodic() {
-    updatePoses(elevator, coralIntake, elevatorArm);
+    updatePoses(elevator, elevatorArm, coralIntake, climber);
   }
 
   private void updatePoses(RobotMechanism... mechanisms) {

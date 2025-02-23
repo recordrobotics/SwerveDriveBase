@@ -108,7 +108,7 @@ public class CoralIntakeToElevator extends SequentialCommandGroup implements Sim
                                     new Pose3d(RobotContainer.poseTracker.getEstimatedPosition())),
                             () ->
                                 RobotContainer.model
-                                    .elevator
+                                    .elevatorArm
                                     .getCoralShooterTargetPose()
                                     .relativeTo(
                                         new Pose3d(
@@ -127,7 +127,7 @@ public class CoralIntakeToElevator extends SequentialCommandGroup implements Sim
         new InstantCommand(
             () -> {
               coral.name = "CoralShooter/Coral";
-              coral.pose = () -> RobotContainer.model.elevator.getCoralShooterTargetPose();
+              coral.pose = () -> RobotContainer.model.elevatorArm.getCoralShooterTargetPose();
               try {
                 RobotContainer.coralShooter.getSimIO().setCoralDetectorSim(false);
               } catch (Exception e) {
