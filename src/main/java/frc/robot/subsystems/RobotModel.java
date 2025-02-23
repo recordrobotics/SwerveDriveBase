@@ -99,9 +99,6 @@ public class RobotModel extends SubsystemBase {
 
     @Override
     public void updatePoses(Pose3d[] poses, int i) {
-      // TODO: get formula for getting position of each stage based on overall height
-      // ^^^^^^ the first stage is always half the height of the second stage
-
       // First stage
       poses[i++] =
           new Pose3d(
