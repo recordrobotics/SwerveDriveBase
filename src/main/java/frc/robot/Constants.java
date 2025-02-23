@@ -566,7 +566,7 @@ public final class Constants {
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
-    public static final double LENGTH = 0.25; // TODO length of what???
+    public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
   }
 
   public final class CoralIntake {

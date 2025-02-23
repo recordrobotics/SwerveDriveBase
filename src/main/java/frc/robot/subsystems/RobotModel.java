@@ -51,7 +51,7 @@ public class RobotModel extends SubsystemBase {
         elevator.append(
             new LoggedMechanismLigament2d(
                 "coralShooter",
-                Constants.CoralShooter.LENGTH,
+                Constants.CoralShooter.HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER,
                 -90,
                 10,
                 new Color8Bit(Color.kGreen)));
@@ -79,7 +79,7 @@ public class RobotModel extends SubsystemBase {
         elevator_setpoint.append(
             new LoggedMechanismLigament2d(
                 "coralShooter",
-                Constants.CoralShooter.LENGTH,
+                Constants.CoralShooter.HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER,
                 -90,
                 10,
                 new Color8Bit(Color.kGreenYellow)));
