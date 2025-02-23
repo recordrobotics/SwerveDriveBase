@@ -785,28 +785,24 @@ public final class Constants {
     public static final double FALCON_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
     public static final double FALCON_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
 
-    public static final double KRAKEN_TURN_KV = 1.7519;
-    public static final double KRAKEN_TURN_KA = 0.017189;
-    public static final double KRAKEN_TURN_KS = 0.001;
-    public static final double KRAKEN_TURN_STD_STATE_POSITION = 2;
-    public static final double KRAKEN_TURN_STD_STATE_VELOCITY = 2;
-    public static final double KRAKEN_TURN_STD_ENCODER_POSITION = 0.1;
-    public static final double KRAKEN_TURN_STD_ENCODER_VELOCITY = 0.1;
-    public static final double KRAKEN_TURN_REGULATOR_POSITION_ERROR_TOLERANCE = 0.1;
-    public static final double KRAKEN_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 1.693;
-    public static final double KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
-
-    public static final double KRAKEN_TURN_KP = 2.3;
-    public static final double KRAKEN_TURN_KI = 0;
-    public static final double KRAKEN_TURN_KD = 0;
-
     public static final double KRAKEN_DRIVE_KS = 0.12373;
     public static final double KRAKEN_DRIVE_KV = 2.5609;
     public static final double KRAKEN_DRIVE_KA = 0.10075;
     public static final double KRAKEN_DRIVE_STD_STATE_VELOCITY = 3;
-    public static final double KRAKEN_DRIVE_STD_ENCODER_VELOCITY = 0.01;
-    public static final double KRAKEN_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 1.6999;
+    public static final double KRAKEN_DRIVE_STD_ENCODER_VELOCITY = 0.001;
+    public static final double KRAKEN_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.05;
     public static final double KRAKEN_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
+
+    public static final double KRAKEN_TURN_KV = 1.7518;
+    public static final double KRAKEN_TURN_KA = 0.015791;
+    public static final double KRAKEN_TURN_KS = 0.08889;
+    public static final double KRAKEN_TURN_STD_STATE_POSITION = 3;
+    public static final double KRAKEN_TURN_STD_STATE_VELOCITY = 3;
+    public static final double KRAKEN_TURN_STD_ENCODER_POSITION = 0.01;
+    public static final double KRAKEN_TURN_STD_ENCODER_VELOCITY = 0.001;
+    public static final double KRAKEN_TURN_REGULATOR_POSITION_ERROR_TOLERANCE = 0.02;
+    public static final double KRAKEN_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
+    public static final double KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
 
     // Wheel diameter
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
@@ -848,27 +844,27 @@ public final class Constants {
 
     // #region BACKUP
     public static final ModuleConstants BACKUP_frontLeftConstants =
-        new ModuleConstants(2, 1, 1, 0.633, frontLeftLocation, MotorType.Falcon, MotorType.Falcon);
+        new ModuleConstants(2, 1, 1, 0.633, frontLeftLocation, MotorType.Kraken, MotorType.Kraken);
 
     public static final ModuleConstants BACKUP_frontRightConstants =
-        new ModuleConstants(4, 3, 2, 0.848, frontRightLocation, MotorType.Falcon, MotorType.Falcon);
+        new ModuleConstants(4, 3, 2, 0.848, frontRightLocation, MotorType.Kraken, MotorType.Kraken);
     public static final ModuleConstants BACKUP_backLeftConstants =
-        new ModuleConstants(8, 7, 4, 0.857, backLeftLocation, MotorType.Falcon, MotorType.Falcon);
+        new ModuleConstants(8, 7, 4, 0.857, backLeftLocation, MotorType.Kraken, MotorType.Falcon);
     public static final ModuleConstants BACKUP_backRightConstants =
-        new ModuleConstants(6, 5, 3, 0.554, backRightLocation, MotorType.Falcon, MotorType.Falcon);
+        new ModuleConstants(6, 5, 3, 0.554, backRightLocation, MotorType.Kraken, MotorType.Kraken);
     // #endregion
 
     public static final ModuleConstants frontLeftConstants =
-        ModuleConstants.fromConfig(MotorLocation.FrontLeft, MotorType.Falcon);
+        ModuleConstants.fromConfig(MotorLocation.FrontLeft, MotorType.Kraken);
 
     public static final ModuleConstants frontRightConstants =
-        ModuleConstants.fromConfig(MotorLocation.FrontRight, MotorType.Falcon);
+        ModuleConstants.fromConfig(MotorLocation.FrontRight, MotorType.Kraken);
 
     public static final ModuleConstants backLeftConstants =
-        ModuleConstants.fromConfig(MotorLocation.BackLeft, MotorType.Falcon);
+        ModuleConstants.fromConfig(MotorLocation.BackLeft, MotorType.Kraken);
 
     public static final ModuleConstants backRightConstants =
-        ModuleConstants.fromConfig(MotorLocation.BackRight, MotorType.Falcon);
+        ModuleConstants.fromConfig(MotorLocation.BackRight, MotorType.Kraken);
   }
 
   public final class RobotState {

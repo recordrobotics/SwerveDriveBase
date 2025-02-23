@@ -2,10 +2,10 @@ package frc.robot;
 
 public final class RobotMap {
   public static final class Elevator {
-    public static final int MOTOR_LEFT_ID = 9;
-    public static final int MOTOR_RIGHT_ID = 10;
-    public static final int BOTTOM_ENDSTOP_ID = 8; // TODO get actual DIO port number
-    public static final int TOP_ENDSTOP_ID = 9; // TODO get actual DIO port number
+    public static final int MOTOR_LEFT_ID = 10;
+    public static final int MOTOR_RIGHT_ID = 11;
+    public static final int BOTTOM_ENDSTOP_ID = 4; // TODO get actual DIO port number
+    public static final int TOP_ENDSTOP_ID = 5; // TODO get actual DIO port number
   }
 
   public static final class CoralShooter {
@@ -14,13 +14,13 @@ public final class RobotMap {
   }
 
   public static final class AlgaeGrabber {
-    public static final int MOTOR_ID = 14; // TODO get actual CAN number
+    public static final int MOTOR_ID = 16; // TODO get actual CAN number
     public static final int LIMIT_SWITCH_ID = 6; // TODO get actual DIO port number
   }
 
   public static final class CoralIntake {
-    public static final int ARM_ID = 11;
-    public static final int WHEEL_ID = 12; // TODO get actual CAN number
+    public static final int ARM_ID = 12;
+    public static final int WHEEL_ID = 14; // TODO get actual CAN number
     public static final int LIMIT_SWITCH_ID = 10; // TODO get actual DIO port number
   }
 
@@ -33,6 +33,6 @@ public final class RobotMap {
   }
 
   public static final class Climber {
-    public static final int MOTOR_ID = 16; // TODO get actual CAN number
+    public static final int MOTOR_ID = 17; // TODO get actual CAN number
   }
 }
