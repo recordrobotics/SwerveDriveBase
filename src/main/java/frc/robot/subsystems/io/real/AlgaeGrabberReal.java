@@ -42,7 +42,7 @@ public class AlgaeGrabberReal implements AlgaeGrabberIO {
 
   @Override
   public double getWheelVoltage() {
-    return wheel.getAppliedOutput();
+    return wheel.getAppliedOutput() * wheel.getBusVoltage();
   }
 
   @Override

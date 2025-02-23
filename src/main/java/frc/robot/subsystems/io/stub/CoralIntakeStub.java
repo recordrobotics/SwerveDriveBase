@@ -28,6 +28,16 @@ public class CoralIntakeStub implements CoralIntakeIO {
   public void setArmPosition(double newValue) {}
 
   @Override
+  public double getWheelVoltage() {
+    return 0;
+  }
+
+  @Override
+  public double getArmVoltage() {
+    return 0;
+  }
+
+  @Override
   public double getWheelPosition() {
     return 0;
   }

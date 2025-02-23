@@ -65,6 +65,16 @@ public class CoralIntakeReal implements CoralIntakeIO {
   }
 
   @Override
+  public double getWheelVoltage() {
+    return wheel.getAppliedOutput() * wheel.getBusVoltage();
+  }
+
+  @Override
+  public double getArmVoltage() {
+    return arm.getMotorVoltage().getValueAsDouble();
+  }
+
+  @Override
   public double getArmVelocity() {
     return arm.getVelocity().getValueAsDouble();
   }

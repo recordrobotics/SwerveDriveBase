@@ -42,7 +42,7 @@ public class CoralShooterReal implements CoralShooterIO {
 
   @Override
   public double getVoltage() {
-    return motor.getAppliedOutput();
+    return motor.getAppliedOutput() * motor.getBusVoltage();
   }
 
   @Override

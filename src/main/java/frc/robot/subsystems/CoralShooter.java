@@ -55,7 +55,7 @@ public class CoralShooter extends KillableSubsystem
     this.io = io;
 
     toggle(CoralShooterStates.OFF); // initialize as off
-    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
+    //DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
 
     positionPid.setTolerance(
         Constants.CoralShooter.AT_GOAL_POSITION_TOLERANCE,
@@ -175,12 +175,12 @@ public class CoralShooter extends KillableSubsystem
       double feedforwardOutput =
           feedForward.calculateWithVelocities(lastSpeed, positionPid.getSetpoint().velocity);
 
-      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      //io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = positionPid.getSetpoint().velocity;
     } else {
       double pidOutput = pid.calculate(getVelocity());
       double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      //io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = pid.getSetpoint();
     }
 
@@ -202,13 +202,13 @@ public class CoralShooter extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
+    //DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
   }
 
   @Override
   public void kill() {
     toggle(CoralShooterStates.OFF);
-    io.setVoltage(0);
+    //io.setVoltage(0);
   }
 
   /** frees up all hardware allocations */

@@ -143,19 +143,21 @@ public final class Constants {
   }
 
   public final class AlgaeGrabber {
-    public static final double kP = 0.07; // TODO: Sysid tuning
-    public static final double kI = 0.0; // TODO: Sysid tuning
-    public static final double kD = 0.0; // TODO: Sysid tuning
-    public static final double kS = 0.02; // TODO: Sysid tuning
-    public static final double kV = 0.14; // TODO: Sysid tuning
-    public static final double kA = 0.09; // TODO: Sysid tuning
+    public static final double kP = 0.12871;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kS = 0.13106;
+    public static final double kV = 1.9165;
+    public static final double kA = 0.15486;
 
-    public static final double OUT_SPEED = 0.2; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -0.2; // TODO ^^^^^^^^^^^
+    public static final double OUT_SPEED = 10;
+    public static final double INTAKE_SPEED = -10;
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
     public static final double DEBOUNCE_TIME = 0.1; // TODO make correct
+
+    public static final double GEAR_RATIO = 30;
   }
 
   public enum ElevatorHeight {
@@ -536,17 +538,17 @@ public final class Constants {
   }
 
   public final class CoralShooter {
-    public static final double kP = 0.07;
+    public static final double kP = 0.011473;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kP_position = 10.5;
+    public static final double kP_position = 90.629;
     public static final double kI_position = 0.0;
-    public static final double kD_position = 0.5;
-    public static final double kS = 0.01;
-    public static final double kV = 0.1;
-    public static final double kA = 0.04;
+    public static final double kD_position = 11.032;
+    public static final double kS = 0.23442;
+    public static final double kV = 2.801;
+    public static final double kA = 0.30488;
 
-    public static final double GEAR_RATIO = 10.0; // TODO make correct
+    public static final double GEAR_RATIO = 10.0;
     public static final Distance DISTANCE_BETWEEN_AXLES = Inches.of(7.249923103040473);
     public static final Distance CORAL_OUTER_DIAMETER = Inches.of(4.5);
     public static final Distance WHEEL_DIAMETER =
@@ -574,16 +576,15 @@ public final class Constants {
     public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(10);
     public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
 
-    // TODO: need correct values
-    public static final double kP = 0.07;
+    public static final double kP = 0.037121;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kS = 0.12;
-    public static final double kV = 0.14;
-    public static final double kA = 0.03;
+    public static final double kS = 0.15522;
+    public static final double kV = 0.6172;
+    public static final double kA = 0.036292;
 
-    public static final double MAX_ARM_VELOCITY = 8;
-    public static final double MAX_ARM_ACCELERATION = 22;
+    public static final double MAX_ARM_VELOCITY = 0.2;
+    public static final double MAX_ARM_ACCELERATION = 0.2;
 
     public static final double REVERSE_SPEED = 4; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
@@ -600,9 +601,11 @@ public final class Constants {
 
     public static final double ARM_UP = Units.degreesToRadians(80);
     public static final double ARM_DOWN = -1.1;
-    public static final double ARM_START_POS = Units.degreesToRadians(-25); // Math.PI / 2;
+    public static final double ARM_START_POS = Units.degreesToRadians(-58.7); // Math.PI / 2;
 
-    public static final double ARM_GEAR_RATIO = 56.8889;
+    public static final double ARM_GEAR_RATIO = 56.8889; // 16:1 * 64/18
+
+    public static final double WHEEL_GEAR_RATIO = 10;
 
     public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
 

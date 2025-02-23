@@ -110,6 +110,16 @@ public class CoralIntakeSim implements CoralIntakeIO {
   }
 
   @Override
+  public double getWheelVoltage() {
+    return wheel.getAppliedOutput() * wheel.getBusVoltage();
+  }
+
+  @Override
+  public double getArmVoltage() {
+    return arm.getMotorVoltage().getValueAsDouble();
+  }
+
+  @Override
   public double getArmPosition() {
     return arm.getPosition().getValueAsDouble();
   }

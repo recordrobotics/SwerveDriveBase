@@ -18,6 +18,10 @@ public interface CoralIntakeIO extends AutoCloseable {
 
   public double getWheelVelocity();
 
+  public double getWheelVoltage();
+
+  public double getArmVoltage();
+
   public double getArmPosition();
 
   public double getArmVelocity();

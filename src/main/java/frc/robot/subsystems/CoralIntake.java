@@ -18,7 +18,6 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -98,8 +97,8 @@ public class CoralIntake extends KillableSubsystem
     sysIdRoutineArm =
         new SysIdRoutine(
             new SysIdRoutine.Config(
-                Volts.of(3).per(Second),
-                Volts.of(1.3),
+                Volts.of(3.6).per(Second),
+                Volts.of(2.4),
                 Seconds.of(1.2),
                 (state -> Logger.recordOutput("CoralIntake/Arm/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.in(Volts)), null, this));
@@ -136,12 +135,17 @@ public class CoralIntake extends KillableSubsystem
 
   @AutoLogOutput
   public double getWheelVelocity() {
-    return io.getWheelVelocity() / 60.0; /* RPM -> RPS */
+    return io.getWheelVelocity() / 60.0 / Constants.CoralIntake.WHEEL_GEAR_RATIO; /* RPM -> RPS */
   }
 
   @AutoLogOutput
   public double getWheelPosition() {
-    return io.getWheelPosition();
+    return io.getWheelPosition() / Constants.CoralIntake.WHEEL_GEAR_RATIO;
+  }
+
+  @AutoLogOutput
+  public double getWheelSetTo() {
+    return io.getWheelVoltage();
   }
 
   @AutoLogOutput
@@ -156,7 +160,7 @@ public class CoralIntake extends KillableSubsystem
 
   @AutoLogOutput
   public double getArmSetTo() {
-    return io.getArmPercent() * RobotController.getBatteryVoltage();
+    return io.getArmVoltage();
   }
 
   /** Set the current shooter speed on both wheels to speed */
@@ -207,7 +211,7 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void periodic() {
-    // toggleArm(SmartDashboard.getNumber("CoralIntakeArm", 0));
+    toggleArm(SmartDashboard.getNumber("CoralIntakeArm", 0));
 
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
@@ -258,10 +262,10 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Coral Intake Motor", io.getWheelPercent(), -1, 1)
-        .subscribe(io::setWheelPercent);
-    DashboardUI.Test.addSlider("Coral Intake Arm Pos", io.getArmPosition(), -1, 1)
-        .subscribe(this::toggleArm);
+    // DashboardUI.Test.addSlider("Coral Intake Motor", io.getWheelPercent(), -1, 1)
+    //     .subscribe(io::setWheelPercent);
+    // DashboardUI.Test.addSlider("Coral Intake Arm Pos", io.getArmPosition(), -1, 1)
+    //     .subscribe(this::toggleArm);
   }
 
   @Override

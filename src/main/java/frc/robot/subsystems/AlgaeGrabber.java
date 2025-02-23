@@ -62,12 +62,12 @@ public class AlgaeGrabber extends KillableSubsystem
 
   @AutoLogOutput
   public double getWheelVelocity() {
-    return io.getWheelVelocity() / 60.0; /* RPM -> RPS */
+    return io.getWheelVelocity() / 60.0 / Constants.AlgaeGrabber.GEAR_RATIO; /* RPM -> RPS */
   }
 
   @AutoLogOutput
   public double getWheelPosition() {
-    return io.getWheelPosition();
+    return io.getWheelPosition() / Constants.AlgaeGrabber.GEAR_RATIO;
   }
 
   @AutoLogOutput
@@ -107,7 +107,7 @@ public class AlgaeGrabber extends KillableSubsystem
   public void periodic() {
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    //io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
 
     lastSpeed = pid.getSetpoint();
     debounced_value = !m_debouncer.calculate(io.getAlgaeDetector());
@@ -128,14 +128,14 @@ public class AlgaeGrabber extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Algae on the Elevator", io.getWheelPercent(), -1, 1)
-        .subscribe(io::setWheelPercent);
+    // DashboardUI.Test.addSlider("Algae on the Elevator", io.getWheelPercent(), -1, 1)
+    //     .subscribe(io::setWheelPercent);
   }
 
   @Override
   public void kill() {
     toggle(AlgaeGrabberStates.OFF);
-    io.setWheelVoltage(0);
+    //io.setWheelVoltage(0);
   }
 
   /** frees up all hardware allocations */

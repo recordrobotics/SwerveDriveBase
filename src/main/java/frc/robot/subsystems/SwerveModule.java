@@ -381,7 +381,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     double nextDriveVoltage = driveLoop.getU(0) + drive_kS * Math.signum(m_setpoint.velocity);
 
-    io.setDriveMotorVoltage(nextDriveVoltage);
+    // io.setDriveMotorVoltage(nextDriveVoltage);
 
     // Get next setpoint from profile.
 
@@ -403,7 +403,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     Logger.recordOutput("targetvoltage_" + turningMotorChannel, nextturnVoltage);
 
-    io.setTurnMotorVoltage(nextturnVoltage);
+    // io.setTurnMotorVoltage(nextturnVoltage);
 
     Logger.recordOutput("GoalPos_" + turningMotorChannel, m_goal.position);
 
