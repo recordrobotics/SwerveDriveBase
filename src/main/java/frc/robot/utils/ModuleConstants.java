@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
+import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -196,7 +197,10 @@ public class ModuleConstants {
   }
 
   private static ModuleConstants getDefault(MotorLocation location) {
-    System.out.println("[MODULE CONSTANTS] Config forced to load default for location " + location);
+    Notifications.send(
+        NotificationLevel.ERROR,
+        "MODULE CONSTANTS",
+        "Config forced to load default for location " + location);
     switch (location) {
       case FrontLeft:
         return Constants.Swerve.BACKUP_frontLeftConstants;

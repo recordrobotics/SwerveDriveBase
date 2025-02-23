@@ -10,17 +10,19 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoPath {
 
   public AutoPath() {
-    // TODO figure out if this is correct
     RobotConfig config = Constants.Swerve.PPDefaultConfig;
     try {
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
       e.printStackTrace();
+      Notifications.send(
+          NotificationLevel.ERROR, "AutoPath failed to load config", "Error message in console");
     }
 
     // Registering named commands (so that the pathplanner can call them by name)

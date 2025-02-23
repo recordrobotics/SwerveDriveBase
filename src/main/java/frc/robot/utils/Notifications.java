@@ -1,34 +1,43 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import frc.robot.utils.libraries.Elastic;
 import frc.robot.utils.libraries.Elastic.Notification;
 import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Notifications {
-  // Fake enum
-  public static final int INFO = 0;
-  public static final int WARNING = 1;
-  public static final int ERROR = 2;
+  private static List<Alert> alerts = new ArrayList<>();
 
-  static void send(int type, String title, String description) {
+  public static void send(NotificationLevel type, String title, String description) {
     send(type, title, description, 0); // Yes 0 does work it makes it infinite
   }
 
-  static void send(int type, String title, String description, int desplayTimeMillis) {
-    NotificationLevel level = NotificationLevel.INFO;
-    switch (type) {
-      case 0:
-        level = NotificationLevel.INFO;
+  public static void send(
+      NotificationLevel level, String title, String description, int desplayTimeMillis) {
+    Notification notification = new Notification(level, title, description, desplayTimeMillis);
+    Elastic.sendNotification(notification);
+
+    AlertType alertType;
+    switch (level) {
+      case INFO:
+        alertType = AlertType.kInfo;
         break;
-      case 1:
-        level = NotificationLevel.WARNING;
+      case WARNING:
+        alertType = AlertType.kWarning;
         break;
-      case 2:
-        level = NotificationLevel.ERROR;
+      case ERROR:
+        alertType = AlertType.kError;
+        break;
+      default:
+        alertType = AlertType.kInfo;
         break;
     }
 
-    Notification notification = new Notification(level, title, description, desplayTimeMillis);
-    Elastic.sendNotification(notification);
+    Alert alert = new Alert(title + " - " + description, alertType);
+    alerts.add(alert);
+    alert.set(true);
   }
 }
