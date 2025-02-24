@@ -89,21 +89,14 @@ public final class Constants {
     public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
     public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
 
-    public static final double MAX_ARM_VELOCITY = 8;
-    public static final double MAX_ARM_ACCELERATION = 22;
-
-    // TODO: Sysid tuning
-    public static final double kP = 7.6661;
-    public static final double kI = 0;
-    public static final double kD = 0.80357;
-    public static final double kG = 0.33478;
-    public static final double kS = 0.0094404;
-    public static final double kV = 0.98364;
-    public static final double kA = 0.086232;
+    public static final double EXTEND_VOLTAGE = 3.0; // TODO: make correct
+    public static final double CLIMB_VOLTAGE = 5.0; // TODO: make correct
 
     public static final double START_POS = Units.degreesToRadians(45);
     public static final double EXTENDED_POS = Units.degreesToRadians(90);
     public static final double RETRACTED_POS = Units.degreesToRadians(0);
+
+    public static final double DEADBAND = 0.05; // TODO: make correct
 
     // TODO: verify correct
     public static final double GEAR_RATIO = 58;
@@ -113,6 +106,9 @@ public final class Constants {
     // TODO: make correct
     public static final double LENGTH = 0.431;
     public static final double ANGLE_OFFSET = 0;
+
+    public static final double kV = 0.1;
+    public static final double kA = 0.1;
   }
 
   public final class ElevatorArm {
