@@ -1,6 +1,8 @@
 package frc.robot.commands.simulation;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -46,6 +48,25 @@ public class CoralShooterToReef extends SequentialCommandGroup implements Simula
                       RobotContainer.model.removeCoral(coral);
                       coral = null;
                     });
+              }
+
+              Pose3d coralPose = coral.pose.get();
+
+              double dt1 =
+                  Math.abs(
+                      reefPose.getPose().getRotation().getY()
+                          - MathUtil.angleModulus(coralPose.getRotation().getY()));
+              double dt2 =
+                  Math.abs(
+                      reefPose.getPose().getRotation().getY()
+                          - MathUtil.angleModulus(coralPose.getRotation().getY() + Math.PI));
+
+              if (dt2 < dt1) {
+                coral.pose =
+                    () ->
+                        new Pose3d(
+                            coralPose.getTranslation(),
+                            coralPose.getRotation().plus(new Rotation3d(0, Math.PI, 0)));
               }
 
               return new PoseAnimator(
