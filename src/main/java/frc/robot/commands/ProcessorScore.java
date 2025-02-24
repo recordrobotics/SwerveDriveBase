@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -7,8 +8,14 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
+import java.util.Set;
 
 public class ProcessorScore extends SequentialCommandGroup {
+
+  public static DeferredCommand deferred() {
+    return new DeferredCommand(
+        () -> new ProcessorScore(), Set.of(RobotContainer.algaeGrabber, RobotContainer.elevator));
+  }
 
   /** NOTE! This command HAS to be deferred */
   public ProcessorScore() {
@@ -32,13 +39,15 @@ public class ProcessorScore extends SequentialCommandGroup {
       addCommands(
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
           new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME),
-          new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)));
+          new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),
+          new ElevatorMove(ElevatorHeight.BOTTOM));
     } else {
       addCommands(
           new ElevatorMove(ElevatorHeight.PROCESSOR_SCORE),
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT)),
           new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME),
-          new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)));
+          new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),
+          new ElevatorMove(ElevatorHeight.BOTTOM));
     }
     addCommands(
         new InstantCommand(

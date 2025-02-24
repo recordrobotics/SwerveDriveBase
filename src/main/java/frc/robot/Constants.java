@@ -168,7 +168,7 @@ public final class Constants {
     L4(1.32, Units.degreesToRadians(22)),
     BOTTOM(0, Units.degreesToRadians(-90)),
     GROUND_ALGAE(0.465, Units.degreesToRadians(60)),
-    PROCESSOR_SCORE(0.465, Units.degreesToRadians(-60));
+    PROCESSOR_SCORE(0.05, Units.degreesToRadians(-60));
 
     private double height;
     private double armAngleRadians;
@@ -224,6 +224,51 @@ public final class Constants {
         closest = SOURCE_13;
       }
       return closest;
+    }
+  }
+
+  public enum ProcessorPose {
+    Blue(0),
+    Red(1);
+
+    private final int side;
+
+    private ProcessorPose(int side) {
+      this.side = side;
+    }
+
+    public static ProcessorPose closestTo(Pose3d pose, double maxDistance) {
+      ProcessorPose closest = null;
+      double closestDistance = Double.MAX_VALUE;
+      for (ProcessorPose processor : ProcessorPose.values()) {
+        double distance = processor.getPose().getTranslation().getDistance(pose.getTranslation());
+        if (distance <= maxDistance && distance < closestDistance) {
+          closest = processor;
+          closestDistance = distance;
+        }
+      }
+      return closest;
+    }
+
+    public Pose3d getPose() {
+      switch (side) {
+        case 0:
+          return new Pose3d(
+              new Translation3d(
+                  FieldConstants.TEAM_BLUE_PROCESSOR.getX(),
+                  FieldConstants.TEAM_BLUE_PROCESSOR.getY(),
+                  0.1),
+              new Rotation3d(0, 0, 0));
+        case 1:
+          return new Pose3d(
+              new Translation3d(
+                  FieldConstants.TEAM_RED_PROCESSOR.getX(),
+                  FieldConstants.TEAM_RED_PROCESSOR.getY(),
+                  0.1),
+              new Rotation3d(0, 0, 0));
+        default:
+          return new Pose3d();
+      }
     }
   }
 

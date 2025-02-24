@@ -130,6 +130,6 @@ public class JoystickXbox extends AbstractControl {
 
   @Override
   public Boolean getClimb() {
-    return xbox_controller.getPOV() == 0;
+    return xbox_controller.getRawButton(1);
   }
 }

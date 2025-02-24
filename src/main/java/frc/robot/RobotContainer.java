@@ -19,6 +19,7 @@ import frc.robot.commands.CoralIntakeFromGround;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
 // Local imports
 import frc.robot.commands.KillSpecified;
+import frc.robot.commands.ProcessorScore;
 import frc.robot.commands.hybrid.HybridScoreCoral;
 import frc.robot.commands.hybrid.HybridSource;
 import frc.robot.commands.manual.ManualSwerve;
@@ -186,8 +187,9 @@ public class RobotContainer {
 
     new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae())
         .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.HIGH_REEF_ALGAE));
+    new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae())
+        .onTrue(ProcessorScore.deferred());
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getClimb());
 
     // Simulation control commands
