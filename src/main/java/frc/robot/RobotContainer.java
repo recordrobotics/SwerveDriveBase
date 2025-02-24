@@ -16,11 +16,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGround;
+import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.hybrid.HybridScoreCoral;
 import frc.robot.commands.hybrid.HybridSource;
 import frc.robot.commands.manual.ManualSwerve;
+import frc.robot.commands.simulation.PlaceRandomGroundAlgae;
 import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
@@ -182,13 +184,16 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(HybridSource.deferred());
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae());
+    new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgae())
+        .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.HIGH_REEF_ALGAE));
+
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae());
     new Trigger(() -> DashboardUI.Overview.getControl().getClimb());
 
     // Simulation control commands
     if (Constants.RobotState.getMode() == Mode.SIM) {
       new Trigger(() -> simulationController.getRawButton(1)).onTrue(new PlaceRandomGroundCoral());
+      new Trigger(() -> simulationController.getRawButton(2)).onTrue(new PlaceRandomGroundAlgae());
     }
   }
 

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
+import frc.robot.commands.simulation.AlgaeGrabberFromReef;
 import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
 
 public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
@@ -26,7 +27,8 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
         new ElevatorMove(targetHeight),
         new InstantCommand(() -> algaeGrabberLightsCommand.schedule()),
         new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
-        new WaitUntilCommand(RobotContainer.algaeGrabber::hasAlgae),
+        new AlgaeGrabberFromReef()
+            .simulateFor(new WaitUntilCommand(RobotContainer.algaeGrabber::hasAlgae)),
         new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),
         new InstantCommand(algaeGrabberLightsCommand::cancel),
         new InstantCommand(

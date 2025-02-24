@@ -336,6 +336,58 @@ public class RobotModel extends SubsystemBase {
       return coralShooterPose.transformBy(
           new Transform3d(0, 0, 0, new Rotation3d(0, Units.degreesToRadians(180 + 90 + 22), 0)));
     }
+
+    public Pose3d getAlgaeGrabberTargetPoseTop() {
+      Pose3d robotOrigin = new Pose3d();
+      if (RobotContainer.poseTracker != null)
+        robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
+
+      var pose =
+          new Pose3d(0.32 + 0.18, -0.11, 0.68, new Rotation3d())
+              .rotateAround(
+                  new Translation3d(0.32, 0, 0.58),
+                  new Rotation3d(0, -Units.degreesToRadians(elevatorarm.getAngle()), 0));
+      pose =
+          new Pose3d(
+              pose.getTranslation()
+                  .plus(
+                      new Translation3d(
+                          0,
+                          0,
+                          model.elevator.elevator.getLength() - Constants.Elevator.MIN_LENGTH)),
+              pose.getRotation());
+
+      Pose3d algaeGrabberPose =
+          robotOrigin.transformBy(new Transform3d(pose.getTranslation(), pose.getRotation()));
+
+      return algaeGrabberPose.transformBy(new Transform3d(0, 0, 0, new Rotation3d()));
+    }
+
+    public Pose3d getAlgaeGrabberTargetPoseBottom() {
+      Pose3d robotOrigin = new Pose3d();
+      if (RobotContainer.poseTracker != null)
+        robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
+
+      var pose =
+          new Pose3d(0.32 + 0.18, -0.11, 0.48, new Rotation3d())
+              .rotateAround(
+                  new Translation3d(0.32, 0, 0.58),
+                  new Rotation3d(0, -Units.degreesToRadians(elevatorarm.getAngle()), 0));
+      pose =
+          new Pose3d(
+              pose.getTranslation()
+                  .plus(
+                      new Translation3d(
+                          0,
+                          0,
+                          model.elevator.elevator.getLength() - Constants.Elevator.MIN_LENGTH)),
+              pose.getRotation());
+
+      Pose3d algaeGrabberPose =
+          robotOrigin.transformBy(new Transform3d(pose.getTranslation(), pose.getRotation()));
+
+      return algaeGrabberPose.transformBy(new Transform3d(0, 0, 0, new Rotation3d()));
+    }
   }
 
   public static class Climber implements RobotMechanism {
@@ -452,7 +504,23 @@ public class RobotModel extends SubsystemBase {
     }
   }
 
+  public static class NamedAlgae {
+    public String name;
+    public Supplier<Pose3d> pose;
+
+    public NamedAlgae(String name, Pose3d pose) {
+      this.name = name;
+      this.pose = () -> pose;
+    }
+
+    public NamedAlgae(String name, Supplier<Pose3d> pose) {
+      this.name = name;
+      this.pose = pose;
+    }
+  }
+
   private final List<NamedCoral> coralPositions = new ArrayList<>();
+  private final List<NamedAlgae> algaePositions = new ArrayList<>();
 
   public NamedCoral[] getCorals() {
     return coralPositions.toArray(new NamedCoral[0]);
@@ -463,6 +531,19 @@ public class RobotModel extends SubsystemBase {
     Pose3d[] poses = new Pose3d[coralPositions.size()];
     for (int i = 0; i < coralPositions.size(); i++) {
       poses[i] = coralPositions.get(i).pose.get();
+    }
+    return poses;
+  }
+
+  public NamedAlgae[] getAlgaes() {
+    return algaePositions.toArray(new NamedAlgae[0]);
+  }
+
+  @AutoLogOutput
+  private Pose3d[] getAlgaePositions() {
+    Pose3d[] poses = new Pose3d[algaePositions.size()];
+    for (int i = 0; i < algaePositions.size(); i++) {
+      poses[i] = algaePositions.get(i).pose.get();
     }
     return poses;
   }
@@ -484,6 +565,29 @@ public class RobotModel extends SubsystemBase {
     for (NamedCoral coral : coralPositions) {
       if (coral.name.equals(name)) {
         return coral;
+      }
+    }
+
+    return null;
+  }
+
+  public void addAlgae(NamedAlgae algae) {
+    var a = getAlgae(algae.name);
+    if (a != null) {
+      algaePositions.remove(a);
+    }
+
+    algaePositions.add(algae);
+  }
+
+  public void removeAlgae(NamedAlgae algae) {
+    algaePositions.remove(algae);
+  }
+
+  public NamedAlgae getAlgae(String name) {
+    for (NamedAlgae algae : algaePositions) {
+      if (algae.name.equals(name)) {
+        return algae;
       }
     }
 

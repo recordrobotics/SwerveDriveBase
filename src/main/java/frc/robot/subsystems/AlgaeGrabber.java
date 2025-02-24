@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.AlgaeGrabberIO;
+import frc.robot.subsystems.io.sim.AlgaeGrabberSim;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -50,6 +51,14 @@ public class AlgaeGrabber extends KillableSubsystem
                 null,
                 (state -> Logger.recordOutput("AlgaeGrabber/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.in(Volts)), null, this));
+  }
+
+  public AlgaeGrabberSim getSimIO() throws Exception {
+    if (io instanceof AlgaeGrabberSim) {
+      return (AlgaeGrabberSim) io;
+    } else {
+      throw new Exception("AlgaeGrabberIO is not a simulation");
+    }
   }
 
   private final SysIdRoutine sysIdRoutine;

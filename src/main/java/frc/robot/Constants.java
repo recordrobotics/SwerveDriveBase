@@ -164,7 +164,7 @@ public final class Constants {
     L2(0.44, Units.degreesToRadians(-95)),
     LOW_REEF_ALGAE(0.465, Units.degreesToRadians(-60)),
     L3(0.88, Units.degreesToRadians(-95)),
-    HIGH_REEF_ALGAE(1.035, Units.degreesToRadians(-60)),
+    HIGH_REEF_ALGAE(0.735, Units.degreesToRadians(-60)),
     L4(1.32, Units.degreesToRadians(22)),
     BOTTOM(0, Units.degreesToRadians(-90)),
     GROUND_ALGAE(0.465, Units.degreesToRadians(60)),
@@ -224,6 +224,93 @@ public final class Constants {
         closest = SOURCE_13;
       }
       return closest;
+    }
+  }
+
+  public enum ReefAlgaePose {
+    BABL(0, 0),
+    BABH(0, 1),
+    BCDL(1, 0),
+    BCDH(1, 1),
+    BEFL(2, 0),
+    BEFH(2, 1),
+    BGHL(3, 0),
+    BGHH(3, 1),
+    BIJL(4, 0),
+    BIJH(4, 1),
+    BKLL(5, 0),
+    BKLH(5, 1),
+    RABL(6, 0),
+    RABH(6, 1),
+    RCDL(7, 0),
+    RCDH(7, 1),
+    REFL(8, 0),
+    REFH(8, 1),
+    RGHL(9, 0),
+    RGHH(9, 1),
+    RIJL(10, 0),
+    RIJH(10, 1),
+    RKLL(11, 0),
+    RKLH(11, 1);
+
+    private final int side;
+    private final int height;
+
+    private ReefAlgaePose(int side, int height) {
+      this.side = side;
+      this.height = height;
+    }
+
+    public static ReefAlgaePose closestTo(Pose3d pose, double maxDistance) {
+      ReefAlgaePose closest = null;
+      double closestDistance = Double.MAX_VALUE;
+      for (ReefAlgaePose algae : ReefAlgaePose.values()) {
+        double distance = algae.getPose().getTranslation().getDistance(pose.getTranslation());
+        if (distance <= maxDistance && distance < closestDistance) {
+          closest = algae;
+          closestDistance = distance;
+        }
+      }
+      return closest;
+    }
+
+    private static final double RADIUS = 0.7;
+
+    public Pose3d getPose() {
+      double sideRelative = side % 6;
+      double theta = -sideRelative * Math.PI / 3;
+
+      double cx;
+      double cy;
+
+      if (side < 6) {
+        cx = FieldConstants.TEAM_BLUE_REEF_CENTER.getX();
+        cy = FieldConstants.TEAM_BLUE_REEF_CENTER.getY();
+      } else {
+        cx = FieldConstants.TEAM_RED_REEF_CENTER.getX();
+        cy = FieldConstants.TEAM_RED_REEF_CENTER.getY();
+      }
+
+      double radius = RADIUS;
+
+      double x = cx - radius * Math.cos(theta);
+      double y = cy + radius * Math.sin(theta);
+
+      double height;
+      double yaw = -theta;
+      switch (this.height) {
+        case 0:
+          height = 0.91;
+          break;
+        case 1:
+          height = 1.31;
+          break;
+        default:
+          height = 0.0;
+          break;
+      }
+
+      return new Pose3d(new Translation3d(x, y, height), new Rotation3d(0, 0, yaw));
     }
   }
 

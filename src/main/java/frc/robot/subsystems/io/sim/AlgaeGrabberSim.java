@@ -45,7 +45,7 @@ public class AlgaeGrabberSim implements AlgaeGrabberIO {
     wheelSim = new SparkMaxSim(wheel, wheelMotor);
 
     if (algaeDetectorSim != null)
-      algaeDetectorSimValue = algaeDetectorSim.createBoolean("Value", Direction.kOutput, false);
+      algaeDetectorSimValue = algaeDetectorSim.createBoolean("Value", Direction.kOutput, true);
     else algaeDetectorSimValue = null;
 
     if (algaeDetectorSim != null) algaeDetector.setSimDevice(algaeDetectorSim);
@@ -89,7 +89,8 @@ public class AlgaeGrabberSim implements AlgaeGrabberIO {
 
   @Override
   public boolean getAlgaeDetector() {
-    if (algaeDetectorSim != null) return algaeDetector.get();
+    // TODO: algaeDetector.get() does not update
+    if (algaeDetectorSim != null) return algaeDetectorSimValue.get();
     else return false;
   }
 
