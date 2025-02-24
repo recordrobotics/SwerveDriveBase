@@ -45,7 +45,7 @@ public class CoralIntakeFromSourceSim extends SequentialCommandGroup implements 
                           new Rotation3d(0, 0, 0)));
 
               Pose3d intake = RobotContainer.model.elevator.getCoralIntakeEjectFinalPose();
-              return intake.getTranslation().getDistance(coralPose.getTranslation()) < 0.5;
+              return intake.getTranslation().getDistance(coralPose.getTranslation()) < 0.8;
             }),
         new InstantCommand(
             () -> {

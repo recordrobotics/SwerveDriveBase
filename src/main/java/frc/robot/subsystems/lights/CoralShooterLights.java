@@ -6,7 +6,7 @@ import frc.robot.subsystems.Lights;
 public class CoralShooterLights extends VirtualLightsSubsystem {
 
   public CoralShooterLights(Lights lights) {
-    super(lights, 16, 20);
+    super(lights, 112, 117);
     setDefaultCommand(runPattern(LEDPattern.kOff).ignoringDisable(true));
   }
 }

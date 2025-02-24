@@ -160,14 +160,14 @@ public final class Constants {
 
   public enum ElevatorHeight {
     INTAKE(0, Units.degreesToRadians(-90)),
-    L1(0.06, Units.degreesToRadians(20)),
-    L2(0.2, Units.degreesToRadians(20)),
+    L1(0.26, Units.degreesToRadians(-95)),
+    L2(0.44, Units.degreesToRadians(-95)),
     LOW_REEF_ALGAE(0.465, Units.degreesToRadians(-60)),
-    L3(0.72, Units.degreesToRadians(20)),
+    L3(0.88, Units.degreesToRadians(-95)),
     HIGH_REEF_ALGAE(1.035, Units.degreesToRadians(-60)),
-    L4(1.32, Units.degreesToRadians(10)),
+    L4(1.32, Units.degreesToRadians(22)),
     BOTTOM(0, Units.degreesToRadians(-90)),
-    GROUND_ALGAE(0.465, Units.degreesToRadians(-60)),
+    GROUND_ALGAE(0.465, Units.degreesToRadians(60)),
     PROCESSOR_SCORE(0.465, Units.degreesToRadians(-60));
 
     private double height;
@@ -581,8 +581,8 @@ public final class Constants {
     public static final double kV = 0.6172;
     public static final double kA = 0.036292;
 
-    public static final double MAX_ARM_VELOCITY = 0.2;
-    public static final double MAX_ARM_ACCELERATION = 0.2;
+    public static final double MAX_ARM_VELOCITY = 8;
+    public static final double MAX_ARM_ACCELERATION = 22;
 
     public static final double REVERSE_SPEED = 4; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^

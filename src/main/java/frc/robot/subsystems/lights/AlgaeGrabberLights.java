@@ -6,7 +6,7 @@ import frc.robot.subsystems.Lights;
 public class AlgaeGrabberLights extends VirtualLightsSubsystem {
 
   public AlgaeGrabberLights(Lights lights) {
-    super(lights, 6, 10);
+    super(lights, 94, 111);
     setDefaultCommand(runPattern(LEDPattern.kOff).ignoringDisable(true));
   }
 }

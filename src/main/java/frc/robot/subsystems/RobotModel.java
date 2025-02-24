@@ -316,9 +316,9 @@ public class RobotModel extends SubsystemBase {
         robotOrigin = new Pose3d(RobotContainer.poseTracker.getEstimatedPosition());
 
       var pose =
-          new Pose3d(0.8 + Constants.ElevatorArm.LENGTH, 0, 0, new Rotation3d())
+          new Pose3d(0.32 + 0.18, 0.2, 0.54, new Rotation3d())
               .rotateAround(
-                  new Translation3d(0.8, 0, Constants.ElevatorArm.LENGTH),
+                  new Translation3d(0.32, 0, 0.58),
                   new Rotation3d(0, -Units.degreesToRadians(elevatorarm.getAngle()), 0));
       pose =
           new Pose3d(
@@ -330,14 +330,11 @@ public class RobotModel extends SubsystemBase {
                           model.elevator.elevator.getLength() - Constants.Elevator.MIN_LENGTH)),
               pose.getRotation());
 
-      var localCoral = new Pose3d(0.55, 0.2, -0.4, new Rotation3d());
-      localCoral =
-          localCoral.transformBy(new Transform3d(pose.getTranslation(), pose.getRotation()));
-
       Pose3d coralShooterPose =
           robotOrigin.transformBy(new Transform3d(pose.getTranslation(), pose.getRotation()));
 
-      return coralShooterPose;
+      return coralShooterPose.transformBy(
+          new Transform3d(0, 0, 0, new Rotation3d(0, Units.degreesToRadians(180 + 90 + 22), 0)));
     }
   }
 
@@ -420,7 +417,6 @@ public class RobotModel extends SubsystemBase {
 
   public RobotModel() {
     periodic();
-    addCoral(new NamedCoral("test", () -> elevatorArm.getCoralShooterTargetPose()));
   }
 
   @Override
