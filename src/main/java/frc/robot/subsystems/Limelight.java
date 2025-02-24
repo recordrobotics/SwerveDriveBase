@@ -46,7 +46,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
     if (measurement == null || measurement_m2 == null) {
       limelightConnected = false;
-      updateCrop();
+      updateCrop(); // TODO if the limelights not connected, why update the crop
       return;
     } else {
       limelightConnected = true;
