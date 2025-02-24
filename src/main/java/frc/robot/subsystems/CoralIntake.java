@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.CoralIntakeIO;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.utils.KillableSubsystem;
@@ -261,10 +262,10 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    // DashboardUI.Test.addSlider("Coral Intake Motor", io.getWheelPercent(), -1, 1)
-    //     .subscribe(io::setWheelPercent);
-    // DashboardUI.Test.addSlider("Coral Intake Arm Pos", io.getArmPosition(), -1, 1)
-    //     .subscribe(this::toggleArm);
+    DashboardUI.Test.addSlider("Coral Intake Motor", io.getWheelPercent(), -1, 1)
+        .subscribe(io::setWheelPercent);
+    DashboardUI.Test.addSlider("Coral Intake Arm Pos", io.getArmPosition(), -1, 1)
+        .subscribe(this::toggleArm);
   }
 
   @Override

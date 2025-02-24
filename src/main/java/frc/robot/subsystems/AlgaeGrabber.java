@@ -12,6 +12,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.AlgaeGrabberIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
@@ -106,7 +107,7 @@ public class AlgaeGrabber extends KillableSubsystem
   public void periodic() {
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    // io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
 
     lastSpeed = pid.getSetpoint();
     debounced_value = !m_debouncer.calculate(io.getAlgaeDetector());
@@ -127,14 +128,14 @@ public class AlgaeGrabber extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    // DashboardUI.Test.addSlider("Algae on the Elevator", io.getWheelPercent(), -1, 1)
-    //     .subscribe(io::setWheelPercent);
+    DashboardUI.Test.addSlider("Algae on the Elevator", io.getWheelPercent(), -1, 1)
+        .subscribe(io::setWheelPercent);
   }
 
   @Override
   public void kill() {
     toggle(AlgaeGrabberStates.OFF);
-    // io.setWheelVoltage(0);
+    io.setWheelVoltage(0);
   }
 
   /** frees up all hardware allocations */
