@@ -4,6 +4,14 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import frc.robot.subsystems.io.ClimberIO;
 
 public class ClimberStub implements ClimberIO {
+
+  @SuppressWarnings("unused")
+  private final double periodicDt;
+
+  public ClimberStub(double periodicDt) {
+    this.periodicDt = periodicDt;
+  }
+
   @Override
   public void applyTalonFXConfig(TalonFXConfiguration configuration) {}
 

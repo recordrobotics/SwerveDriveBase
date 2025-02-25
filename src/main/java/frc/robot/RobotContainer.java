@@ -93,7 +93,7 @@ public class RobotContainer {
       coralShooter = new CoralShooter(new CoralShooterStub(0.02));
       coralIntake = new CoralIntake(new CoralIntakeStub(0.02));
       algaeGrabber = new AlgaeGrabber(new AlgaeGrabberStub(0.02));
-      climber = new Climber(new ClimberStub());
+      climber = new Climber(new ClimberStub(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
       camera = new PhotonCamera("photonvision");
