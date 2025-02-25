@@ -40,6 +40,11 @@ public class ElevatorArmStub implements ElevatorArmIO {
   }
 
   @Override
+  public double getArmVoltage() {
+    return 0;
+  }
+
+  @Override
   public double getArmCurrentDrawAmps() {
     return 0;
   }

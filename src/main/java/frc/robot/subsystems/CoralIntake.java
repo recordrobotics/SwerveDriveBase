@@ -84,6 +84,8 @@ public class CoralIntake extends KillableSubsystem
 
     armPID.setTolerance(0.15, 1.05);
 
+    armPID.reset(getArmAngle());
+
     sysIdRoutineWheel =
         new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -97,13 +99,13 @@ public class CoralIntake extends KillableSubsystem
     sysIdRoutineArm =
         new SysIdRoutine(
             new SysIdRoutine.Config(
-                Volts.of(3.6).per(Second),
-                Volts.of(2.4),
+                Volts.of(3.2).per(Second),
+                Volts.of(2.1),
                 Seconds.of(1.2),
                 (state -> Logger.recordOutput("CoralIntake/Arm/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.in(Volts)), null, this));
 
-    SmartDashboard.putNumber("CoralIntakeArm", 0);
+    SmartDashboard.putNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS);
   }
 
   public CoralIntakeSim getSimIO() throws Exception {
@@ -211,11 +213,11 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void periodic() {
-    toggleArm(SmartDashboard.getNumber("CoralIntakeArm", 0));
+    toggleArm(SmartDashboard.getNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS));
 
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    //io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
     lastSpeed = pid.getSetpoint();
 
     double pidOutputArm = armPID.calculate(getArmAngle());
@@ -229,7 +231,7 @@ public class CoralIntake extends KillableSubsystem
     Logger.recordOutput("CoralIntakeSetVoltage", pidOutputArm);
     Logger.recordOutput("CoralIntakeSetVoltageFF", armFeedforwardOutput);
 
-    // io.setArmVoltage(pidOutputArm + armFeedforwardOutput);
+    io.setArmVoltage(pidOutputArm + armFeedforwardOutput);
     currentSetpoint = armPID.getSetpoint();
 
     // Update mechanism
@@ -271,8 +273,8 @@ public class CoralIntake extends KillableSubsystem
   @Override
   public void kill() {
     toggle(CoralIntakeStates.OFF);
-    //io.setWheelVoltage(0);
-    //io.setArmVoltage(0);
+    // io.setWheelVoltage(0);
+    // io.setArmVoltage(0);
   }
 
   /** frees up all hardware allocations */

@@ -10,7 +10,6 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -66,16 +65,18 @@ public class ElevatorArm extends KillableSubsystem
 
     pid.setTolerance(0.15, 1.05);
 
+    pid.reset(getArmAngle());
+
     sysIdRoutine =
         new SysIdRoutine(
             new SysIdRoutine.Config(
                 Volts.of(3).per(Second),
                 Volts.of(1.3),
-                Seconds.of(1.2),
+                Seconds.of(1.3),
                 (state -> Logger.recordOutput("ElevatorArm/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.in(Volts)), null, this));
 
-    SmartDashboard.putNumber("ElevatorArm", 0);
+    SmartDashboard.putNumber("ElevatorArm", Constants.ElevatorArm.ARM_START_POS);
   }
 
   public ElevatorArmSim getSimIO() throws Exception {
@@ -100,7 +101,7 @@ public class ElevatorArm extends KillableSubsystem
 
   @AutoLogOutput
   public double getArmSetTo() {
-    return io.getArmPercent() * RobotController.getBatteryVoltage();
+    return io.getArmVoltage();
   }
 
   public void toggle(double angleRadians) {
@@ -115,7 +116,7 @@ public class ElevatorArm extends KillableSubsystem
 
   @Override
   public void periodic() {
-    // toggle(SmartDashboard.getNumber("ElevatorArm", 0));
+    toggle(SmartDashboard.getNumber("ElevatorArm", Constants.ElevatorArm.ARM_START_POS));
 
     double pidOutputArm = pid.calculate(getArmAngle());
 

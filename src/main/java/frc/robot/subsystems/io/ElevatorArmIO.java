@@ -18,6 +18,8 @@ public interface ElevatorArmIO extends AutoCloseable {
 
   public double getArmPercent();
 
+  public double getArmVoltage();
+
   public double getArmCurrentDrawAmps();
 
   public void simulationPeriodic();

@@ -54,6 +54,11 @@ public class ElevatorArmReal implements ElevatorArmIO {
   }
 
   @Override
+  public double getArmVoltage() {
+    return arm.getMotorVoltage().getValueAsDouble();
+  }
+
+  @Override
   public double getArmCurrentDrawAmps() {
     return arm.getSupplyCurrent().getValueAsDouble();
   }

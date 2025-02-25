@@ -117,12 +117,14 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     io.setLeftMotorPosition(0);
     io.setRightMotorPosition(0);
 
+    m_setpoint = new TrapezoidProfile.State(getCurrentHeight(), 0);
+
     sysIdRoutine =
         new SysIdRoutine(
             // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
             new SysIdRoutine.Config(
-                Volts.of(4.5).per(Second),
-                Volts.of(4),
+                Volts.of(5).per(Second),
+                Volts.of(5.5),
                 Seconds.of(1.2),
                 (state -> Logger.recordOutput("Elevator/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::setBothMotors, null, this));
@@ -170,7 +172,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
   @Override
   public void periodic() {
-    // toggle(SmartDashboard.getNumber("Elevator", 0));
+    toggle(SmartDashboard.getNumber("Elevator", 0));
+
     // Get next setpoint from profile.
     m_setpoint = m_profile.calculate(Constants.Elevator.kDt, m_setpoint, m_goal);
 

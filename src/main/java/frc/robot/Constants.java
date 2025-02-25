@@ -115,23 +115,23 @@ public final class Constants {
     public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(10);
     public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
 
-    public static final double MAX_ARM_VELOCITY = 8;
-    public static final double MAX_ARM_ACCELERATION = 22;
+    public static final double MAX_ARM_VELOCITY = 12;
+    public static final double MAX_ARM_ACCELERATION = 40;
 
     // TODO: Sysid tuning
-    public static final double kP = 7.6661;
+    public static final double kP = 2.996;
     public static final double kI = 0;
-    public static final double kD = 0.80357;
-    public static final double kG = 0.33478;
-    public static final double kS = 0.0094404;
-    public static final double kV = 0.98364;
-    public static final double kA = 0.086232;
+    public static final double kD = 0.28181;
+    public static final double kG = 0.23627;
+    public static final double kS = 0.086337;
+    public static final double kV = 0.65091;
+    public static final double kA = 0.030534;
 
     public static final double ARM_START_POS = Units.degreesToRadians(-90);
 
     // TODO: verify correct
     // I got 36
-    public static final double ARM_GEAR_RATIO = 38.4; // 16:1 * 72/32
+    public static final double ARM_GEAR_RATIO = 36; // 38.4; // 16:1 * 72/32
 
     // TODO: make correct
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
@@ -633,10 +633,10 @@ public final class Constants {
     public static final double kDt = 0.02;
     public static final double kMaxVelocity = 8;
     public static final double kMaxAcceleration = 10;
-    public static final double kV = 5.4352;
-    public static final double kA = 0.088399;
-    public static final double kG = 0.088227;
-    public static final double kS = 0.09213;
+    public static final double kV = 5.5734;
+    public static final double kA = 0.1426;
+    public static final double kG = 0.28565;
+    public static final double kS = 0.076647;
 
     public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
     public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
@@ -713,25 +713,25 @@ public final class Constants {
     public static final double kV = 0.6172;
     public static final double kA = 0.036292;
 
-    public static final double MAX_ARM_VELOCITY = 1;
-    public static final double MAX_ARM_ACCELERATION = 1;
+    public static final double MAX_ARM_VELOCITY = 8;
+    public static final double MAX_ARM_ACCELERATION = 22;
 
     public static final double REVERSE_SPEED = 4; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
 
     public static final double INTAKE_TIME = 0.1; // TODO make correct
 
-    public static final double sP = 2.6661;
+    public static final double sP = 4.8919;
     public static final double sI = 0;
-    public static final double sD = 0.80357;
-    public static final double sG = 0.33478;
-    public static final double sS = 0.0094404;
-    public static final double sV = 0.98364;
-    public static final double sA = 0.086232;
+    public static final double sD = 0.11072;
+    public static final double sG = 0.25141;
+    public static final double sS = 0.24131;
+    public static final double sV = 0.94817;
+    public static final double sA = 0.025281;
 
     public static final double ARM_UP = Units.degreesToRadians(80);
-    public static final double ARM_DOWN = -1.1;
-    public static final double ARM_START_POS = Units.degreesToRadians(-58.7); // Math.PI / 2;
+    public static final double ARM_DOWN = -1;
+    public static final double ARM_START_POS = Units.degreesToRadians(92.82);
 
     public static final double ARM_GEAR_RATIO = 56.8889; // 16:1 * 64/18
 

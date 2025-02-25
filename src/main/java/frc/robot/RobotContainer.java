@@ -28,18 +28,16 @@ import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.io.real.AlgaeGrabberReal;
-import frc.robot.subsystems.io.real.CoralIntakeReal;
-import frc.robot.subsystems.io.real.CoralShooterReal;
+import frc.robot.subsystems.io.real.ElevatorReal;
 import frc.robot.subsystems.io.sim.AlgaeGrabberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.subsystems.io.sim.CoralShooterSim;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
 import frc.robot.subsystems.io.stub.AlgaeGrabberStub;
+import frc.robot.subsystems.io.stub.CoralIntakeStub;
 import frc.robot.subsystems.io.stub.CoralShooterStub;
 import frc.robot.subsystems.io.stub.ElevatorArmStub;
-import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -83,10 +81,10 @@ public class RobotContainer {
       drivetrain = new Drivetrain();
       poseTracker = new PoseTracker();
       limelight = new Limelight();
-      elevator = new Elevator(new ElevatorStub(Constants.Elevator.kDt));
+      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmStub(0.02));
       coralShooter = new CoralShooter(new CoralShooterStub(0.02));
-      coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
+      coralIntake = new CoralIntake(new CoralIntakeStub(0.02));
       algaeGrabber = new AlgaeGrabber(new AlgaeGrabberStub(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
@@ -213,11 +211,11 @@ public class RobotContainer {
     // return autoCommand;
 
     return new InstantCommand()
-        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(coralIntake.sysIdQuasistaticArm(Direction.kReverse).andThen(new WaitCommand(0.4)))
-        .andThen(coralIntake.sysIdDynamicArm(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(coralIntake.sysIdDynamicArm(Direction.kReverse).andThen(new WaitCommand(0.4)));
+        .andThen(elevator.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(elevator.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(elevator.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
+        .andThen(elevator.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(elevator.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {
