@@ -13,12 +13,13 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.RobotModel.NamedAlgae;
 import java.util.HashSet;
 
-public class AlgaeGrabberFromGround extends SequentialCommandGroup implements SimulationCommand {
+public class AlgaeGrabberFromGroundTimeBased extends SequentialCommandGroup
+    implements SimulationCommand {
 
   private Pose3d algaePose;
   private NamedAlgae algae;
 
-  public AlgaeGrabberFromGround(double secondsUntilAlgaeAcquired) {
+  public AlgaeGrabberFromGroundTimeBased(double secondsUntilAlgaeAcquired) {
     if (Constants.RobotState.getMode() == Mode.REAL) return;
 
     addCommands(

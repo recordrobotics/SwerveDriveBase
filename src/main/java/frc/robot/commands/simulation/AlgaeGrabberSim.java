@@ -32,12 +32,16 @@ public class AlgaeGrabberSim extends SequentialCommandGroup implements Simulatio
               switch (algaeGrabberTypeChooser.get()) {
                 case FAKE_TELEOP:
                   if (RobotContainer.elevator.getHeight() == ElevatorHeight.GROUND_ALGAE) {
-                    return new AlgaeGrabberFromGround(secondsUntilAlgaeAcquired);
+                    return new AlgaeGrabberFromGroundTimeBased(secondsUntilAlgaeAcquired);
                   } else {
                     return new AlgaeGrabberFromReef();
                   }
                 case FIELD_SETUP:
-                  return new AlgaeGrabberFromReef();
+                  if (RobotContainer.elevator.getHeight() == ElevatorHeight.GROUND_ALGAE) {
+                    return new AlgaeGrabberFromGroundPoseBased(RobotContainer.model::getAlgaes);
+                  } else {
+                    return new AlgaeGrabberFromReef();
+                  }
                 default:
                   return null;
               }
