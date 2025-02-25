@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
+import frc.robot.commands.simulation.AlgaeGrabberToProcessor;
 import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
 import java.util.Set;
 
@@ -38,14 +39,16 @@ public class ProcessorScore extends SequentialCommandGroup {
     if (RobotContainer.elevator.getHeight() == ElevatorHeight.GROUND_ALGAE) {
       addCommands(
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
-          new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME),
+          new AlgaeGrabberToProcessor()
+              .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME)),
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),
           new ElevatorMove(ElevatorHeight.BOTTOM));
     } else {
       addCommands(
           new ElevatorMove(ElevatorHeight.PROCESSOR_SCORE),
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT)),
-          new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME),
+          new AlgaeGrabberToProcessor()
+              .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME)),
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),
           new ElevatorMove(ElevatorHeight.BOTTOM));
     }

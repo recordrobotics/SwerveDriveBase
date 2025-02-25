@@ -1,6 +1,8 @@
 package frc.robot.commands.simulation;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -49,12 +51,31 @@ public class AlgaeGrabberToProcessor extends SequentialCommandGroup implements S
               }
 
               return new PoseAnimator(
-                  algae != null ? algae.pose.get() : new Pose3d(),
-                  () -> processorPose.getPose(),
-                  p -> {
-                    if (algae != null) algae.pose = () -> p;
-                  },
-                  0.2);
+                      algae != null ? algae.pose.get() : new Pose3d(),
+                      () -> processorPose.getPose(),
+                      p -> {
+                        if (algae != null) algae.pose = () -> p;
+                      },
+                      0.2)
+                  .andThen(
+                      () -> {
+                        new PoseAnimator(
+                                processorPose.getPose(),
+                                () ->
+                                    processorPose
+                                        .getPose()
+                                        .transformBy(
+                                            new Transform3d(1.5, 0, -0.3, new Rotation3d())),
+                                p -> {
+                                  if (algae != null) algae.pose = () -> p;
+                                },
+                                0.6)
+                            .andThen(
+                                () -> {
+                                  if (algae != null) RobotContainer.model.removeAlgae(algae);
+                                })
+                            .schedule();
+                      });
             },
             new HashSet<Subsystem>()),
         new InstantCommand(

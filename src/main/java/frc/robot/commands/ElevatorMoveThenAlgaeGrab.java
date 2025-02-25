@@ -15,7 +15,7 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
     Command algaeGrabberLightsCommand =
         RobotContainer.lights.algaeGrabber.runPattern(Constants.Lights.PULSATING_ORANGE);
 
-    addRequirements(RobotContainer.coralShooter);
+    addRequirements(RobotContainer.algaeGrabber);
 
     addCommands(
         new InstantCommand(

@@ -31,7 +31,14 @@ public abstract class AbstractControl {
   public abstract Boolean getCoralSourceIntake();
 
   // Reef algae
-  public abstract Boolean getReefAlgae();
+  public abstract Boolean getReefAlgaeLow();
+
+  public abstract Boolean getReefAlgaeHigh();
+
+  public abstract Boolean getReefAlgaeDefault();
+
+  // Ground Algae
+  public abstract Boolean getGroundAlgae();
 
   // Score algae
   public abstract Boolean getScoreAlgae();

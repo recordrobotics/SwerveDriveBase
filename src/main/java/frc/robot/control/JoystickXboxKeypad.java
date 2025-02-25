@@ -121,8 +121,25 @@ public class JoystickXboxKeypad extends AbstractControl {
   }
 
   @Override
-  public Boolean getReefAlgae() {
-    return xbox_controller.getRightTriggerAxis() > 0.3;
+  public Boolean getReefAlgaeLow() {
+    return xbox_controller.getRightTriggerAxis() > 0.3 && xbox_controller.getPOV() == 180;
+  }
+
+  @Override
+  public Boolean getReefAlgaeHigh() {
+    return xbox_controller.getRightTriggerAxis() > 0.3 && xbox_controller.getPOV() == 0;
+  }
+
+  @Override
+  public Boolean getReefAlgaeDefault() {
+    return xbox_controller.getRightTriggerAxis() > 0.3
+        && xbox_controller.getPOV() != 180
+        && xbox_controller.getPOV() != 0;
+  }
+
+  @Override
+  public Boolean getGroundAlgae() {
+    return xbox_controller.getRightBumperButton();
   }
 
   @Override
@@ -132,6 +149,6 @@ public class JoystickXboxKeypad extends AbstractControl {
 
   @Override
   public Boolean getClimb() {
-    return xbox_controller.getPOV() == 0;
+    return xbox_controller.getRawButton(1);
   }
 }

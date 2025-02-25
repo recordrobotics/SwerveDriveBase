@@ -116,7 +116,7 @@ public class ElevatorArm extends KillableSubsystem
 
   @Override
   public void periodic() {
-    toggle(SmartDashboard.getNumber("ElevatorArm", Constants.ElevatorArm.ARM_START_POS));
+    // toggle(SmartDashboard.getNumber("ElevatorArm", Constants.ElevatorArm.ARM_START_POS));
 
     double pidOutputArm = pid.calculate(getArmAngle());
 

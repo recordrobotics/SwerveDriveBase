@@ -119,13 +119,30 @@ public class JoystickXbox extends AbstractControl {
   }
 
   @Override
-  public Boolean getReefAlgae() {
-    return xbox_controller.getRightTriggerAxis() > 0.3;
+  public Boolean getReefAlgaeLow() {
+    return xbox_controller.getRightTriggerAxis() > 0.3 && xbox_controller.getPOV() == 180;
+  }
+
+  @Override
+  public Boolean getReefAlgaeHigh() {
+    return xbox_controller.getRightTriggerAxis() > 0.3 && xbox_controller.getPOV() == 0;
+  }
+
+  @Override
+  public Boolean getReefAlgaeDefault() {
+    return xbox_controller.getRightTriggerAxis() > 0.3
+        && xbox_controller.getPOV() != 180
+        && xbox_controller.getPOV() != 0;
+  }
+
+  @Override
+  public Boolean getGroundAlgae() {
+    return xbox_controller.getRightBumperButton();
   }
 
   @Override
   public Boolean getScoreAlgae() {
-    return xbox_controller.getPOV() == 180;
+    return xbox_controller.getPOV() == 90;
   }
 
   @Override

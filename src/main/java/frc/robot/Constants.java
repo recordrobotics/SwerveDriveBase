@@ -167,7 +167,7 @@ public final class Constants {
     HIGH_REEF_ALGAE(0.735, Units.degreesToRadians(-60)),
     L4(1.32, Units.degreesToRadians(22)),
     BOTTOM(0, Units.degreesToRadians(-90)),
-    GROUND_ALGAE(0.465, Units.degreesToRadians(60)),
+    GROUND_ALGAE(0, Units.degreesToRadians(-50)),
     PROCESSOR_SCORE(0.05, Units.degreesToRadians(-60));
 
     private double height;
@@ -188,10 +188,10 @@ public final class Constants {
   }
 
   public final class FieldConstants {
-    public static final Translation2d TEAM_RED_REEF_CENTER = new Translation2d(13.059, 4.028);
     public static final Translation2d TEAM_BLUE_REEF_CENTER = new Translation2d(4.489, 4.028);
-    public static final Translation2d TEAM_RED_PROCESSOR = new Translation2d(6.026, 0);
-    public static final Translation2d TEAM_BLUE_PROCESSOR = new Translation2d(11.585, 8.062);
+    public static final Translation2d TEAM_RED_REEF_CENTER = new Translation2d(13.059, 4.028);
+    public static final Translation2d TEAM_BLUE_PROCESSOR = new Translation2d(6.026, 0);
+    public static final Translation2d TEAM_RED_PROCESSOR = new Translation2d(11.585, 8.062);
 
     public static final Pose2d SOURCE_1 =
         new Pose2d(16.994, 0.355, Rotation2d.fromDegrees(35.988608));
@@ -256,16 +256,16 @@ public final class Constants {
           return new Pose3d(
               new Translation3d(
                   FieldConstants.TEAM_BLUE_PROCESSOR.getX(),
-                  FieldConstants.TEAM_BLUE_PROCESSOR.getY(),
-                  0.1),
+                  FieldConstants.TEAM_BLUE_PROCESSOR.getY() - 0.3,
+                  0.35),
               new Rotation3d(0, 0, 0));
         case 1:
           return new Pose3d(
               new Translation3d(
                   FieldConstants.TEAM_RED_PROCESSOR.getX(),
-                  FieldConstants.TEAM_RED_PROCESSOR.getY(),
-                  0.1),
-              new Rotation3d(0, 0, 0));
+                  FieldConstants.TEAM_RED_PROCESSOR.getY() + 0.3,
+                  0.35),
+              new Rotation3d(0, 0, Math.PI));
         default:
           return new Pose3d();
       }
@@ -356,6 +356,31 @@ public final class Constants {
       }
 
       return new Pose3d(new Translation3d(x, y, height), new Rotation3d(0, 0, yaw));
+    }
+
+    public int getSide() {
+      return side;
+    }
+
+    public static int getDefaultHeight(int side) {
+      switch (side) {
+        case 0:
+        case 2:
+        case 4:
+        case 6:
+        case 8:
+        case 10:
+          return 1;
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 9:
+        case 11:
+          return 0;
+        default:
+          return 0;
+      }
     }
   }
 
