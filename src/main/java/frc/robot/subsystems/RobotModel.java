@@ -447,8 +447,8 @@ public class RobotModel extends SubsystemBase {
       poses[i] =
           new Pose3d(0, 0, 0, new Rotation3d())
               .rotateAround(
-                  new Translation3d(0, 0.334669, 0.456817),
-                  new Rotation3d(Units.degreesToRadians(climber.getAngle()), 0, 0));
+                  new Translation3d(-0.355, 0, 0.31),
+                  new Rotation3d(0, Units.degreesToRadians(climber.getAngle()), 0));
     }
   }
 

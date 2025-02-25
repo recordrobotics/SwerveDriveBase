@@ -1,14 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
-import frc.robot.commands.simulation.AlgaeGrabberFromReef;
+import frc.robot.commands.simulation.AlgaeGrabberSim;
 import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
+import java.util.Set;
 
 public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
   public ElevatorMoveThenAlgaeGrab(ElevatorHeight targetHeight) {
@@ -27,7 +29,7 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
         new ElevatorMove(targetHeight),
         new InstantCommand(() -> algaeGrabberLightsCommand.schedule()),
         new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
-        new AlgaeGrabberFromReef()
+        new AlgaeGrabberSim(0.2)
             .simulateFor(new WaitUntilCommand(RobotContainer.algaeGrabber::hasAlgae)),
         new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),
         new InstantCommand(algaeGrabberLightsCommand::cancel),
@@ -41,7 +43,13 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
                             Constants.Lights.PULSATING_GREEN))
                     .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)
                     .schedule()),
-        new ElevatorMove(ElevatorHeight.INTAKE),
+        new DeferredCommand(
+            () ->
+                new ElevatorMove(
+                    targetHeight == ElevatorHeight.GROUND_ALGAE
+                        ? ElevatorHeight.GROUND_ALGAE
+                        : ElevatorHeight.INTAKE),
+            Set.of(RobotContainer.elevator)),
         new InstantCommand(
             () ->
                 RobotContainer.lights
