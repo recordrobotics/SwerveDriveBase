@@ -2,11 +2,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Climb extends SequentialCommandGroup {
   public Climb() {
+    addRequirements(RobotContainer.climber);
     addCommands(
         new InstantCommand(
             () ->
@@ -14,7 +16,9 @@ public class Climb extends SequentialCommandGroup {
                     .stateVisualizer
                     .runPattern(Constants.Lights.cagePattern)
                     .schedule()),
-        // TODO climbers
+        new InstantCommand(() -> RobotContainer.climber.extend()),
+        new WaitUntilCommand(() -> RobotContainer.climber.atGoal()),
+        new InstantCommand(() -> RobotContainer.climber.climb()),
         new InstantCommand(
             () ->
                 RobotContainer.lights

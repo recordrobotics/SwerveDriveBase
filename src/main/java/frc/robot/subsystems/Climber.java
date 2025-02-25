@@ -53,6 +53,10 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
     RobotContainer.model.climber.update(getArmAngle());
   }
 
+  public boolean atGoal() {
+    return Math.abs(targetPos - getArmAngle()) < Constants.Climber.DEADBAND;
+  }
+
   public void climb() {
     targetPos = Constants.Climber.RETRACTED_POS;
   }

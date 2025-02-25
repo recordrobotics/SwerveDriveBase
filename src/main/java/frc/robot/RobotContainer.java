@@ -33,11 +33,13 @@ import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.io.real.ElevatorReal;
 import frc.robot.subsystems.io.sim.AlgaeGrabberSim;
+import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.subsystems.io.sim.CoralShooterSim;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
 import frc.robot.subsystems.io.stub.AlgaeGrabberStub;
+import frc.robot.subsystems.io.stub.ClimberStub;
 import frc.robot.subsystems.io.stub.CoralIntakeStub;
 import frc.robot.subsystems.io.stub.CoralShooterStub;
 import frc.robot.subsystems.io.stub.ElevatorArmStub;
@@ -65,6 +67,7 @@ public class RobotContainer {
   public static CoralShooter coralShooter;
   public static CoralIntake coralIntake;
   public static AlgaeGrabber algaeGrabber;
+  public static Climber climber;
   public static Lights lights;
   public static PowerDistributionPanel pdp;
 
@@ -90,6 +93,7 @@ public class RobotContainer {
       coralShooter = new CoralShooter(new CoralShooterStub(0.02));
       coralIntake = new CoralIntake(new CoralIntakeStub(0.02));
       algaeGrabber = new AlgaeGrabber(new AlgaeGrabberStub(0.02));
+      climber = new Climber(new ClimberStub());
       lights = new Lights();
       pdp = new PowerDistributionPanel();
       camera = new PhotonCamera("photonvision");
@@ -102,6 +106,7 @@ public class RobotContainer {
       coralShooter = new CoralShooter(new CoralShooterSim(0.02));
       coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
       algaeGrabber = new AlgaeGrabber(new AlgaeGrabberSim(0.02));
+      climber = new Climber(new ClimberSim(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
       camera = new PhotonCamera("photonvision");
