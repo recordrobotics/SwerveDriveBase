@@ -713,15 +713,15 @@ public final class Constants {
     public static final double kV = 0.6172;
     public static final double kA = 0.036292;
 
-    public static final double MAX_ARM_VELOCITY = 8;
-    public static final double MAX_ARM_ACCELERATION = 22;
+    public static final double MAX_ARM_VELOCITY = 1;
+    public static final double MAX_ARM_ACCELERATION = 1;
 
     public static final double REVERSE_SPEED = 4; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
 
     public static final double INTAKE_TIME = 0.1; // TODO make correct
 
-    public static final double sP = 7.6661;
+    public static final double sP = 2.6661;
     public static final double sI = 0;
     public static final double sD = 0.80357;
     public static final double sG = 0.33478;
