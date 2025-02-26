@@ -884,6 +884,7 @@ public final class Constants {
      * back). Used for calculating wheel locations on the robot
      */
     public static final double ROBOT_WHEEL_DISTANCE_WIDTH = 0.5588;
+
     public static final double ROBOT_WHEEL_DISTANCE_LENGTH = 0.5588;
 
     public static final double BUMPER_WIDTH = 0.762;
