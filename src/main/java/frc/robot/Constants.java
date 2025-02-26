@@ -943,24 +943,24 @@ public final class Constants {
     public static final double FALCON_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
     public static final double FALCON_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
 
-    public static final double KRAKEN_DRIVE_KS = 0.12373;
-    public static final double KRAKEN_DRIVE_KV = 2.5609;
-    public static final double KRAKEN_DRIVE_KA = 0.10075;
+    public static final double KRAKEN_DRIVE_KS = 0.059576;
+    public static final double KRAKEN_DRIVE_KV = 2.5813;
+    public static final double KRAKEN_DRIVE_KA = 0.2404;
     public static final double KRAKEN_DRIVE_STD_STATE_VELOCITY = 3;
     public static final double KRAKEN_DRIVE_STD_ENCODER_VELOCITY = 0.001;
     public static final double KRAKEN_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.05;
-    public static final double KRAKEN_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
+    public static final double KRAKEN_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
 
-    public static final double KRAKEN_TURN_KV = 1.7518;
-    public static final double KRAKEN_TURN_KA = 0.015791;
-    public static final double KRAKEN_TURN_KS = 0.08889;
+    public static final double KRAKEN_TURN_KV = 1.608;
+    public static final double KRAKEN_TURN_KA = 0.031048;
+    public static final double KRAKEN_TURN_KS = 0.26148;
     public static final double KRAKEN_TURN_STD_STATE_POSITION = 3;
     public static final double KRAKEN_TURN_STD_STATE_VELOCITY = 3;
     public static final double KRAKEN_TURN_STD_ENCODER_POSITION = 0.01;
     public static final double KRAKEN_TURN_STD_ENCODER_VELOCITY = 0.001;
-    public static final double KRAKEN_TURN_REGULATOR_POSITION_ERROR_TOLERANCE = 0.02;
-    public static final double KRAKEN_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
-    public static final double KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
+    public static final double KRAKEN_TURN_REGULATOR_POSITION_ERROR_TOLERANCE = 0.04;
+    public static final double KRAKEN_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.2;
+    public static final double KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
 
     // Wheel diameter
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);

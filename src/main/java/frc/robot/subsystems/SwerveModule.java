@@ -205,13 +205,12 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
                 m.DRIVE_STD_STATE_VELOCITY), // Standard deviation of the state (velocity)
             VecBuilder.fill(
                 m.DRIVE_STD_ENCODER_VELOCITY), // Standard deviation of encoder measurements
-            // (position, velocity)
+            // (velocity)
             Constants.Swerve.kDt);
     this.driveController =
         new LinearQuadraticRegulator<>(
             driveSystem,
-            VecBuilder.fill(
-                m.DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE), // qelms. Positon, Velocity error
+            VecBuilder.fill(m.DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE), // qelms. Velocity error
             // tolerance, in meters and meters per second. Decrease this to more heavily penalize
             // state excursion, or make the controller behave more aggressively.
             VecBuilder.fill(
@@ -223,7 +222,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
                 .kDt); // Nominal time between loops. 0.020 for TimedRobot, but can be lower if
     // using notifiers.
 
-    driveController.latencyCompensate(driveSystem, Constants.Swerve.kDt, 0.000015);
+    driveController.latencyCompensate(driveSystem, Constants.Swerve.kDt, 0.0046062);
 
     this.driveLoop =
         new LinearSystemLoop<>(
@@ -233,6 +232,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     // Corrects for offset in absolute motor position
     io.setTurnMotorPosition(getAbsWheelTurnOffset());
+    m_setpoint = new TrapezoidProfile.State(getTurnWheelRotation2d().getRotations(), 0);
 
     SmartDashboard.putNumber("SwerveTurn_" + turningMotorChannel, 0);
 
@@ -379,14 +379,12 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     driveLoop.predict(Constants.Swerve.kDt);
 
-    double nextDriveVoltage = driveLoop.getU(0) + drive_kS * Math.signum(m_setpoint.velocity);
+    double nextDriveVoltage = driveLoop.getU(0) + drive_kS * Math.signum(targetDriveVelocity);
 
     io.setDriveMotorVoltage(nextDriveVoltage);
 
     // Get next setpoint from profile.
-
     Logger.recordOutput("setpoint_" + turningMotorChannel, m_setpoint.position);
-
     m_setpoint = m_profile.calculate(Constants.Swerve.kDt, m_setpoint, m_goal);
     Logger.recordOutput("setpoint_after_" + turningMotorChannel, m_setpoint.position);
 

@@ -31,7 +31,6 @@ import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.io.real.ElevatorReal;
 import frc.robot.subsystems.io.sim.AlgaeGrabberSim;
 import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
@@ -43,6 +42,7 @@ import frc.robot.subsystems.io.stub.ClimberStub;
 import frc.robot.subsystems.io.stub.CoralIntakeStub;
 import frc.robot.subsystems.io.stub.CoralShooterStub;
 import frc.robot.subsystems.io.stub.ElevatorArmStub;
+import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -88,7 +88,7 @@ public class RobotContainer {
       drivetrain = new Drivetrain();
       poseTracker = new PoseTracker();
       limelight = new Limelight();
-      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
+      elevator = new Elevator(new ElevatorStub(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmStub(0.02));
       coralShooter = new CoralShooter(new CoralShooterStub(0.02));
       coralIntake = new CoralIntake(new CoralIntakeStub(0.02));
@@ -237,11 +237,22 @@ public class RobotContainer {
     // return autoCommand;
 
     return new InstantCommand()
-        .andThen(elevator.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(elevator.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(elevator.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
-        .andThen(elevator.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(elevator.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
+        .andThen(
+            drivetrain
+                .sysIdQuasistaticDriveMotors(Direction.kForward)
+                .andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain
+                .sysIdQuasistaticDriveMotors(Direction.kForward)
+                .andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain
+                .sysIdQuasistaticDriveMotors(Direction.kReverse)
+                .andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain.sysIdDynamicDriveMotors(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain.sysIdDynamicDriveMotors(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {
