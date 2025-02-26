@@ -27,7 +27,7 @@ public class ElevatorArmSim implements ElevatorArmIO {
           LinearSystemId.createDCMotorSystem(Constants.ElevatorArm.kV, Constants.ElevatorArm.kA),
           armMotor,
           Constants.ElevatorArm.ARM_GEAR_RATIO,
-          Units.inchesToMeters(88), // TODO: make sure ARM_GEAR_RATIO is correct
+          Units.inchesToMeters(88),
           Units.degreesToRadians(-95),
           Units.degreesToRadians(95),
           true,

@@ -118,7 +118,6 @@ public final class Constants {
     public static final double MAX_ARM_VELOCITY = 12;
     public static final double MAX_ARM_ACCELERATION = 40;
 
-    // TODO: Sysid tuning
     public static final double kP = 2.996;
     public static final double kI = 0;
     public static final double kD = 0.28181;
@@ -129,9 +128,7 @@ public final class Constants {
 
     public static final double ARM_START_POS = Units.degreesToRadians(-90);
 
-    // TODO: verify correct
-    // I got 36
-    public static final double ARM_GEAR_RATIO = 36; // 38.4; // 16:1 * 72/32
+    public static final double ARM_GEAR_RATIO = 36; // 16:1 * 72/32
 
     // TODO: make correct
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
