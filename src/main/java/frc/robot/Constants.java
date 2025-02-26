@@ -883,9 +883,8 @@ public final class Constants {
      * Distance between wheels (width aka between left and right and length aka between front and
      * back). Used for calculating wheel locations on the robot
      */
-    public static final double ROBOT_WHEEL_DISTANCE_WIDTH = 0.5969;
-
-    public static final double ROBOT_WHEEL_DISTANCE_LENGTH = 0.5969;
+    public static final double ROBOT_WHEEL_DISTANCE_WIDTH = 0.5588;
+    public static final double ROBOT_WHEEL_DISTANCE_LENGTH = 0.5588;
 
     public static final double BUMPER_WIDTH = 0.762;
     public static final double MAX_MECHANISM_HEIGHT = 2.1336;
@@ -922,7 +921,7 @@ public final class Constants {
     public static final Current KRAKEN_TURN_STATOR_CURRENT_LIMIT = Amps.of(100);
     public static final Current KRAKEN_TURN_SUPPLY_CURRENT_LIMIT = Amps.of(25);
     public static final Current KRAKEN_DRIVE_STATOR_CURRENT_LIMIT = Amps.of(120);
-    public static final Current KRAKEN_DRIVE_SUPPLY_CURRENT_LIMIT = Amps.of(32);
+    public static final Current KRAKEN_DRIVE_SUPPLY_CURRENT_LIMIT = Amps.of(52);
 
     public static final double FALCON_DRIVE_KS = 0.12373;
     public static final double FALCON_DRIVE_KV = 2.5609;
@@ -981,7 +980,7 @@ public final class Constants {
         new RobotConfig(
             29.1,
             0.29,
-            new ModuleConfig(0.048, 5.45, 1.2, DCMotor.getFalcon500(1), 100, 500),
+            new ModuleConfig(0.048, 5.45, 1.2, DCMotor.getKrakenX60(1), 100, 500),
             frontLeftLocation,
             frontRightLocation,
             backLeftLocation,
