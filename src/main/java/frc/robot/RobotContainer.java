@@ -19,30 +19,30 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.ReefAlgaePose;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGround;
+import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
+import frc.robot.commands.ElevatorMoveThenCoralShoot;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
-import frc.robot.commands.hybrid.HybridScoreCoral;
-import frc.robot.commands.hybrid.HybridSource;
 import frc.robot.commands.manual.ManualSwerve;
 import frc.robot.commands.simulation.PlaceRandomGroundAlgae;
 import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.io.real.AlgaeGrabberReal;
+import frc.robot.subsystems.io.real.CoralIntakeReal;
+import frc.robot.subsystems.io.real.CoralShooterReal;
+import frc.robot.subsystems.io.real.ElevatorArmReal;
+import frc.robot.subsystems.io.real.ElevatorReal;
 import frc.robot.subsystems.io.sim.AlgaeGrabberSim;
 import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.subsystems.io.sim.CoralShooterSim;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
-import frc.robot.subsystems.io.stub.AlgaeGrabberStub;
 import frc.robot.subsystems.io.stub.ClimberStub;
-import frc.robot.subsystems.io.stub.CoralIntakeStub;
-import frc.robot.subsystems.io.stub.CoralShooterStub;
-import frc.robot.subsystems.io.stub.ElevatorArmStub;
-import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -88,11 +88,11 @@ public class RobotContainer {
       drivetrain = new Drivetrain();
       poseTracker = new PoseTracker();
       limelight = new Limelight();
-      elevator = new Elevator(new ElevatorStub(Constants.Elevator.kDt));
-      elevatorArm = new ElevatorArm(new ElevatorArmStub(0.02));
-      coralShooter = new CoralShooter(new CoralShooterStub(0.02));
-      coralIntake = new CoralIntake(new CoralIntakeStub(0.02));
-      algaeGrabber = new AlgaeGrabber(new AlgaeGrabberStub(0.02));
+      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
+      elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
+      coralShooter = new CoralShooter(new CoralShooterReal(0.02));
+      coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
+      algaeGrabber = new AlgaeGrabber(new AlgaeGrabberReal(0.02));
       climber = new Climber(new ClimberStub(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
@@ -167,32 +167,32 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
 
-    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
-    //     .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L1));
-    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
-    //     .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L2));
-    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
-    //     .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L3));
-    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
-    //     .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L4));
-
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
-        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L1));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L1));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
-        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L2));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L2));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
-        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L3));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L3));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
-        .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L4));
+        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L4));
+
+    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
+    //     .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L1));
+    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
+    //     .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L2));
+    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
+    //     .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L3));
+    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
+    //     .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L4));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
         .onTrue(new CoralIntakeFromGround());
 
-    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
-    //     .onTrue(new CoralIntakeFromSource());
-
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
-        .onTrue(HybridSource.deferred());
+        .onTrue(new CoralIntakeFromSource());
+
+    // new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
+    //     .onTrue(HybridSource.deferred());
 
     new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae())
         .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.GROUND_ALGAE));

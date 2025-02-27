@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -15,10 +14,10 @@ public class ElevatorMoveThenCoralShoot extends SequentialCommandGroup {
         RobotContainer.lights.elevator.runPattern(Constants.Lights.elevatorPattern);
 
     addCommands(
-        new ConditionalCommand(
-            new InstantCommand(() -> this.cancel()),
-            new InstantCommand(() -> {}),
-            () -> !RobotContainer.coralShooter.hasCoral()),
+        // new ConditionalCommand(
+        //     new InstantCommand(() -> this.cancel()),
+        //     new InstantCommand(() -> {}),
+        //     () -> !RobotContainer.coralShooter.hasCoral()),
         new InstantCommand(() -> lightsCommand.schedule()),
         new ElevatorMove(targetHeight).asProxy(),
         new CoralShoot(),

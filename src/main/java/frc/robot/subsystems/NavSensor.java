@@ -51,7 +51,7 @@ public class NavSensor extends SubsystemBase implements ShuffleboardPublisher {
 
   // Gets the angle minus the reference angle
   public Rotation2d getAdjustedAngle() {
-    return Rotation2d.fromDegrees(-(io.getAngle() - referenceAngle));
+    return Rotation2d.fromDegrees((io.getAngle() - referenceAngle));
   }
 
   public double getJerkMagnitude() {

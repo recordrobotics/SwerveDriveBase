@@ -8,6 +8,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -89,6 +91,9 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
   // The state-space loop combines a controller, observer, feedforward and plant for easy control.
   private final LinearSystemLoop<N1, N1, N1> driveLoop;
+
+  private final PIDController drivePID;
+  private final SimpleMotorFeedforward driveFF;
 
   private final double drive_kS;
 
@@ -230,6 +235,9 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     drive_kS = m.DRIVE_KS;
 
+    driveFF = new SimpleMotorFeedforward(m.DRIVE_KS, m.DRIVE_KV, m.DRIVE_KA);
+    drivePID = new PIDController(0.01, 0, 0);
+
     // Corrects for offset in absolute motor position
     io.setTurnMotorPosition(getAbsWheelTurnOffset());
     m_setpoint = new TrapezoidProfile.State(getTurnWheelRotation2d().getRotations(), 0);
@@ -335,6 +343,8 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     return new SwerveModulePosition(getDriveWheelDistance(), getTurnWheelRotation2d());
   }
 
+  double lastSpeed = 0;
+
   /**
    * Sets the desired state for the module.
    *
@@ -371,15 +381,20 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
   }
 
   public void controllerPeriodic() {
-    // Set setpoint of the linear system (position m, velocity m/s).
-    driveLoop.setNextR(VecBuilder.fill(targetDriveVelocity));
+    // // Set setpoint of the linear system (position m, velocity m/s).
+    // driveLoop.setNextR(VecBuilder.fill(targetDriveVelocity));
 
-    // Correct our Kalman filter's state vector estimate with encoder data.
-    driveLoop.correct(VecBuilder.fill(getDriveWheelVelocity()));
+    // // Correct our Kalman filter's state vector estimate with encoder data.
+    // driveLoop.correct(VecBuilder.fill(getDriveWheelVelocity()));
 
-    driveLoop.predict(Constants.Swerve.kDt);
+    // driveLoop.predict(Constants.Swerve.kDt);
 
-    double nextDriveVoltage = driveLoop.getU(0) + drive_kS * Math.signum(targetDriveVelocity);
+    // double nextDriveVoltage = driveLoop.getU(0) + drive_kS * Math.signum(targetDriveVelocity);
+
+    double nextDriveVoltage =
+        drivePID.calculate(getDriveWheelVelocity(), targetDriveVelocity)
+            + driveFF.calculateWithVelocities(lastSpeed, targetDriveVelocity);
+    lastSpeed = targetDriveVelocity;
 
     io.setDriveMotorVoltage(nextDriveVoltage);
 

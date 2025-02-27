@@ -712,8 +712,8 @@ public final class Constants {
     public static final double POSITION_MODE_MAX_VELOCITY = 1;
     public static final double POSITION_MODE_MAX_ACCELERATION = 2;
 
-    public static final double OUT_SPEED = 4; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
+    public static final double OUT_SPEED = 0.4; // TODO this is probably too slow
+    public static final double INTAKE_SPEED = -0.4; // TODO ^^^^^^^^^^^
 
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
@@ -738,8 +738,8 @@ public final class Constants {
     public static final double MAX_ARM_VELOCITY = 8;
     public static final double MAX_ARM_ACCELERATION = 22;
 
-    public static final double REVERSE_SPEED = 4; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -4; // TODO ^^^^^^^^^^^
+    public static final double REVERSE_SPEED = 6; // TODO this is probably too slow
+    public static final double INTAKE_SPEED = -8; // TODO ^^^^^^^^^^^
 
     public static final double INTAKE_TIME = 0.1; // TODO make correct
 
@@ -945,8 +945,8 @@ public final class Constants {
     public static final double KRAKEN_DRIVE_KA = 0.2404;
     public static final double KRAKEN_DRIVE_STD_STATE_VELOCITY = 3;
     public static final double KRAKEN_DRIVE_STD_ENCODER_VELOCITY = 0.001;
-    public static final double KRAKEN_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.05;
-    public static final double KRAKEN_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
+    public static final double KRAKEN_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
+    public static final double KRAKEN_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
 
     public static final double KRAKEN_TURN_KV = 1.608;
     public static final double KRAKEN_TURN_KA = 0.031048;
@@ -956,17 +956,17 @@ public final class Constants {
     public static final double KRAKEN_TURN_STD_ENCODER_POSITION = 0.01;
     public static final double KRAKEN_TURN_STD_ENCODER_VELOCITY = 0.001;
     public static final double KRAKEN_TURN_REGULATOR_POSITION_ERROR_TOLERANCE = 0.04;
-    public static final double KRAKEN_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.2;
-    public static final double KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
+    public static final double KRAKEN_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.5;
+    public static final double KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 4.0;
 
     // Wheel diameter
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
 
     // Turn max velocity and acceleration
     // Calculated from motor rpm 5000 / 60 (rps) / gear ratio (15.43)
-    public static final double TurnMaxAngularVelocity = 25; // ROTATIONS / SECOND
+    public static final double TurnMaxAngularVelocity = 10; // ROTATIONS / SECOND
     // Calculated from max velocity / time to reach (0.1)
-    public static final double TurnMaxAngularAcceleration = 15; // ROTATIONS / SECOND / SECOND
+    public static final double TurnMaxAngularAcceleration = 5; // ROTATIONS / SECOND / SECOND
 
     /** The max speed the robot can travel safely */
     public static final double robotMaxSpeed = 4.7;
