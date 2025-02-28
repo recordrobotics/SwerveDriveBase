@@ -716,7 +716,7 @@ public final class Constants {
 
     public static final double OUT_SPEED_FORWARD = 0.4; // TODO this is probably too slow
     public static final double OUT_SPEED_BACKWARD = -0.4; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = 0.03; // TODO ^^^^^^^^^^^
+    public static final double INTAKE_SPEED = -0.06; // TODO ^^^^^^^^^^^
 
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
