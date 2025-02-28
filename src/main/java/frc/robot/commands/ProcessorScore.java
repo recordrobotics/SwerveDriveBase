@@ -36,7 +36,7 @@ public class ProcessorScore extends SequentialCommandGroup {
                     .runPattern(Constants.Lights.PULSATING_ORANGE)
                     .schedule()));
 
-    if (RobotContainer.elevator.getHeight() == ElevatorHeight.GROUND_ALGAE) {
+    if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE) {
       addCommands(
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
           new AlgaeGrabberToProcessor()

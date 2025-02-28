@@ -29,7 +29,7 @@ public class CoralShoot extends SequentialCommandGroup {
                     .schedule()),
         new InstantCommand(
             () -> {
-              if (RobotContainer.elevator.getHeight() == ElevatorHeight.L4)
+              if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.L4)
                 RobotContainer.coralShooter.toggle(CoralShooterStates.OUT_BACKWARD);
               else RobotContainer.coralShooter.toggle(CoralShooterStates.OUT_FORWARD);
             }),

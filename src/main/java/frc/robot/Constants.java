@@ -182,6 +182,11 @@ public final class Constants {
     public double getArmAngle() {
       return armAngleRadians;
     }
+
+    public double getDifference(double height, double angle) {
+      return Math.abs(this.height - height) / 0.1
+          + Math.abs(this.armAngleRadians - angle) / Units.degreesToRadians(4);
+    }
   }
 
   public final class FieldConstants {
@@ -711,11 +716,11 @@ public final class Constants {
     public static final Distance CORAL_INTAKE_DISTANCE = Centimeters.of(5);
 
     // m/s coral
-    public static final double POSITION_MODE_MAX_VELOCITY = 1;
-    public static final double POSITION_MODE_MAX_ACCELERATION = 2;
+    public static final double POSITION_MODE_MAX_VELOCITY = 0.1;
+    public static final double POSITION_MODE_MAX_ACCELERATION = 0.2;
 
-    public static final double OUT_SPEED_FORWARD = 0.4; // TODO this is probably too slow
-    public static final double OUT_SPEED_BACKWARD = -0.4; // TODO this is probably too slow
+    public static final double OUT_SPEED_FORWARD = -0.4; // TODO this is probably too slow
+    public static final double OUT_SPEED_BACKWARD = 0.4; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -0.06; // TODO ^^^^^^^^^^^
 
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;

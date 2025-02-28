@@ -29,6 +29,7 @@ import frc.robot.subsystems.io.ElevatorIO;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
+import java.util.Arrays;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -43,8 +44,6 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   private final TrapezoidProfile m_profile = new TrapezoidProfile(constraints);
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
-
-  private Constants.ElevatorHeight m_height = ElevatorHeight.BOTTOM;
 
   // The plant holds a state-space model of our elevator. This system has the following properties:
   //
@@ -227,12 +226,22 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   }
 
   public void moveTo(ElevatorHeight height) {
-    m_height = height;
     toggle(height.getHeight());
   }
 
-  public ElevatorHeight getHeight() {
-    return m_height;
+  @AutoLogOutput
+  public ElevatorHeight getNearestHeight() {
+    double currentHeight = getCurrentHeight();
+    double currentArmAngle = RobotContainer.elevatorArm.getArmAngle();
+
+    var heights = ElevatorHeight.values();
+    Arrays.sort(
+        heights,
+        (a, b) ->
+            Double.compare(
+                a.getDifference(currentHeight, currentArmAngle),
+                b.getDifference(currentHeight, currentArmAngle)));
+    return heights[0];
   }
 
   public boolean atGoal() {

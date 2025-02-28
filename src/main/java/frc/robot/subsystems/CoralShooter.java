@@ -155,6 +155,7 @@ public class CoralShooter extends KillableSubsystem
     }
   }
 
+  @AutoLogOutput
   public CoralShooterStates getCurrentState() {
     return currentState;
   }

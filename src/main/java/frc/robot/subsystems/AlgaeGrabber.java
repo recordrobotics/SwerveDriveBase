@@ -62,8 +62,10 @@ public class AlgaeGrabber extends KillableSubsystem
   private final SysIdRoutine sysIdRoutine;
 
   public enum AlgaeGrabberStates {
-    OUT,
-    INTAKE,
+    OUT_GROUND,
+    OUT_REEF,
+    INTAKE_GROUND,
+    INTAKE_REEF,
     OFF;
   }
 
@@ -90,13 +92,23 @@ public class AlgaeGrabber extends KillableSubsystem
   /** Set the shooter speed to the preset ShooterStates state */
   public void toggle(AlgaeGrabberStates state) {
     switch (state) {
-      case OUT:
-        toggle(Constants.AlgaeGrabber.OUT_SPEED);
+      case OUT_GROUND:
+        toggle(Constants.AlgaeGrabber.OUT_GROUND_SPEED);
         waitingForAlgae = false;
         hasAlgae = false;
         break;
-      case INTAKE:
-        toggle(Constants.AlgaeGrabber.INTAKE_SPEED);
+      case OUT_REEF:
+        toggle(Constants.AlgaeGrabber.OUT_REEF_SPEED);
+        waitingForAlgae = false;
+        hasAlgae = false;
+        break;
+      case INTAKE_GROUND:
+        toggle(Constants.AlgaeGrabber.INTAKE_GROUND_SPEED);
+        waitingForAlgae = true;
+        hasAlgae = false;
+        break;
+      case INTAKE_REEF:
+        toggle(Constants.AlgaeGrabber.INTAKE_REEF_SPEED);
         waitingForAlgae = true;
         hasAlgae = false;
         break;
