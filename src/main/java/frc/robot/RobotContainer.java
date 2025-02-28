@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.ReefAlgaePose;
 import frc.robot.Constants.RobotState.Mode;
-import frc.robot.commands.CoralIntakeFromGround;
+import frc.robot.commands.CoralIntakeFromGroundToggled;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
 import frc.robot.commands.ElevatorMoveThenCoralShoot;
@@ -152,7 +152,15 @@ public class RobotContainer {
 
     // Command to kill robot
     new Trigger(() -> DashboardUI.Overview.getControl().getKill())
-        .whileTrue(new KillSpecified(drivetrain))
+        .whileTrue(
+            new KillSpecified(
+                drivetrain,
+                elevator,
+                elevatorArm,
+                coralShooter,
+                coralIntake,
+                algaeGrabber,
+                climber))
         .onTrue(
             new InstantCommand(
                 () ->
@@ -186,7 +194,7 @@ public class RobotContainer {
     //     .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L4));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
-        .onTrue(new CoralIntakeFromGround());
+        .toggleOnTrue(new CoralIntakeFromGroundToggled());
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(new CoralIntakeFromSource());

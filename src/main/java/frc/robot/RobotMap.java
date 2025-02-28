@@ -10,7 +10,7 @@ public final class RobotMap {
 
   public static final class CoralShooter {
     public static final int MOTOR_ID = 15;
-    public static final int LIMIT_SWITCH_ID = 7;
+    public static final int LIMIT_SWITCH_ID = 9;
   }
 
   public static final class AlgaeGrabber {

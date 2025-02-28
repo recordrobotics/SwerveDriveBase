@@ -132,6 +132,7 @@ public class CoralIntake extends KillableSubsystem
 
   public enum IntakeArmStates {
     UP,
+    INTAKE,
     DOWN;
   }
 
@@ -185,6 +186,9 @@ public class CoralIntake extends KillableSubsystem
         break;
       case DOWN:
         toggleArm(Constants.CoralIntake.ARM_DOWN);
+        break;
+      case INTAKE:
+        toggleArm(Constants.CoralIntake.ARM_INTAKE);
         break;
       default:
         io.setArmVoltage(0);

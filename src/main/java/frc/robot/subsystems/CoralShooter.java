@@ -83,7 +83,8 @@ public class CoralShooter extends KillableSubsystem
   private final SysIdRoutine sysIdRoutine;
 
   public enum CoralShooterStates {
-    OUT,
+    OUT_FORWARD,
+    OUT_BACKWARD,
     INTAKE,
     POSITION,
     OFF;
@@ -129,9 +130,13 @@ public class CoralShooter extends KillableSubsystem
   /** Set the shooter speed to the preset ShooterStates state */
   public void toggle(CoralShooterStates state) {
     switch (state) {
-      case OUT:
-        currentState = CoralShooterStates.OUT;
-        toggle(Constants.CoralShooter.OUT_SPEED);
+      case OUT_FORWARD:
+        currentState = CoralShooterStates.OUT_FORWARD;
+        toggle(Constants.CoralShooter.OUT_SPEED_FORWARD);
+        break;
+      case OUT_BACKWARD:
+        currentState = CoralShooterStates.OUT_BACKWARD;
+        toggle(Constants.CoralShooter.OUT_SPEED_BACKWARD);
         break;
       case INTAKE:
         currentState = CoralShooterStates.INTAKE;

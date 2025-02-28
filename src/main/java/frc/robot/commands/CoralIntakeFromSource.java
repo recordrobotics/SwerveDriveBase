@@ -42,8 +42,8 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
                     .stateVisualizer
                     .runPattern(Constants.Lights.PULSATING_ORANGE)
                     .schedule()),
-        new InstantCommand(() -> RobotContainer.coralIntake.toggleArm(IntakeArmStates.UP)),
-        new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.OFF)),
+        new InstantCommand(() -> RobotContainer.coralIntake.toggleArm(IntakeArmStates.INTAKE)),
+        new InstantCommand(() -> RobotContainer.coralIntake.toggle(CoralIntakeStates.REVERSE)),
         new InstantCommand(() -> RobotContainer.elevator.moveTo(ElevatorHeight.INTAKE)),
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.INTAKE)),
         new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),

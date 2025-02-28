@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -26,16 +25,15 @@ public class AlgaeGrabber extends KillableSubsystem
 
   private final AlgaeGrabberIO io;
 
-  private static Boolean debounced_value = false;
-  private Debouncer m_debouncer =
-      new Debouncer(Constants.AlgaeGrabber.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
-
   private final PIDController pid =
       new PIDController(
           Constants.AlgaeGrabber.kP, Constants.AlgaeGrabber.kI, Constants.AlgaeGrabber.kD);
   private final SimpleMotorFeedforward feedForward =
       new SimpleMotorFeedforward(
           Constants.AlgaeGrabber.kS, Constants.AlgaeGrabber.kV, Constants.AlgaeGrabber.kA);
+
+  private boolean hasAlgae = false;
+  private boolean waitingForAlgae = false;
 
   public AlgaeGrabber(AlgaeGrabberIO io) {
     this.io = io;
@@ -94,9 +92,13 @@ public class AlgaeGrabber extends KillableSubsystem
     switch (state) {
       case OUT:
         toggle(Constants.AlgaeGrabber.OUT_SPEED);
+        waitingForAlgae = false;
+        hasAlgae = false;
         break;
       case INTAKE:
         toggle(Constants.AlgaeGrabber.INTAKE_SPEED);
+        waitingForAlgae = true;
+        hasAlgae = false;
         break;
       case OFF: // Off
       default: // should never happen
@@ -107,7 +109,7 @@ public class AlgaeGrabber extends KillableSubsystem
 
   @AutoLogOutput
   public boolean hasAlgae() {
-    return debounced_value;
+    return hasAlgae;
   }
 
   private double lastSpeed = 0;
@@ -119,7 +121,11 @@ public class AlgaeGrabber extends KillableSubsystem
     io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
 
     lastSpeed = pid.getSetpoint();
-    debounced_value = !m_debouncer.calculate(io.getAlgaeDetector());
+
+    if (waitingForAlgae && Math.abs(getWheelVelocity()) < 0.1) {
+      hasAlgae = true;
+      waitingForAlgae = false;
+    }
   }
 
   @Override

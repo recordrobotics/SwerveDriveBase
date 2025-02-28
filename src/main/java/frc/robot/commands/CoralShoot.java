@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.CoralShooterToReef;
 import frc.robot.subsystems.CoralShooter.CoralShooterStates;
@@ -26,7 +27,12 @@ public class CoralShoot extends SequentialCommandGroup {
                     .stateVisualizer
                     .runPattern(Constants.Lights.coralScorePattern)
                     .schedule()),
-        new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OUT)),
+        new InstantCommand(
+            () -> {
+              if (RobotContainer.elevator.getHeight() == ElevatorHeight.L4)
+                RobotContainer.coralShooter.toggle(CoralShooterStates.OUT_BACKWARD);
+              else RobotContainer.coralShooter.toggle(CoralShooterStates.OUT_FORWARD);
+            }),
         // Make sure coral left
         new CoralShooterToReef()
             .simulateFor(new WaitUntilCommand(() -> !RobotContainer.coralShooter.hasCoral())),

@@ -156,15 +156,15 @@ public final class Constants {
   }
 
   public enum ElevatorHeight {
-    INTAKE(0, Units.degreesToRadians(-90)),
+    INTAKE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-95)),
     L1(0.26, Units.degreesToRadians(-95)),
     L2(0.44, Units.degreesToRadians(-95)),
     LOW_REEF_ALGAE(0.465, Units.degreesToRadians(-60)),
     L3(0.88, Units.degreesToRadians(-95)),
     HIGH_REEF_ALGAE(0.735, Units.degreesToRadians(-60)),
     L4(1.32, Units.degreesToRadians(22)),
-    BOTTOM(0, Units.degreesToRadians(-90)),
-    GROUND_ALGAE(0, Units.degreesToRadians(-50)),
+    BOTTOM(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-90)),
+    GROUND_ALGAE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-50)),
     PROCESSOR_SCORE(0.05, Units.degreesToRadians(-60));
 
     private double height;
@@ -660,6 +660,8 @@ public final class Constants {
     public static final double kG = 0.28565;
     public static final double kS = 0.076647;
 
+    public static final double STARTING_HEIGHT = Units.inchesToMeters(1.25);
+
     public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
     public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
 
@@ -712,8 +714,9 @@ public final class Constants {
     public static final double POSITION_MODE_MAX_VELOCITY = 1;
     public static final double POSITION_MODE_MAX_ACCELERATION = 2;
 
-    public static final double OUT_SPEED = 0.4; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -0.4; // TODO ^^^^^^^^^^^
+    public static final double OUT_SPEED_FORWARD = 0.4; // TODO this is probably too slow
+    public static final double OUT_SPEED_BACKWARD = -0.4; // TODO this is probably too slow
+    public static final double INTAKE_SPEED = 0.03; // TODO ^^^^^^^^^^^
 
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
@@ -738,7 +741,7 @@ public final class Constants {
     public static final double MAX_ARM_VELOCITY = 8;
     public static final double MAX_ARM_ACCELERATION = 22;
 
-    public static final double REVERSE_SPEED = 6; // TODO this is probably too slow
+    public static final double REVERSE_SPEED = 12; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -8; // TODO ^^^^^^^^^^^
 
     public static final double INTAKE_TIME = 0.1; // TODO make correct
@@ -751,7 +754,8 @@ public final class Constants {
     public static final double sV = 0.94817;
     public static final double sA = 0.025281;
 
-    public static final double ARM_UP = Units.degreesToRadians(80);
+    public static final double ARM_UP = Units.degreesToRadians(92.82);
+    public static final double ARM_INTAKE = Units.degreesToRadians(80);
     public static final double ARM_DOWN = -1;
     public static final double ARM_START_POS = Units.degreesToRadians(92.82);
 

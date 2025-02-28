@@ -114,10 +114,13 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
 
-    io.setLeftMotorPosition(0);
-    io.setRightMotorPosition(0);
+    io.setLeftMotorPosition(
+        Constants.Elevator.STARTING_HEIGHT / Constants.Elevator.METERS_PER_ROTATION);
+    io.setRightMotorPosition(
+        Constants.Elevator.STARTING_HEIGHT / Constants.Elevator.METERS_PER_ROTATION);
 
     m_setpoint = new TrapezoidProfile.State(getCurrentHeight(), 0);
+    toggle(Constants.Elevator.STARTING_HEIGHT);
 
     sysIdRoutine =
         new SysIdRoutine(
@@ -131,7 +134,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
     controller.latencyCompensate(elevatorSystem, Constants.Elevator.kDt, 0.02022);
 
-    SmartDashboard.putNumber("Elevator", 0);
+    SmartDashboard.putNumber("Elevator", Constants.Elevator.STARTING_HEIGHT);
   }
 
   private final SysIdRoutine sysIdRoutine;
@@ -192,8 +195,9 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
             + Constants.Elevator.kG
             + Constants.Elevator.kS * Math.signum(m_setpoint.velocity);
 
-    if ((!getTopEndStopPressed() || nextVoltage <= 0)
-        && (!getBottomEndStopPressed() || nextVoltage >= 0)) {
+    if (Math.abs(getCurrentVelocity()) < 0.2
+        || ((!getTopEndStopPressed() || nextVoltage <= 0)
+            && (!getBottomEndStopPressed() || nextVoltage >= 0))) {
       setBothMotors(nextVoltage);
     } else {
       setBothMotors(0);
