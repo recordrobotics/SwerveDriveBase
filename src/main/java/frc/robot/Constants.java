@@ -702,9 +702,9 @@ public final class Constants {
     public static final double kP = 0.011473;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kP_position = 90.629;
+    public static final double kP_position = 3.629;
     public static final double kI_position = 0.0;
-    public static final double kD_position = 11.032;
+    public static final double kD_position = 0.132;
     public static final double kS = 0.23442;
     public static final double kV = 2.801;
     public static final double kA = 0.30488;
@@ -715,7 +715,7 @@ public final class Constants {
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
-    public static final Distance CORAL_INTAKE_DISTANCE = Centimeters.of(5);
+    public static final Distance CORAL_INTAKE_DISTANCE = Centimeters.of(-0.2);
 
     // m/s coral
     public static final double POSITION_MODE_MAX_VELOCITY = 0.1;

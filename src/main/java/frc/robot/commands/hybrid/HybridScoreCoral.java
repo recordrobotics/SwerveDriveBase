@@ -18,7 +18,6 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.FieldPosition;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ElevatorMove;
-import frc.robot.commands.ElevatorMoveThenCoralShoot;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 import java.util.Set;
@@ -97,7 +96,7 @@ public class HybridScoreCoral extends SequentialCommandGroup {
         new InstantCommand(() -> elevatorLightsCommand.schedule()),
         AutoBuilder.followPath(shortestPath).asProxy().alongWith(new ElevatorMove(reefCoralHeight)),
         new InstantCommand(stateVisualizerLightsCommand::cancel),
-        new InstantCommand(elevatorLightsCommand::cancel),
-        new ElevatorMoveThenCoralShoot(reefCoralHeight));
+        new InstantCommand(elevatorLightsCommand::cancel));
+    // new ElevatorMoveThenCoralShoot(reefCoralHeight));
   }
 }

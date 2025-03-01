@@ -21,7 +21,7 @@ import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
-import frc.robot.commands.ElevatorMoveThenCoralShoot;
+import frc.robot.commands.ElevatorShootToggled;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
@@ -176,13 +176,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
-        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L1));
+        .onTrue(new ElevatorShootToggled(ElevatorHeight.L1));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
-        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L2));
+        .onTrue(new ElevatorShootToggled(ElevatorHeight.L2));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
-        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L3));
+        .onTrue(new ElevatorShootToggled(ElevatorHeight.L3));
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
-        .onTrue(new ElevatorMoveThenCoralShoot(ElevatorHeight.L4));
+        .onTrue(new ElevatorShootToggled(ElevatorHeight.L4));
 
     // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
     //     .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L1));
