@@ -28,7 +28,12 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
                     .schedule()),
         new ElevatorMove(targetHeight),
         new InstantCommand(() -> algaeGrabberLightsCommand.schedule()),
-        new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
+        new InstantCommand(
+            () -> {
+              if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE)
+                RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE_GROUND);
+              else RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE_REEF);
+            }),
         new AlgaeGrabberSim(0.2)
             .simulateFor(new WaitUntilCommand(RobotContainer.algaeGrabber::hasAlgae)),
         new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),

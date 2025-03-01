@@ -38,7 +38,8 @@ public class ProcessorScore extends SequentialCommandGroup {
 
     if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE) {
       addCommands(
-          new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE)),
+          new InstantCommand(
+              () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT_GROUND)),
           new AlgaeGrabberToProcessor()
               .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME)),
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),
@@ -46,7 +47,7 @@ public class ProcessorScore extends SequentialCommandGroup {
     } else {
       addCommands(
           new ElevatorMove(ElevatorHeight.PROCESSOR_SCORE),
-          new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT)),
+          new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT_REEF)),
           new AlgaeGrabberToProcessor()
               .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME)),
           new InstantCommand(() -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF)),

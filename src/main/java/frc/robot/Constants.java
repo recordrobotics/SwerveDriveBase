@@ -145,8 +145,10 @@ public final class Constants {
     public static final double kV = 1.9165;
     public static final double kA = 0.15486;
 
-    public static final double OUT_SPEED = 10;
-    public static final double INTAKE_SPEED = -10;
+    public static final double OUT_GROUND_SPEED = 10;
+    public static final double OUT_REEF_SPEED = -10;
+    public static final double INTAKE_GROUND_SPEED = -10;
+    public static final double INTAKE_REEF_SPEED = 10;
 
     public static final double SHOOT_TIME = 0.1; // TODO make correct
 
