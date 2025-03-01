@@ -34,6 +34,7 @@ public class AlgaeGrabber extends KillableSubsystem
 
   private boolean hasAlgae = false;
   private boolean waitingForAlgae = false;
+  private boolean waitingForIntakeSpeed = false;
 
   public AlgaeGrabber(AlgaeGrabberIO io) {
     this.io = io;
@@ -95,25 +96,31 @@ public class AlgaeGrabber extends KillableSubsystem
       case OUT_GROUND:
         toggle(Constants.AlgaeGrabber.OUT_GROUND_SPEED);
         waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
         hasAlgae = false;
         break;
       case OUT_REEF:
         toggle(Constants.AlgaeGrabber.OUT_REEF_SPEED);
         waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
         hasAlgae = false;
         break;
       case INTAKE_GROUND:
         toggle(Constants.AlgaeGrabber.INTAKE_GROUND_SPEED);
-        waitingForAlgae = true;
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = true;
         hasAlgae = false;
         break;
       case INTAKE_REEF:
         toggle(Constants.AlgaeGrabber.INTAKE_REEF_SPEED);
-        waitingForAlgae = true;
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = true;
         hasAlgae = false;
         break;
       case OFF: // Off
       default: // should never happen
+        waitingForIntakeSpeed = false;
+        waitingForAlgae = false;
         toggle(0);
         break;
     }
@@ -133,6 +140,11 @@ public class AlgaeGrabber extends KillableSubsystem
     io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
 
     lastSpeed = pid.getSetpoint();
+
+    if (waitingForIntakeSpeed && Math.abs(getWheelVelocity()) > 0.4) {
+      waitingForIntakeSpeed = false;
+      waitingForAlgae = true;
+    }
 
     if (waitingForAlgae && Math.abs(getWheelVelocity()) < 0.1) {
       hasAlgae = true;
