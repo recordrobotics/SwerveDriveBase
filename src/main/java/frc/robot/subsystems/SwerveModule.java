@@ -323,22 +323,12 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
   }
 
   public void controllerPeriodic() {
-    // // Set setpoint of the linear system (position m, velocity m/s).
-    // driveLoop.setNextR(VecBuilder.fill(targetDriveVelocity));
-
-    // // Correct our Kalman filter's state vector estimate with encoder data.
-    // driveLoop.correct(VecBuilder.fill(getDriveWheelVelocity()));
-
-    // driveLoop.predict(Constants.Swerve.kDt);
-
-    // double nextDriveVoltage = driveLoop.getU(0) + drive_kS * Math.signum(targetDriveVelocity);
-
     double nextDriveVoltage =
         drivePID.calculate(getDriveWheelVelocity(), targetDriveVelocity)
             + driveFF.calculateWithVelocities(lastSpeed, targetDriveVelocity);
     lastSpeed = targetDriveVelocity;
 
-    // io.setDriveMotorVoltage(nextDriveVoltage);
+    io.setDriveMotorVoltage(nextDriveVoltage);
 
     // Get next setpoint from profile.
     Logger.recordOutput("setpoint_" + turningMotorChannel, m_setpoint.position);
@@ -358,7 +348,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     Logger.recordOutput("targetvoltage_" + turningMotorChannel, nextturnVoltage);
 
-    // io.setTurnMotorVoltage(nextturnVoltage);
+    io.setTurnMotorVoltage(nextturnVoltage);
 
     Logger.recordOutput("GoalPos_" + turningMotorChannel, m_goal.position);
 
