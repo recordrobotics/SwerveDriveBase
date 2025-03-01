@@ -71,31 +71,8 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
   private final double turn_kS;
 
-  // The plant holds a state-space model of our turn motor. This system has the following
-  // properties:
-  //
-  // States: [position, velocity], in, meters and meters per second.
-  // Inputs (what we can "put in"): [voltage], in volts.
-  // Outputs (what we can measure): [position], in meters.
-  //
-  // The Kv and Ka constants are found using the FRC Characterization toolsuite.
-  private final LinearSystem<N1, N1, N1> driveSystem;
-
-  // The observer fuses our encoder data and voltage inputs to reject noise.
-  private final KalmanFilter<N1, N1, N1> driveObserver;
-
-  // A LQR uses feedback to create voltage commands.
-  private final LinearQuadraticRegulator<N1, N1, N1>
-      driveController; // Nominal time between loops. 0.020 for TimedRobot, but can be lower if
-  // using notifiers.
-
-  // The state-space loop combines a controller, observer, feedforward and plant for easy control.
-  private final LinearSystemLoop<N1, N1, N1> driveLoop;
-
   private final PIDController drivePID;
   private final SimpleMotorFeedforward driveFF;
-
-  private final double drive_kS;
 
   private double targetDriveVelocity;
 
@@ -199,41 +176,6 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
             turnSystem, turnController, turnObserver, 12.0, Constants.Swerve.kDt);
 
     turn_kS = m.TURN_KS;
-
-    this.driveSystem = LinearSystemId.identifyVelocitySystem(m.DRIVE_KV, m.DRIVE_KA);
-    this.driveObserver =
-        new KalmanFilter<>(
-            Nat.N1(),
-            Nat.N1(),
-            driveSystem,
-            VecBuilder.fill(
-                m.DRIVE_STD_STATE_VELOCITY), // Standard deviation of the state (velocity)
-            VecBuilder.fill(
-                m.DRIVE_STD_ENCODER_VELOCITY), // Standard deviation of encoder measurements
-            // (velocity)
-            Constants.Swerve.kDt);
-    this.driveController =
-        new LinearQuadraticRegulator<>(
-            driveSystem,
-            VecBuilder.fill(m.DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE), // qelms. Velocity error
-            // tolerance, in meters and meters per second. Decrease this to more heavily penalize
-            // state excursion, or make the controller behave more aggressively.
-            VecBuilder.fill(
-                m.DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE), // relms. Control effort (voltage)
-            // tolerance. Decrease this to more heavily penalize control effort, or
-            // make the controller less aggressive. 12 is a good starting point because
-            // that is the (approximate) maximum voltage of a battery.
-            Constants.Swerve
-                .kDt); // Nominal time between loops. 0.020 for TimedRobot, but can be lower if
-    // using notifiers.
-
-    driveController.latencyCompensate(driveSystem, Constants.Swerve.kDt, 0.0046062);
-
-    this.driveLoop =
-        new LinearSystemLoop<>(
-            driveSystem, driveController, driveObserver, 12.0, Constants.Swerve.kDt);
-
-    drive_kS = m.DRIVE_KS;
 
     driveFF = new SimpleMotorFeedforward(m.DRIVE_KS, m.DRIVE_KV, m.DRIVE_KA);
     drivePID = new PIDController(0.01, 0, 0);
