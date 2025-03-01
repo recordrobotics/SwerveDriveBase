@@ -21,6 +21,12 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
         new InstantCommand(() -> RobotContainer.coralIntake.toggleArm(IntakeArmStates.INTAKE)),
         new WaitUntilCommand(() -> RobotContainer.coralIntake.armAtGoal()),
         new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
+        new InstantCommand(
+            () ->
+                RobotContainer.lights
+                    .coralIntake
+                    .runPattern(Constants.Lights.PULSATING_ORANGE)
+                    .schedule()),
         // once both the arm and elevator are at goal, start elevator intake
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.INTAKE)),
         // push coral out
@@ -33,6 +39,22 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
         new InstantCommand(
             () -> RobotContainer.coralShooter.moveBy(Constants.CoralShooter.CORAL_INTAKE_DISTANCE)),
         new WaitUntilCommand(() -> RobotContainer.coralShooter.positionAtGoal()),
+        new InstantCommand(
+            () ->
+                RobotContainer.lights
+                    .elevator
+                    .runPattern(Constants.Lights.FLASHING_GREEN)
+                    .alongWith(
+                        RobotContainer.lights.coralIntake.runPattern(
+                            Constants.Lights.FLASHING_GREEN))
+                    .alongWith(
+                        RobotContainer.lights.coralShooter.runPattern(
+                            Constants.Lights.FLASHING_GREEN))
+                    .alongWith(
+                        RobotContainer.lights.stateVisualizer.runPattern(
+                            Constants.Lights.PULSATING_GREEN))
+                    .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)
+                    .schedule()),
         // stop elevator intake
         new InstantCommand(() -> RobotContainer.coralShooter.toggle(CoralShooterStates.OFF)),
         // stop intake push out
