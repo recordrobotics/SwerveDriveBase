@@ -34,7 +34,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends KillableSubsystem implements ShuffleboardPublisher, PoweredSubsystem {
-
   private final ElevatorIO io;
 
   // Maximum elevator velocity and acceleration constraints
@@ -146,7 +145,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return (io.getLeftMotorPosition() + io.getRightMotorPosition()) / 2;
   }
 
-  /** Average of the left and right heights of the elevator in meters */
+  /** Height of the elevator in meters */
   @AutoLogOutput
   public double getCurrentHeight() {
     return getCurrentRotation() * Constants.Elevator.METERS_PER_ROTATION;
@@ -172,10 +171,12 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     return io.getTopEndStop();
   }
 
+  public void setGoal(TrapezoidProfile.State goal) {
+    m_goal = goal;
+  }
+
   @Override
   public void periodic() {
-    // toggle(SmartDashboard.getNumber("Elevator", 0));
-
     // Get next setpoint from profile.
     m_setpoint = m_profile.calculate(Constants.Elevator.kDt, m_setpoint, m_goal);
 

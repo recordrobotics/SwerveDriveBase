@@ -696,6 +696,8 @@ public final class Constants {
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0.15, 0, Rotation2d.fromDegrees(0));
     public static final double MIN_LENGTH = 0.65;
     public static final double MAX_HEIGHT = 1.443284;
+
+    public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
   }
 
   public final class CoralShooter {

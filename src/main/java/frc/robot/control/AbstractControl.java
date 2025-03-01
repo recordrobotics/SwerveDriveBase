@@ -2,6 +2,7 @@ package frc.robot.control;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.utils.DriveCommandData;
@@ -30,7 +31,7 @@ public abstract class AbstractControl {
 
   public abstract Boolean getElevatorAlgaeHigh();
 
-  public abstract double getManualElevator();
+  public abstract LinearVelocity getManualElevatorVelocity();
 
   // Intake coral
   public abstract Boolean getCoralGroundIntake();

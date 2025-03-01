@@ -1,6 +1,9 @@
 package frc.robot.control;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -146,7 +149,8 @@ public class JoystickXboxKeypad extends AbstractControl {
   }
 
   @Override
-  public double getManualElevator() {
-    return xbox_controller.getLeftY();
+  public LinearVelocity getManualElevatorVelocity() {
+    double leftY = xbox_controller.getLeftY();
+    return Centimeters.of(20).per(Seconds).times(leftY * Math.abs(leftY));
   }
 }
