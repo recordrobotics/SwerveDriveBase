@@ -145,14 +145,12 @@ public final class Constants {
     public static final double kV = 1.9165;
     public static final double kA = 0.15486;
 
-    public static final double OUT_GROUND_SPEED = 10;
-    public static final double OUT_REEF_SPEED = -10;
-    public static final double INTAKE_GROUND_SPEED = -10;
-    public static final double INTAKE_REEF_SPEED = 10;
+    public static final double OUT_GROUND_SPEED = 2.8;
+    public static final double OUT_REEF_SPEED = -2.8;
+    public static final double INTAKE_GROUND_SPEED = -1.23;
+    public static final double INTAKE_REEF_SPEED = 1.23;
 
-    public static final double SHOOT_TIME = 0.1; // TODO make correct
-
-    public static final double DEBOUNCE_TIME = 0.1; // TODO make correct
+    public static final double SHOOT_TIME = 0.3; // TODO make correct
 
     public static final double GEAR_RATIO = 30;
   }
@@ -695,7 +693,7 @@ public final class Constants {
 
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0.15, 0, Rotation2d.fromDegrees(0));
     public static final double MIN_LENGTH = 0.65;
-    public static final double MAX_HEIGHT = 1.443284;
+    public static final double MAX_HEIGHT = 1.32;
 
     public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
   }
@@ -717,20 +715,20 @@ public final class Constants {
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
-    public static final Distance CORAL_INTAKE_DISTANCE = Centimeters.of(-0.2);
+    public static final Distance CORAL_INTAKE_DISTANCE = Meters.of(-0.13);
 
     // m/s coral
-    public static final double POSITION_MODE_MAX_VELOCITY = 0.1;
-    public static final double POSITION_MODE_MAX_ACCELERATION = 0.2;
+    public static final double POSITION_MODE_MAX_VELOCITY = 1.0;
+    public static final double POSITION_MODE_MAX_ACCELERATION = 0.4;
 
-    public static final double OUT_SPEED_FORWARD = -0.4; // TODO this is probably too slow
-    public static final double OUT_SPEED_BACKWARD = 0.4; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -0.06; // TODO ^^^^^^^^^^^
+    public static final double OUT_SPEED_FORWARD = -2.5;
+    public static final double OUT_SPEED_BACKWARD = 1.5;
+    public static final double INTAKE_SPEED = -0.35;
 
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
 
-    public static final double SHOOT_TIME = 0.1; // TODO make correct
+    public static final double SHOOT_TIME = 0.3; // TODO make correct
 
     public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
   }

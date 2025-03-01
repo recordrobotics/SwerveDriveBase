@@ -3,6 +3,7 @@ package frc.robot.control;
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -154,7 +155,7 @@ public class JoystickXbox extends AbstractControl {
 
   @Override
   public LinearVelocity getManualElevatorVelocity() {
-    double leftY = xbox_controller.getLeftY();
-    return Centimeters.of(20).per(Seconds).times(leftY * Math.abs(leftY));
+    double leftY = MathUtil.applyDeadband(-xbox_controller.getLeftY(), 0.1);
+    return Centimeters.of(50).per(Seconds).times(leftY * Math.abs(leftY));
   }
 }

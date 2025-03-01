@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -57,6 +58,9 @@ public class CoralShooter extends KillableSubsystem
     toggle(CoralShooterStates.OFF); // initialize as off
     DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
 
+    io.setPosition(0);
+    positionPid.reset(0);
+
     positionPid.setTolerance(
         Constants.CoralShooter.AT_GOAL_POSITION_TOLERANCE,
         Constants.CoralShooter.AT_GOAL_VELOCITY_TOLERANCE);
@@ -70,6 +74,8 @@ public class CoralShooter extends KillableSubsystem
                 null,
                 (state -> Logger.recordOutput("CoralShooter/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(v -> io.setVoltage(v.in(Volts)), null, this));
+
+    SmartDashboard.putNumber("CoralShooter_Value", 0);
   }
 
   public CoralShooterSim getSimIO() throws Exception {
@@ -173,6 +179,10 @@ public class CoralShooter extends KillableSubsystem
 
   @Override
   public void periodic() {
+    // toggle(0);
+    // currentState = CoralShooterStates.POSITION;
+    // positionPid.setGoal(SmartDashboard.getNumber("CoralShooter_Value", 0));
+
     if (currentState == CoralShooterStates.POSITION) {
       double pidOutput = positionPid.calculate(getPosition());
 

@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -50,6 +51,8 @@ public class AlgaeGrabber extends KillableSubsystem
                 null,
                 (state -> Logger.recordOutput("AlgaeGrabber/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(v -> io.setWheelVoltage(v.in(Volts)), null, this));
+
+    SmartDashboard.putNumber("AlgaeGrabber_Value", 0);
   }
 
   public AlgaeGrabberSim getSimIO() throws Exception {
@@ -135,6 +138,8 @@ public class AlgaeGrabber extends KillableSubsystem
 
   @Override
   public void periodic() {
+    toggle(SmartDashboard.getNumber("AlgaeGrabber_Value", 0));
+
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
     io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
