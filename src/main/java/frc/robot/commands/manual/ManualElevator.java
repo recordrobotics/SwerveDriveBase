@@ -13,7 +13,6 @@ import frc.robot.dashboard.DashboardUI;
 public class ManualElevator extends Command {
   public ManualElevator() {
     addRequirements(RobotContainer.elevator);
-    addRequirements(RobotContainer.elevatorArm);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
