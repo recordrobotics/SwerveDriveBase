@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
@@ -10,13 +9,11 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
-import frc.robot.Constants.ReefAlgaePose;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
 import frc.robot.commands.CoralIntakeFromSource;
@@ -25,6 +22,7 @@ import frc.robot.commands.ElevatorShootToggled;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
+import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.ManualSwerve;
 import frc.robot.commands.simulation.PlaceRandomGroundAlgae;
 import frc.robot.commands.simulation.PlaceRandomGroundCoral;
@@ -46,7 +44,6 @@ import frc.robot.subsystems.io.stub.ClimberStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
-import java.util.Set;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -132,6 +129,7 @@ public class RobotContainer {
     ShuffleboardPublisher.setup(poseTracker.nav, drivetrain, limelight);
 
     drivetrain.setDefaultCommand(new ManualSwerve());
+    elevator.setDefaultCommand(new ManualElevator());
 
     // camera exposure fix
     camera.setDriverMode(false);
@@ -175,13 +173,13 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL1())
         .onTrue(new ElevatorShootToggled(ElevatorHeight.L1));
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL2())
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL2())
         .onTrue(new ElevatorShootToggled(ElevatorHeight.L2));
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL3())
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL3())
         .onTrue(new ElevatorShootToggled(ElevatorHeight.L3));
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL4())
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL4())
         .onTrue(new ElevatorShootToggled(ElevatorHeight.L4));
 
     // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
@@ -204,23 +202,10 @@ public class RobotContainer {
 
     new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae())
         .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.GROUND_ALGAE));
-    new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeLow())
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow())
         .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.LOW_REEF_ALGAE));
-    new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeHigh())
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh())
         .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.HIGH_REEF_ALGAE));
-    new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeDefault())
-        .onTrue(
-            new DeferredCommand(
-                () ->
-                    new ElevatorMoveThenAlgaeGrab(
-                        ReefAlgaePose.getDefaultHeight(
-                                    ReefAlgaePose.closestTo(
-                                            new Pose3d(poseTracker.getEstimatedPosition()), 1000)
-                                        .getSide())
-                                == 1
-                            ? ElevatorHeight.HIGH_REEF_ALGAE
-                            : ElevatorHeight.LOW_REEF_ALGAE),
-                Set.of(algaeGrabber, elevator)));
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae())
         .onTrue(ProcessorScore.deferred());
 

@@ -16,26 +16,26 @@ public abstract class AbstractControl {
 
   public abstract Boolean getKill();
 
-  // Shoot coral
-  public abstract Boolean getCoralShootL1();
+  // Elevator
 
-  public abstract Boolean getCoralShootL2();
+  public abstract Boolean getElevatorL1();
 
-  public abstract Boolean getCoralShootL3();
+  public abstract Boolean getElevatorL2();
 
-  public abstract Boolean getCoralShootL4();
+  public abstract Boolean getElevatorL3();
+
+  public abstract Boolean getElevatorL4();
+
+  public abstract Boolean getElevatorAlgaeLow();
+
+  public abstract Boolean getElevatorAlgaeHigh();
+
+  public abstract double getManualElevator();
 
   // Intake coral
   public abstract Boolean getCoralGroundIntake();
 
   public abstract Boolean getCoralSourceIntake();
-
-  // Reef algae
-  public abstract Boolean getReefAlgaeLow();
-
-  public abstract Boolean getReefAlgaeHigh();
-
-  public abstract Boolean getReefAlgaeDefault();
 
   // Ground Algae
   public abstract Boolean getGroundAlgae();

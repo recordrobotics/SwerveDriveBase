@@ -89,22 +89,22 @@ public class JoystickXbox extends AbstractControl {
   }
 
   @Override
-  public Boolean getCoralShootL1() {
+  public Boolean getElevatorL1() {
     return xbox_controller.getAButton();
   }
 
   @Override
-  public Boolean getCoralShootL2() {
+  public Boolean getElevatorL2() {
     return xbox_controller.getXButton();
   }
 
   @Override
-  public Boolean getCoralShootL3() {
+  public Boolean getElevatorL3() {
     return xbox_controller.getBButton();
   }
 
   @Override
-  public Boolean getCoralShootL4() {
+  public Boolean getElevatorL4() {
     return xbox_controller.getYButton();
   }
 
@@ -119,20 +119,13 @@ public class JoystickXbox extends AbstractControl {
   }
 
   @Override
-  public Boolean getReefAlgaeLow() {
-    return xbox_controller.getRightTriggerAxis() > 0.3 && xbox_controller.getPOV() == 180;
+  public Boolean getElevatorAlgaeLow() {
+    return xbox_controller.getRightTriggerAxis() > 0.3 && xbox_controller.getPOV() != 0;
   }
 
   @Override
-  public Boolean getReefAlgaeHigh() {
+  public Boolean getElevatorAlgaeHigh() {
     return xbox_controller.getRightTriggerAxis() > 0.3 && xbox_controller.getPOV() == 0;
-  }
-
-  @Override
-  public Boolean getReefAlgaeDefault() {
-    return xbox_controller.getRightTriggerAxis() > 0.3
-        && xbox_controller.getPOV() != 180
-        && xbox_controller.getPOV() != 0;
   }
 
   @Override
@@ -148,5 +141,10 @@ public class JoystickXbox extends AbstractControl {
   @Override
   public Boolean getClimb() {
     return xbox_controller.getRawButton(1);
+  }
+
+  @Override
+  public double getManualElevator() {
+    return xbox_controller.getLeftY();
   }
 }
