@@ -6,12 +6,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 
-public class ElevatorShootToggled extends Command {
+public class ElevatorReefToggled extends Command {
 
   private ElevatorHeight targetHeight;
   private Command lightsCommand;
 
-  public ElevatorShootToggled(ElevatorHeight targetHeight) {
+  public ElevatorReefToggled(ElevatorHeight targetHeight) {
     this.targetHeight = targetHeight;
   }
 
@@ -25,14 +25,9 @@ public class ElevatorShootToggled extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    new CoralShoot()
-        .andThen(
-            new InstantCommand(
-                () ->
-                    new ElevatorMove(ElevatorHeight.BOTTOM)
-                        .asProxy()
-                        .andThen(new InstantCommand(lightsCommand::cancel))
-                        .schedule()))
+    new ElevatorMove(ElevatorHeight.BOTTOM)
+        .asProxy()
+        .andThen(new InstantCommand(lightsCommand::cancel))
         .schedule();
   }
 }

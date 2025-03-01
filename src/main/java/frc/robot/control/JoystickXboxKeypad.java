@@ -114,6 +114,11 @@ public class JoystickXboxKeypad extends AbstractControl {
   }
 
   @Override
+  public Boolean getCoralShoot() {
+    return xbox_controller.getPOV() == 270;
+  }
+
+  @Override
   public Boolean getCoralGroundIntake() {
     return xbox_controller.getLeftTriggerAxis() > 0.3;
   }

@@ -17,8 +17,11 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
 import frc.robot.commands.CoralIntakeFromSource;
+import frc.robot.commands.CoralShoot;
+import frc.robot.commands.ElevatorAlgaeToggled;
 import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
-import frc.robot.commands.ElevatorShootToggled;
+import frc.robot.commands.ElevatorMoveThenAlgaeGrabEnd;
+import frc.robot.commands.ElevatorReefToggled;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
@@ -174,13 +177,15 @@ public class RobotContainer {
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL1())
-        .onTrue(new ElevatorShootToggled(ElevatorHeight.L1));
+        .onTrue(new ElevatorReefToggled(ElevatorHeight.L1));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL2())
-        .onTrue(new ElevatorShootToggled(ElevatorHeight.L2));
+        .onTrue(new ElevatorReefToggled(ElevatorHeight.L2));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL3())
-        .onTrue(new ElevatorShootToggled(ElevatorHeight.L3));
+        .onTrue(new ElevatorReefToggled(ElevatorHeight.L3));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL4())
-        .onTrue(new ElevatorShootToggled(ElevatorHeight.L4));
+        .onTrue(new ElevatorReefToggled(ElevatorHeight.L4));
+
+    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShoot()).onTrue(new CoralShoot());
 
     // new Trigger(() -> DashboardUI.Overview.getControl().getCoralShootL1())
     //     .onTrue(HybridScoreCoral.deferred(ElevatorHeight.L1));
@@ -201,11 +206,13 @@ public class RobotContainer {
     //     .onTrue(HybridSource.deferred());
 
     new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae())
-        .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.GROUND_ALGAE));
+        .onTrue(
+            new ElevatorMoveThenAlgaeGrab(ElevatorHeight.GROUND_ALGAE)
+                .andThen(new ElevatorMoveThenAlgaeGrabEnd(ElevatorHeight.GROUND_ALGAE)));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow())
-        .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.LOW_REEF_ALGAE));
+        .onTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh())
-        .onTrue(new ElevatorMoveThenAlgaeGrab(ElevatorHeight.HIGH_REEF_ALGAE));
+        .onTrue(new ElevatorAlgaeToggled(ElevatorHeight.HIGH_REEF_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae())
         .onTrue(ProcessorScore.deferred());
 
