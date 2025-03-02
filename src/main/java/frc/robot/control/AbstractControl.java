@@ -2,6 +2,7 @@ package frc.robot.control;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.dashboard.DashboardUI;
@@ -18,7 +19,6 @@ public abstract class AbstractControl {
   public abstract Boolean getKill();
 
   // Elevator
-
   public abstract Boolean getElevatorL1();
 
   public abstract Boolean getElevatorL2();
@@ -32,6 +32,8 @@ public abstract class AbstractControl {
   public abstract Boolean getElevatorAlgaeHigh();
 
   public abstract LinearVelocity getManualElevatorVelocity();
+
+  public abstract AngularVelocity getManualElevatorArmVelocity();
 
   // Intake coral
   public abstract Boolean getCoralGroundIntake();

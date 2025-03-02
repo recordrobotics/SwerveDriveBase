@@ -31,7 +31,7 @@ public class ElevatorArmSim implements ElevatorArmIO {
           Units.degreesToRadians(-95),
           Units.degreesToRadians(95),
           true,
-          Constants.ElevatorArm.ARM_START_POS,
+          Constants.ElevatorArm.START_POS,
           0.001,
           0.001);
 
@@ -104,7 +104,7 @@ public class ElevatorArmSim implements ElevatorArmIO {
     armSim.setRawRotorPosition(
         Constants.ElevatorArm.ARM_GEAR_RATIO
             * Units.radiansToRotations(
-                armSimModel.getAngleRads() - Constants.ElevatorArm.ARM_START_POS));
+                armSimModel.getAngleRads() - Constants.ElevatorArm.START_POS));
     armSim.setRotorVelocity(
         Constants.ElevatorArm.ARM_GEAR_RATIO
             * Units.radiansToRotations(armSimModel.getVelocityRadPerSec()));

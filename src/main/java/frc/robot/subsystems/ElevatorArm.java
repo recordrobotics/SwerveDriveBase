@@ -10,12 +10,14 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
+import frc.robot.commands.manual.ManualElevatorArm;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.ElevatorArmIO;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
@@ -29,7 +31,7 @@ public class ElevatorArm extends KillableSubsystem
     implements ShuffleboardPublisher, PoweredSubsystem {
 
   private final ElevatorArmIO io;
-
+  private final SysIdRoutine sysIdRoutine;
   private final ProfiledPIDController pid =
       new ProfiledPIDController(
           Constants.ElevatorArm.kP,
@@ -37,15 +39,17 @@ public class ElevatorArm extends KillableSubsystem
           Constants.ElevatorArm.kD,
           new TrapezoidProfile.Constraints(
               Constants.ElevatorArm.MAX_ARM_VELOCITY, Constants.ElevatorArm.MAX_ARM_ACCELERATION));
-
   private final ArmFeedforward feedforward =
       new ArmFeedforward(
           Constants.ElevatorArm.kS,
           Constants.ElevatorArm.kG,
           Constants.ElevatorArm.kV,
           Constants.ElevatorArm.kA);
+  private AngularVelocity manualVelocity = RadiansPerSecond.of(0.0);
 
   public ElevatorArm(ElevatorArmIO io) {
+    setDefaultCommand(new ManualElevatorArm());
+
     this.io = io;
 
     io.applyArmTalonFXConfig(
@@ -60,7 +64,7 @@ public class ElevatorArm extends KillableSubsystem
 
     io.setArmPosition(
         Constants.ElevatorArm.ARM_GEAR_RATIO
-            * Units.radiansToRotations(Constants.ElevatorArm.ARM_START_POS));
+            * Units.radiansToRotations(Constants.ElevatorArm.START_POS));
     toggle(ElevatorHeight.BOTTOM.getArmAngle());
 
     pid.setTolerance(0.15, 1.05);
@@ -76,7 +80,7 @@ public class ElevatorArm extends KillableSubsystem
                 (state -> Logger.recordOutput("ElevatorArm/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.in(Volts)), null, this));
 
-    SmartDashboard.putNumber("ElevatorArm", Constants.ElevatorArm.ARM_START_POS);
+    SmartDashboard.putNumber("ElevatorArm", Constants.ElevatorArm.START_POS);
   }
 
   public ElevatorArmSim getSimIO() throws Exception {
@@ -86,8 +90,6 @@ public class ElevatorArm extends KillableSubsystem
       throw new Exception("ElevatorArmIO is not a simulation");
     }
   }
-
-  private final SysIdRoutine sysIdRoutine;
 
   @AutoLogOutput
   public double getArmAngle() {
@@ -112,11 +114,28 @@ public class ElevatorArm extends KillableSubsystem
     return pid.atGoal();
   }
 
+  public void setManualVelocity(AngularVelocity velocity) {
+    manualVelocity = velocity;
+  }
+
   private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
 
   @Override
   public void periodic() {
-    // toggle(SmartDashboard.getNumber("ElevatorArm", Constants.ElevatorArm.ARM_START_POS));
+    // manual, so no position pid
+    if (getDefaultCommand().isScheduled()) {
+      double feedforwardOutput =
+          feedforward.calculateWithVelocities(
+              getArmAngle(), getArmVelocity(), manualVelocity.in(RadiansPerSecond));
+      io.setArmVoltage(feedforwardOutput);
+      Logger.recordOutput("ElevatorArmTargetPosition", getArmAngle());
+      Logger.recordOutput("ElevatorArmTargetVelocity", manualVelocity.in(RadiansPerSecond));
+      Logger.recordOutput("ElevatorArmSetVoltage", 0.0);
+      Logger.recordOutput("ElevatorArmSetVoltageFF", feedforwardOutput);
+      RobotContainer.model.elevatorArm.update(getArmAngle());
+      RobotContainer.model.elevatorArm.updateSetpoint(getArmAngle());
+      return;
+    }
 
     double pidOutputArm = pid.calculate(getArmAngle());
 

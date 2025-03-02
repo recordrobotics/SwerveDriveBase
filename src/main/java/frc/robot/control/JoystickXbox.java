@@ -1,10 +1,12 @@
 package frc.robot.control;
 
 import static edu.wpi.first.units.Units.Centimeters;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
@@ -157,5 +159,11 @@ public class JoystickXbox extends AbstractControl {
   public LinearVelocity getManualElevatorVelocity() {
     double leftY = MathUtil.applyDeadband(-xbox_controller.getLeftY(), 0.1);
     return Centimeters.of(50).per(Seconds).times(leftY * Math.abs(leftY));
+  }
+
+  @Override
+  public AngularVelocity getManualElevatorArmVelocity() {
+    double rightY = MathUtil.applyDeadband(-xbox_controller.getRightY(), 0.1);
+    return Degrees.of(180).per(Seconds).times(rightY * Math.abs(rightY));
   }
 }

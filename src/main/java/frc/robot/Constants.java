@@ -126,7 +126,9 @@ public final class Constants {
     public static final double kV = 0.65091;
     public static final double kA = 0.030534;
 
-    public static final double ARM_START_POS = Units.degreesToRadians(-90);
+    public static final double START_POS = Units.degreesToRadians(-90);
+    public static final double MIN_POS = Units.degreesToRadians(-95); // TODO: make correct
+    public static final double MAX_POS = Units.degreesToRadians(95); // TODO: make correct
 
     public static final double ARM_GEAR_RATIO = 36; // 16:1 * 72/32
 
@@ -135,6 +137,8 @@ public final class Constants {
     // TODO: make correct
     public static final double LENGTH = 0.431;
     public static final double ANGLE_OFFSET = 0;
+
+    public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
   }
 
   public final class AlgaeGrabber {
