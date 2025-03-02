@@ -54,8 +54,8 @@ public final class Constants {
             Units.degreesToRadians(540), // Max angular velocity radians per second
             Units.degreesToRadians(720)); // Max angular acceleration radians per second per second
 
-    public static final double processorTriggerDistance = 3.0;
-    public static final double reefTriggerDistance = 3.0;
+    public static final double processorTriggerDistance = 3.0; // Meters
+    public static final double reefTriggerDistance = 3.0; // Meters
 
     public static final Map<String, Boolean> isAlgaeInHighPosition =
         Map.of(
@@ -89,14 +89,14 @@ public final class Constants {
     public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
     public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
 
-    public static final double EXTEND_VOLTAGE = 3.0; // TODO: make correct
-    public static final double CLIMB_VOLTAGE = 5.0; // TODO: make correct
+    public static final Voltage EXTEND_VOLTAGE = Volts.of(3.0); // TODO: make correct
+    public static final Voltage CLIMB_VOLTAGE = Volts.of(5.0); // TODO: make correct
 
-    public static final double START_POS = Units.degreesToRadians(45);
-    public static final double EXTENDED_POS = Units.degreesToRadians(90);
-    public static final double RETRACTED_POS = Units.degreesToRadians(0);
+    public static final Angle START_POS = Degrees.of(45);
+    public static final Angle EXTENDED_POS = Degrees.of(90);
+    public static final Angle RETRACTED_POS = Degrees.of(0);
 
-    public static final double DEADBAND = 0.05; // TODO: make correct
+    public static final Angle DEADBAND = Degrees.of(5); // TODO: make correct
 
     // TODO: verify correct
     public static final double GEAR_RATIO = 58;
@@ -104,7 +104,7 @@ public final class Constants {
     // TODO: make correct
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
     // TODO: make correct
-    public static final double LENGTH = 0.431;
+    public static final Distance LENGTH = Meters.of(0.431);
     public static final double ANGLE_OFFSET = 0;
 
     public static final double kV = 0.1;

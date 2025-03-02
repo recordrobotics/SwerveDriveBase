@@ -1,11 +1,14 @@
 package frc.robot.subsystems.io.sim;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants;
@@ -31,7 +34,7 @@ public class ClimberSim implements ClimberIO {
           Units.degreesToRadians(-95), // TODO: is bad numbers
           Units.degreesToRadians(95),
           true,
-          Constants.Climber.START_POS,
+          Constants.Climber.START_POS.in(Radians),
           0.001,
           0.001);
 
@@ -48,8 +51,8 @@ public class ClimberSim implements ClimberIO {
   }
 
   @Override
-  public void setVoltage(double outputVolts) {
-    motor.setVoltage(outputVolts);
+  public void setVoltage(Voltage outputVolts) {
+    motor.setVoltage(outputVolts.in(Volts));
   }
 
   @Override
@@ -98,7 +101,8 @@ public class ClimberSim implements ClimberIO {
 
     motorSim.setRawRotorPosition(
         Constants.Climber.GEAR_RATIO
-            * Units.radiansToRotations(simModel.getAngleRads() - Constants.Climber.START_POS));
+            * Units.radiansToRotations(
+                simModel.getAngleRads() - Constants.Climber.START_POS.in(Radians)));
     motorSim.setRotorVelocity(
         Constants.Climber.GEAR_RATIO * Units.radiansToRotations(simModel.getVelocityRadPerSec()));
   }

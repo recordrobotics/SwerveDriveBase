@@ -1,6 +1,7 @@
 package frc.robot.subsystems.io.stub;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.subsystems.io.ClimberIO;
 
 public class ClimberStub implements ClimberIO {
@@ -16,7 +17,7 @@ public class ClimberStub implements ClimberIO {
   public void applyTalonFXConfig(TalonFXConfiguration configuration) {}
 
   @Override
-  public void setVoltage(double outputVolts) {}
+  public void setVoltage(Voltage outputVolts) {}
 
   @Override
   public void setPosition(double newValue) {}

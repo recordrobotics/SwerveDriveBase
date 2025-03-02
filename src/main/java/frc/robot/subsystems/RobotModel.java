@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -406,7 +408,7 @@ public class RobotModel extends SubsystemBase {
         root.append(
             new LoggedMechanismLigament2d(
                 "climber",
-                Constants.Climber.LENGTH,
+                Constants.Climber.LENGTH.in(Meters),
                 Constants.Climber.ANGLE_OFFSET,
                 3,
                 new Color8Bit(Color.kPurple)));
@@ -424,7 +426,7 @@ public class RobotModel extends SubsystemBase {
         root_setpoint.append(
             new LoggedMechanismLigament2d(
                 "climber",
-                Constants.Climber.LENGTH,
+                Constants.Climber.LENGTH.in(Meters),
                 Constants.Climber.ANGLE_OFFSET,
                 3,
                 new Color8Bit(Color.kViolet)));

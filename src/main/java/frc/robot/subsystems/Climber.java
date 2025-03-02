@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -17,7 +19,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 public class Climber extends KillableSubsystem implements ShuffleboardPublisher, PoweredSubsystem {
   private final ClimberIO io;
-  private double targetPos = Constants.Climber.START_POS;
+  private Angle targetPos = Constants.Climber.START_POS;
 
   public Climber(ClimberIO io) {
     this.io = io;
@@ -32,29 +34,28 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
 
-    io.setPosition(
-        Constants.Climber.GEAR_RATIO * Units.radiansToRotations(Constants.Climber.START_POS));
+    io.setPosition(Constants.Climber.GEAR_RATIO * Constants.Climber.START_POS.in(Rotations));
   }
 
   @Override
   public void periodic() {
-    double currentPos = getArmAngle();
+    Angle currentPos = getArmAngle();
 
     // Simple bang bang with deadband
-    if (Math.abs(targetPos - currentPos) < Constants.Climber.DEADBAND) {
-      io.setVoltage(0.0);
-    } else if (targetPos > currentPos) {
+    if (targetPos.isNear(currentPos, Constants.Climber.DEADBAND.in(Radians))) {
+      io.setVoltage(Volts.zero());
+    } else if (targetPos.gt(currentPos)) {
       io.setVoltage(Constants.Climber.CLIMB_VOLTAGE);
     } else {
-      io.setVoltage(-Constants.Climber.EXTEND_VOLTAGE);
+      io.setVoltage(Constants.Climber.EXTEND_VOLTAGE.unaryMinus());
     }
 
     // Update mechanism
-    RobotContainer.model.climber.update(getArmAngle());
+    RobotContainer.model.climber.update(getArmAngle().in(Radians));
   }
 
   public boolean atGoal() {
-    return Math.abs(targetPos - getArmAngle()) < Constants.Climber.DEADBAND;
+    return targetPos.isNear(getArmAngle(), Constants.Climber.DEADBAND.in(Radians));
   }
 
   public void climb() {
@@ -74,8 +75,8 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
   }
 
   @AutoLogOutput
-  public double getArmAngle() {
-    return io.getPosition() / Constants.Climber.GEAR_RATIO * 2 * Math.PI;
+  public Angle getArmAngle() {
+    return Rotations.of(io.getPosition() / Constants.Climber.GEAR_RATIO);
   }
 
   @AutoLogOutput
@@ -106,7 +107,7 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
 
   @Override
   public void kill() {
-    io.setVoltage(0);
+    io.setVoltage(Volts.zero());
   }
 
   /** frees up all hardware allocations */
