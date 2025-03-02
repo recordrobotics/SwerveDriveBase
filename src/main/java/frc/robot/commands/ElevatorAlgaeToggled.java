@@ -10,16 +10,16 @@ public class ElevatorAlgaeToggled extends Command {
 
   public ElevatorAlgaeToggled(ElevatorHeight targetHeight) {
     this.targetHeight = targetHeight;
-    addRequirements(RobotContainer.algaeGrabber);
+    addRequirements(RobotContainer.elevatorMoveToggleRequirement);
   }
 
   @Override
   public void initialize() {
-    new ElevatorMoveThenAlgaeGrab(targetHeight).schedule();
+    new ElevatorMoveThenAlgaeGrab(targetHeight).handleInterrupt(this::cancel).schedule();
   }
 
   @Override
   public void end(boolean interrupted) {
-    new ElevatorMoveThenAlgaeGrabEnd(targetHeight).schedule();
+    new ElevatorMoveThenAlgaeGrabEnd(targetHeight).handleInterrupt(this::cancel).schedule();
   }
 }

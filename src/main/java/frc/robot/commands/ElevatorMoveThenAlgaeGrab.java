@@ -24,7 +24,7 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
                     .elevator
                     .runPattern(Constants.Lights.elevatorPattern)
                     .schedule()),
-        new ElevatorMove(targetHeight),
+        new ElevatorMove(targetHeight).asProxy(),
         new InstantCommand(() -> algaeGrabberLightsCommand.schedule()),
         new InstantCommand(
             () -> {
@@ -46,5 +46,6 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
                             Constants.Lights.PULSATING_GREEN))
                     .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)
                     .schedule()));
+    this.handleInterrupt(algaeGrabberLightsCommand::cancel);
   }
 }

@@ -9,7 +9,7 @@ public class ElevatorMove extends Command {
 
   public ElevatorMove(ElevatorHeight targetHeight) {
     this.targetHeight = targetHeight;
-    addRequirements(RobotContainer.elevator);
+    addRequirements(RobotContainer.elevator, RobotContainer.elevatorArm);
   }
 
   // Called when the command is initially scheduled.

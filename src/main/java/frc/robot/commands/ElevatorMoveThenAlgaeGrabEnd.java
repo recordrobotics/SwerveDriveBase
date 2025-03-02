@@ -18,7 +18,7 @@ public class ElevatorMoveThenAlgaeGrabEnd extends SequentialCommandGroup {
                 new ElevatorMove(
                     targetHeight == ElevatorHeight.GROUND_ALGAE
                         ? ElevatorHeight.GROUND_ALGAE
-                        : ElevatorHeight.INTAKE),
+                        : ElevatorHeight.BOTTOM),
             Set.of(RobotContainer.elevator)),
         new InstantCommand(
             () ->
