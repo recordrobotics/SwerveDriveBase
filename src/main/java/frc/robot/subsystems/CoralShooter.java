@@ -125,6 +125,7 @@ public class CoralShooter extends KillableSubsystem
   public void moveBy(double meters) {
     toggle(0);
     currentState = CoralShooterStates.POSITION;
+    positionPid.reset(getPosition());
     positionPid.setGoal(getPosition() + meters);
   }
 

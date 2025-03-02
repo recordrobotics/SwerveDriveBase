@@ -30,10 +30,9 @@ public class CoralShooterSim implements CoralShooterIO {
           LinearSystemId.createDCMotorSystem(wheelMotor, 0.001, Constants.CoralShooter.GEAR_RATIO),
           wheelMotor);
 
-  private final DigitalInput coralDetector =
-      new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
+  private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralShooter.PHOTOSENSOR_ID);
   private final SimDevice coralDetectorSim =
-      SimDevice.create("DigitalInput", RobotMap.CoralShooter.LIMIT_SWITCH_ID);
+      SimDevice.create("DigitalInput", RobotMap.CoralShooter.PHOTOSENSOR_ID);
   private final SimBoolean coralDetectorSimValue;
 
   public CoralShooterSim(double periodicDt) {

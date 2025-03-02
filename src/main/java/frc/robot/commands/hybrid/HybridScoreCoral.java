@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
@@ -87,13 +87,9 @@ public class HybridScoreCoral extends SequentialCommandGroup {
         RobotContainer.lights.elevator.runPattern(Constants.Lights.elevatorPattern);
 
     addCommands(
-        new ConditionalCommand( // cancel if no coral
-            new InstantCommand(() -> this.cancel()),
-            new InstantCommand(() -> {}),
-            () -> !RobotContainer.coralShooter.hasCoral()),
-        new InstantCommand(() -> stateVisualizerLightsCommand.schedule()),
+        new ScheduleCommand(stateVisualizerLightsCommand),
         AutoBuilder.pathfindToPose(shortestPose, Constants.HybridConstants.constraints).asProxy(),
-        new InstantCommand(() -> elevatorLightsCommand.schedule()),
+        new ScheduleCommand(elevatorLightsCommand),
         AutoBuilder.followPath(shortestPath).asProxy().alongWith(new ElevatorMove(reefCoralHeight)),
         new InstantCommand(stateVisualizerLightsCommand::cancel),
         new InstantCommand(elevatorLightsCommand::cancel));

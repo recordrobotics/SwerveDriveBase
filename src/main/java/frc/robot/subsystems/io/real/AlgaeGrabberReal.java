@@ -2,7 +2,6 @@ package frc.robot.subsystems.io.real;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.io.AlgaeGrabberIO;
 
@@ -12,8 +11,6 @@ public class AlgaeGrabberReal implements AlgaeGrabberIO {
   private final double periodicDt;
 
   private final SparkMax wheel;
-  private final DigitalInput algaeDetector =
-      new DigitalInput(RobotMap.AlgaeGrabber.LIMIT_SWITCH_ID);
 
   public AlgaeGrabberReal(double periodicDt) {
     this.periodicDt = periodicDt;
@@ -56,11 +53,6 @@ public class AlgaeGrabberReal implements AlgaeGrabberIO {
   }
 
   @Override
-  public boolean getAlgaeDetector() {
-    return algaeDetector.get();
-  }
-
-  @Override
   public double getWheelCurrentDrawAmps() {
     return wheel.getOutputCurrent();
   }
@@ -68,7 +60,6 @@ public class AlgaeGrabberReal implements AlgaeGrabberIO {
   @Override
   public void close() throws Exception {
     wheel.close();
-    algaeDetector.close();
   }
 
   @Override

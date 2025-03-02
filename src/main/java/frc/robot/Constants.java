@@ -153,6 +153,8 @@ public final class Constants {
     public static final double OUT_REEF_SPEED = -2.8;
     public static final double INTAKE_GROUND_SPEED = -1.23;
     public static final double INTAKE_REEF_SPEED = 1.23;
+    public static final double HOLD_GROUND_SPEED = -0.3;
+    public static final double HOLD_REEF_SPEED = 0.3;
 
     public static final double SHOOT_TIME = 0.3; // TODO make correct
 
@@ -160,7 +162,7 @@ public final class Constants {
   }
 
   public enum ElevatorHeight {
-    INTAKE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-95)),
+    INTAKE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-98)),
     L1(0.26, Units.degreesToRadians(-95)),
     L2(0.44, Units.degreesToRadians(-95)),
     LOW_REEF_ALGAE(0.465, Units.degreesToRadians(-60)),

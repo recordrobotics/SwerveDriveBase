@@ -23,15 +23,6 @@ public class CoralIntakeToElevator extends SequentialCommandGroup implements Sim
     addCommands(
         new InstantCommand(
             () -> coral = RobotContainer.model.getCoral("CoralIntakeToElevator/Coral")),
-        // set does not have coral (NC)
-        new InstantCommand(
-            () -> {
-              try {
-                RobotContainer.coralIntake.getSimIO().setCoralDetectorSim(true);
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
-            }),
         // move coral to elevator
         new DeferredCommand(
             () ->

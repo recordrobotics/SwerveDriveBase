@@ -25,11 +25,10 @@ public class AlgaeGrabberToProcessor extends SequentialCommandGroup implements S
 
     addCommands(
         new InstantCommand(() -> algae = RobotContainer.model.getAlgae("AlgaeGrabber/Algae")),
-        // set does not have coral (NC)
         new InstantCommand(
             () -> {
               try {
-                RobotContainer.algaeGrabber.getSimIO().setAlgaeDetectorSim(true);
+                RobotContainer.algaeGrabber.getSimIO().setHasAlgae(false);
               } catch (Exception e) {
                 e.printStackTrace();
               }

@@ -41,11 +41,6 @@ public class AlgaeGrabberStub implements AlgaeGrabberIO {
   }
 
   @Override
-  public boolean getAlgaeDetector() {
-    return false;
-  }
-
-  @Override
   public double getWheelCurrentDrawAmps() {
     return 0;
   }

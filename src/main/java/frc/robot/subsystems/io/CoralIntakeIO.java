@@ -34,8 +34,6 @@ public interface CoralIntakeIO extends AutoCloseable {
 
   public double getArmPercent();
 
-  public boolean getCoralDetector();
-
   public double getWheelCurrentDrawAmps();
 
   public double getArmCurrentDrawAmps();

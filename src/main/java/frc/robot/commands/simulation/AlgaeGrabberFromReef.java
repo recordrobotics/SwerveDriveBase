@@ -63,12 +63,11 @@ public class AlgaeGrabberFromReef extends SequentialCommandGroup implements Simu
                   0.2);
             },
             new HashSet<>()),
-        // set has algae (NC)
         new InstantCommand(
             () -> {
               try {
                 algae.pose = () -> RobotContainer.model.elevatorArm.getAlgaeGrabberTargetPoseTop();
-                RobotContainer.algaeGrabber.getSimIO().setAlgaeDetectorSim(false);
+                RobotContainer.algaeGrabber.getSimIO().setHasAlgae(true);
               } catch (Exception e) {
                 e.printStackTrace();
               }

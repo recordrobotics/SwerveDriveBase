@@ -49,15 +49,6 @@ public class CoralIntakeFromGroundTimeBased extends SequentialCommandGroup
             () -> {
               coral.name = "CoralIntakeToElevator/Coral";
               coral.pose = () -> RobotContainer.model.coralIntake.getCoralTargetPose();
-            }),
-        // set has coral (NC)
-        new InstantCommand(
-            () -> {
-              try {
-                RobotContainer.coralIntake.getSimIO().setCoralDetectorSim(false);
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
             }));
   }
 

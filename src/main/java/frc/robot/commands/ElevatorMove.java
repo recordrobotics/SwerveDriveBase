@@ -21,7 +21,10 @@ public class ElevatorMove extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    RobotContainer.elevator.moveTo(targetHeight);
+    RobotContainer.elevatorArm.toggle(targetHeight.getArmAngle());
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -10,18 +10,16 @@ public final class RobotMap {
 
   public static final class CoralShooter {
     public static final int MOTOR_ID = 15;
-    public static final int LIMIT_SWITCH_ID = 9;
+    public static final int PHOTOSENSOR_ID = 9;
   }
 
   public static final class AlgaeGrabber {
     public static final int MOTOR_ID = 16;
-    public static final int LIMIT_SWITCH_ID = 6;
   }
 
   public static final class CoralIntake {
     public static final int ARM_ID = 12;
     public static final int WHEEL_ID = 14;
-    public static final int LIMIT_SWITCH_ID = 10;
   }
 
   public static final class ElevatorArm {

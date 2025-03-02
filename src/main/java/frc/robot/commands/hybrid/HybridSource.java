@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
@@ -69,7 +70,7 @@ public class HybridSource extends SequentialCommandGroup {
         RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.hybridPattern);
 
     addCommands(
-        new InstantCommand(() -> lightsCommand.schedule()),
+        new ScheduleCommand(lightsCommand),
         AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints)
             .asProxy(),
         new InstantCommand(lightsCommand::cancel),

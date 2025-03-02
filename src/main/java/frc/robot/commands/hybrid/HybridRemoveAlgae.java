@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
@@ -62,10 +63,13 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
         RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.removeAlgaePattern);
 
     addCommands(
-        new InstantCommand(() -> lightsCommand.schedule()),
+        new ScheduleCommand(lightsCommand),
         AutoBuilder.pathfindToPose(
             shortestPath.getStartingHolonomicPose().get(), Constants.HybridConstants.constraints),
-        new InstantCommand(() -> RobotContainer.elevator.moveTo(algaeHeight)),
+        new InstantCommand(
+            () -> RobotContainer.elevator.moveTo(algaeHeight),
+            RobotContainer.elevator,
+            RobotContainer.elevatorArm),
         AutoBuilder.followPath(shortestPath),
         new InstantCommand(lightsCommand::cancel),
         ElevatorMoveThenAlgaeGrab.create(algaeHeight));

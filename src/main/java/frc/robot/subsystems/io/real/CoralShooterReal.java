@@ -12,8 +12,7 @@ public class CoralShooterReal implements CoralShooterIO {
   private final double periodicDt;
 
   private final SparkMax motor;
-  private final DigitalInput coralDetector =
-      new DigitalInput(RobotMap.CoralShooter.LIMIT_SWITCH_ID);
+  private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralShooter.PHOTOSENSOR_ID);
 
   public CoralShooterReal(double periodicDt) {
     this.periodicDt = periodicDt;

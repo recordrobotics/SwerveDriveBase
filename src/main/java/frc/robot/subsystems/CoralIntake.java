@@ -14,7 +14,6 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
@@ -36,10 +35,6 @@ public class CoralIntake extends KillableSubsystem
     implements ShuffleboardPublisher, PoweredSubsystem {
 
   private final CoralIntakeIO io;
-
-  private static Boolean debounced_value = false;
-  private Debouncer m_debouncer =
-      new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final ProfiledPIDController armPID =
       new ProfiledPIDController(
@@ -123,11 +118,6 @@ public class CoralIntake extends KillableSubsystem
     REVERSE,
     INTAKE,
     OFF;
-  }
-
-  @AutoLogOutput
-  public boolean hasCoral() {
-    return debounced_value;
   }
 
   public enum IntakeArmStates {
@@ -241,8 +231,6 @@ public class CoralIntake extends KillableSubsystem
     // Update mechanism
     RobotContainer.model.coralIntake.update(getArmAngle());
     RobotContainer.model.coralIntake.updateSetpoint(currentSetpoint.position);
-
-    debounced_value = !m_debouncer.calculate(io.getCoralDetector());
   }
 
   @Override

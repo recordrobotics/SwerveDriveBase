@@ -4,7 +4,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.io.CoralIntakeIO;
 
@@ -15,7 +14,6 @@ public class CoralIntakeReal implements CoralIntakeIO {
 
   private final SparkMax wheel;
   private final TalonFX arm;
-  private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralIntake.LIMIT_SWITCH_ID);
 
   public CoralIntakeReal(double periodicDt) {
     this.periodicDt = periodicDt;
@@ -100,11 +98,6 @@ public class CoralIntakeReal implements CoralIntakeIO {
   }
 
   @Override
-  public boolean getCoralDetector() {
-    return coralDetector.get();
-  }
-
-  @Override
   public double getWheelCurrentDrawAmps() {
     return wheel.getOutputCurrent();
   }
@@ -118,7 +111,6 @@ public class CoralIntakeReal implements CoralIntakeIO {
   public void close() throws Exception {
     wheel.close();
     arm.close();
-    coralDetector.close();
   }
 
   @Override

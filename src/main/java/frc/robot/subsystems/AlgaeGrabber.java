@@ -70,6 +70,8 @@ public class AlgaeGrabber extends KillableSubsystem
     OUT_REEF,
     INTAKE_GROUND,
     INTAKE_REEF,
+    HOLD_REEF,
+    HOLD_GROUND,
     OFF;
   }
 
@@ -120,6 +122,18 @@ public class AlgaeGrabber extends KillableSubsystem
         waitingForIntakeSpeed = true;
         hasAlgae = false;
         break;
+      case HOLD_REEF:
+        toggle(Constants.AlgaeGrabber.HOLD_REEF_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = true;
+        break;
+      case HOLD_GROUND:
+        toggle(Constants.AlgaeGrabber.HOLD_GROUND_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = true;
+        break;
       case OFF: // Off
       default: // should never happen
         waitingForIntakeSpeed = false;
@@ -138,7 +152,7 @@ public class AlgaeGrabber extends KillableSubsystem
 
   @Override
   public void periodic() {
-    toggle(SmartDashboard.getNumber("AlgaeGrabber_Value", 0));
+    // toggle(SmartDashboard.getNumber("AlgaeGrabber_Value", 0));
 
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());

@@ -16,8 +16,6 @@ public interface AlgaeGrabberIO extends AutoCloseable {
 
   public double getWheelPercent();
 
-  public boolean getAlgaeDetector();
-
   public double getWheelCurrentDrawAmps();
 
   public void simulationPeriodic();

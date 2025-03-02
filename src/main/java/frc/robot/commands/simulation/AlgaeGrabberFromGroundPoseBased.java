@@ -55,14 +55,13 @@ public class AlgaeGrabberFromGroundPoseBased extends SequentialCommandGroup
                     p -> closestAlgae.pose = () -> p,
                     0.2),
             new HashSet<>()),
-        // set has algae (NC)
         new InstantCommand(
             () -> {
               try {
                 closestAlgae.name = "AlgaeGrabber/Algae";
                 closestAlgae.pose =
                     () -> RobotContainer.model.elevatorArm.getAlgaeGrabberTargetPoseBottom();
-                RobotContainer.algaeGrabber.getSimIO().setAlgaeDetectorSim(false);
+                RobotContainer.algaeGrabber.getSimIO().setHasAlgae(true);
               } catch (Exception e) {
                 e.printStackTrace();
               }

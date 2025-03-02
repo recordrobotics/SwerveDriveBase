@@ -74,11 +74,6 @@ public class CoralIntakeStub implements CoralIntakeIO {
   }
 
   @Override
-  public boolean getCoralDetector() {
-    return false;
-  }
-
-  @Override
   public double getWheelCurrentDrawAmps() {
     return 0;
   }
