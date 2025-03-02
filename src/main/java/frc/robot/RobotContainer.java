@@ -177,13 +177,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(poseTracker::resetDriverPose));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL1())
-        .onTrue(new ElevatorReefToggled(ElevatorHeight.L1));
+        .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L1));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL2())
-        .onTrue(new ElevatorReefToggled(ElevatorHeight.L2));
+        .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L2));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL3())
-        .onTrue(new ElevatorReefToggled(ElevatorHeight.L3));
+        .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L3));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL4())
-        .onTrue(new ElevatorReefToggled(ElevatorHeight.L4));
+        .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L4));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralShoot()).onTrue(new CoralShoot());
 
@@ -210,9 +210,9 @@ public class RobotContainer {
             new ElevatorMoveThenAlgaeGrab(ElevatorHeight.GROUND_ALGAE)
                 .andThen(new ElevatorMoveThenAlgaeGrabEnd(ElevatorHeight.GROUND_ALGAE)));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow())
-        .onTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
+        .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh())
-        .onTrue(new ElevatorAlgaeToggled(ElevatorHeight.HIGH_REEF_ALGAE));
+        .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.HIGH_REEF_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae())
         .onTrue(ProcessorScore.deferred());
 

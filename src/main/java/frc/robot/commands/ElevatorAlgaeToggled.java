@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorHeight;
+import frc.robot.RobotContainer;
 
 public class ElevatorAlgaeToggled extends Command {
 
@@ -9,6 +10,7 @@ public class ElevatorAlgaeToggled extends Command {
 
   public ElevatorAlgaeToggled(ElevatorHeight targetHeight) {
     this.targetHeight = targetHeight;
+    addRequirements(RobotContainer.algaeGrabber);
   }
 
   @Override
