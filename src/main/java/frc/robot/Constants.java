@@ -734,7 +734,7 @@ public final class Constants {
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
 
-    public static final Time SHOOT_TIME = Seconds.of(0.5); // TODO make correct
+    public static final Time SHOOT_TIME = Seconds.of(0.3); // TODO make correct
 
     public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
   }
@@ -770,7 +770,7 @@ public final class Constants {
 
     public static final double ARM_UP = Units.degreesToRadians(92.82);
     public static final double ARM_INTAKE = Units.degreesToRadians(80);
-    public static final double ARM_SCORE_L1 = Units.degreesToRadians(48);
+    public static final double ARM_SCORE_L1 = Units.degreesToRadians(10.06);
     public static final double ARM_DOWN = -1;
     public static final double ARM_START_POS = Units.degreesToRadians(92.82);
 
