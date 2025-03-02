@@ -40,6 +40,8 @@ public abstract class AbstractControl {
 
   public abstract Boolean getCoralSourceIntake();
 
+  public abstract Boolean getCoralIntakeScoreL1();
+
   public abstract Boolean getCoralShoot();
 
   // Ground Algae

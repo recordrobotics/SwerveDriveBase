@@ -756,6 +756,7 @@ public final class Constants {
 
     public static final double REVERSE_SPEED = 12; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -8; // TODO ^^^^^^^^^^^
+    public static final double SHOOT_SPEED = 20; // TODO ^^^^^^^^^^^
 
     public static final double INTAKE_TIME = 0.1; // TODO make correct
 
@@ -769,6 +770,7 @@ public final class Constants {
 
     public static final double ARM_UP = Units.degreesToRadians(92.82);
     public static final double ARM_INTAKE = Units.degreesToRadians(80);
+    public static final double ARM_SCORE_L1 = Units.degreesToRadians(48);
     public static final double ARM_DOWN = -1;
     public static final double ARM_START_POS = Units.degreesToRadians(92.82);
 
@@ -777,6 +779,8 @@ public final class Constants {
     public static final double WHEEL_GEAR_RATIO = 10;
 
     public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
+
+    public static final double SHOOT_TIME = 0.3;
 
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
     public static final double LENGTH = 0.431;

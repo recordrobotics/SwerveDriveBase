@@ -117,12 +117,14 @@ public class CoralIntake extends KillableSubsystem
   public enum CoralIntakeStates {
     REVERSE,
     INTAKE,
+    SHOOT,
     OFF;
   }
 
   public enum IntakeArmStates {
     UP,
     INTAKE,
+    SCORE_L1,
     DOWN;
   }
 
@@ -180,6 +182,9 @@ public class CoralIntake extends KillableSubsystem
       case INTAKE:
         toggleArm(Constants.CoralIntake.ARM_INTAKE);
         break;
+      case SCORE_L1:
+        toggleArm(Constants.CoralIntake.ARM_SCORE_L1);
+        break;
       default:
         io.setArmVoltage(0);
         break;
@@ -194,6 +199,9 @@ public class CoralIntake extends KillableSubsystem
         break;
       case INTAKE:
         toggle(Constants.CoralIntake.INTAKE_SPEED);
+        break;
+      case SHOOT:
+        toggle(Constants.CoralIntake.SHOOT_SPEED);
         break;
       case OFF: // Off
       default: // should never happen

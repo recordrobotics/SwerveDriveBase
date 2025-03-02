@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,7 +19,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
+import frc.robot.commands.CoralIntakeFromGroundUp;
 import frc.robot.commands.CoralIntakeFromSource;
+import frc.robot.commands.CoralIntakeShootL1;
 import frc.robot.commands.CoralShoot;
 import frc.robot.commands.ElevatorAlgaeToggled;
 import frc.robot.commands.ElevatorMove;
@@ -91,6 +94,11 @@ public class RobotContainer {
 
   public static ElevatorMoveToggleRequirement elevatorMoveToggleRequirement =
       new ElevatorMoveToggleRequirement();
+
+  public static class CoralIntakeMoveToggleRequirement extends SubsystemBase {}
+
+  public static CoralIntakeMoveToggleRequirement coralIntakeMoveToggleRequirement =
+      new CoralIntakeMoveToggleRequirement();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -212,6 +220,16 @@ public class RobotContainer {
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(new CoralIntakeFromSource());
+
+    var coralScoreL1Cmd =
+        Commands.either(
+            new CoralIntakeShootL1(),
+            new CoralIntakeFromGroundUp(false),
+            () -> coralIntake.getArmAngle() >= Constants.CoralIntake.ARM_SCORE_L1 - 0.1);
+    coralScoreL1Cmd.addRequirements(coralIntakeMoveToggleRequirement);
+
+    new Trigger(() -> DashboardUI.Overview.getControl().getCoralIntakeScoreL1())
+        .onTrue(coralScoreL1Cmd);
 
     // new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
     //     .onTrue(HybridSource.deferred());
