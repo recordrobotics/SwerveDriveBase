@@ -14,7 +14,6 @@ import frc.robot.dashboard.DashboardUI;
 public class ManualElevator extends Command {
   public ManualElevator() {
     addRequirements(RobotContainer.elevator);
-    addRequirements(RobotContainer.elevatorArm);
   }
 
   private double height = 0;

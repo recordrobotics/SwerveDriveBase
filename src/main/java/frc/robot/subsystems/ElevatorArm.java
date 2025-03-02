@@ -10,14 +10,12 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
-import frc.robot.commands.manual.ManualElevatorArm;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.ElevatorArmIO;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
@@ -45,11 +43,8 @@ public class ElevatorArm extends KillableSubsystem
           Constants.ElevatorArm.kG,
           Constants.ElevatorArm.kV,
           Constants.ElevatorArm.kA);
-  private AngularVelocity manualVelocity = RadiansPerSecond.of(0.0);
 
   public ElevatorArm(ElevatorArmIO io) {
-    setDefaultCommand(new ManualElevatorArm());
-
     this.io = io;
 
     io.applyArmTalonFXConfig(
@@ -114,29 +109,14 @@ public class ElevatorArm extends KillableSubsystem
     return pid.atGoal();
   }
 
-  public void setManualVelocity(AngularVelocity velocity) {
-    manualVelocity = velocity;
+  public void setGoal(TrapezoidProfile.State goal) {
+    pid.setGoal(goal);
   }
 
   private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
 
   @Override
   public void periodic() {
-    // manual, so no position pid
-    if (getDefaultCommand().isScheduled()) {
-      double feedforwardOutput =
-          feedforward.calculateWithVelocities(
-              getArmAngle(), getArmVelocity(), manualVelocity.in(RadiansPerSecond));
-      io.setArmVoltage(feedforwardOutput);
-      Logger.recordOutput("ElevatorArmTargetPosition", getArmAngle());
-      Logger.recordOutput("ElevatorArmTargetVelocity", manualVelocity.in(RadiansPerSecond));
-      Logger.recordOutput("ElevatorArmSetVoltage", 0.0);
-      Logger.recordOutput("ElevatorArmSetVoltageFF", feedforwardOutput);
-      RobotContainer.model.elevatorArm.update(getArmAngle());
-      RobotContainer.model.elevatorArm.updateSetpoint(getArmAngle());
-      return;
-    }
-
     double pidOutputArm = pid.calculate(getArmAngle());
 
     double feedforwardOutput =

@@ -26,6 +26,7 @@ import frc.robot.commands.ElevatorReefToggled;
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
 import frc.robot.commands.manual.ManualElevator;
+import frc.robot.commands.manual.ManualElevatorArm;
 import frc.robot.commands.manual.ManualSwerve;
 import frc.robot.commands.simulation.PlaceRandomGroundAlgae;
 import frc.robot.commands.simulation.PlaceRandomGroundCoral;
@@ -133,6 +134,7 @@ public class RobotContainer {
 
     drivetrain.setDefaultCommand(new ManualSwerve());
     elevator.setDefaultCommand(new ManualElevator());
+    elevatorArm.setDefaultCommand(new ManualElevatorArm());
 
     // camera exposure fix
     camera.setDriverMode(false);
