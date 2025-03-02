@@ -68,6 +68,6 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
         new InstantCommand(() -> RobotContainer.elevator.moveTo(algaeHeight)),
         AutoBuilder.followPath(shortestPath),
         new InstantCommand(lightsCommand::cancel),
-        new ElevatorMoveThenAlgaeGrab(algaeHeight));
+        ElevatorMoveThenAlgaeGrab.create(algaeHeight));
   }
 }

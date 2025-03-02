@@ -11,8 +11,11 @@ import frc.robot.commands.simulation.AlgaeGrabberSim;
 import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
 
 public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
-  public ElevatorMoveThenAlgaeGrab(ElevatorHeight targetHeight) {
-    Command algaeGrabberLightsCommand =
+
+  private Command algaeGrabberLightsCommand;
+
+  private ElevatorMoveThenAlgaeGrab(ElevatorHeight targetHeight) {
+    algaeGrabberLightsCommand =
         RobotContainer.lights.algaeGrabber.runPattern(Constants.Lights.PULSATING_ORANGE);
 
     addRequirements(RobotContainer.algaeGrabber);
@@ -46,6 +49,14 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
                             Constants.Lights.PULSATING_GREEN))
                     .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)
                     .schedule()));
-    this.handleInterrupt(algaeGrabberLightsCommand::cancel);
+  }
+
+  private void handleInterrupt() {
+    algaeGrabberLightsCommand.cancel();
+  }
+
+  public static Command create(ElevatorHeight targetHeight) {
+    var cmd = new ElevatorMoveThenAlgaeGrab(targetHeight);
+    return cmd.handleInterrupt(cmd::handleInterrupt);
   }
 }

@@ -215,7 +215,7 @@ public class RobotContainer {
 
     new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae())
         .onTrue(
-            new ElevatorMoveThenAlgaeGrab(ElevatorHeight.GROUND_ALGAE)
+            ElevatorMoveThenAlgaeGrab.create(ElevatorHeight.GROUND_ALGAE)
                 .andThen(new ElevatorMoveThenAlgaeGrabEnd(ElevatorHeight.GROUND_ALGAE)));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow())
         .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
