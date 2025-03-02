@@ -721,7 +721,7 @@ public final class Constants {
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
-    public static final Distance CORAL_INTAKE_DISTANCE = Meters.of(-0.13);
+    public static final Distance CORAL_INTAKE_DISTANCE = Millimeters.of(186);
 
     // m/s coral
     public static final double POSITION_MODE_MAX_VELOCITY = 1.0;
@@ -734,7 +734,7 @@ public final class Constants {
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
 
-    public static final double SHOOT_TIME = 0.3; // TODO make correct
+    public static final Time SHOOT_TIME = Seconds.of(0.5); // TODO make correct
 
     public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
   }
