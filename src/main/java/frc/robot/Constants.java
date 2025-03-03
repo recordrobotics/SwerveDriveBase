@@ -127,8 +127,8 @@ public final class Constants {
     public static final double kA = 0.030534;
 
     public static final double START_POS = Units.degreesToRadians(-90);
-    public static final double MIN_POS = Units.degreesToRadians(-95); // TODO: make correct
-    public static final double MAX_POS = Units.degreesToRadians(95); // TODO: make correct
+    public static final double MIN_POS = Units.degreesToRadians(-103.54);
+    public static final double MAX_POS = Units.degreesToRadians(113.79);
 
     public static final double ARM_GEAR_RATIO = 36; // 16:1 * 72/32
 
@@ -149,29 +149,31 @@ public final class Constants {
     public static final double kV = 1.9165;
     public static final double kA = 0.15486;
 
-    public static final double OUT_GROUND_SPEED = 2.8;
+    public static final double OUT_GROUND_SPEED = 8.8;
     public static final double OUT_REEF_SPEED = -2.8;
-    public static final double INTAKE_GROUND_SPEED = -1.23;
+    public static final double INTAKE_GROUND_SPEED = -2.23;
     public static final double INTAKE_REEF_SPEED = 1.23;
-    public static final double HOLD_GROUND_SPEED = -0.3;
+    public static final double HOLD_GROUND_SPEED = -0.15;
     public static final double HOLD_REEF_SPEED = 0.3;
 
-    public static final double SHOOT_TIME = 0.3; // TODO make correct
+    public static final double SHOOT_TIME_GROUND = 2.3;
+    public static final double SHOOT_TIME_REEF = 0.3;
 
     public static final double GEAR_RATIO = 30;
   }
 
   public enum ElevatorHeight {
-    INTAKE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-98)),
-    L1(0.26, Units.degreesToRadians(-95)),
-    L2(0.44, Units.degreesToRadians(-95)),
-    LOW_REEF_ALGAE(0.465, Units.degreesToRadians(-60)),
-    L3(0.88, Units.degreesToRadians(-95)),
-    HIGH_REEF_ALGAE(0.735, Units.degreesToRadians(-60)),
-    L4(1.32, Units.degreesToRadians(22)),
+    INTAKE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-100)),
+    L1(0.26, Units.degreesToRadians(-101.69)),
+    L2(0.56, Units.degreesToRadians(-101.69)),
+    LOW_REEF_ALGAE(0.4849, Units.degreesToRadians(-37.841)),
+    L3(0.937, Units.degreesToRadians(-101.57)),
+    HIGH_REEF_ALGAE(0.916, Units.degreesToRadians(-40.26)),
+    L4(1.309, Units.degreesToRadians(64.99)),
     BOTTOM(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-90)),
-    GROUND_ALGAE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-50)),
-    PROCESSOR_SCORE(0.05, Units.degreesToRadians(-60));
+    GROUND_ALGAE(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(-28)),
+    GROUND_ALGAE_PROCESSOR(Constants.Elevator.STARTING_HEIGHT, Units.degreesToRadians(60.66)),
+    PROCESSOR_SCORE(0.04, Units.degreesToRadians(-60));
 
     private double height;
     private double armAngleRadians;
@@ -699,7 +701,7 @@ public final class Constants {
 
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0.15, 0, Rotation2d.fromDegrees(0));
     public static final double MIN_LENGTH = 0.65;
-    public static final double MAX_HEIGHT = 1.32;
+    public static final double MAX_HEIGHT = 1.343;
 
     public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
   }
@@ -721,20 +723,22 @@ public final class Constants {
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
-    public static final Distance CORAL_INTAKE_DISTANCE = Millimeters.of(186);
+    public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(-3);
 
     // m/s coral
-    public static final double POSITION_MODE_MAX_VELOCITY = 1.0;
-    public static final double POSITION_MODE_MAX_ACCELERATION = 0.4;
+    public static final double POSITION_MODE_MAX_VELOCITY = 1.4;
+    public static final double POSITION_MODE_MAX_ACCELERATION = 0.7;
 
     public static final double OUT_SPEED_FORWARD = -2.5;
     public static final double OUT_SPEED_BACKWARD = 1.5;
     public static final double INTAKE_SPEED = -0.35;
 
-    public static final double AT_GOAL_POSITION_TOLERANCE = 0.01;
-    public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.05;
+    public static final double AT_GOAL_POSITION_TOLERANCE = 0.05;
+    public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.07;
 
     public static final Time SHOOT_TIME = Seconds.of(0.3); // TODO make correct
+
+    public static final double DEBOUNCE_TIME = 0.02; // TODO make correct
 
     public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
   }
@@ -777,8 +781,6 @@ public final class Constants {
     public static final double ARM_GEAR_RATIO = 56.8889; // 16:1 * 64/18
 
     public static final double WHEEL_GEAR_RATIO = 10;
-
-    public static final double DEBOUNCE_TIME = 0.05; // TODO make correct
 
     public static final double SHOOT_TIME = 0.3;
 

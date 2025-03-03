@@ -33,7 +33,7 @@ public class CoralShooter extends KillableSubsystem
 
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
-      new Debouncer(Constants.CoralIntake.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+      new Debouncer(Constants.CoralShooter.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final PIDController pid =
       new PIDController(

@@ -182,7 +182,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     // Corrects for offset in absolute motor position
     io.setTurnMotorPosition(getAbsWheelTurnOffset());
-    m_setpoint = new TrapezoidProfile.State(getTurnWheelRotation2d().getRotations(), 0);
+    m_setpoint = new TrapezoidProfile.State(getAbsWheelTurnOffset() / TURN_GEAR_RATIO, 0);
 
     SmartDashboard.putNumber("SwerveTurn_" + turningMotorChannel, 0);
 

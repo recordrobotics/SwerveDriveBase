@@ -14,7 +14,7 @@ import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
 public class ProcessorScore extends SequentialCommandGroup {
 
   public ProcessorScore() {
-    addRequirements(RobotContainer.algaeGrabber);
+    addRequirements(RobotContainer.algaeGrabber, RobotContainer.elevatorArm);
 
     addCommands(
         new ScheduleCommand(
@@ -28,12 +28,16 @@ public class ProcessorScore extends SequentialCommandGroup {
                 .runPattern(Constants.Lights.PULSATING_ORANGE)
                 .onlyWhile(this::isScheduled)),
         Commands.either(
-            new InstantCommand(
-                    () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT_GROUND),
-                    RobotContainer.algaeGrabber)
+            new ElevatorMove(ElevatorHeight.GROUND_ALGAE_PROCESSOR)
                 .andThen(
-                    new AlgaeGrabberToProcessor()
-                        .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME)))
+                    new InstantCommand(
+                        () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT_GROUND),
+                        RobotContainer.algaeGrabber))
+                .andThen(
+                    // new AlgaeGrabberToProcessor()
+                    // .simulateFor(
+                    new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME_GROUND))
+                // )
                 .andThen(
                     new InstantCommand(
                         () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF),
@@ -46,7 +50,7 @@ public class ProcessorScore extends SequentialCommandGroup {
                         RobotContainer.algaeGrabber))
                 .andThen(
                     new AlgaeGrabberToProcessor()
-                        .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME)))
+                        .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME_REEF)))
                 .andThen(
                     new InstantCommand(
                         () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF),

@@ -160,12 +160,12 @@ public class AlgaeGrabber extends KillableSubsystem
 
     lastSpeed = pid.getSetpoint();
 
-    if (waitingForIntakeSpeed && Math.abs(getWheelVelocity()) > 0.4) {
+    if (waitingForIntakeSpeed && Math.abs(getWheelVelocity()) > 1.0) {
       waitingForIntakeSpeed = false;
       waitingForAlgae = true;
     }
 
-    if (waitingForAlgae && Math.abs(getWheelVelocity()) < 0.1) {
+    if (waitingForAlgae && Math.abs(getWheelVelocity()) < 0.5) {
       hasAlgae = true;
       waitingForAlgae = false;
     }

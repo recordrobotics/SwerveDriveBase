@@ -147,7 +147,7 @@ public class JoystickXboxKeypad extends AbstractControl {
 
   @Override
   public Boolean getScoreAlgae() {
-    return xbox_controller.getPOV() == 180;
+    return xbox_controller.getPOV() == 90;
   }
 
   @Override
