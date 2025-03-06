@@ -107,8 +107,8 @@ public final class Constants {
     public static final Distance LENGTH = Meters.of(0.431);
     public static final double ANGLE_OFFSET = 0;
 
-    public static final double kV = 0.1;
-    public static final double kA = 0.1;
+    public static final double kV = 2.0;
+    public static final double kA = 2.0;
   }
 
   public final class ElevatorArm {

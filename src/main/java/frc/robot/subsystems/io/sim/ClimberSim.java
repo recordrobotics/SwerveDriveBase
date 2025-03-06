@@ -23,16 +23,16 @@ public class ClimberSim implements ClimberIO {
 
   private final TalonFXSimState motorSim;
 
-  private final DCMotor theMotor = DCMotor.getKrakenX60(1);
+  private final DCMotor dcMotor = DCMotor.getKrakenX60(1);
 
   private final SingleJointedArmSim simModel =
       new SingleJointedArmSim(
           LinearSystemId.createDCMotorSystem(Constants.Climber.kV, Constants.Climber.kA),
-          theMotor,
+          dcMotor,
           Constants.Climber.GEAR_RATIO,
-          Units.inchesToMeters(88), // TODO: make sure gear ratio is correct
-          Units.degreesToRadians(-95), // TODO: is bad numbers
-          Units.degreesToRadians(95),
+          Units.inchesToMeters(5),
+          Units.degreesToRadians(-10),
+          Units.degreesToRadians(190),
           true,
           Constants.Climber.START_POS.in(Radians),
           0.001,
