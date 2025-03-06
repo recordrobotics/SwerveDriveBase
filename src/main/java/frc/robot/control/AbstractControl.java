@@ -15,6 +15,10 @@ public abstract class AbstractControl {
 
   public abstract Boolean getAutoAlign();
 
+  public abstract Boolean getElevatorRelativeDrive();
+
+  public abstract Boolean getCoralIntakeRelativeDrive();
+
   // Misc
   public abstract Boolean getPoseReset();
 

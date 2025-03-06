@@ -39,12 +39,7 @@ public class JoystickXboxKeypad extends AbstractControl {
   }
 
   public Boolean getAutoAlign() {
-    return joystick.getRawButton(7)
-        || joystick.getRawButton(8)
-        || joystick.getRawButton(9)
-        || joystick.getRawButton(10)
-        || joystick.getRawButton(11)
-        || joystick.getRawButton(12);
+    return joystick.getRawButton(7) || joystick.getRawButton(9) || joystick.getRawButton(11);
   }
 
   public Pair<Double, Double> getXY() {
@@ -95,6 +90,14 @@ public class JoystickXboxKeypad extends AbstractControl {
         || joystick.getRawButtonPressed(4)
         || joystick.getRawButtonPressed(5)
         || joystick.getRawButtonPressed(6);
+  }
+
+  public Boolean getElevatorRelativeDrive() {
+    return joystick.getRawButton(8);
+  }
+
+  public Boolean getCoralIntakeRelativeDrive() {
+    return joystick.getRawButton(10);
   }
 
   @Override

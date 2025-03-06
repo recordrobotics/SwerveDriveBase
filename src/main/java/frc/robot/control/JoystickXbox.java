@@ -28,23 +28,36 @@ public class JoystickXbox extends AbstractControl {
   @Override
   public DriveCommandData getDriveCommandData() {
     // Gets information needed to drive
+
+    double x = getXY().getFirst() * getDirectionalSpeedLevel();
+    double y = getXY().getSecond() * getDirectionalSpeedLevel();
+
+    if (getCoralIntakeRelativeDrive()) {
+      double temp = x;
+      x = -y;
+      y = temp;
+    }
+
     DriveCommandData driveCommandData =
         new DriveCommandData(
-            getXY().getFirst() * getDirectionalSpeedLevel(),
-            getXY().getSecond() * getDirectionalSpeedLevel(),
+            x,
+            y,
             getSpin() * getSpinSpeedLevel(),
-            true);
+            !(getElevatorRelativeDrive() || getCoralIntakeRelativeDrive()));
     // Returns
     return driveCommandData;
   }
 
   public Boolean getAutoAlign() {
-    return joystick.getRawButton(7)
-        || joystick.getRawButton(8)
-        || joystick.getRawButton(9)
-        || joystick.getRawButton(10)
-        || joystick.getRawButton(11)
-        || joystick.getRawButton(12);
+    return joystick.getRawButton(7) || joystick.getRawButton(9) || joystick.getRawButton(11);
+  }
+
+  public Boolean getElevatorRelativeDrive() {
+    return joystick.getRawButton(8);
+  }
+
+  public Boolean getCoralIntakeRelativeDrive() {
+    return joystick.getRawButton(10);
   }
 
   public Pair<Double, Double> getXY() {
