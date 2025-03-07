@@ -186,6 +186,57 @@
               "rotation_turns": 0,
               "compression": 51
             }
+          },
+          {
+            "title": "B",
+            "x": 1344.0,
+            "y": 384.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Elevator/BottomEndStopPressed",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "T",
+            "x": 1344.0,
+            "y": 256.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Elevator/TopEndStopPressed",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "C",
+            "x": 1344.0,
+            "y": 512.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/CoralShooter/HasCoral",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
           }
         ]
       }
@@ -274,7 +325,7 @@
           {
             "title": "Driver Orientation",
             "x": 0.0,
-            "y": 512.0,
+            "y": 384.0,
             "width": 384.0,
             "height": 128.0,
             "type": "Split Button Chooser",
@@ -286,7 +337,7 @@
           {
             "title": "Drive Mode",
             "x": 384.0,
-            "y": 512.0,
+            "y": 384.0,
             "width": 384.0,
             "height": 128.0,
             "type": "Split Button Chooser",
@@ -325,7 +376,7 @@
           },
           {
             "title": "Target Reef",
-            "x": 960.0,
+            "x": 1024.0,
             "y": 448.0,
             "width": 512.0,
             "height": 256.0,
@@ -372,6 +423,138 @@
               "period": 0.06,
               "rotation_turns": 0,
               "compression": 48
+            }
+          },
+          {
+            "title": "C",
+            "x": 1344.0,
+            "y": 256.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/CoralShooter/HasCoral",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "B",
+            "x": 1344.0,
+            "y": 128.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Elevator/BottomEndStopPressed",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "T",
+            "x": 1344.0,
+            "y": 0.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Elevator/TopEndStopPressed",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Test",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "Coral Shooter",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Number Slider",
+            "properties": {
+              "topic": "/Shuffleboard/Test/Coral Shooter",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": -1.0,
+              "max_value": 1.0,
+              "divisions": 5,
+              "update_continuously": false
+            }
+          },
+          {
+            "title": "Encoder 0",
+            "x": 128.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Shuffleboard/Test/Encoder 0",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Encoder 1",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Shuffleboard/Test/Encoder 1",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Encoder 2",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Shuffleboard/Test/Encoder 2",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Encoder 3",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/Shuffleboard/Test/Encoder 3",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
             }
           }
         ]
