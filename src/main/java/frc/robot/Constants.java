@@ -1055,16 +1055,16 @@ public final class Constants {
     public static final double TurnMaxAngularAcceleration = 5; // ROTATIONS / SECOND / SECOND
 
     /** The max speed the robot can travel safely */
-    public static final double robotMaxSpeed = 4.7;
+    public static final double robotMaxSpeed = 4.35;
 
     /** The max jerk of the robot below which the pose is certain (in G/s) */
     public static final double MaxPoseCertaintyJerk = 80;
 
     public static final RobotConfig PPDefaultConfig =
         new RobotConfig(
-            29.1,
-            0.29,
-            new ModuleConfig(0.048, 5.45, 1.2, DCMotor.getKrakenX60(1), 100, 500),
+            65.081,
+            40.000,
+            new ModuleConfig(WHEEL_DIAMETER / 2, 4.350, 1.2, DCMotor.getKrakenX60(1), 52, 1),
             frontLeftLocation,
             frontRightLocation,
             backLeftLocation,
@@ -1085,14 +1085,15 @@ public final class Constants {
 
     // #region BACKUP
     public static final ModuleConstants BACKUP_frontLeftConstants =
-        new ModuleConstants(2, 1, 1, 0.633, frontLeftLocation, MotorType.Kraken, MotorType.Kraken);
+        new ModuleConstants(2, 3, 0, 0.6353, frontLeftLocation, MotorType.Kraken, MotorType.Kraken);
 
     public static final ModuleConstants BACKUP_frontRightConstants =
-        new ModuleConstants(4, 3, 2, 0.848, frontRightLocation, MotorType.Kraken, MotorType.Kraken);
+        new ModuleConstants(
+            4, 5, 1, 0.8357, frontRightLocation, MotorType.Kraken, MotorType.Kraken);
     public static final ModuleConstants BACKUP_backLeftConstants =
-        new ModuleConstants(8, 7, 4, 0.857, backLeftLocation, MotorType.Kraken, MotorType.Falcon);
+        new ModuleConstants(8, 9, 2, 0.8596, backLeftLocation, MotorType.Kraken, MotorType.Kraken);
     public static final ModuleConstants BACKUP_backRightConstants =
-        new ModuleConstants(6, 5, 3, 0.554, backRightLocation, MotorType.Kraken, MotorType.Kraken);
+        new ModuleConstants(6, 7, 3, 0.5079, backRightLocation, MotorType.Kraken, MotorType.Kraken);
     // #endregion
 
     public static final ModuleConstants frontLeftConstants =
@@ -1113,7 +1114,7 @@ public final class Constants {
       return RobotBase.isReal() ? Mode.REAL : (RobotBase.isSimulation() ? Mode.SIM : Mode.REPLAY);
     }
 
-    public static final boolean MOTOR_LOGGING_ENABLED = true;
+    public static final boolean MOTOR_LOGGING_ENABLED = false;
 
     public static enum Mode {
       REAL,
