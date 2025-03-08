@@ -251,6 +251,23 @@
               "period": 0.06,
               "data_type": "boolean"
             }
+          },
+          {
+            "title": "HasAlgae",
+            "x": 1216.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/AlgaeGrabber/HasAlgae",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
           }
         ]
       }
@@ -490,6 +507,23 @@
               "true_icon": "None",
               "false_icon": "None"
             }
+          },
+          {
+            "title": "HasAlgae",
+            "x": 896.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/AlgaeGrabber/HasAlgae",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
           }
         ]
       }
@@ -500,25 +534,8 @@
         "layouts": [],
         "containers": [
           {
-            "title": "Coral Shooter",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Number Slider",
-            "properties": {
-              "topic": "/Shuffleboard/Test/Coral Shooter",
-              "period": 0.06,
-              "data_type": "double",
-              "min_value": -1.0,
-              "max_value": 1.0,
-              "divisions": 5,
-              "update_continuously": false
-            }
-          },
-          {
             "title": "Encoder 0",
-            "x": 128.0,
+            "x": 0.0,
             "y": 0.0,
             "width": 128.0,
             "height": 128.0,
@@ -532,7 +549,7 @@
           },
           {
             "title": "Encoder 1",
-            "x": 256.0,
+            "x": 128.0,
             "y": 0.0,
             "width": 128.0,
             "height": 128.0,
@@ -546,7 +563,7 @@
           },
           {
             "title": "Encoder 2",
-            "x": 384.0,
+            "x": 256.0,
             "y": 0.0,
             "width": 128.0,
             "height": 128.0,
@@ -560,7 +577,7 @@
           },
           {
             "title": "Encoder 3",
-            "x": 512.0,
+            "x": 384.0,
             "y": 0.0,
             "width": 128.0,
             "height": 128.0,
