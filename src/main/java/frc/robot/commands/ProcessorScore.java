@@ -34,10 +34,8 @@ public class ProcessorScore extends SequentialCommandGroup {
                         () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT_GROUND),
                         RobotContainer.algaeGrabber))
                 .andThen(
-                    // new AlgaeGrabberToProcessor()
-                    // .simulateFor(
-                    new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME_GROUND))
-                // )
+                    new AlgaeGrabberToProcessor()
+                        .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME_GROUND)))
                 .andThen(
                     new InstantCommand(
                         () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF),

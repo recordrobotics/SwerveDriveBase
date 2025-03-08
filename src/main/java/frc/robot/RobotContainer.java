@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorHeight;
@@ -24,10 +23,8 @@ import frc.robot.commands.CoralIntakeMoveL1;
 import frc.robot.commands.CoralIntakeShootL1;
 import frc.robot.commands.CoralShoot;
 import frc.robot.commands.ElevatorAlgaeToggled;
-import frc.robot.commands.ElevatorMove;
-import frc.robot.commands.ElevatorMoveThenAlgaeGrab;
-import frc.robot.commands.ElevatorMoveThenAlgaeGrabEnd;
 import frc.robot.commands.ElevatorReefToggled;
+import frc.robot.commands.GroundAlgaeToggled;
 // Local imports
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
@@ -40,7 +37,6 @@ import frc.robot.commands.simulation.PlaceRandomGroundCoral;
 import frc.robot.control.*;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
 import frc.robot.subsystems.io.real.AlgaeGrabberReal;
 import frc.robot.subsystems.io.real.CoralIntakeReal;
@@ -242,15 +238,7 @@ public class RobotContainer {
     //     .onTrue(HybridSource.deferred());
 
     new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae())
-        .toggleOnTrue(
-            ElevatorMoveThenAlgaeGrab.create(ElevatorHeight.GROUND_ALGAE)
-                .andThen(new InstantCommand(() -> {}, elevatorMoveToggleRequirement))
-                .andThen(new ElevatorMoveThenAlgaeGrabEnd(ElevatorHeight.GROUND_ALGAE).asProxy())
-                .handleInterrupt(
-                    () -> {
-                      RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF);
-                      new ScheduleCommand(new ElevatorMove(ElevatorHeight.BOTTOM)).schedule();
-                    }));
+        .toggleOnTrue(new GroundAlgaeToggled(ElevatorHeight.GROUND_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow())
         .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh())

@@ -28,9 +28,10 @@ public class ElevatorMoveThenAlgaeGrabEnd extends SequentialCommandGroup {
                 RobotContainer.algaeGrabber),
             RobotContainer.algaeGrabber::hasAlgae),
         Commands.either(
-            new ElevatorMove(ElevatorHeight.GROUND_ALGAE),
-            new ElevatorMove(ElevatorHeight.BOTTOM),
-            () -> targetHeight == ElevatorHeight.GROUND_ALGAE),
+                new ElevatorMove(ElevatorHeight.GROUND_ALGAE),
+                new ElevatorMove(ElevatorHeight.BOTTOM),
+                () -> targetHeight == ElevatorHeight.GROUND_ALGAE)
+            .asProxy(),
         new ScheduleCommand(
             RobotContainer.lights
                 .elevator
