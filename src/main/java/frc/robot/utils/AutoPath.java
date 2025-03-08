@@ -13,6 +13,8 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.commands.Align;
 import frc.robot.commands.CoralIntakeFromSource;
+import frc.robot.commands.CoralIntakeMoveL1;
+import frc.robot.commands.CoralIntakeShootL1;
 import frc.robot.commands.CoralShoot;
 import frc.robot.commands.ElevatorMove;
 import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
@@ -43,6 +45,8 @@ public class AutoPath {
     NamedCommands.registerCommand("ElevatorDown", new ElevatorMove(ElevatorHeight.BOTTOM));
     NamedCommands.registerCommand("SourceIntake", new CoralIntakeFromSource().withTimeout(4));
     NamedCommands.registerCommand("CoralShoot", new CoralShoot().withTimeout(3));
+    NamedCommands.registerCommand("CoralL1ArmMove", new CoralIntakeMoveL1().withTimeout(3));
+    NamedCommands.registerCommand("CoralL1Shoot", new CoralIntakeShootL1().withTimeout(3));
 
     // Configures auto builder
     AutoBuilder.configure(
