@@ -268,11 +268,26 @@ public final class Constants {
     // Processors
     BProcessor(new Pose2d(6, 0.6, Rotation2d.fromDegrees(270)), true),
     RProcessor(new Pose2d(11.5, 7.4, Rotation2d.fromDegrees(90)), true),
-    // 1 is left, 2 is right, both from driver view
-    BSourceOuterLeft(new Pose2d(1.642, 7.322, Rotation2d.fromDegrees(36.870)), false);
-    // BSourceOuterRight(new Pose2d(1.2, 1, Rotation2d.fromDegrees(-125)), false),
-    // RSourceOuterLeft(new Pose2d(16.2, 1, Rotation2d.fromDegrees(-55)), false),
-    // RSourceOuterRight(new Pose2d(16.2, 7, Rotation2d.fromDegrees(55)), false);
+
+    BSourceOuterLeft(new Pose2d(1.642, 7.322, Rotation2d.fromDegrees(36.870)), false),
+    BSourceOuterRight(
+        new Pose2d(1.642, FlippingUtil.fieldSizeY - 7.322, Rotation2d.fromDegrees(143.791)), false),
+    RSourceOuterLeft(
+        new Pose2d(
+            FlippingUtil.fieldSizeX - 1.642,
+            FlippingUtil.fieldSizeY - 7.322,
+            Rotation2d.fromDegrees(-143.791)),
+        false),
+    RSourceOuterRight(
+        new Pose2d(FlippingUtil.fieldSizeX - 1.642, 7.322, Rotation2d.fromDegrees(-36.209)), false),
+
+    BSourceInnerLeft(new Pose2d(0.751, 6.619, Rotation2d.fromDegrees(36.209)), false),
+    BSourceInnerRight(new Pose2d(0.722, 1.412, Rotation2d.fromDegrees(143.596)), false),
+    RSourceInnerLeft(
+        new Pose2d(FlippingUtil.fieldSizeX - 0.751, 1.412, Rotation2d.fromDegrees(-143.791)),
+        false),
+    RSourceInnerRight(
+        new Pose2d(FlippingUtil.fieldSizeX - 0.751, 6.619, Rotation2d.fromDegrees(-36.209)), false);
 
     private Pose2d pose;
     private boolean useTranslation;
