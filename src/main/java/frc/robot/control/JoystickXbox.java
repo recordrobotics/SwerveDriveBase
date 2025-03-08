@@ -189,8 +189,8 @@ public class JoystickXbox extends AbstractControl {
   }
 
   @Override
-  public Boolean getClimb() {
-    return xbox_controller.getRawButton(1);
+  public Boolean getBargeAlgae() {
+    return xbox_controller.getRawButton(7);
   }
 
   @Override

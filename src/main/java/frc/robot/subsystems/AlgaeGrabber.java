@@ -68,6 +68,7 @@ public class AlgaeGrabber extends KillableSubsystem
   public enum AlgaeGrabberStates {
     OUT_GROUND,
     OUT_REEF,
+    SHOOT_BARGE,
     INTAKE_GROUND,
     INTAKE_REEF,
     HOLD_REEF,
@@ -106,6 +107,12 @@ public class AlgaeGrabber extends KillableSubsystem
         break;
       case OUT_REEF:
         toggle(Constants.AlgaeGrabber.OUT_REEF_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = false;
+        break;
+      case SHOOT_BARGE:
+        toggle(Constants.AlgaeGrabber.SHOOT_BARGE_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = false;
         hasAlgae = false;

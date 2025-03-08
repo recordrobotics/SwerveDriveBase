@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.Align;
+import frc.robot.commands.BargeScore;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
 import frc.robot.commands.CoralIntakeFromGroundUp;
 import frc.robot.commands.CoralIntakeFromSource;
@@ -246,7 +247,8 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae())
         .onTrue(new ProcessorScore());
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getClimb());
+    new Trigger(() -> DashboardUI.Overview.getControl().getBargeAlgae())
+        .toggleOnTrue(new BargeScore());
 
     new Trigger(() -> DashboardUI.Overview.getControl().getAutoAlign())
         .whileTrue(Align.create(0.01, 0.05, false)); // TODO: make correct and units

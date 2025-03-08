@@ -152,6 +152,7 @@ public final class Constants {
 
     public static final double OUT_GROUND_SPEED = 8.8;
     public static final double OUT_REEF_SPEED = -2.8;
+    public static final double SHOOT_BARGE_SPEED = 16;
     public static final double INTAKE_GROUND_SPEED = -2.23;
     public static final double INTAKE_REEF_SPEED = 1.23;
     public static final double HOLD_GROUND_SPEED = -0.15;
@@ -159,6 +160,7 @@ public final class Constants {
 
     public static final double SHOOT_TIME_GROUND = 2.3;
     public static final double SHOOT_TIME_REEF = 0.3;
+    public static final double SHOOT_TIME_BARGE = 0.4;
 
     public static final double GEAR_RATIO = 30;
   }
@@ -174,7 +176,8 @@ public final class Constants {
     BOTTOM(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(-90)),
     GROUND_ALGAE(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(-28)),
     GROUND_ALGAE_PROCESSOR(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(60.66)),
-    PROCESSOR_SCORE(0.04, Units.degreesToRadians(-60));
+    PROCESSOR_SCORE(0.04, Units.degreesToRadians(-60)),
+    BARGE_ALAGAE(1.309, Units.degreesToRadians(110));
 
     private double height;
     private double armAngleRadians;
