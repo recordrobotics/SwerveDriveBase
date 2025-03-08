@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.765098612096782,
-        "y": 5.208226460245232
+        "x": 3.224902292885989,
+        "y": 6.16501513411498
       },
       "isLocked": false,
       "linkedName": "ReefK"
@@ -20,8 +20,8 @@
         "y": 7.3302499999999995
       },
       "prevControl": {
-        "x": 0.70625,
-        "y": 7.3302499999999995
+        "x": 2.6800089313088757,
+        "y": 6.501455243650518
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ElevatorDown",
+      "waypointRelativePos": 0.08372721134368653,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ElevatorDown"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 9.0,

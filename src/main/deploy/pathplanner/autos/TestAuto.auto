@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4ToSource"
+            "pathName": "ReefJToSourceLeftOuter"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SourceToL4"
+            "pathName": "SourceLeftOuterToReefK"
           }
         },
         {
@@ -79,7 +79,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L42ToSource"
+            "pathName": "ReefKToSourceLeftOuter"
           }
         },
         {
