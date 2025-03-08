@@ -709,7 +709,10 @@ public final class Constants {
         new Pose2d(7.145, 4.026, new Rotation2d(Math.PI))),
     BargeRight(
         new Pose2d(FlippingUtil.fieldSizeX - 7.145, 6.171, new Rotation2d(0)),
-        new Pose2d(7.145, 1.909, new Rotation2d(Math.PI)));
+        new Pose2d(7.145, 1.909, new Rotation2d(Math.PI))),
+    ReefTest(
+        new Pose2d(13.958, 5.265, Rotation2d.fromDegrees(-120)),
+        new Pose2d(13.958, 5.265, Rotation2d.fromDegrees(-120)));
 
     private final Pose2d m_transformRed;
     private final Pose2d m_transformBlue;

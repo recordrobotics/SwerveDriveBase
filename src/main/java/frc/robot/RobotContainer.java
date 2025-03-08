@@ -195,7 +195,9 @@ public class RobotContainer {
 
     // Reset pose trigger
     new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
-        .onTrue(new InstantCommand(poseTracker::resetStartingPose));
+        .onTrue(new InstantCommand(poseTracker::resetDriverPose));
+    new Trigger(() -> DashboardUI.Autonomous.getResetLocation())
+        .onTrue(new InstantCommand(poseTracker::resetStartingPose).ignoringDisable(true));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL1())
         .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L1));

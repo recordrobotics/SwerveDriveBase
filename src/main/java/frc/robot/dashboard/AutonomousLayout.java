@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldStartingLocation;
 import frc.robot.utils.libraries.Elastic;
@@ -31,6 +32,8 @@ public class AutonomousLayout extends AbstractLayout {
         FieldStartingLocation.BargeCenter.name(), FieldStartingLocation.BargeCenter);
 
     addValueSendable("Velocity", () -> TuningData.MapToArray(velocityGraphData), "double[]");
+
+    SmartDashboard.putBoolean("Autonomous/ResetLocationButton", false);
   }
 
   public void setupAutoChooser() {
@@ -67,5 +70,9 @@ public class AutonomousLayout extends AbstractLayout {
     return fieldStartingLocationChooser.get() == null
         ? FieldStartingLocation.BargeCenter
         : fieldStartingLocationChooser.get();
+  }
+
+  public boolean getResetLocation() {
+    return SmartDashboard.getBoolean("Autonomous/ResetLocationButton", false);
   }
 }
