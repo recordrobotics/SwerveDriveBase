@@ -1,14 +1,9 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.3.1"
+    id "edu.wpi.first.GradleRIO" version "2025.3.2"
     id 'com.diffplug.spotless' version '6.20.0'
     id "com.peterabeles.gversion" version "1.10"
 }
-
-wpi.maven.useLocal = false
-wpi.maven.useDevelopment = true
-wpi.versions.wpilibVersion = '2025.+'
-wpi.versions.wpimathVersion = '2025.+'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
