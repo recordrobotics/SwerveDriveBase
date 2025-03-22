@@ -28,14 +28,11 @@ public class CoralIntakeFromGround extends SequentialCommandGroup {
                 .coralIntake
                 .runPattern(Constants.Lights.coralIntakePattern)
                 .onlyWhile(this::isScheduled)),
+        new InstantCommand(
+            () -> RobotContainer.coralIntake.toggleArm(IntakeArmStates.DOWN),
+            RobotContainer.coralIntake),
         // start moving elevator to intake position
-        new ElevatorMove(ElevatorHeight.INTAKE)
-            .asProxy()
-            .alongWith(
-                // at the same time lower the arm
-                new InstantCommand(
-                    () -> RobotContainer.coralIntake.toggleArm(IntakeArmStates.DOWN),
-                    RobotContainer.coralIntake)),
+        new ScheduleCommand(new ElevatorMove(ElevatorHeight.INTAKE)),
         new WaitUntilCommand(() -> RobotContainer.coralIntake.armAtGoal()),
         new ScheduleCommand(
             RobotContainer.lights
