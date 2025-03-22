@@ -90,7 +90,6 @@ public class RobotContainer {
   @SuppressWarnings("unused")
   private final AutoPath autoPath;
 
-  @SuppressWarnings("unused")
   private Command autoCommand;
 
   private final GenericHID simulationController;

@@ -103,7 +103,7 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
   }
 
   @Override
-  public void setupShuffleboard() {} // TODO add shuffleboard?
+  public void setupShuffleboard() {}
 
   @Override
   public void kill() {

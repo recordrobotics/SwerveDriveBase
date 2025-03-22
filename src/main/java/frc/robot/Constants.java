@@ -242,7 +242,6 @@ public final class Constants {
     }
   }
 
-  // TODO find values
   public enum RobotAlignPose {
     // Reefs
     BA(new Pose2d(3.2193371, 3.9859508000000003, Rotation2d.fromDegrees(0)), true),
@@ -914,9 +913,7 @@ public final class Constants {
 
     public static final double REVERSE_SPEED = 12; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -8; // TODO ^^^^^^^^^^^
-    public static final double SHOOT_SPEED = 20; // TODO ^^^^^^^^^^^
-
-    public static final double INTAKE_TIME = 0.1; // TODO make correct
+    public static final double L1_SCORE_SPEED = 20; // TODO ^^^^^^^^^^^
 
     public static final double sP = 4.8919;
     public static final double sI = 0;
@@ -953,7 +950,7 @@ public final class Constants {
 
     public static final double SUCCESS_FLASH_TIME = 1; // seconds
 
-    public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.3); // TODO is good?
+    public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.3);
     public static final Distance LED_SPACING = Meters.of(1.0 / 30.0); // 30 LEDs per meter
 
     public static final LEDPattern PULSATING_ORANGE =

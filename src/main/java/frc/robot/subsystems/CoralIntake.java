@@ -119,7 +119,7 @@ public class CoralIntake extends KillableSubsystem
   public enum CoralIntakeStates {
     REVERSE,
     INTAKE,
-    SHOOT,
+    L1_SCORE,
     OFF;
   }
 
@@ -207,8 +207,8 @@ public class CoralIntake extends KillableSubsystem
       case INTAKE:
         toggle(Constants.CoralIntake.INTAKE_SPEED);
         break;
-      case SHOOT:
-        toggle(Constants.CoralIntake.SHOOT_SPEED);
+      case L1_SCORE:
+        toggle(Constants.CoralIntake.L1_SCORE_SPEED);
         break;
       case OFF: // Off
       default: // should never happen
@@ -273,7 +273,11 @@ public class CoralIntake extends KillableSubsystem
   public void setupShuffleboard() {
     DashboardUI.Test.addSlider("Coral Intake Motor", io.getWheelPercent(), -1, 1)
         .subscribe(io::setWheelPercent);
-    DashboardUI.Test.addSlider("Coral Intake Arm Pos", io.getArmPosition(), -1, 1)
+    DashboardUI.Test.addSlider(
+            "Coral Intake Arm Pos",
+            io.getArmPosition(),
+            Constants.CoralIntake.ARM_DOWN,
+            Constants.CoralIntake.ARM_UP)
         .subscribe(this::toggleArm);
   }
 
