@@ -9,12 +9,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.AlgaeGrabberToProcessor;
-import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
+import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
 
 public class ProcessorScore extends SequentialCommandGroup {
 
   public ProcessorScore() {
-    addRequirements(RobotContainer.algaeGrabber);
+    addRequirements(RobotContainer.elevatorHead);
 
     addCommands(
         new ScheduleCommand(
@@ -32,40 +32,40 @@ public class ProcessorScore extends SequentialCommandGroup {
                 .asProxy()
                 .andThen(
                     new InstantCommand(
-                        () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT_GROUND),
-                        RobotContainer.algaeGrabber))
+                        () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OUT_GROUND),
+                        RobotContainer.elevatorHead))
                 .andThen(
                     new AlgaeGrabberToProcessor()
-                        .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME_GROUND)))
+                        .simulateFor(new WaitCommand(Constants.ElevatorHead.SHOOT_TIME_GROUND)))
                 .andThen(
                     new InstantCommand(
-                        () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF),
-                        RobotContainer.algaeGrabber))
+                        () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                        RobotContainer.elevatorHead))
                 .andThen(new ElevatorMove(ElevatorHeight.BOTTOM).asProxy()),
             Commands.either(
                 new InstantCommand(
-                        () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.SHOOT_BARGE),
-                        RobotContainer.algaeGrabber)
+                        () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.SHOOT_BARGE),
+                        RobotContainer.elevatorHead)
                     .andThen(
                         new AlgaeGrabberToProcessor()
-                            .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME_BARGE)))
+                            .simulateFor(new WaitCommand(Constants.ElevatorHead.SHOOT_TIME_BARGE)))
                     .andThen(
                         new InstantCommand(
-                            () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF),
-                            RobotContainer.algaeGrabber)),
+                            () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                            RobotContainer.elevatorHead)),
                 new ElevatorMove(ElevatorHeight.PROCESSOR_SCORE)
                     .asProxy()
                     .andThen(
                         new InstantCommand(
-                            () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OUT_REEF),
-                            RobotContainer.algaeGrabber))
+                            () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OUT_REEF),
+                            RobotContainer.elevatorHead))
                     .andThen(
                         new AlgaeGrabberToProcessor()
-                            .simulateFor(new WaitCommand(Constants.AlgaeGrabber.SHOOT_TIME_REEF)))
+                            .simulateFor(new WaitCommand(Constants.ElevatorHead.SHOOT_TIME_REEF)))
                     .andThen(
                         new InstantCommand(
-                            () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF),
-                            RobotContainer.algaeGrabber))
+                            () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                            RobotContainer.elevatorHead))
                     .andThen(new ElevatorMove(ElevatorHeight.BOTTOM).asProxy()),
                 () -> RobotContainer.elevator.getNearestHeight() == ElevatorHeight.BARGE_ALAGAE),
             () -> RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE),

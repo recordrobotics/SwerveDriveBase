@@ -1,6 +1,6 @@
 package frc.robot.subsystems.io;
 
-public interface CoralShooterIO extends AutoCloseable {
+public interface ElevatorHeadIO extends AutoCloseable {
 
   public void setVoltage(double outputVolts);
 

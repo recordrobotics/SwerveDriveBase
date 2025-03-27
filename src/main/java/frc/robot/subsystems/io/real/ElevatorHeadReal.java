@@ -4,19 +4,19 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.io.CoralShooterIO;
+import frc.robot.subsystems.io.ElevatorHeadIO;
 
-public class CoralShooterReal implements CoralShooterIO {
+public class ElevatorHeadReal implements ElevatorHeadIO {
 
   @SuppressWarnings("unused")
   private final double periodicDt;
 
   private final SparkMax motor;
-  private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralShooter.PHOTOSENSOR_ID);
+  private final DigitalInput coralDetector = new DigitalInput(RobotMap.ElevatorHead.PHOTOSENSOR_ID);
 
-  public CoralShooterReal(double periodicDt) {
+  public ElevatorHeadReal(double periodicDt) {
     this.periodicDt = periodicDt;
-    motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
+    motor = new SparkMax(RobotMap.ElevatorHead.MOTOR_ID, MotorType.kBrushless);
   }
 
   @Override

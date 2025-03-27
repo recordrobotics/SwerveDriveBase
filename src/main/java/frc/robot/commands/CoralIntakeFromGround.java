@@ -15,7 +15,7 @@ import frc.robot.subsystems.CoralIntake.IntakeArmStates;
 public class CoralIntakeFromGround extends SequentialCommandGroup {
   public CoralIntakeFromGround() {
     addRequirements(RobotContainer.coralIntake);
-    addRequirements(RobotContainer.coralShooter);
+    addRequirements(RobotContainer.elevatorHead);
 
     addCommands(
         new ScheduleCommand(

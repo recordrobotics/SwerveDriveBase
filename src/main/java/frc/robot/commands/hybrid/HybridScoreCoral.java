@@ -31,7 +31,7 @@ public class HybridScoreCoral extends SequentialCommandGroup {
 
   public static DeferredCommand deferred(ElevatorHeight reefCoralHeight) {
     return new DeferredCommand(
-        () -> new HybridScoreCoral(reefCoralHeight), Set.of(RobotContainer.coralShooter));
+        () -> new HybridScoreCoral(reefCoralHeight), Set.of(RobotContainer.elevatorHead));
   }
 
   public HybridScoreCoral(ElevatorHeight reefCoralHeight) {

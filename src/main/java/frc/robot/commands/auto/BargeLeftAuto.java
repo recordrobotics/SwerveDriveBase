@@ -51,7 +51,7 @@ public class BargeLeftAuto extends SequentialCommandGroup {
                                 RobotContainer.poseTracker.getEstimatedPosition(), 0.7)
                             != null)
                 .repeatedly()
-                .onlyWhile(() -> !RobotContainer.coralShooter.hasCoral()));
+                .onlyWhile(() -> !RobotContainer.elevatorHead.hasCoral()));
   }
 
   public BargeLeftAuto() throws FileVersionException, IOException, ParseException {

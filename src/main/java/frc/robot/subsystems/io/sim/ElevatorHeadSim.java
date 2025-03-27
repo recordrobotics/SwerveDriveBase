@@ -14,31 +14,33 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.io.CoralShooterIO;
+import frc.robot.subsystems.io.ElevatorHeadIO;
 
-public class CoralShooterSim implements CoralShooterIO {
+public class ElevatorHeadSim implements ElevatorHeadIO {
 
   private final double periodicDt;
 
   private final SparkMax motor;
   private final SparkMaxSim motorSim;
 
+  private boolean hasAlgae = false;
+
   private final DCMotor wheelMotor = DCMotor.getNeo550(1);
 
   private final DCMotorSim wheelSimModel =
       new DCMotorSim(
-          LinearSystemId.createDCMotorSystem(wheelMotor, 0.001, Constants.CoralShooter.GEAR_RATIO),
+          LinearSystemId.createDCMotorSystem(wheelMotor, 0.001, Constants.ElevatorHead.GEAR_RATIO),
           wheelMotor);
 
-  private final DigitalInput coralDetector = new DigitalInput(RobotMap.CoralShooter.PHOTOSENSOR_ID);
+  private final DigitalInput coralDetector = new DigitalInput(RobotMap.ElevatorHead.PHOTOSENSOR_ID);
   private final SimDevice coralDetectorSim =
-      SimDevice.create("DigitalInput", RobotMap.CoralShooter.PHOTOSENSOR_ID);
+      SimDevice.create("DigitalInput", RobotMap.ElevatorHead.PHOTOSENSOR_ID);
   private final SimBoolean coralDetectorSimValue;
 
-  public CoralShooterSim(double periodicDt) {
+  public ElevatorHeadSim(double periodicDt) {
     this.periodicDt = periodicDt;
 
-    motor = new SparkMax(RobotMap.CoralShooter.MOTOR_ID, MotorType.kBrushless);
+    motor = new SparkMax(RobotMap.ElevatorHead.MOTOR_ID, MotorType.kBrushless);
     motorSim = new SparkMaxSim(motor, wheelMotor);
 
     if (coralDetectorSim != null)
@@ -84,6 +86,10 @@ public class CoralShooterSim implements CoralShooterIO {
     return motor.get();
   }
 
+  public void setHasAlgae(boolean hasAlgae) {
+    this.hasAlgae = hasAlgae;
+  }
+
   @Override
   public boolean getCoralDetector() {
     // TODO: coralDetector.get() does not update
@@ -113,13 +119,17 @@ public class CoralShooterSim implements CoralShooterIO {
   public void simulationPeriodic() {
     var voltage = motorSim.getAppliedOutput() * motorSim.getBusVoltage();
 
+    if (hasAlgae) {
+      voltage /= 20.0;
+    }
+
     wheelSimModel.setInputVoltage(voltage);
     wheelSimModel.update(periodicDt);
 
     motorSim.iterate(
         Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec())
             * 60.0
-            * Constants.CoralShooter.GEAR_RATIO,
+            * Constants.ElevatorHead.GEAR_RATIO,
         RobotController.getBatteryVoltage(),
         periodicDt);
   }

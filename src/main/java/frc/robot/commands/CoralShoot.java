@@ -9,17 +9,17 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.CoralShooterToReef;
-import frc.robot.subsystems.CoralShooter.CoralShooterStates;
+import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 
 public class CoralShoot extends SequentialCommandGroup {
   public CoralShoot() {
-    addRequirements(RobotContainer.coralShooter);
+    addRequirements(RobotContainer.elevatorHead);
 
     addCommands(
         new ScheduleCommand(
             RobotContainer.lights
                 .coralShooter
-                .runPattern(Constants.Lights.coralShooterPattern)
+                .runPattern(Constants.Lights.elevatorHeadPattern)
                 .onlyWhile(this::isScheduled)),
         new ScheduleCommand(
             RobotContainer.lights
@@ -30,17 +30,17 @@ public class CoralShoot extends SequentialCommandGroup {
             () -> {
               if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.L4
                   || RobotContainer.elevator.getNearestHeight() == ElevatorHeight.BARGE_ALAGAE)
-                RobotContainer.coralShooter.toggle(CoralShooterStates.OUT_BACKWARD);
-              else RobotContainer.coralShooter.toggle(CoralShooterStates.OUT_FORWARD);
+                RobotContainer.elevatorHead.toggle(CoralShooterStates.OUT_BACKWARD);
+              else RobotContainer.elevatorHead.toggle(CoralShooterStates.OUT_FORWARD);
             },
-            RobotContainer.coralShooter),
+            RobotContainer.elevatorHead),
         // Make sure coral left
         new CoralShooterToReef()
-            .simulateFor(new WaitUntilCommand(() -> !RobotContainer.coralShooter.hasCoral())),
-        new WaitCommand(Constants.CoralShooter.SHOOT_TIME),
+            .simulateFor(new WaitUntilCommand(() -> !RobotContainer.elevatorHead.hasCoral())),
+        new WaitCommand(Constants.ElevatorHead.SHOOT_TIME),
         new InstantCommand(
-            () -> RobotContainer.coralShooter.toggle(CoralShooterStates.OFF),
-            RobotContainer.coralShooter),
+            () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.OFF),
+            RobotContainer.elevatorHead),
         new ScheduleCommand(
             RobotContainer.lights
                 .coralShooter

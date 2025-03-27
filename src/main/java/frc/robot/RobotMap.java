@@ -8,13 +8,9 @@ public final class RobotMap {
     public static final int TOP_ENDSTOP_ID = 5;
   }
 
-  public static final class CoralShooter {
+  public static final class ElevatorHead {
     public static final int MOTOR_ID = 15;
     public static final int PHOTOSENSOR_ID = 9;
-  }
-
-  public static final class AlgaeGrabber {
-    public static final int MOTOR_ID = 16;
   }
 
   public static final class CoralIntake {

@@ -18,41 +18,45 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.dashboard.DashboardUI;
-import frc.robot.subsystems.io.CoralShooterIO;
-import frc.robot.subsystems.io.sim.CoralShooterSim;
+import frc.robot.subsystems.io.ElevatorHeadIO;
+import frc.robot.subsystems.io.sim.ElevatorHeadSim;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class CoralShooter extends KillableSubsystem
+public class ElevatorHead extends KillableSubsystem
     implements ShuffleboardPublisher, PoweredSubsystem {
 
-  private final CoralShooterIO io;
+  private final ElevatorHeadIO io;
 
   private static Boolean debounced_value = false;
   private Debouncer m_debouncer =
-      new Debouncer(Constants.CoralShooter.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+      new Debouncer(Constants.ElevatorHead.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
 
   private final PIDController pid =
       new PIDController(
-          Constants.CoralShooter.kP, Constants.CoralShooter.kI, Constants.CoralShooter.kD);
+          Constants.ElevatorHead.kP, Constants.ElevatorHead.kI, Constants.ElevatorHead.kD);
   private final ProfiledPIDController positionPid =
       new ProfiledPIDController(
-          Constants.CoralShooter.kP_position,
-          Constants.CoralShooter.kI_position,
-          Constants.CoralShooter.kD_position,
+          Constants.ElevatorHead.kP_position,
+          Constants.ElevatorHead.kI_position,
+          Constants.ElevatorHead.kD_position,
           new TrapezoidProfile.Constraints(
-              Constants.CoralShooter.POSITION_MODE_MAX_VELOCITY,
-              Constants.CoralShooter.POSITION_MODE_MAX_ACCELERATION));
+              Constants.ElevatorHead.POSITION_MODE_MAX_VELOCITY,
+              Constants.ElevatorHead.POSITION_MODE_MAX_ACCELERATION));
   private final SimpleMotorFeedforward feedForward =
       new SimpleMotorFeedforward(
-          Constants.CoralShooter.kS, Constants.CoralShooter.kV, Constants.CoralShooter.kA);
+          Constants.ElevatorHead.kS, Constants.ElevatorHead.kV, Constants.ElevatorHead.kA);
 
   private CoralShooterStates currentState = CoralShooterStates.OFF;
 
-  public CoralShooter(CoralShooterIO io) {
+  private boolean hasAlgae = false;
+  private boolean waitingForAlgae = false;
+  private boolean waitingForIntakeSpeed = false;
+
+  public ElevatorHead(ElevatorHeadIO io) {
     this.io = io;
 
     toggle(CoralShooterStates.OFF); // initialize as off
@@ -62,8 +66,8 @@ public class CoralShooter extends KillableSubsystem
     positionPid.reset(0);
 
     positionPid.setTolerance(
-        Constants.CoralShooter.AT_GOAL_POSITION_TOLERANCE,
-        Constants.CoralShooter.AT_GOAL_VELOCITY_TOLERANCE);
+        Constants.ElevatorHead.AT_GOAL_POSITION_TOLERANCE,
+        Constants.ElevatorHead.AT_GOAL_VELOCITY_TOLERANCE);
 
     sysIdRoutine =
         new SysIdRoutine(
@@ -78,15 +82,26 @@ public class CoralShooter extends KillableSubsystem
     SmartDashboard.putNumber("CoralShooter_Value", 0);
   }
 
-  public CoralShooterSim getSimIO() throws Exception {
-    if (io instanceof CoralShooterSim) {
-      return (CoralShooterSim) io;
+  public ElevatorHeadSim getSimIO() throws Exception {
+    if (io instanceof ElevatorHeadSim) {
+      return (ElevatorHeadSim) io;
     } else {
       throw new Exception("CoralShooterIO is not a simulation");
     }
   }
 
   private final SysIdRoutine sysIdRoutine;
+
+  public enum AlgaeGrabberStates {
+    OUT_GROUND,
+    OUT_REEF,
+    SHOOT_BARGE,
+    INTAKE_GROUND,
+    INTAKE_REEF,
+    HOLD_REEF,
+    HOLD_GROUND,
+    OFF;
+  }
 
   public enum CoralShooterStates {
     OUT_FORWARD,
@@ -100,17 +115,17 @@ public class CoralShooter extends KillableSubsystem
   public double getVelocity() {
     return io.getVelocity()
         / 60.0
-        / Constants.CoralShooter.GEAR_RATIO
+        / Constants.ElevatorHead.GEAR_RATIO
         * Math.PI
-        * Constants.CoralShooter.WHEEL_DIAMETER.in(Meters); /* RPM -> RPS */
+        * Constants.ElevatorHead.WHEEL_DIAMETER.in(Meters); /* RPM -> RPS */
   }
 
   @AutoLogOutput
   public double getPosition() {
     return io.getPosition()
-        / Constants.CoralShooter.GEAR_RATIO
+        / Constants.ElevatorHead.GEAR_RATIO
         * Math.PI
-        * Constants.CoralShooter.WHEEL_DIAMETER.in(Meters); /* Rotations -> Meters */
+        * Constants.ElevatorHead.WHEEL_DIAMETER.in(Meters); /* Rotations -> Meters */
   }
 
   @AutoLogOutput
@@ -136,18 +151,21 @@ public class CoralShooter extends KillableSubsystem
 
   /** Set the shooter speed to the preset ShooterStates state */
   public void toggle(CoralShooterStates state) {
+    waitingForAlgae = false;
+    waitingForIntakeSpeed = false;
+    hasAlgae = false;
     switch (state) {
       case OUT_FORWARD:
         currentState = CoralShooterStates.OUT_FORWARD;
-        toggle(Constants.CoralShooter.OUT_SPEED_FORWARD);
+        toggle(Constants.ElevatorHead.OUT_SPEED_FORWARD);
         break;
       case OUT_BACKWARD:
         currentState = CoralShooterStates.OUT_BACKWARD;
-        toggle(Constants.CoralShooter.OUT_SPEED_BACKWARD);
+        toggle(Constants.ElevatorHead.OUT_SPEED_BACKWARD);
         break;
       case INTAKE:
         currentState = CoralShooterStates.INTAKE;
-        toggle(Constants.CoralShooter.INTAKE_SPEED);
+        toggle(Constants.ElevatorHead.INTAKE_SPEED);
         break;
       case POSITION:
         currentState = CoralShooterStates.POSITION;
@@ -162,8 +180,67 @@ public class CoralShooter extends KillableSubsystem
     }
   }
 
+  public void toggle(AlgaeGrabberStates state) {
+    currentState = CoralShooterStates.OFF;
+    switch (state) {
+      case OUT_GROUND:
+        toggle(Constants.ElevatorHead.OUT_GROUND_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = false;
+        break;
+      case OUT_REEF:
+        toggle(Constants.ElevatorHead.OUT_REEF_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = false;
+        break;
+      case SHOOT_BARGE:
+        toggle(Constants.ElevatorHead.SHOOT_BARGE_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = false;
+        break;
+      case INTAKE_GROUND:
+        toggle(Constants.ElevatorHead.INTAKE_GROUND_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = true;
+        hasAlgae = false;
+        break;
+      case INTAKE_REEF:
+        toggle(Constants.ElevatorHead.INTAKE_REEF_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = true;
+        hasAlgae = false;
+        break;
+      case HOLD_REEF:
+        toggle(Constants.ElevatorHead.HOLD_REEF_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = true;
+        break;
+      case HOLD_GROUND:
+        toggle(Constants.ElevatorHead.HOLD_GROUND_SPEED);
+        waitingForAlgae = false;
+        waitingForIntakeSpeed = false;
+        hasAlgae = true;
+        break;
+      case OFF: // Off
+      default: // should never happen
+        waitingForIntakeSpeed = false;
+        waitingForAlgae = false;
+        toggle(0);
+        break;
+    }
+  }
+
   @AutoLogOutput
-  public CoralShooterStates getCurrentState() {
+  public boolean hasAlgae() {
+    return hasAlgae;
+  }
+
+  @AutoLogOutput
+  public CoralShooterStates getCurrentCoralShooterState() {
     return currentState;
   }
 
@@ -191,7 +268,7 @@ public class CoralShooter extends KillableSubsystem
     if (currentState == CoralShooterStates.POSITION) {
       double pidOutput = positionPid.calculate(getPosition());
 
-      Logger.recordOutput("CoralShooter/PositionSetpoint", positionPid.getSetpoint().position);
+      Logger.recordOutput("ElevatorHead/PositionSetpoint", positionPid.getSetpoint().position);
 
       double feedforwardOutput =
           feedForward.calculateWithVelocities(lastSpeed, positionPid.getSetpoint().velocity);
@@ -203,6 +280,16 @@ public class CoralShooter extends KillableSubsystem
       double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
       io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = pid.getSetpoint();
+
+      if (waitingForIntakeSpeed && Math.abs(getVelocity()) > 1.0) { // TODO: tune
+        waitingForIntakeSpeed = false;
+        waitingForAlgae = true;
+      }
+
+      if (waitingForAlgae && Math.abs(getVelocity()) < 0.5) {
+        hasAlgae = true;
+        waitingForAlgae = false;
+      }
     }
 
     debounced_value = !m_debouncer.calculate(io.getCoralDetector());
@@ -223,12 +310,13 @@ public class CoralShooter extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
+    DashboardUI.Test.addSlider("Elevator Head", io.getPercent(), -1, 1).subscribe(io::setPercent);
   }
 
   @Override
   public void kill() {
     toggle(CoralShooterStates.OFF);
+    toggle(AlgaeGrabberStates.OFF);
     io.setVoltage(0);
   }
 

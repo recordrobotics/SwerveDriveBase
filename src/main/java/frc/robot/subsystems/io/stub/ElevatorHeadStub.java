@@ -1,13 +1,13 @@
 package frc.robot.subsystems.io.stub;
 
-import frc.robot.subsystems.io.CoralShooterIO;
+import frc.robot.subsystems.io.ElevatorHeadIO;
 
-public class CoralShooterStub implements CoralShooterIO {
+public class ElevatorHeadStub implements ElevatorHeadIO {
 
   @SuppressWarnings("unused")
   private final double periodicDt;
 
-  public CoralShooterStub(double periodicDt) {
+  public ElevatorHeadStub(double periodicDt) {
     this.periodicDt = periodicDt;
   }
 

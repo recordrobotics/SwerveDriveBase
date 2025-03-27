@@ -139,10 +139,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     // TODO: reenable when doing sysid - allows logs to be saved on disable
-    // if (hasRun && false) {
-    //   Logger.end();
-    //   SignalLogger.stop();
-    // }
+    if (hasRun) {
+      Logger.end();
+      SignalLogger.stop();
+    }
   }
 
   @Override
@@ -181,7 +181,7 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.cancel();
     }
 
-    new KillSpecified(RobotContainer.coralShooter, RobotContainer.coralIntake).schedule();
+    new KillSpecified(RobotContainer.elevatorHead, RobotContainer.coralIntake).schedule();
 
     m_robotContainer.teleopInit();
     hasRun = true;

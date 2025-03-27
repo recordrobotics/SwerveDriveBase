@@ -7,26 +7,26 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
+import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
 
 public class ElevatorMoveThenAlgaeGrabEnd extends SequentialCommandGroup {
   public ElevatorMoveThenAlgaeGrabEnd(ElevatorHeight targetHeight) {
-    addRequirements(RobotContainer.algaeGrabber);
+    addRequirements(RobotContainer.elevatorHead);
 
     addCommands(
         Commands.either(
             Commands.either(
                 new InstantCommand(
-                    () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.HOLD_GROUND),
-                    RobotContainer.algaeGrabber),
+                    () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.HOLD_GROUND),
+                    RobotContainer.elevatorHead),
                 new InstantCommand(
-                    () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.HOLD_REEF),
-                    RobotContainer.algaeGrabber),
+                    () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.HOLD_REEF),
+                    RobotContainer.elevatorHead),
                 () -> targetHeight == ElevatorHeight.GROUND_ALGAE),
             new InstantCommand(
-                () -> RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF),
-                RobotContainer.algaeGrabber),
-            RobotContainer.algaeGrabber::hasAlgae),
+                () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                RobotContainer.elevatorHead),
+            RobotContainer.elevatorHead::hasAlgae),
         Commands.either(
                 new ElevatorMove(ElevatorHeight.GROUND_ALGAE),
                 new ElevatorMove(ElevatorHeight.BOTTOM),

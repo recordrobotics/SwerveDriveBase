@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -164,6 +165,15 @@ public class Drivetrain extends KillableSubsystem
   }
 
   public void SysIdOnlyDriveMotors(Voltage volts) {
+
+    SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+    // SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+
+    m_frontLeft.setDesiredState(state);
+    m_frontRight.setDesiredState(state);
+    m_backLeft.setDesiredState(state);
+    m_backRight.setDesiredState(state);
+
     m_frontLeft.setDriveMotorVoltsSysIdOnly(volts.in(Volts));
     m_frontRight.setDriveMotorVoltsSysIdOnly(volts.in(Volts));
     m_backLeft.setDriveMotorVoltsSysIdOnly(volts.in(Volts));

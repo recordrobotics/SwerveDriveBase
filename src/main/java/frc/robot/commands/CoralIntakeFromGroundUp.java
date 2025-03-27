@@ -10,14 +10,14 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.CoralIntakeToElevator;
 import frc.robot.subsystems.CoralIntake.CoralIntakeStates;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
-import frc.robot.subsystems.CoralShooter.CoralShooterStates;
+import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 
 public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
   public CoralIntakeFromGroundUp(boolean moveToElevator) {
     addRequirements(RobotContainer.coralIntake);
 
     if (moveToElevator) {
-      addRequirements(RobotContainer.coralShooter);
+      addRequirements(RobotContainer.elevatorHead);
       addRequirements(RobotContainer.elevator);
     }
 
@@ -38,8 +38,8 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
         Commands.either(
             // once both the arm and elevator are at goal, start elevator intake
             new InstantCommand(
-                    () -> RobotContainer.coralShooter.toggle(CoralShooterStates.INTAKE),
-                    RobotContainer.coralShooter)
+                    () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.INTAKE),
+                    RobotContainer.elevatorHead)
                 .andThen(
                     // push coral out
                     new InstantCommand(
@@ -49,7 +49,7 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
                     // wait for elevator to have coral
                     new CoralIntakeToElevator()
                         .simulateFor(
-                            new WaitUntilCommand(() -> RobotContainer.coralShooter.hasCoral())))
+                            new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral())))
                 .andThen(
                     new InstantCommand(
                         () -> {
@@ -61,15 +61,15 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
                     // move coral a set distance
                     new InstantCommand(
                         () ->
-                            RobotContainer.coralShooter.moveBy(
-                                Constants.CoralShooter.CORAL_INTAKE_DISTANCE),
-                        RobotContainer.coralShooter))
+                            RobotContainer.elevatorHead.moveBy(
+                                Constants.ElevatorHead.CORAL_INTAKE_DISTANCE),
+                        RobotContainer.elevatorHead))
                 .andThen(
-                    new WaitUntilCommand(() -> RobotContainer.coralShooter.positionAtGoal()),
+                    new WaitUntilCommand(() -> RobotContainer.elevatorHead.positionAtGoal()),
                     // stop elevator intake
                     new InstantCommand(
-                        () -> RobotContainer.coralShooter.toggle(CoralShooterStates.OFF),
-                        RobotContainer.coralShooter)),
+                        () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.OFF),
+                        RobotContainer.elevatorHead)),
             new InstantCommand(
                 () -> {
                   RobotContainer.coralIntake.toggle(CoralIntakeStates.INTAKE);

@@ -29,7 +29,7 @@ public class CoralShooterToReef extends SequentialCommandGroup implements Simula
         new InstantCommand(
             () -> {
               try {
-                RobotContainer.coralShooter.getSimIO().setCoralDetectorSim(true);
+                RobotContainer.elevatorHead.getSimIO().setCoralDetectorSim(true);
               } catch (Exception e) {
                 e.printStackTrace();
               }

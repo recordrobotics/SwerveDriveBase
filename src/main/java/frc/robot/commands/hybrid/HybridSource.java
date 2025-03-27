@@ -30,7 +30,7 @@ public class HybridSource extends SequentialCommandGroup {
   public static DeferredCommand deferred() {
     return new DeferredCommand(
         () -> new HybridSource(),
-        Set.of(RobotContainer.elevator, RobotContainer.coralShooter, RobotContainer.coralIntake));
+        Set.of(RobotContainer.elevator, RobotContainer.elevatorHead, RobotContainer.coralIntake));
   }
 
   public HybridSource() {

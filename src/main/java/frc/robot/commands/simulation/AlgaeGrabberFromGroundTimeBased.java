@@ -49,7 +49,7 @@ public class AlgaeGrabberFromGroundTimeBased extends SequentialCommandGroup
                 algae.name = "AlgaeGrabber/Algae";
                 algae.pose =
                     () -> RobotContainer.model.elevatorArm.getAlgaeGrabberTargetPoseBottom();
-                RobotContainer.algaeGrabber.getSimIO().setHasAlgae(true);
+                RobotContainer.elevatorHead.getSimIO().setHasAlgae(true);
               } catch (Exception e) {
                 e.printStackTrace();
               }

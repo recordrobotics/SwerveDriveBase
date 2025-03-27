@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.subsystems.CoralShooter.CoralShooterStates;
+import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ModuleConstants.MotorLocation;
@@ -141,29 +141,6 @@ public final class Constants {
     public static final double ANGLE_OFFSET = 0;
 
     public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
-  }
-
-  public final class AlgaeGrabber {
-    public static final double kP = 0.12871;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final double kS = 0.13106;
-    public static final double kV = 1.9165;
-    public static final double kA = 0.15486;
-
-    public static final double OUT_GROUND_SPEED = 8.8;
-    public static final double OUT_REEF_SPEED = -2.8;
-    public static final double SHOOT_BARGE_SPEED = 16;
-    public static final double INTAKE_GROUND_SPEED = -4.2;
-    public static final double INTAKE_REEF_SPEED = 5.5;
-    public static final double HOLD_GROUND_SPEED = -0.15;
-    public static final double HOLD_REEF_SPEED = 0.4;
-
-    public static final double SHOOT_TIME_GROUND = 2.3;
-    public static final double SHOOT_TIME_REEF = 0.3;
-    public static final double SHOOT_TIME_BARGE = 0.4;
-
-    public static final double GEAR_RATIO = 30;
   }
 
   public enum ElevatorHeight {
@@ -859,7 +836,7 @@ public final class Constants {
     public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
   }
 
-  public final class CoralShooter {
+  public final class ElevatorHead {
     public static final double kP = 0.011473;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
@@ -871,12 +848,12 @@ public final class Constants {
     public static final double kA = 0.30488;
 
     public static final double GEAR_RATIO = 10.0;
-    public static final Distance DISTANCE_BETWEEN_AXLES = Inches.of(7.249923103040473);
+    public static final Distance DISTANCE_BETWEEN_AXLES = Inches.of(7);
     public static final Distance CORAL_OUTER_DIAMETER = Inches.of(4.5);
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
-    public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(-1); // Inches.of(-4);
+    public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(-1);
 
     // m/s coral
     public static final double POSITION_MODE_MAX_VELOCITY = 1.4;
@@ -894,6 +871,18 @@ public final class Constants {
     public static final double DEBOUNCE_TIME = 0.02; // TODO make correct
 
     public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
+
+    public static final double OUT_GROUND_SPEED = 8.8;
+    public static final double OUT_REEF_SPEED = -2.8;
+    public static final double SHOOT_BARGE_SPEED = 16;
+    public static final double INTAKE_GROUND_SPEED = -4.2;
+    public static final double INTAKE_REEF_SPEED = 5.5;
+    public static final double HOLD_GROUND_SPEED = -0.15;
+    public static final double HOLD_REEF_SPEED = 0.4;
+
+    public static final double SHOOT_TIME_GROUND = 2.3;
+    public static final double SHOOT_TIME_REEF = 0.3;
+    public static final double SHOOT_TIME_BARGE = 0.4;
   }
 
   public final class CoralIntake {
@@ -999,9 +988,9 @@ public final class Constants {
                     Color.kGreen,
                     (RobotContainer.coralIntake.getArmAngle() - Constants.CoralIntake.ARM_UP)
                         / (Constants.CoralIntake.ARM_DOWN - Constants.CoralIntake.ARM_UP)));
-    public static final Supplier<LEDPattern> coralShooterPattern =
+    public static final Supplier<LEDPattern> elevatorHeadPattern =
         () ->
-            (RobotContainer.coralShooter.getCurrentState() == CoralShooterStates.OFF)
+            (RobotContainer.elevatorHead.getCurrentCoralShooterState() == CoralShooterStates.OFF)
                 ? PULSATING_GREEN
                 : PULSATING_ORANGE;
 

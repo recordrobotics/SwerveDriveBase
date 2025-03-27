@@ -9,7 +9,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.AlgaeGrabberSim;
-import frc.robot.subsystems.AlgaeGrabber.AlgaeGrabberStates;
+import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
 
 public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
 
@@ -19,7 +19,7 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
     algaeGrabberLightsCommand =
         RobotContainer.lights.algaeGrabber.runPattern(Constants.Lights.PULSATING_ORANGE);
 
-    addRequirements(RobotContainer.algaeGrabber);
+    addRequirements(RobotContainer.elevatorHead);
 
     addCommands(
         new ScheduleCommand(
@@ -32,19 +32,19 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
         new InstantCommand(
             () -> {
               if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE)
-                RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE_GROUND);
-              else RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.INTAKE_REEF);
+                RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.INTAKE_GROUND);
+              else RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.INTAKE_REEF);
             },
-            RobotContainer.algaeGrabber),
+            RobotContainer.elevatorHead),
         new AlgaeGrabberSim(0.2)
-            .simulateFor(new WaitUntilCommand(RobotContainer.algaeGrabber::hasAlgae)),
+            .simulateFor(new WaitUntilCommand(RobotContainer.elevatorHead::hasAlgae)),
         new InstantCommand(
             () -> {
               if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE)
-                RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.HOLD_GROUND);
-              else RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.HOLD_REEF);
+                RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.HOLD_GROUND);
+              else RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.HOLD_REEF);
             },
-            RobotContainer.algaeGrabber),
+            RobotContainer.elevatorHead),
         new InstantCommand(algaeGrabberLightsCommand::cancel),
         new ScheduleCommand(
             RobotContainer.lights
@@ -58,7 +58,7 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
 
   private void handleInterrupt() {
     algaeGrabberLightsCommand.cancel();
-    RobotContainer.algaeGrabber.toggle(AlgaeGrabberStates.OFF);
+    RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF);
   }
 
   public static Command create(ElevatorHeight targetHeight) {

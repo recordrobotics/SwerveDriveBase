@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotAlignPose;
 import frc.robot.Constants.RobotState.Mode;
@@ -31,7 +33,6 @@ import frc.robot.commands.GroundAlgaeToggled;
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
 import frc.robot.commands.VibrateXbox;
-import frc.robot.commands.auto.PlannedAuto;
 import frc.robot.commands.hybrid.AutoScore;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.ManualElevatorArm;
@@ -43,18 +44,16 @@ import frc.robot.control.AbstractControl.AutoScoreDirection;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
-import frc.robot.subsystems.io.real.AlgaeGrabberReal;
-import frc.robot.subsystems.io.real.CoralIntakeReal;
-import frc.robot.subsystems.io.real.CoralShooterReal;
-import frc.robot.subsystems.io.real.ElevatorArmReal;
-import frc.robot.subsystems.io.real.ElevatorReal;
-import frc.robot.subsystems.io.sim.AlgaeGrabberSim;
 import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
-import frc.robot.subsystems.io.sim.CoralShooterSim;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
+import frc.robot.subsystems.io.sim.ElevatorHeadSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
 import frc.robot.subsystems.io.stub.ClimberStub;
+import frc.robot.subsystems.io.stub.CoralIntakeStub;
+import frc.robot.subsystems.io.stub.ElevatorArmStub;
+import frc.robot.subsystems.io.stub.ElevatorHeadStub;
+import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -76,9 +75,8 @@ public class RobotContainer {
   public static Limelight limelight;
   public static Elevator elevator;
   public static ElevatorArm elevatorArm;
-  public static CoralShooter coralShooter;
+  public static ElevatorHead elevatorHead;
   public static CoralIntake coralIntake;
-  public static AlgaeGrabber algaeGrabber;
   public static Climber climber;
   public static Lights lights;
   public static PowerDistributionPanel pdp;
@@ -109,11 +107,10 @@ public class RobotContainer {
       drivetrain = new Drivetrain();
       poseTracker = new PoseTracker();
       limelight = new Limelight();
-      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
-      elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
-      coralShooter = new CoralShooter(new CoralShooterReal(0.02));
-      coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
-      algaeGrabber = new AlgaeGrabber(new AlgaeGrabberReal(0.02));
+      elevator = new Elevator(new ElevatorStub(Constants.Elevator.kDt));
+      elevatorArm = new ElevatorArm(new ElevatorArmStub(0.02));
+      elevatorHead = new ElevatorHead(new ElevatorHeadStub(0.02));
+      coralIntake = new CoralIntake(new CoralIntakeStub(0.02));
       climber = new Climber(new ClimberStub(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
@@ -124,9 +121,8 @@ public class RobotContainer {
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmSim(0.02));
-      coralShooter = new CoralShooter(new CoralShooterSim(0.02));
+      elevatorHead = new ElevatorHead(new ElevatorHeadSim(0.02));
       coralIntake = new CoralIntake(new CoralIntakeSim(0.02));
-      algaeGrabber = new AlgaeGrabber(new AlgaeGrabberSim(0.02));
       climber = new Climber(new ClimberSim(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
@@ -179,13 +175,7 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getKill())
         .whileTrue(
             new KillSpecified(
-                drivetrain,
-                elevator,
-                elevatorArm,
-                coralShooter,
-                coralIntake,
-                algaeGrabber,
-                climber));
+                drivetrain, elevator, elevatorArm, elevatorHead, coralIntake, climber));
 
     // Reset pose trigger
     new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
@@ -220,7 +210,7 @@ public class RobotContainer {
                       < 80;
 
           return DashboardUI.Overview.getControl().getManualOverride()
-              || (atBottom && coralShooter.coralReady())
+              || (atBottom && elevatorHead.coralReady())
               || (atL4 && !nearReef)
               || (!atBottom && !atL4);
         };
@@ -323,29 +313,28 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    if (autoCommand == null) {
-      autoCommand = new PlannedAuto();
-    }
-    return autoCommand;
+    // if (autoCommand == null) {
+    //   autoCommand = new PlannedAuto();
+    // }
+    // return autoCommand;
 
-    // return new InstantCommand()
-    //     .andThen(
-    //         drivetrain
-    //             .sysIdQuasistaticDriveMotors(Direction.kForward)
-    //             .andThen(new WaitCommand(0.4)))
-    //     .andThen(
-    //         drivetrain
-    //             .sysIdQuasistaticDriveMotors(Direction.kForward)
-    //             .andThen(new WaitCommand(0.4)))
-    //     .andThen(
-    //         drivetrain
-    //             .sysIdQuasistaticDriveMotors(Direction.kReverse)
-    //             .andThen(new WaitCommand(0.4)))
-    //     .andThen(
-    //         drivetrain.sysIdDynamicDriveMotors(Direction.kForward).andThen(new WaitCommand(0.4)))
-    //     .andThen(
-    //         drivetrain.sysIdDynamicDriveMotors(Direction.kReverse).andThen(new
-    // WaitCommand(0.4)));
+    return new InstantCommand()
+        .andThen(
+            drivetrain
+                .sysIdQuasistaticDriveMotors(Direction.kForward)
+                .andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain
+                .sysIdQuasistaticDriveMotors(Direction.kForward)
+                .andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain
+                .sysIdQuasistaticDriveMotors(Direction.kReverse)
+                .andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain.sysIdDynamicDriveMotors(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain.sysIdDynamicDriveMotors(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {
@@ -353,7 +342,7 @@ public class RobotContainer {
   }
 
   public void simulationPeriodic() {
-    updateSimulationBattery(drivetrain, elevator, coralShooter, coralIntake, algaeGrabber);
+    updateSimulationBattery(drivetrain, elevator, elevatorHead, coralIntake);
   }
 
   public void updateSimulationBattery(PoweredSubsystem... subsystems) {
@@ -372,9 +361,8 @@ public class RobotContainer {
     limelight.close();
     elevator.close();
     elevatorArm.close();
-    coralShooter.close();
+    elevatorHead.close();
     coralIntake.close();
-    algaeGrabber.close();
     pdp.close();
   }
 }

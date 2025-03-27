@@ -28,7 +28,7 @@ public class AlgaeGrabberToProcessor extends SequentialCommandGroup implements S
         new InstantCommand(
             () -> {
               try {
-                RobotContainer.algaeGrabber.getSimIO().setHasAlgae(false);
+                RobotContainer.elevatorHead.getSimIO().setHasAlgae(false);
               } catch (Exception e) {
                 e.printStackTrace();
               }

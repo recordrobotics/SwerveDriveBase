@@ -34,7 +34,7 @@ public class GroundAlgaeToggled extends Command {
     isRunning = false;
     if (interrupted) {
       new ElevatorMoveThenAlgaeGrabEnd(
-              RobotContainer.algaeGrabber.hasAlgae() ? targetHeight : ElevatorHeight.BOTTOM)
+              RobotContainer.elevatorHead.hasAlgae() ? targetHeight : ElevatorHeight.BOTTOM)
           .handleInterrupt(this::cancel)
           .schedule();
     }

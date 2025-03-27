@@ -104,7 +104,7 @@ public class CoralIntakeFromSourceSim extends SequentialCommandGroup implements 
               coral.name = "CoralShooter/Coral";
               coral.pose = () -> RobotContainer.model.elevatorArm.getCoralShooterTargetPose();
               try {
-                RobotContainer.coralShooter.getSimIO().setCoralDetectorSim(false);
+                RobotContainer.elevatorHead.getSimIO().setCoralDetectorSim(false);
               } catch (Exception e) {
                 e.printStackTrace();
               }
