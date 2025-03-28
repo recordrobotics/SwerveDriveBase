@@ -45,13 +45,14 @@ import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
 import frc.robot.subsystems.io.real.CoralIntakeReal;
+import frc.robot.subsystems.io.real.ElevatorArmReal;
+import frc.robot.subsystems.io.real.ElevatorHeadReal;
 import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.subsystems.io.sim.ElevatorHeadSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
 import frc.robot.subsystems.io.stub.ClimberStub;
-import frc.robot.subsystems.io.stub.ElevatorArmStub;
 import frc.robot.subsystems.io.stub.ElevatorHeadStub;
 import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
@@ -108,8 +109,8 @@ public class RobotContainer {
       poseTracker = new PoseTracker();
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorStub(Constants.Elevator.kDt));
-      elevatorArm = new ElevatorArm(new ElevatorArmStub(0.02));
-      elevatorHead = new ElevatorHead(new ElevatorHeadStub(0.02));
+      elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
+      elevatorHead = new ElevatorHead(new ElevatorHeadReal(0.02));
       coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
       climber = new Climber(new ClimberStub(0.02));
       lights = new Lights();
@@ -319,12 +320,10 @@ public class RobotContainer {
     // return autoCommand;
 
     return new InstantCommand()
-        .andThen(
-            coralIntake.sysIdQuasistaticWheel(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(
-            coralIntake.sysIdQuasistaticWheel(Direction.kReverse).andThen(new WaitCommand(0.4)))
-        .andThen(coralIntake.sysIdDynamicWheel(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(coralIntake.sysIdDynamicWheel(Direction.kReverse).andThen(new WaitCommand(0.4)));
+        .andThen(elevatorHead.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(elevatorHead.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
+        .andThen(elevatorHead.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(elevatorHead.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {

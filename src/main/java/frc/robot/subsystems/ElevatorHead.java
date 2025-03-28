@@ -60,7 +60,7 @@ public class ElevatorHead extends KillableSubsystem
     this.io = io;
 
     toggle(CoralShooterStates.OFF); // initialize as off
-    DashboardUI.Test.addSlider("Coral Shooter", io.getPercent(), -1, 1).subscribe(io::setPercent);
+    DashboardUI.Test.addSlider("Elevator Head", io.getPercent(), -1, 1).subscribe(io::setPercent);
 
     io.setPosition(0);
     positionPid.reset(0);
@@ -76,17 +76,17 @@ public class ElevatorHead extends KillableSubsystem
                 null,
                 null,
                 null,
-                (state -> Logger.recordOutput("CoralShooter/SysIdTestState", state.toString()))),
+                (state -> Logger.recordOutput("ElevatorHead/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(v -> io.setVoltage(v.in(Volts)), null, this));
 
-    SmartDashboard.putNumber("CoralShooter_Value", 0);
+    SmartDashboard.putNumber("ElevatorHead_Value", 0);
   }
 
   public ElevatorHeadSim getSimIO() throws Exception {
     if (io instanceof ElevatorHeadSim) {
       return (ElevatorHeadSim) io;
     } else {
-      throw new Exception("CoralShooterIO is not a simulation");
+      throw new Exception("ElevatorHeadIO is not a simulation");
     }
   }
 
@@ -273,12 +273,12 @@ public class ElevatorHead extends KillableSubsystem
       double feedforwardOutput =
           feedForward.calculateWithVelocities(lastSpeed, positionPid.getSetpoint().velocity);
 
-      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      // io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = positionPid.getSetpoint().velocity;
     } else {
       double pidOutput = pid.calculate(getVelocity());
       double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      // io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = pid.getSetpoint();
 
       if (waitingForIntakeSpeed && Math.abs(getVelocity()) > 1.0) { // TODO: tune

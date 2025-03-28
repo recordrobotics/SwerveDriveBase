@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -49,7 +50,10 @@ public class ElevatorArm extends KillableSubsystem
 
     io.applyArmTalonFXConfig(
         new TalonFXConfiguration()
-            .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake))
+            .withMotorOutput(
+                new MotorOutputConfigs()
+                    .withInverted(InvertedValue.Clockwise_Positive)
+                    .withNeutralMode(NeutralModeValue.Brake))
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(Constants.ElevatorArm.ARM_SUPPLY_CURRENT_LIMIT)
@@ -69,8 +73,8 @@ public class ElevatorArm extends KillableSubsystem
     sysIdRoutine =
         new SysIdRoutine(
             new SysIdRoutine.Config(
-                Volts.of(3).per(Second),
-                Volts.of(1.3),
+                Volts.of(2.0).per(Second),
+                Volts.of(1.5),
                 Seconds.of(1.3),
                 (state -> Logger.recordOutput("ElevatorArm/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism((v) -> io.setArmVoltage(v.in(Volts)), null, this));
@@ -117,6 +121,8 @@ public class ElevatorArm extends KillableSubsystem
 
   @Override
   public void periodic() {
+    toggle(SmartDashboard.getNumber("ElevatorArm", Constants.ElevatorArm.START_POS));
+
     double pidOutputArm = pid.calculate(getArmAngle());
 
     double feedforwardOutput =

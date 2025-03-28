@@ -123,10 +123,10 @@ public final class Constants {
     public static final double kP = 2.996;
     public static final double kI = 0;
     public static final double kD = 0.28181;
-    public static final double kG = 0.23627;
-    public static final double kS = 0.086337;
-    public static final double kV = 0.65091;
-    public static final double kA = 0.030534;
+    public static final double kG = 0.21122;
+    public static final double kS = 0.11314;
+    public static final double kV = 0.63525;
+    public static final double kA = 0.022185;
 
     public static final double START_POS = Units.degreesToRadians(-90);
     public static final double MIN_POS = Units.degreesToRadians(-103.54);
@@ -144,7 +144,7 @@ public final class Constants {
   }
 
   public enum ElevatorHeight {
-    INTAKE(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(-100)),
+    INTAKE(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(-103.13)),
     L1(0.26, Units.degreesToRadians(-101.69)),
     L2(0.56, Units.degreesToRadians(-101.69)),
     LOW_REEF_ALGAE(0.4849, Units.degreesToRadians(-37.841)),
@@ -837,15 +837,15 @@ public final class Constants {
   }
 
   public final class ElevatorHead {
-    public static final double kP = 0.011473;
+    public static final double kP = 0.047421;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kP_position = 3.629;
     public static final double kI_position = 0.0;
     public static final double kD_position = 0.132;
-    public static final double kS = 0.23442;
-    public static final double kV = 2.801;
-    public static final double kA = 0.30488;
+    public static final double kS = 0.19168;
+    public static final double kV = 3.1111;
+    public static final double kA = 0.23988;
 
     public static final double GEAR_RATIO = 10.0;
     public static final Distance DISTANCE_BETWEEN_AXLES = Inches.of(7);
