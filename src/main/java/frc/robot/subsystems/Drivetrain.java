@@ -168,10 +168,10 @@ public class Drivetrain extends KillableSubsystem
 
     SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
-    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(360-45)));
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(360 - 45)));
     m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-    m_backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(180+45)));
-    m_backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(180-45)));
+    m_backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(180 + 45)));
+    m_backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(180 - 45)));
 
     // m_frontLeft.setDesiredState(state);
     // m_frontRight.setDesiredState(state);
