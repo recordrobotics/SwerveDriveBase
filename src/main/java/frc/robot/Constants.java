@@ -1115,17 +1115,17 @@ public final class Constants {
     public static final double FALCON_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
     public static final double FALCON_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE = 12.0;
 
-    public static final double KRAKEN_DRIVE_KS = 0.059576;
-    public static final double KRAKEN_DRIVE_KV = 2.5813;
-    public static final double KRAKEN_DRIVE_KA = 0.2404;
+    public static final double KRAKEN_DRIVE_KS = 0.089666;
+    public static final double KRAKEN_DRIVE_KV = 2.5833;
+    public static final double KRAKEN_DRIVE_KA = 0.18188;
     public static final double KRAKEN_DRIVE_STD_STATE_VELOCITY = 3;
     public static final double KRAKEN_DRIVE_STD_ENCODER_VELOCITY = 0.001;
     public static final double KRAKEN_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE = 0.1;
     public static final double KRAKEN_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE = 7.0;
 
-    public static final double KRAKEN_TURN_KV = 1.608;
-    public static final double KRAKEN_TURN_KA = 0.031048;
-    public static final double KRAKEN_TURN_KS = 0.26148;
+    public static final double KRAKEN_TURN_KV = 1.4557;
+    public static final double KRAKEN_TURN_KA = 0.029012;
+    public static final double KRAKEN_TURN_KS = 0.29719;
     public static final double KRAKEN_TURN_STD_STATE_POSITION = 3;
     public static final double KRAKEN_TURN_STD_STATE_VELOCITY = 3;
     public static final double KRAKEN_TURN_STD_ENCODER_POSITION = 0.01;
@@ -1151,8 +1151,8 @@ public final class Constants {
 
     public static final RobotConfig PPDefaultConfig =
         new RobotConfig(
-            65.081,
-            40.000,
+            64.864,
+            14.547,
             new ModuleConfig(WHEEL_DIAMETER / 2, 4.350, 1.2, DCMotor.getKrakenX60(1), 52, 1),
             frontLeftLocation,
             frontRightLocation,

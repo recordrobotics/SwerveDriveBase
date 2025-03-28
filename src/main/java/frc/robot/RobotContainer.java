@@ -320,21 +320,13 @@ public class RobotContainer {
 
     return new InstantCommand()
         .andThen(
-            drivetrain
-                .sysIdQuasistaticDriveMotors(Direction.kForward)
-                .andThen(new WaitCommand(0.4)))
+            drivetrain.sysIdQuasistaticTurnMotors(Direction.kForward).andThen(new WaitCommand(0.4)))
         .andThen(
-            drivetrain
-                .sysIdQuasistaticDriveMotors(Direction.kReverse)
-                .andThen(new WaitCommand(0.4)))
+            drivetrain.sysIdQuasistaticTurnMotors(Direction.kReverse).andThen(new WaitCommand(0.4)))
         .andThen(
-            drivetrain
-                .sysIdQuasistaticDriveMotors(Direction.kForward)
-                .andThen(new WaitCommand(0.4)))
+            drivetrain.sysIdDynamicTurnMotors(Direction.kForward).andThen(new WaitCommand(0.4)))
         .andThen(
-            drivetrain
-                .sysIdQuasistaticDriveMotors(Direction.kReverse)
-                .andThen(new WaitCommand(0.4)));
+            drivetrain.sysIdDynamicTurnMotors(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {

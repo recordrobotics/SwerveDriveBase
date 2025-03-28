@@ -100,7 +100,7 @@ public class Drivetrain extends KillableSubsystem
             new SysIdRoutine.Config(
                 Volts.of(6).per(Second),
                 Volts.of(7),
-                Seconds.of(0.8),
+                Seconds.of(0.5),
                 (state -> Logger.recordOutput("Drivetrain/Turn/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::SysIdOnlyTurnMotors, null, this));
   }
@@ -148,10 +148,10 @@ public class Drivetrain extends KillableSubsystem
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.robotMaxSpeed);
 
     // Sets state for each module
-    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    // m_frontRight.setDesiredState(swerveModuleStates[1]);
-    // m_backLeft.setDesiredState(swerveModuleStates[2]);
-    // m_backRight.setDesiredState(swerveModuleStates[3]);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_backLeft.setDesiredState(swerveModuleStates[2]);
+    m_backRight.setDesiredState(swerveModuleStates[3]);
 
     Logger.recordOutput("SwerveStates/Setpoints", swerveModuleStates);
   }

@@ -177,7 +177,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     turn_kS = m.TURN_KS;
 
     driveFF = new SimpleMotorFeedforward(m.DRIVE_KS, m.DRIVE_KV, m.DRIVE_KA);
-    drivePID = new PIDController(0.01, 0, 0);
+    drivePID = new PIDController(0.1, 0, 0);
 
     // Corrects for offset in absolute motor position
     io.setTurnMotorPosition(getAbsWheelTurnOffset());
@@ -328,7 +328,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
             + driveFF.calculateWithVelocities(lastSpeed, targetDriveVelocity);
     lastSpeed = targetDriveVelocity;
 
-    // io.setDriveMotorVoltage(nextDriveVoltage);
+    io.setDriveMotorVoltage(nextDriveVoltage);
 
     // Get next setpoint from profile.
     // Logger.recordOutput("setpoint_" + turningMotorChannel, m_setpoint.position);
@@ -348,7 +348,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
     // Logger.recordOutput("targetvoltage_" + turningMotorChannel, nextturnVoltage);
 
-    // io.setTurnMotorVoltage(nextturnVoltage);
+    io.setTurnMotorVoltage(nextturnVoltage);
 
     // Logger.recordOutput("GoalPos_" + turningMotorChannel, m_goal.position);
 
