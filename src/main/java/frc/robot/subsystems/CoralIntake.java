@@ -96,7 +96,7 @@ public class CoralIntake extends KillableSubsystem
     sysIdRoutineArm =
         new SysIdRoutine(
             new SysIdRoutine.Config(
-                Volts.of(3.2).per(Second),
+                Volts.of(2.2).per(Second),
                 Volts.of(2.1),
                 Seconds.of(1.2),
                 (state -> Logger.recordOutput("CoralIntake/Arm/SysIdTestState", state.toString()))),
@@ -222,11 +222,11 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void periodic() {
-    // toggleArm(SmartDashboard.getNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS));
+    toggleArm(SmartDashboard.getNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS));
 
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    // io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
     lastSpeed = pid.getSetpoint();
 
     double pidOutputArm = armPID.calculate(getArmAngle());
