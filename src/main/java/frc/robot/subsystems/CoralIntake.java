@@ -222,11 +222,11 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void periodic() {
-    toggleArm(SmartDashboard.getNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS));
+    // toggleArm(SmartDashboard.getNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS));
 
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-    // io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+    io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
     lastSpeed = pid.getSetpoint();
 
     double pidOutputArm = armPID.calculate(getArmAngle());

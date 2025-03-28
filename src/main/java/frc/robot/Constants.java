@@ -893,9 +893,9 @@ public final class Constants {
     public static final double kP = 0.037121;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kS = 0.15522;
-    public static final double kV = 0.6172;
-    public static final double kA = 0.036292;
+    public static final double kS = 0.1709;
+    public static final double kV = 0.61705;
+    public static final double kA = 0.039556;
 
     public static final double MAX_ARM_VELOCITY = 8;
     public static final double MAX_ARM_ACCELERATION = 22;

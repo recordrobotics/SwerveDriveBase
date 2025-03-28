@@ -51,7 +51,6 @@ import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.subsystems.io.sim.ElevatorHeadSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
 import frc.robot.subsystems.io.stub.ClimberStub;
-import frc.robot.subsystems.io.stub.CoralIntakeStub;
 import frc.robot.subsystems.io.stub.ElevatorArmStub;
 import frc.robot.subsystems.io.stub.ElevatorHeadStub;
 import frc.robot.subsystems.io.stub.ElevatorStub;
@@ -321,13 +320,11 @@ public class RobotContainer {
 
     return new InstantCommand()
         .andThen(
-            coralIntake.sysIdQuasistaticArm(Direction.kForward).andThen(new WaitCommand(0.4)))
+            coralIntake.sysIdQuasistaticWheel(Direction.kForward).andThen(new WaitCommand(0.4)))
         .andThen(
-            coralIntake.sysIdQuasistaticArm(Direction.kReverse).andThen(new WaitCommand(0.4)))
-        .andThen(
-            coralIntake.sysIdDynamicArm(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(
-            coralIntake.sysIdDynamicArm(Direction.kReverse).andThen(new WaitCommand(0.4)));
+            coralIntake.sysIdQuasistaticWheel(Direction.kReverse).andThen(new WaitCommand(0.4)))
+        .andThen(coralIntake.sysIdDynamicWheel(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(coralIntake.sysIdDynamicWheel(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {
