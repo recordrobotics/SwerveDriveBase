@@ -87,9 +87,9 @@ public class Drivetrain extends KillableSubsystem
         new SysIdRoutine(
             // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
             new SysIdRoutine.Config(
-                Volts.of(2.5).per(Second),
-                Volts.of(2.2),
-                Seconds.of(1.0),
+                Volts.of(3.0).per(Second),
+                Volts.of(3.0),
+                Seconds.of(1.5),
                 (state ->
                     Logger.recordOutput("Drivetrain/Drive/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::SysIdOnlyDriveMotors, null, this));
@@ -100,7 +100,7 @@ public class Drivetrain extends KillableSubsystem
             new SysIdRoutine.Config(
                 Volts.of(6).per(Second),
                 Volts.of(7),
-                Seconds.of(1.5),
+                Seconds.of(0.8),
                 (state -> Logger.recordOutput("Drivetrain/Turn/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::SysIdOnlyTurnMotors, null, this));
   }
@@ -148,10 +148,10 @@ public class Drivetrain extends KillableSubsystem
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.robotMaxSpeed);
 
     // Sets state for each module
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    // m_frontRight.setDesiredState(swerveModuleStates[1]);
+    // m_backLeft.setDesiredState(swerveModuleStates[2]);
+    // m_backRight.setDesiredState(swerveModuleStates[3]);
 
     Logger.recordOutput("SwerveStates/Setpoints", swerveModuleStates);
   }
@@ -167,12 +167,16 @@ public class Drivetrain extends KillableSubsystem
   public void SysIdOnlyDriveMotors(Voltage volts) {
 
     SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
-    // SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
 
-    m_frontLeft.setDesiredState(state);
-    m_frontRight.setDesiredState(state);
-    m_backLeft.setDesiredState(state);
-    m_backRight.setDesiredState(state);
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(360-45)));
+    m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    m_backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(180+45)));
+    m_backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(180-45)));
+
+    // m_frontLeft.setDesiredState(state);
+    // m_frontRight.setDesiredState(state);
+    // m_backLeft.setDesiredState(state);
+    // m_backRight.setDesiredState(state);
 
     m_frontLeft.setDriveMotorVoltsSysIdOnly(volts.in(Volts));
     m_frontRight.setDriveMotorVoltsSysIdOnly(volts.in(Volts));
