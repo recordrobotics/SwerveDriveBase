@@ -35,4 +35,8 @@ public class CommandUtils {
       }
     };
   }
+
+  public static Command maybeProxy(boolean doProxy, Command command) {
+    return doProxy ? command.asProxy() : command;
+  }
 }

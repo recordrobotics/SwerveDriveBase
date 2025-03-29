@@ -11,6 +11,7 @@ import frc.robot.commands.simulation.CoralIntakeFromSourceSim;
 import frc.robot.subsystems.CoralIntake.CoralIntakeStates;
 import frc.robot.subsystems.CoralIntake.IntakeArmStates;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
+import frc.robot.utils.CommandUtils;
 
 public class CoralIntakeFromSource extends SequentialCommandGroup {
   public CoralIntakeFromSource(boolean useProxy) {
@@ -42,9 +43,7 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
             },
             RobotContainer.coralIntake),
         // start moving elevator to intake position
-        useProxy
-            ? new ElevatorMove(ElevatorHeight.INTAKE).asProxy()
-            : new ElevatorMove(ElevatorHeight.INTAKE),
+        CommandUtils.maybeProxy(useProxy, new ElevatorMove(ElevatorHeight.INTAKE)),
         new InstantCommand(
             () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.INTAKE),
             RobotContainer.elevatorHead),
