@@ -797,10 +797,10 @@ public final class Constants {
     public static final double kDt = 0.02;
     public static final double kMaxVelocity = 8;
     public static final double kMaxAcceleration = 10;
-    public static final double kV = 5.5734;
-    public static final double kA = 0.1426;
-    public static final double kG = 0.28565;
-    public static final double kS = 0.076647;
+    public static final double kV = 5.5255;
+    public static final double kA = 0.1319;
+    public static final double kG = 0.19133;
+    public static final double kS = 0.078513;
 
     public static final double STARTING_HEIGHT = 0;
     public static final double LOWEST_HOLD_HEIGHT = Units.inchesToMeters(1.25);

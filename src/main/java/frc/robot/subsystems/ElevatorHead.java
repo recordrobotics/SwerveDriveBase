@@ -273,12 +273,12 @@ public class ElevatorHead extends KillableSubsystem
       double feedforwardOutput =
           feedForward.calculateWithVelocities(lastSpeed, positionPid.getSetpoint().velocity);
 
-      // io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = positionPid.getSetpoint().velocity;
     } else {
       double pidOutput = pid.calculate(getVelocity());
       double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
-      // io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
+      io.setVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
       lastSpeed = pid.getSetpoint();
 
       if (waitingForIntakeSpeed && Math.abs(getVelocity()) > 1.0) { // TODO: tune

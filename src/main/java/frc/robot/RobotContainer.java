@@ -47,6 +47,7 @@ import frc.robot.subsystems.CoralIntake.IntakeArmStates;
 import frc.robot.subsystems.io.real.CoralIntakeReal;
 import frc.robot.subsystems.io.real.ElevatorArmReal;
 import frc.robot.subsystems.io.real.ElevatorHeadReal;
+import frc.robot.subsystems.io.real.ElevatorReal;
 import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
@@ -108,7 +109,7 @@ public class RobotContainer {
       drivetrain = new Drivetrain();
       poseTracker = new PoseTracker();
       limelight = new Limelight();
-      elevator = new Elevator(new ElevatorStub(Constants.Elevator.kDt));
+      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
       elevatorHead = new ElevatorHead(new ElevatorHeadReal(0.02));
       coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
@@ -320,10 +321,10 @@ public class RobotContainer {
     // return autoCommand;
 
     return new InstantCommand()
-        .andThen(elevatorHead.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(elevatorHead.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
-        .andThen(elevatorHead.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(elevatorHead.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
+        .andThen(elevator.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(elevator.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
+        .andThen(elevator.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(elevator.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {
