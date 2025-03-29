@@ -900,7 +900,7 @@ public final class Constants {
     public static final double MAX_ARM_VELOCITY = 8;
     public static final double MAX_ARM_ACCELERATION = 22;
 
-    public static final double REVERSE_SPEED = 12; // TODO this is probably too slow
+    public static final double REVERSE_SPEED = 6; // TODO this is probably too slow
     public static final double INTAKE_SPEED = -18; // TODO ^^^^^^^^^^^
     public static final double L1_SCORE_SPEED = 20; // TODO ^^^^^^^^^^^
 
