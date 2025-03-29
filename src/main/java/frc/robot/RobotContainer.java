@@ -54,8 +54,6 @@ import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.subsystems.io.sim.ElevatorHeadSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
 import frc.robot.subsystems.io.stub.ClimberStub;
-import frc.robot.subsystems.io.stub.ElevatorHeadStub;
-import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;

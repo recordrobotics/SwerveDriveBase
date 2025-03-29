@@ -223,23 +223,6 @@
             }
           },
           {
-            "title": "C",
-            "x": 1344.0,
-            "y": 512.0,
-            "width": 64.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/CoralShooter/HasCoral",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
             "title": "Reset",
             "x": 1088.0,
             "y": 256.0,
@@ -250,23 +233,6 @@
               "topic": "/SmartDashboard/Autonomous/ResetLocationButton",
               "period": 0.06,
               "data_type": "boolean"
-            }
-          },
-          {
-            "title": "HasAlgae",
-            "x": 1216.0,
-            "y": 384.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/AlgaeGrabber/HasAlgae",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
             }
           },
           {
@@ -306,6 +272,40 @@
               "topic": "/SmartDashboard/Autonomous/TrustLimelight",
               "period": 0.06,
               "data_type": "boolean"
+            }
+          },
+          {
+            "title": "HasAlgae",
+            "x": 1216.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/ElevatorHead/HasAlgae",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "C",
+            "x": 1344.0,
+            "y": 512.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/ElevatorHead/HasCoral",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
@@ -497,23 +497,6 @@
             }
           },
           {
-            "title": "C",
-            "x": 1344.0,
-            "y": 256.0,
-            "width": 64.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/CoralShooter/HasCoral",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
             "title": "B",
             "x": 1344.0,
             "y": 128.0,
@@ -548,6 +531,23 @@
             }
           },
           {
+            "title": "C",
+            "x": 1344.0,
+            "y": 256.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/ElevatorHead/HasCoral",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
             "title": "HasAlgae",
             "x": 896.0,
             "y": 384.0,
@@ -555,7 +555,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/RealOutputs/AlgaeGrabber/HasAlgae",
+              "topic": "/AdvantageKit/RealOutputs/ElevatorHead/HasAlgae",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,

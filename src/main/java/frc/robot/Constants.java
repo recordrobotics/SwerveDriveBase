@@ -144,11 +144,11 @@ public final class Constants {
   }
 
   public enum ElevatorHeight {
-    INTAKE(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(-103.13)),
+    INTAKE(Units.inchesToMeters(0.1), Units.degreesToRadians(-103.54)),
     L1(0.26, Units.degreesToRadians(-101.69)),
-    L2(0.56, Units.degreesToRadians(-101.69)),
+    L2(0.51, Units.degreesToRadians(-101.69)),
     LOW_REEF_ALGAE(0.4849, Units.degreesToRadians(-37.841)),
-    L3(0.937, Units.degreesToRadians(-101.57)),
+    L3(0.887, Units.degreesToRadians(-101.57)),
     HIGH_REEF_ALGAE(0.916, Units.degreesToRadians(-40.26)),
     L4(1.309, Units.degreesToRadians(64.99)),
     BOTTOM(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(-90)),
@@ -853,15 +853,15 @@ public final class Constants {
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
-    public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(-1);
+    public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(0.2);
 
     // m/s coral
     public static final double POSITION_MODE_MAX_VELOCITY = 1.4;
     public static final double POSITION_MODE_MAX_ACCELERATION = 0.7;
 
-    public static final double OUT_SPEED_FORWARD = -2.5;
-    public static final double OUT_SPEED_BACKWARD = 1.5;
-    public static final double INTAKE_SPEED = -0.85; // -0.35;
+    public static final double OUT_SPEED_FORWARD = 2.5;
+    public static final double OUT_SPEED_BACKWARD = -1.5;
+    public static final double INTAKE_SPEED = 0.85; // -0.35;
 
     public static final double AT_GOAL_POSITION_TOLERANCE = 0.05;
     public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.07;
@@ -901,7 +901,7 @@ public final class Constants {
     public static final double MAX_ARM_ACCELERATION = 22;
 
     public static final double REVERSE_SPEED = 12; // TODO this is probably too slow
-    public static final double INTAKE_SPEED = -8; // TODO ^^^^^^^^^^^
+    public static final double INTAKE_SPEED = -18; // TODO ^^^^^^^^^^^
     public static final double L1_SCORE_SPEED = 20; // TODO ^^^^^^^^^^^
 
     public static final double sP = 4.8919;
@@ -915,7 +915,7 @@ public final class Constants {
     public static final double ARM_UP = Units.degreesToRadians(84.19);
     public static final double ARM_INTAKE = Units.degreesToRadians(77.08);
     public static final double ARM_SCORE_L1 = Units.degreesToRadians(22.35);
-    public static final double ARM_DOWN = Units.degreesToRadians(-49.25);
+    public static final double ARM_DOWN = Units.degreesToRadians(-50.5);
     public static final double ARM_START_POS = Units.degreesToRadians(84.19);
 
     public static final double ARM_GEAR_RATIO = 56.8889; // 16:1 * 64/18
