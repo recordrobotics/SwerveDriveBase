@@ -70,14 +70,11 @@ public final class Constants {
   }
 
   public final class Limelight {
-    public static final Angle LIMELIGHT_ANGLE_UP = Degrees.of(23); // TODO make correct
+    public static final Angle LIMELIGHT_ANGLE_UP = Degrees.of(21);
     public static final Translation3d LIMELIGHT_OFFSET =
-        new Translation3d(
-            Meters.of(0.2), // TODO make correct
-            Meters.of(0.2), // TODO make correct
-            Meters.of(0.4)); // TODO make correct
+        new Translation3d(Meters.of(0.311558), Meters.of(0.330204), Meters.of(0.246383));
 
-    public static final String LIMELIGHT_NAME = "limelight";
+    public static final String LIMELIGHT_NAME = "limelight-3G-on-the-swerve-cover";
     public static final AprilTagFieldLayout FIELD_LAYOUT =
         AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
