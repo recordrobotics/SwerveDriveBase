@@ -19,7 +19,7 @@ import frc.robot.Constants.RobotAlignPose;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.Align;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
-import frc.robot.commands.CoralIntakeFromGroundUp;
+import frc.robot.commands.CoralIntakeFromGroundUpL1;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.CoralIntakeMoveL1;
 import frc.robot.commands.CoralIntakeShootL1;
@@ -263,7 +263,7 @@ public class RobotContainer {
                 new CoralIntakeShootL1(),
                 new CoralIntakeMoveL1(),
                 () -> coralIntake.getArmState() == IntakeArmStates.SCORE_L1),
-            new CoralIntakeFromGroundUp(false),
+            new CoralIntakeFromGroundUpL1(),
             () -> coralIntake.getArmAngle() >= Constants.CoralIntake.ARM_SCORE_L1 - 0.1);
     coralScoreL1Cmd.addRequirements(coralIntakeMoveToggleRequirement);
 

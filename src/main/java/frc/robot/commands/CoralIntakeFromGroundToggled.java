@@ -16,6 +16,6 @@ public class CoralIntakeFromGroundToggled extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    new CoralIntakeFromGroundUp(true).handleInterrupt(this::cancel).schedule();
+    new CoralIntakeFromGroundUp().handleInterrupt(this::cancel).schedule();
   }
 }
