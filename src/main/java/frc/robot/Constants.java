@@ -12,8 +12,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.FlippingUtil;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -70,18 +68,7 @@ public final class Constants {
   }
 
   public final class Limelight {
-    public static final Angle LIMELIGHT_ANGLE_UP = Degrees.of(21);
-    public static final Translation3d LIMELIGHT_OFFSET =
-        new Translation3d(Meters.of(0.311558), Meters.of(0.330204), Meters.of(0.246383));
-
     public static final String LIMELIGHT_NAME = "limelight-3G-on-the-swerve-cover";
-    public static final AprilTagFieldLayout FIELD_LAYOUT =
-        AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
-
-    public static final Angle FOV_VERTICAL_FROM_CENTER = Degrees.of(28);
-    public static final Angle FOV_HORIZONTAL_FROM_CENTER = Degrees.of(40);
-
-    public static final double CROPPING_MARGIN = 0.2; // units are in ... um ... uh ... Numbers!
   }
 
   public final class Climber {
