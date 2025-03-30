@@ -44,11 +44,11 @@ public class PoseTracker extends SubsystemBase implements AutoCloseable {
 
     poseFilter.update(nav.getAdjustedAngle(), getModulePositions());
     poseFilter.addVisionMeasurement(
-        RobotContainer.limelight.getPoseEstimate().pose,
-        RobotContainer.limelight.getPoseEstimate().timestampSeconds,
+        RobotContainer.limelight.getLeft().currentEstimate.pose,
+        RobotContainer.limelight.getLeft().currentEstimate.timestampSeconds,
         VecBuilder.fill(
-            RobotContainer.limelight.getConfidence(),
-            RobotContainer.limelight.getConfidence(),
+            RobotContainer.limelight.getLeft().currentConfidence,
+            RobotContainer.limelight.getLeft().currentConfidence,
             trustLimelight ? 4 : 9999999) // some influence of limelight pose rotation
         );
 
@@ -80,13 +80,13 @@ public class PoseTracker extends SubsystemBase implements AutoCloseable {
     setToPose(
         new Pose2d(
             getEstimatedPosition().getTranslation(),
-            RobotContainer.limelight.getPoseEstimate().pose.getRotation()));
+            RobotContainer.limelight.getLeft().currentEstimate.pose.getRotation()));
   }
 
   public void resetFullLimelight() {
     setToPose(
         new Pose2d(
-            RobotContainer.limelight.getPoseEstimate().pose.getTranslation(),
+            RobotContainer.limelight.getLeft().currentEstimate.pose.getTranslation(),
             getEstimatedPosition().getRotation()));
   }
 

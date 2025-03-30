@@ -32,23 +32,39 @@ public class OverviewLayout extends AbstractLayout {
 
   // private Supplier<Boolean> poseCertainValue = () -> false;
   private Supplier<Boolean> navSensorValue = () -> false;
-  private Supplier<Integer> tagNumValue = () -> 0;
-  private Supplier<Double> confidenceValue = () -> 0.0;
-  private Supplier<Boolean> hasVisionValue = () -> false;
-  private Supplier<Boolean> limelightConnectedValue = () -> false;
+
+  private Supplier<Integer> tagNumLeftValue = () -> 0;
+  private Supplier<Double> confidenceLeftValue = () -> 0.0;
+  private Supplier<Boolean> hasVisionLeftValue = () -> false;
+  private Supplier<Boolean> limelightConnectedLeftValue = () -> false;
+
+  private Supplier<Integer> tagNumCenterValue = () -> 0;
+  private Supplier<Double> confidenceCenterValue = () -> 0.0;
+  private Supplier<Boolean> hasVisionCenterValue = () -> false;
+  private Supplier<Boolean> limelightConnectedCenterValue = () -> false;
 
   private static final Map<Integer, TuningData> shooterSpeedData = new HashMap<>();
 
   public OverviewLayout() {
     addValueSendable("Nav Sensor", () -> navSensorValue.get(), "boolean");
 
-    addValueSendable("Tag Count", () -> tagNumValue.get(), "int");
+    addValueSendable("Left/Tag Count", () -> tagNumLeftValue.get(), "int");
 
-    addValueSendable("Confidence", () -> confidenceValue.get(), "double");
+    addValueSendable("Left/Confidence", () -> confidenceLeftValue.get(), "double");
 
-    addValueSendable("Has Vision", () -> hasVisionValue.get(), "boolean");
+    addValueSendable("Left/Has Vision", () -> hasVisionLeftValue.get(), "boolean");
 
-    addValueSendable("Limelight Connected", () -> limelightConnectedValue.get(), "boolean");
+    addValueSendable(
+        "Left/Limelight Connected", () -> limelightConnectedLeftValue.get(), "boolean");
+
+    addValueSendable("Center/Tag Count", () -> tagNumCenterValue.get(), "int");
+
+    addValueSendable("Center/Confidence", () -> confidenceCenterValue.get(), "double");
+
+    addValueSendable("Center/Has Vision", () -> hasVisionCenterValue.get(), "boolean");
+
+    addValueSendable(
+        "Center/Limelight Connected", () -> limelightConnectedCenterValue.get(), "boolean");
   }
 
   /**
@@ -76,20 +92,36 @@ public class OverviewLayout extends AbstractLayout {
     navSensorValue = navSensor;
   }
 
-  public void setTagNum(Supplier<Integer> tagNum) {
-    tagNumValue = tagNum;
+  public void setTagNumLeft(Supplier<Integer> tagNum) {
+    tagNumLeftValue = tagNum;
   }
 
-  public void setConfidence(Supplier<Double> confidence) {
-    confidenceValue = confidence;
+  public void setConfidenceLeft(Supplier<Double> confidence) {
+    confidenceLeftValue = confidence;
   }
 
-  public void setHasVision(Supplier<Boolean> hasVision) {
-    hasVisionValue = hasVision;
+  public void setHasVisionLeft(Supplier<Boolean> hasVision) {
+    hasVisionLeftValue = hasVision;
   }
 
-  public void setLimelightConnected(Supplier<Boolean> limelightConnected) {
-    limelightConnectedValue = limelightConnected;
+  public void setLimelightConnectedLeft(Supplier<Boolean> limelightConnected) {
+    limelightConnectedLeftValue = limelightConnected;
+  }
+
+  public void setTagNumCenter(Supplier<Integer> tagNum) {
+    tagNumCenterValue = tagNum;
+  }
+
+  public void setConfidenceCenter(Supplier<Double> confidence) {
+    confidenceCenterValue = confidence;
+  }
+
+  public void setHasVisionCenter(Supplier<Boolean> hasVision) {
+    hasVisionCenterValue = hasVision;
+  }
+
+  public void setLimelightConnectedCenter(Supplier<Boolean> limelightConnected) {
+    limelightConnectedCenterValue = limelightConnected;
   }
 
   public void putShooterSpeedData(int id, double current, double target) {

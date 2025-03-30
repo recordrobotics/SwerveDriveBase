@@ -68,7 +68,8 @@ public final class Constants {
   }
 
   public final class Limelight {
-    public static final String LIMELIGHT_NAME = "limelight-3G-on-the-swerve-cover";
+    public static final String LIMELIGHT_LEFT_NAME = "limelight-left";
+    public static final String LIMELIGHT_CENTER_NAME = "limelight-center";
   }
 
   public final class Climber {
