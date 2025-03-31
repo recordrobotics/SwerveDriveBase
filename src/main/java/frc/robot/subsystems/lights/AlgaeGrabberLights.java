@@ -7,6 +7,7 @@ public class AlgaeGrabberLights extends VirtualLightsSubsystem {
 
   public AlgaeGrabberLights(Lights lights) {
     super(lights, 94, 111);
-    setDefaultCommand(runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY).ignoringDisable(true));
+    setDefaultCommand(
+        runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY_WITH_CLIMB).ignoringDisable(true));
   }
 }

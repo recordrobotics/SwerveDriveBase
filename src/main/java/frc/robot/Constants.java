@@ -930,6 +930,8 @@ public final class Constants {
     public static final LEDPattern FLASHING_GREEN =
         LEDPattern.solid(Color.kGreen).blink(Constants.Lights.FLASH_FREQUENCY);
 
+    public static final LEDPattern CLIMB_PATTERN = LEDPattern.kOff;
+
     public static final Supplier<LEDPattern> ALLIANCE_COLOR =
         () ->
             DriverStationUtils.getCurrentAlliance() == Alliance.Red
@@ -947,6 +949,9 @@ public final class Constants {
                     .mask(LEDPattern.progressMaskLayer(() -> 0.3))
                     .scrollAtAbsoluteSpeed(SCROLL_SPEED.times(5), LED_SPACING)
                     .blend(LEDPattern.solid(Color.kBlue));
+
+    public static final Supplier<LEDPattern> ALLIANCE_COLOR_FANCY_WITH_CLIMB =
+        () -> RobotContainer.isInClimbMode() ? CLIMB_PATTERN : ALLIANCE_COLOR_FANCY.get();
 
     public static final LEDPattern elevatorPattern =
         LEDPattern.solid(Color.kWhite)

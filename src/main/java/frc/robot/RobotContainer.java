@@ -56,7 +56,9 @@ import frc.robot.subsystems.io.stub.ClimberStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
+import frc.robot.utils.libraries.Elastic;
 import java.util.function.BooleanSupplier;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -99,6 +101,8 @@ public class RobotContainer {
 
   public static CoralIntakeMoveToggleRequirement coralIntakeMoveToggleRequirement =
       new CoralIntakeMoveToggleRequirement();
+
+  @AutoLogOutput private static boolean inClimbMode = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -158,7 +162,9 @@ public class RobotContainer {
     NetworkTableInstance.getDefault().flush();
   }
 
-  public void teleopInit() {}
+  public void teleopInit() {
+    inClimbMode = false;
+  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -185,6 +191,20 @@ public class RobotContainer {
         .onTrue(new InstantCommand(poseTracker::resetStartingPose).ignoringDisable(true));
     new Trigger(() -> DashboardUI.Autonomous.getLimelightRotation())
         .onTrue(new InstantCommand(poseTracker::resetToLimelight).ignoringDisable(true));
+
+    // Climb mode trigger
+    new Trigger(() -> DashboardUI.Overview.getControl().getClimbMode())
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (!inClimbMode) {
+                    inClimbMode = true;
+                    Elastic.selectTab("Climb");
+                  } else {
+                    inClimbMode = false;
+                    DashboardUI.Overview.switchTo();
+                  }
+                }));
 
     BooleanSupplier elevatorLock =
         () -> {
@@ -340,6 +360,10 @@ public class RobotContainer {
 
     RoboRioSim.setVInVoltage(
         MathUtil.clamp(BatterySim.calculateDefaultBatteryLoadedVoltage(currents), 0, 13));
+  }
+
+  public static boolean isInClimbMode() {
+    return inClimbMode;
   }
 
   /** frees up all hardware allocations */

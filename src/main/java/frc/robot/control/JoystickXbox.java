@@ -144,6 +144,11 @@ public class JoystickXbox extends AbstractControl {
   }
 
   @Override
+  public Boolean getClimbMode() {
+    return joystick.getRawButton(12);
+  }
+
+  @Override
   public void vibrate(RumbleType type, double value) {
     xbox_controller.setRumble(type, value);
   }

@@ -66,6 +66,11 @@ public class JoystickXboxKeypad extends AbstractControl {
     return joystick.getRawButton(10);
   }
 
+  @Override
+  public Boolean getClimbMode() {
+    return joystick.getRawButton(12);
+  }
+
   public Pair<Double, Double> getXY(boolean orient) {
     double X =
         SimpleMath.ApplyThresholdAndSensitivity(

@@ -27,6 +27,8 @@ public abstract class AbstractControl {
 
   public abstract Boolean getKill();
 
+  public abstract Boolean getClimbMode();
+
   // Elevator
   public abstract Boolean getAutoScore();
 
