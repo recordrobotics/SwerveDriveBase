@@ -302,14 +302,34 @@ public class RobotContainer {
     // new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
     //     .onTrue(HybridSource.deferred());
 
+    BooleanSupplier algaeLock =
+        () -> DashboardUI.Overview.getControl().getManualOverride() || !elevatorHead.hasCoral();
+
     new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae())
+        .and(algaeLock)
         .toggleOnTrue(new GroundAlgaeToggled(ElevatorHeight.GROUND_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow())
+        .and(algaeLock)
         .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh())
+        .and(algaeLock)
         .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.HIGH_REEF_ALGAE));
     new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae())
+        .and(algaeLock)
         .onTrue(new ProcessorScore());
+
+    new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae())
+        .and(() -> !algaeLock.getAsBoolean())
+        .onTrue(new VibrateXbox(RumbleType.kRightRumble, 1).withTimeout(0.1));
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow())
+        .and(() -> !algaeLock.getAsBoolean())
+        .onTrue(new VibrateXbox(RumbleType.kRightRumble, 1).withTimeout(0.1));
+    new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh())
+        .and(() -> !algaeLock.getAsBoolean())
+        .onTrue(new VibrateXbox(RumbleType.kBothRumble, 1).withTimeout(0.1));
+    new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae())
+        .and(() -> !algaeLock.getAsBoolean())
+        .onTrue(new VibrateXbox(RumbleType.kLeftRumble, 1).withTimeout(0.1));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getAutoAlign())
         .whileTrue(Align.create(0.01, 0.05, false, 1));
