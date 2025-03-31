@@ -66,9 +66,7 @@ public abstract class AbstractControl {
   public abstract Boolean getScoreAlgae();
 
   // Climb
-  public abstract Boolean getClimbMove();
-
-  public abstract Boolean getClimbUp();
+  public abstract Boolean getClimb();
 
   public abstract void vibrate(RumbleType type, double value);
 

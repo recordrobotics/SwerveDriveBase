@@ -242,12 +242,7 @@ public class JoystickXboxKeypad extends AbstractControl {
   }
 
   @Override
-  public Boolean getClimbMove() {
-    return xbox_controller.getPOV() != 0 && xbox_controller.getRawButton(7);
-  }
-
-  @Override
-  public Boolean getClimbUp() {
-    return xbox_controller.getPOV() == 0 && xbox_controller.getRawButton(7);
+  public Boolean getClimb() {
+    return xbox_controller.getRawButton(7);
   }
 }

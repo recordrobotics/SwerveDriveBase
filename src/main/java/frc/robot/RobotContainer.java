@@ -205,15 +205,23 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getClimbMode())
         .onTrue(
             new InstantCommand(
-                () -> {
-                  if (!inClimbMode) {
-                    inClimbMode = true;
-                    Elastic.selectTab("Climb");
-                  } else {
-                    inClimbMode = false;
-                    DashboardUI.Overview.switchTo();
-                  }
-                }));
+                    () -> {
+                      if (!inClimbMode) {
+                        inClimbMode = true;
+                        Elastic.selectTab("Climb");
+                      } else {
+                        inClimbMode = false;
+                        DashboardUI.Overview.switchTo();
+                      }
+                    })
+                .andThen(
+                    new DeferredCommand(
+                        () ->
+                            new ClimbMove(
+                                climber.getCurrentState() == ClimberState.Extend
+                                    ? ClimberState.Park
+                                    : ClimberState.Extend),
+                        Set.of(climber))));
 
     BooleanSupplier elevatorLock =
         () -> {
@@ -348,17 +356,12 @@ public class RobotContainer {
                     == AutoScoreDirection.Right)
         .onTrue(new AutoScore(AutoScoreDirection.Right));
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getClimbMove())
+    new Trigger(() -> DashboardUI.Overview.getControl().getClimb())
         .onTrue(
-            new DeferredCommand(
-                () ->
-                    new ClimbMove(
-                        climber.getCurrentState() == ClimberState.Extend
-                            ? ClimberState.Park
-                            : ClimberState.Extend),
-                Set.of(climber)));
-
-    new Trigger(() -> DashboardUI.Overview.getControl().getClimbUp()).onTrue(new ClimbUp());
+            Commands.either(
+                new ClimbUp(),
+                new ClimbMove(ClimberState.Extend),
+                () -> climber.getCurrentState() == ClimberState.Extend));
 
     // Simulation control commands
     if (Constants.RobotState.getMode() == Mode.SIM) {
