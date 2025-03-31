@@ -1,13 +1,88 @@
 {
   "version": 1.0,
-  "grid_size": 64,
+  "grid_size": 32,
   "tabs": [
     {
       "name": "Autonomous",
       "grid_layout": {
         "layouts": [
           {
-            "title": "Limelight",
+            "title": "Limelight Left",
+            "x": 1280.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 320.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Connected",
+                "x": 256.0,
+                "y": 384.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Left/Limelight Connected",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Has Vision",
+                "x": 256.0,
+                "y": 256.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Left/Has Vision",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Confidence",
+                "x": 384.0,
+                "y": 384.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Left/Confidence",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Tag Count",
+                "x": 384.0,
+                "y": 512.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Left/Tag Count",
+                  "period": 0.06,
+                  "data_type": "int",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
+            "title": "Limelight Center",
             "x": 1408.0,
             "y": 256.0,
             "width": 128.0,
@@ -25,7 +100,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Limelight Connected",
+                  "topic": "/SmartDashboard/Overview/Center/Limelight Connected",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -42,7 +117,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Has Vision",
+                  "topic": "/SmartDashboard/Overview/Center/Has Vision",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -59,7 +134,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Tag Count",
+                  "topic": "/SmartDashboard/Overview/Center/Tag Count",
                   "period": 0.06,
                   "data_type": "int",
                   "show_submit_button": false
@@ -73,7 +148,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Confidence",
+                  "topic": "/SmartDashboard/Overview/Center/Confidence",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -87,7 +162,7 @@
             "title": "Field",
             "x": 0.0,
             "y": 0.0,
-            "width": 1088.0,
+            "width": 1024.0,
             "height": 512.0,
             "type": "Field",
             "properties": {
@@ -105,9 +180,9 @@
           },
           {
             "title": "Starting Location",
-            "x": 1088.0,
+            "x": 1024.0,
             "y": 128.0,
-            "width": 448.0,
+            "width": 512.0,
             "height": 128.0,
             "type": "Split Button Chooser",
             "properties": {
@@ -117,9 +192,9 @@
           },
           {
             "title": "Auto Code",
-            "x": 1088.0,
+            "x": 1024.0,
             "y": 0.0,
-            "width": 448.0,
+            "width": 512.0,
             "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
@@ -156,7 +231,8 @@
               "topic": "/CameraPublisher/photonvision_Port_1182_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0,
-              "compression": 50
+              "compression": 40,
+              "fps": 30
             }
           },
           {
@@ -170,7 +246,7 @@
               "topic": "/CameraPublisher/photonvision_Port_1184_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0,
-              "compression": 41,
+              "compression": 40,
               "fps": 30
             }
           },
@@ -185,12 +261,13 @@
               "topic": "/CameraPublisher/photonvision_Port_1186_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0,
-              "compression": 51
+              "compression": 40,
+              "fps": 30
             }
           },
           {
             "title": "B",
-            "x": 1344.0,
+            "x": 1216.0,
             "y": 384.0,
             "width": 64.0,
             "height": 128.0,
@@ -207,7 +284,7 @@
           },
           {
             "title": "T",
-            "x": 1344.0,
+            "x": 1216.0,
             "y": 256.0,
             "width": 64.0,
             "height": 128.0,
@@ -224,7 +301,7 @@
           },
           {
             "title": "Reset",
-            "x": 1088.0,
+            "x": 1024.0,
             "y": 256.0,
             "width": 192.0,
             "height": 128.0,
@@ -236,10 +313,10 @@
             }
           },
           {
-            "title": "LimelightRotation",
-            "x": 1088.0,
+            "title": "Limelight Rotation",
+            "x": 1024.0,
             "y": 384.0,
-            "width": 128.0,
+            "width": 192.0,
             "height": 128.0,
             "type": "Toggle Button",
             "properties": {
@@ -250,7 +327,7 @@
           },
           {
             "title": "ForceMT1",
-            "x": 1088.0,
+            "x": 896.0,
             "y": 512.0,
             "width": 128.0,
             "height": 128.0,
@@ -262,22 +339,9 @@
             }
           },
           {
-            "title": "TrustLimelight",
-            "x": 1216.0,
-            "y": 512.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/Autonomous/TrustLimelight",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
             "title": "HasAlgae",
-            "x": 1216.0,
-            "y": 384.0,
+            "x": 1280.0,
+            "y": 576.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -293,7 +357,7 @@
           },
           {
             "title": "C",
-            "x": 1344.0,
+            "x": 1216.0,
             "y": 512.0,
             "width": 64.0,
             "height": 128.0,
@@ -307,6 +371,32 @@
               "true_icon": "None",
               "false_icon": "None"
             }
+          },
+          {
+            "title": "Trust Limelight Center",
+            "x": 1024.0,
+            "y": 576.0,
+            "width": 192.0,
+            "height": 64.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Autonomous/TrustLimelightCenter",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Trust Limelight Left",
+            "x": 1024.0,
+            "y": 512.0,
+            "width": 192.0,
+            "height": 64.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Autonomous/TrustLimelightLeft",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
           }
         ]
       }
@@ -316,7 +406,7 @@
       "grid_layout": {
         "layouts": [
           {
-            "title": "Limelight",
+            "title": "Limelight Left",
             "x": 1408.0,
             "y": 0.0,
             "width": 128.0,
@@ -334,7 +424,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Limelight Connected",
+                  "topic": "/SmartDashboard/Overview/Left/Limelight Connected",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -351,7 +441,82 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Has Vision",
+                  "topic": "/SmartDashboard/Overview/Left/Has Vision",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Confidence",
+                "x": 384.0,
+                "y": 384.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Left/Confidence",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Tag Count",
+                "x": 384.0,
+                "y": 512.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Left/Tag Count",
+                  "period": 0.06,
+                  "data_type": "int",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
+            "title": "Limelight Center",
+            "x": 1408.0,
+            "y": 320.0,
+            "width": 128.0,
+            "height": 320.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Connected",
+                "x": 256.0,
+                "y": 384.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Center/Limelight Connected",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "Has Vision",
+                "x": 256.0,
+                "y": 256.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/Overview/Center/Has Vision",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -368,7 +533,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Tag Count",
+                  "topic": "/SmartDashboard/Overview/Center/Tag Count",
                   "period": 0.06,
                   "data_type": "int",
                   "show_submit_button": false
@@ -382,7 +547,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Overview/Confidence",
+                  "topic": "/SmartDashboard/Overview/Center/Confidence",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -427,7 +592,8 @@
               "topic": "/CameraPublisher/photonvision_Port_1182_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0,
-              "compression": 47
+              "compression": 40,
+              "fps": 30
             }
           },
           {
@@ -448,8 +614,8 @@
           {
             "title": "Target Reef",
             "x": 1024.0,
-            "y": 448.0,
-            "width": 512.0,
+            "y": 384.0,
+            "width": 384.0,
             "height": 256.0,
             "type": "Field",
             "properties": {
@@ -467,8 +633,8 @@
           },
           {
             "title": "Nav Sensor",
-            "x": 1408.0,
-            "y": 320.0,
+            "x": 896.0,
+            "y": 384.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -493,7 +659,8 @@
               "topic": "/CameraPublisher/photonvision_Port_1186_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0,
-              "compression": 48
+              "compression": 40,
+              "fps": 30
             }
           },
           {
@@ -534,6 +701,159 @@
             "title": "C",
             "x": 1344.0,
             "y": 256.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/ElevatorHead/HasCoral",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "HasAlgae",
+            "x": 768.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/ElevatorHead/HasAlgae",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Climb",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "Coral Shooter Front",
+            "x": 1120.0,
+            "y": 0.0,
+            "width": 384.0,
+            "height": 352.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision_Port_1186_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 40,
+              "fps": 30
+            }
+          },
+          {
+            "title": "Coral Shooter Back",
+            "x": 1120.0,
+            "y": 352.0,
+            "width": 384.0,
+            "height": 352.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision_Port_1184_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 40,
+              "fps": 30
+            }
+          },
+          {
+            "title": "Ground Intake",
+            "x": 704.0,
+            "y": 0.0,
+            "width": 416.0,
+            "height": 384.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision_Port_1182_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 40,
+              "fps": 30
+            }
+          },
+          {
+            "title": "Climber",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 704.0,
+            "height": 512.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision_Port_1182_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 50,
+              "fps": 30
+            }
+          },
+          {
+            "title": "Nav Sensor",
+            "x": 1024.0,
+            "y": 384.0,
+            "width": 96.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Overview/Nav Sensor",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "T",
+            "x": 704.0,
+            "y": 384.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Elevator/TopEndStopPressed",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "B",
+            "x": 768.0,
+            "y": 384.0,
+            "width": 64.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Elevator/BottomEndStopPressed",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "C",
+            "x": 832.0,
+            "y": 384.0,
             "width": 64.0,
             "height": 128.0,
             "type": "Boolean Box",

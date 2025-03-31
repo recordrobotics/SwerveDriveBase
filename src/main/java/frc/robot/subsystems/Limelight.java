@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger;
 public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
   public static class LimelightData {
     public int numTags = 0;
-    public double confidence = 0;
+    private double confidence = 0;
     public boolean hasVision = false;
     public boolean limelightConnected = false;
 
@@ -24,12 +24,12 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
 
     public String name;
 
-    public final double MT1_CONFIDENCE;
-    public final double MT2_CONFIDENCE;
+    private final double MT1_CONFIDENCE;
+    private final double MT2_CONFIDENCE;
 
-    public final double MT1_MAX_DIST;
+    private final double MT1_MAX_DIST;
 
-    public final double MAX_POSE_ERROR;
+    private final double MAX_POSE_ERROR;
 
     public LimelightData(String name) {
       this.name = name;
@@ -116,7 +116,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       String prefix = "Limelight/" + id + "/";
       Logger.recordOutput(prefix + "Pose", unsafeEstimate.pose);
       Logger.recordOutput(prefix + "NumTags", numTags);
-      Logger.recordOutput(prefix + "Confidence", confidence);
+      Logger.recordOutput(prefix + "Confidence", currentConfidence);
       Logger.recordOutput(prefix + "HasVision", hasVision);
       Logger.recordOutput(prefix + "LimelightConnected", limelightConnected);
     }

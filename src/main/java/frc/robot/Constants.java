@@ -747,27 +747,17 @@ public final class Constants {
   }
 
   public enum FieldStartingLocation {
-    BargeLeft(
-        new Pose2d(FlippingUtil.fieldSizeX - 7.145, 1.909, new Rotation2d(0)),
-        new Pose2d(7.145, 6.171, new Rotation2d(Math.PI))),
-    BargeCenter(
-        new Pose2d(FlippingUtil.fieldSizeX - 7.145, 4.026, new Rotation2d(0)),
-        new Pose2d(7.145, 4.026, new Rotation2d(Math.PI))),
-    BargeRight(
-        new Pose2d(FlippingUtil.fieldSizeX - 7.145, 6.171, new Rotation2d(0)),
-        new Pose2d(7.145, 1.909, new Rotation2d(Math.PI))),
-    ReefTest(
-        new Pose2d(13.958, 5.265, Rotation2d.fromDegrees(-120)),
-        new Pose2d(2.082, 4.053, Rotation2d.fromDegrees(0))),
-    ProccessorTest(
-        new Pose2d(10.242, 7.581, Rotation2d.fromDegrees(90)),
-        new Pose2d(6.148, 0.606, Rotation2d.fromDegrees(-90)));
+    BargeLeft(new Pose2d(7.004, 6.171, Rotation2d.fromDegrees(-152.840))),
+    BargeCenter(new Pose2d(7.145, 4.026, Rotation2d.fromDegrees(180.000))),
+    BargeRight(new Pose2d(6.961, 1.939, Rotation2d.fromDegrees(127.847))),
+    ReefTest(new Pose2d(2.082, 4.053, Rotation2d.fromDegrees(-120))),
+    ProccessorTest(new Pose2d(6.148, 0.606, Rotation2d.fromDegrees(-90)));
 
     private final Pose2d m_transformRed;
     private final Pose2d m_transformBlue;
 
-    private FieldStartingLocation(Pose2d poseRed, Pose2d poseBlue) {
-      m_transformRed = poseRed;
+    private FieldStartingLocation(Pose2d poseBlue) {
+      m_transformRed = FlippingUtil.flipFieldPose(poseBlue);
       m_transformBlue = poseBlue;
     }
 

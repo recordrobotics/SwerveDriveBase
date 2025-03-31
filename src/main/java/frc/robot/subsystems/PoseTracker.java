@@ -4,6 +4,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,21 +36,34 @@ public class PoseTracker extends SubsystemBase implements AutoCloseable {
             getModulePositions(),
             DashboardUI.Autonomous.getStartingLocation().getPose());
 
-    SmartDashboard.putBoolean("Autonomous/TrustLimelight", false);
+    SmartDashboard.putBoolean("Autonomous/TrustLimelightLeft", false);
+    SmartDashboard.putBoolean("Autonomous/TrustLimelightCenter", false);
   }
 
   @Override
   public void periodic() {
-    boolean trustLimelight = SmartDashboard.getBoolean("Autonomous/TrustLimelight", false);
+    boolean trustLimelightLeft = SmartDashboard.getBoolean("Autonomous/TrustLimelightLeft", false);
+    boolean trustLimelightCenter =
+        SmartDashboard.getBoolean("Autonomous/TrustLimelightCenter", false);
 
     poseFilter.update(nav.getAdjustedAngle(), getModulePositions());
+
     poseFilter.addVisionMeasurement(
         RobotContainer.limelight.getLeft().currentEstimate.pose,
         RobotContainer.limelight.getLeft().currentEstimate.timestampSeconds,
         VecBuilder.fill(
             RobotContainer.limelight.getLeft().currentConfidence,
             RobotContainer.limelight.getLeft().currentConfidence,
-            trustLimelight ? 4 : 9999999) // some influence of limelight pose rotation
+            trustLimelightLeft ? 4 : 9999999) // some influence of limelight pose rotation
+        );
+
+    poseFilter.addVisionMeasurement(
+        RobotContainer.limelight.getCenter().currentEstimate.pose,
+        RobotContainer.limelight.getCenter().currentEstimate.timestampSeconds,
+        VecBuilder.fill(
+            RobotContainer.limelight.getCenter().currentConfidence,
+            RobotContainer.limelight.getCenter().currentConfidence,
+            trustLimelightCenter ? 4 : 9999999) // some influence of limelight pose rotation
         );
 
     SmartDashboard.putNumber("gyro", nav.getAdjustedAngle().getDegrees());
@@ -84,10 +98,17 @@ public class PoseTracker extends SubsystemBase implements AutoCloseable {
   }
 
   public void resetFullLimelight() {
-    setToPose(
-        new Pose2d(
-            RobotContainer.limelight.getLeft().currentEstimate.pose.getTranslation(),
-            getEstimatedPosition().getRotation()));
+    Translation2d translation;
+
+    if (RobotContainer.limelight.getLeft().hasVision) {
+      translation = RobotContainer.limelight.getLeft().currentEstimate.pose.getTranslation();
+    } else if (RobotContainer.limelight.getCenter().hasVision) {
+      translation = RobotContainer.limelight.getCenter().currentEstimate.pose.getTranslation();
+    } else {
+      translation = RobotContainer.limelight.getLeft().currentEstimate.pose.getTranslation();
+    }
+
+    setToPose(new Pose2d(translation, getEstimatedPosition().getRotation()));
   }
 
   /**

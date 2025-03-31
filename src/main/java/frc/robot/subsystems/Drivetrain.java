@@ -166,7 +166,7 @@ public class Drivetrain extends KillableSubsystem
 
   public void SysIdOnlyDriveMotors(Voltage volts) {
 
-    SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+    // SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
     m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(360 - 45)));
     m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
