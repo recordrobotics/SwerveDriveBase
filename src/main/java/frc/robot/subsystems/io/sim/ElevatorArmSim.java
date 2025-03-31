@@ -2,6 +2,7 @@ package frc.robot.subsystems.io.sim;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
@@ -40,6 +41,7 @@ public class ElevatorArmSim implements ElevatorArmIO {
 
     arm = new TalonFX(RobotMap.ElevatorArm.ARM_ID);
     armSim = arm.getSimState();
+    armSim.Orientation = ChassisReference.Clockwise_Positive;
   }
 
   @Override

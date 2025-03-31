@@ -101,7 +101,7 @@ public final class Constants {
     public static final Angle EXTENDED_ANGLE = Degrees.of(90); // TODO: make correct
     public static final Angle CLIMBED_ANGLE = Degrees.of(0); // TODO: make correct
 
-    public static final double GEAR_RATIO = 58;
+    public static final double GEAR_RATIO = 48; // 48:1 gearbox
     public static final double DRUM_RADIUS = Units.inchesToMeters(0.8783343);
     public static final double ARM_ATTACHMENT_RADIUS = Units.inchesToMeters(0.8783343);
 
@@ -863,13 +863,13 @@ public final class Constants {
 
     public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
 
-    public static final double OUT_GROUND_SPEED = 8.8;
-    public static final double OUT_REEF_SPEED = -2.8;
-    public static final double SHOOT_BARGE_SPEED = 16;
-    public static final double INTAKE_GROUND_SPEED = -4.2;
-    public static final double INTAKE_REEF_SPEED = 5.5;
-    public static final double HOLD_GROUND_SPEED = -0.15;
-    public static final double HOLD_REEF_SPEED = 0.4;
+    public static final double OUT_GROUND_SPEED = -8.8;
+    public static final double OUT_REEF_SPEED = 2.8;
+    public static final double SHOOT_BARGE_SPEED = -16;
+    public static final double INTAKE_GROUND_SPEED = 4.2;
+    public static final double INTAKE_REEF_SPEED = -5.5;
+    public static final double HOLD_GROUND_SPEED = 0.15;
+    public static final double HOLD_REEF_SPEED = -0.4;
 
     public static final double SHOOT_TIME_GROUND = 2.3;
     public static final double SHOOT_TIME_REEF = 0.3;
