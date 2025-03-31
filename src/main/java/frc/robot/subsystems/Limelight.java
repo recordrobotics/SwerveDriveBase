@@ -136,6 +136,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     center.updateEstimation();
 
     DashboardUI.Autonomous.setVisionPoseLeft(left.unsafeEstimate.pose);
+    DashboardUI.Autonomous.setVisionPoseCenter(center.unsafeEstimate.pose);
 
     left.logValues("Left");
     center.logValues("Center");
