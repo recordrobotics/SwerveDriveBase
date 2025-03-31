@@ -29,9 +29,9 @@ public class ClimberSim implements ClimberIO {
           LinearSystemId.createDCMotorSystem(Constants.Climber.kV, Constants.Climber.kA),
           dcMotor,
           Constants.Climber.GEAR_RATIO,
-          Units.inchesToMeters(5),
-          Units.degreesToRadians(-10),
-          Units.degreesToRadians(190),
+          Units.inchesToMeters(88),
+          Units.degreesToRadians(-90),
+          Units.degreesToRadians(150),
           true,
           Constants.Climber.START_ANGLE.in(Radians),
           0.001,
@@ -105,8 +105,7 @@ public class ClimberSim implements ClimberIO {
 
     motorSim.setRawRotorPosition(
         (simModel.getAngleRads() - Constants.Climber.START_ANGLE.in(Radians))
-            / Constants.Climber.ARM_RADIANS_PER_ROTATION);
-    motorSim.setRotorVelocity(
-        simModel.getVelocityRadPerSec() / Constants.Climber.ARM_RADIANS_PER_ROTATION);
+            * Constants.Climber.GEAR_RATIO);
+    motorSim.setRotorVelocity(simModel.getVelocityRadPerSec() * Constants.Climber.GEAR_RATIO);
   }
 }

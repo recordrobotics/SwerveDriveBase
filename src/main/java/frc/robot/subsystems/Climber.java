@@ -62,7 +62,7 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
 
     pid.setTolerance(0.15, 1.05);
 
-    pid.reset(getArmAngle());
+    pid.reset(Constants.Climber.START_ANGLE.in(Radians));
 
     sysIdRoutine =
         new SysIdRoutine(
@@ -86,7 +86,7 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
 
   @Override
   public void periodic() {
-    // pid.setGoal(SmartDashboard.getNumber("Climber", Constants.Climber.START_ANGLE));
+    pid.setGoal(SmartDashboard.getNumber("Climber", Constants.Climber.START_ANGLE.in(Radians)));
 
     if (currentState == ClimberState.Climb) {
       double rampT =
@@ -111,6 +111,10 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
       double feedforwardOutput =
           feedforward.calculateWithVelocities(
               getArmAngle(), currentSetpoint.velocity, pid.getSetpoint().velocity);
+
+      Logger.recordOutput("Climber/PID", pidOutputArm);
+      Logger.recordOutput("Climber/FF", feedforwardOutput);
+      Logger.recordOutput("Climber/Setpoint", currentSetpoint.position);
 
       io.setVoltage(pidOutputArm + feedforwardOutput);
       currentSetpoint = pid.getSetpoint();

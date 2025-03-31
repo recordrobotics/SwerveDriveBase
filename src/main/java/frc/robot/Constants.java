@@ -80,8 +80,8 @@ public final class Constants {
     public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(40);
     public static final Current STATOR_CURRENT_LIMIT = Amps.of(100);
 
-    public static final double MAX_ARM_VELOCITY = 12;
-    public static final double MAX_ARM_ACCELERATION = 40;
+    public static final double MAX_ARM_VELOCITY = 1;
+    public static final double MAX_ARM_ACCELERATION = 1;
 
     public static final double kP = 2.996; // TODO: tune sysid
     public static final double kI = 0;
