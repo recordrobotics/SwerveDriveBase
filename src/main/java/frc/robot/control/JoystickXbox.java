@@ -230,11 +230,6 @@ public class JoystickXbox extends AbstractControl {
   }
 
   @Override
-  public Boolean getBargeAlgae() {
-    return xbox_controller.getPOV() == 0 && xbox_controller.getRawButton(7);
-  }
-
-  @Override
   public LinearVelocity getManualElevatorVelocity() {
     double leftY = MathUtil.applyDeadband(-xbox_controller.getLeftY(), 0.1);
     return Centimeters.of(50).per(Seconds).times(leftY * Math.abs(leftY));
@@ -247,7 +242,12 @@ public class JoystickXbox extends AbstractControl {
   }
 
   @Override
-  public Boolean getClimb() {
+  public Boolean getClimbMove() {
     return xbox_controller.getPOV() != 0 && xbox_controller.getRawButton(7);
+  }
+
+  @Override
+  public Boolean getClimbUp() {
+    return xbox_controller.getPOV() == 0 && xbox_controller.getRawButton(7);
   }
 }

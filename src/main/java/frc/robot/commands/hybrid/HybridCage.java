@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldPosition;
 import frc.robot.RobotContainer;
-import frc.robot.commands.Climb;
+import frc.robot.commands.ClimbMove;
+import frc.robot.commands.ClimbUp;
+import frc.robot.subsystems.Climber.ClimberState;
 import frc.robot.utils.TriggerProcessor.TriggerDistance;
 
 @TriggerDistance(
@@ -67,8 +69,11 @@ public class HybridCage extends SequentialCommandGroup {
 
     addCommands(
         new ScheduleCommand(lightsCommand),
-        AutoBuilder.pathfindThenFollowPath(shortestPath, Constants.HybridConstants.constraints),
+        new ClimbMove(ClimberState.Extend)
+            .alongWith(
+                AutoBuilder.pathfindThenFollowPath(
+                    shortestPath, Constants.HybridConstants.constraints)),
         new InstantCommand(lightsCommand::cancel),
-        new Climb());
+        new ClimbUp());
   }
 }

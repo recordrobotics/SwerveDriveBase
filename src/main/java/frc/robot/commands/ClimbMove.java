@@ -5,9 +5,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Climber.ClimberState;
 
-public class Climb extends SequentialCommandGroup {
-  public Climb() {
+public class ClimbMove extends SequentialCommandGroup {
+  public ClimbMove(ClimberState state) {
     addRequirements(RobotContainer.climber);
     addCommands(
         new InstantCommand(
@@ -16,9 +17,8 @@ public class Climb extends SequentialCommandGroup {
                     .stateVisualizer
                     .runPattern(Constants.Lights.cagePattern)
                     .schedule()),
-        new InstantCommand(() -> RobotContainer.climber.extend()),
+        new InstantCommand(() -> RobotContainer.climber.toggle(state)),
         new WaitUntilCommand(() -> RobotContainer.climber.atGoal()),
-        new InstantCommand(() -> RobotContainer.climber.climb()),
         new InstantCommand(
             () ->
                 RobotContainer.lights

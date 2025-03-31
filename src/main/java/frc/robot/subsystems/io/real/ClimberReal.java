@@ -1,10 +1,7 @@
 package frc.robot.subsystems.io.real;
 
-import static edu.wpi.first.units.Units.*;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.units.measure.Voltage;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.io.ClimberIO;
 
@@ -27,8 +24,8 @@ public class ClimberReal implements ClimberIO {
   }
 
   @Override
-  public void setVoltage(Voltage outputVolts) {
-    motor.setVoltage(outputVolts.in(Volts));
+  public void setVoltage(double outputVolts) {
+    motor.setVoltage(outputVolts);
   }
 
   @Override
@@ -59,6 +56,11 @@ public class ClimberReal implements ClimberIO {
   @Override
   public double getCurrentDrawAmps() {
     return motor.getSupplyCurrent().getValueAsDouble();
+  }
+
+  @Override
+  public double getVoltage() {
+    return motor.getMotorVoltage().getValueAsDouble();
   }
 
   @Override

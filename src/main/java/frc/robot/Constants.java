@@ -77,29 +77,41 @@ public final class Constants {
   }
 
   public final class Climber {
-    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
-    public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
+    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(40);
+    public static final Current STATOR_CURRENT_LIMIT = Amps.of(100);
 
-    public static final Voltage EXTEND_VOLTAGE = Volts.of(3.0); // TODO: make correct
-    public static final Voltage CLIMB_VOLTAGE = Volts.of(5.0); // TODO: make correct
+    public static final double MAX_ARM_VELOCITY = 12;
+    public static final double MAX_ARM_ACCELERATION = 40;
 
-    public static final Angle START_POS = Degrees.of(45);
-    public static final Angle EXTENDED_POS = Degrees.of(90);
-    public static final Angle RETRACTED_POS = Degrees.of(0);
+    public static final double kP = 2.996; // TODO: tune sysid
+    public static final double kI = 0;
+    public static final double kD = 0.28181;
+    public static final double kG = 0.2269;
+    public static final double kS = 0.13495;
+    public static final double kV = 0.67446;
+    public static final double kA = 0.018492;
 
-    public static final Angle DEADBAND = Degrees.of(5); // TODO: make correct
+    public static final Voltage CLIMB_RAMP_VOLTAGE_START = Volts.of(3.0); // TODO: make correct
+    public static final Voltage CLIMB_RAMP_VOLTAGE_END = Volts.of(10.0); // TODO: make correct
+    public static final Voltage CLIMB_HOLD_VOLTAGE = Volts.of(1); // TODO: make correct
+    public static final Time CLIMB_RAMP_TIME = Seconds.of(1.0); // TODO: make correct
 
-    // TODO: verify correct
+    public static final Angle START_ANGLE = Degrees.of(45); // TODO: make correct
+    public static final Angle PARK_ANGLE = START_ANGLE;
+    public static final Angle EXTENDED_ANGLE = Degrees.of(90); // TODO: make correct
+    public static final Angle CLIMBED_ANGLE = Degrees.of(0); // TODO: make correct
+
     public static final double GEAR_RATIO = 58;
+    public static final double DRUM_RADIUS = Units.inchesToMeters(0.8783343);
+    public static final double ARM_ATTACHMENT_RADIUS = Units.inchesToMeters(0.8783343);
+
+    public static final double ARM_RADIANS_PER_ROTATION = DRUM_RADIUS * 2 * Math.PI / GEAR_RATIO;
 
     // TODO: make correct
     public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
     // TODO: make correct
     public static final Distance LENGTH = Meters.of(0.431);
     public static final double ANGLE_OFFSET = 0;
-
-    public static final double kV = 2.0;
-    public static final double kA = 2.0;
   }
 
   public final class ElevatorArm {
