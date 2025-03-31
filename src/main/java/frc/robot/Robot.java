@@ -143,6 +143,8 @@ public class Robot extends LoggedRobot {
     //   Logger.end();
     //   SignalLogger.stop();
     // }
+
+    m_robotContainer.disabledInit();
   }
 
   @Override

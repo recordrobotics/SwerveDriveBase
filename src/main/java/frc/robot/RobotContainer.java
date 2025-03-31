@@ -166,6 +166,10 @@ public class RobotContainer {
     inClimbMode = false;
   }
 
+  public void disabledInit() {
+    inClimbMode = false;
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link

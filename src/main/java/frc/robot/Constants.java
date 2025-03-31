@@ -12,6 +12,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.FlippingUtil;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,13 +25,16 @@ import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
+import edu.wpi.first.wpilibj.LEDReader;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ModuleConstants.MotorLocation;
 import frc.robot.utils.ModuleConstants.MotorType;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -930,7 +934,59 @@ public final class Constants {
     public static final LEDPattern FLASHING_GREEN =
         LEDPattern.solid(Color.kGreen).blink(Constants.Lights.FLASH_FREQUENCY);
 
-    public static final LEDPattern CLIMB_PATTERN = LEDPattern.kOff;
+    private static HashMap<LEDReader, Long> lastSparkles = new HashMap<>();
+
+    private static LEDPattern sparkle(Frequency frequency, Frequency fadeFrequency) {
+      final double periodMicros = frequency.asPeriod().in(Microseconds);
+      final double fadePeriodSeconds = fadeFrequency.asPeriod().in(Seconds);
+      final double multiplier = MathUtil.clamp(1.0 / fadePeriodSeconds, 0, 1);
+
+      return (reader, writer) -> {
+        long now = RobotController.getTime();
+
+        long lastSparkle = lastSparkles.getOrDefault(reader, 0l);
+
+        if (now - lastSparkle > periodMicros) {
+          lastSparkle = now;
+          lastSparkles.put(reader, lastSparkle);
+
+          int led = (int) (Math.random() * reader.getLength());
+          writer.setLED(led, Color.kWhite);
+        }
+
+        int baseR, baseG, baseB;
+
+        if (DriverStationUtils.getCurrentAlliance() == Alliance.Red) {
+          baseR = 140;
+          baseG = 0;
+          baseB = 0;
+        } else {
+          baseR = 0;
+          baseG = 0;
+          baseB = 140;
+        }
+
+        for (int led = 0; led < reader.getLength(); led++) {
+          int blendedRGB =
+              Color.lerpRGB(
+                  reader.getRed(led),
+                  reader.getGreen(led),
+                  reader.getBlue(led),
+                  baseR,
+                  baseG,
+                  baseB,
+                  multiplier);
+
+          writer.setRGB(
+              led,
+              Color.unpackRGB(blendedRGB, Color.RGBChannel.kRed),
+              Color.unpackRGB(blendedRGB, Color.RGBChannel.kGreen),
+              Color.unpackRGB(blendedRGB, Color.RGBChannel.kBlue));
+        }
+      };
+    }
+
+    public static final LEDPattern CLIMB_PATTERN = sparkle(Hertz.of(25), Percent.of(5).per(Second));
 
     public static final Supplier<LEDPattern> ALLIANCE_COLOR =
         () ->
