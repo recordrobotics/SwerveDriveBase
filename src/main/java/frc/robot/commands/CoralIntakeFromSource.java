@@ -8,8 +8,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.CoralIntakeFromSourceSim;
-import frc.robot.subsystems.CoralIntake.CoralIntakeStates;
-import frc.robot.subsystems.CoralIntake.IntakeArmStates;
+import frc.robot.subsystems.CoralIntake.CoralIntakeState;
+import frc.robot.subsystems.CoralIntake.IntakeArmState;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 import frc.robot.utils.CommandUtils;
 
@@ -38,8 +38,8 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
                 .onlyWhile(this::isScheduled)),
         new InstantCommand(
             () -> {
-              RobotContainer.coralIntake.toggleArm(IntakeArmStates.INTAKE);
-              RobotContainer.coralIntake.toggle(CoralIntakeStates.REVERSE);
+              RobotContainer.coralIntake.toggleArm(IntakeArmState.INTAKE);
+              RobotContainer.coralIntake.toggle(CoralIntakeState.SOURCE);
             },
             RobotContainer.coralIntake),
         // start moving elevator to intake position
@@ -52,8 +52,8 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
             .simulateFor(new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral())),
         new InstantCommand(
             () -> {
-              RobotContainer.coralIntake.toggleArm(IntakeArmStates.UP);
-              RobotContainer.coralIntake.toggle(CoralIntakeStates.OFF);
+              RobotContainer.coralIntake.toggleArm(IntakeArmState.UP);
+              RobotContainer.coralIntake.toggle(CoralIntakeState.OFF);
             },
             RobotContainer.coralIntake),
         // move coral a set distance

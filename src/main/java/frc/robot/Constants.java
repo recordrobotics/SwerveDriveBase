@@ -891,9 +891,13 @@ public final class Constants {
     public static final double MAX_ARM_VELOCITY = 8;
     public static final double MAX_ARM_ACCELERATION = 22;
 
-    public static final double REVERSE_SPEED = 8;
+    public static final double PUSH_OUT_SPEED = 8;
+    public static final double PULL_THROUGH_SPEED = 18;
+    public static final double SOURCE_SPEED = 18;
     public static final double INTAKE_SPEED = -18;
     public static final double L1_SCORE_SPEED = 20;
+
+    public static final double PUSH_OUT_RAMP_TIME = 0.5;
 
     public static final double sP = 4.8919;
     public static final double sI = 0;

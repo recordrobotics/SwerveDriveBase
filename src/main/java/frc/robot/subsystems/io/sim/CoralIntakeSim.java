@@ -27,7 +27,7 @@ public class CoralIntakeSim implements CoralIntakeIO {
   private final TalonFXSimState armSim;
 
   private final DCMotor wheelMotor = DCMotor.getNeo550(1);
-  private final DCMotor armMotor = DCMotor.getFalcon500(1);
+  private final DCMotor armMotor = DCMotor.getKrakenX60(1);
 
   private final DCMotorSim wheelSimModel =
       new DCMotorSim(
@@ -163,7 +163,9 @@ public class CoralIntakeSim implements CoralIntakeIO {
     armSimModel.update(periodicDt);
 
     wheelSim.iterate(
-        Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec()) * 60.0,
+        Constants.CoralIntake.WHEEL_GEAR_RATIO
+            * Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec())
+            * 60.0,
         RobotController.getBatteryVoltage(),
         periodicDt);
 

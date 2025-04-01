@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -58,7 +60,10 @@ public class CoralIntake extends KillableSubsystem
       new SimpleMotorFeedforward(
           Constants.CoralIntake.kS, Constants.CoralIntake.kV, Constants.CoralIntake.kA);
 
-  private IntakeArmStates currentState = IntakeArmStates.UP;
+  private IntakeArmState currentArmtate = IntakeArmState.UP;
+  private CoralIntakeState currentIntakeState = CoralIntakeState.OFF;
+
+  private double intakePushAndPullRampStart = 0;
 
   public CoralIntake(CoralIntakeIO io) {
     this.io = io;
@@ -76,8 +81,8 @@ public class CoralIntake extends KillableSubsystem
     io.setArmPosition(
         Constants.CoralIntake.ARM_GEAR_RATIO
             * Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS));
-    toggle(CoralIntakeStates.OFF);
-    toggleArm(IntakeArmStates.UP);
+    toggle(CoralIntakeState.OFF);
+    toggleArm(IntakeArmState.UP);
 
     armPID.setTolerance(0.15, 1.05);
 
@@ -116,14 +121,15 @@ public class CoralIntake extends KillableSubsystem
   private final SysIdRoutine sysIdRoutineWheel;
   private final SysIdRoutine sysIdRoutineArm;
 
-  public enum CoralIntakeStates {
-    REVERSE,
+  public enum CoralIntakeState {
+    SOURCE,
+    PUSH_AND_PULL,
     INTAKE,
     L1_SCORE,
     OFF;
   }
 
-  public enum IntakeArmStates {
+  public enum IntakeArmState {
     UP,
     INTAKE,
     SCORE_L1,
@@ -160,8 +166,12 @@ public class CoralIntake extends KillableSubsystem
     return io.getArmVoltage();
   }
 
-  public IntakeArmStates getArmState() {
-    return currentState;
+  public IntakeArmState getArmState() {
+    return currentArmtate;
+  }
+
+  public CoralIntakeState getIntakeState() {
+    return currentIntakeState;
   }
 
   /** Set the current shooter speed on both wheels to speed */
@@ -177,8 +187,8 @@ public class CoralIntake extends KillableSubsystem
     return armPID.atGoal();
   }
 
-  public void toggleArm(IntakeArmStates state) {
-    currentState = state;
+  public void toggleArm(IntakeArmState state) {
+    currentArmtate = state;
     switch (state) {
       case UP:
         toggleArm(Constants.CoralIntake.ARM_UP);
@@ -199,10 +209,15 @@ public class CoralIntake extends KillableSubsystem
   }
 
   /** Set the shooter speed to the preset ShooterStates state */
-  public void toggle(CoralIntakeStates state) {
+  public void toggle(CoralIntakeState state) {
+    currentIntakeState = state;
     switch (state) {
-      case REVERSE:
-        toggle(Constants.CoralIntake.REVERSE_SPEED);
+      case SOURCE:
+        toggle(Constants.CoralIntake.SOURCE_SPEED);
+        break;
+      case PUSH_AND_PULL:
+        intakePushAndPullRampStart = Timer.getTimestamp();
+        toggle(Constants.CoralIntake.PUSH_OUT_SPEED);
         break;
       case INTAKE:
         toggle(Constants.CoralIntake.INTAKE_SPEED);
@@ -224,6 +239,22 @@ public class CoralIntake extends KillableSubsystem
   public void periodic() {
     // toggleArm(SmartDashboard.getNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS));
 
+    if (currentIntakeState == CoralIntakeState.PUSH_AND_PULL) {
+      // push and pull ramp
+      double rampT =
+          MathUtil.clamp(
+              (Timer.getTimestamp() - intakePushAndPullRampStart)
+                  / Constants.CoralIntake.PUSH_OUT_RAMP_TIME,
+              0,
+              1);
+      double rampedSpeed =
+          MathUtil.interpolate(
+              Constants.CoralIntake.PUSH_OUT_SPEED,
+              Constants.CoralIntake.PULL_THROUGH_SPEED,
+              rampT);
+      toggle(rampedSpeed);
+    }
+
     double pidOutput = pid.calculate(getWheelVelocity());
     double feedforwardOutput = feedForward.calculateWithVelocities(lastSpeed, pid.getSetpoint());
     io.setWheelVoltage(pidOutput + feedforwardOutput); // Feed forward runs on voltage control
@@ -235,10 +266,10 @@ public class CoralIntake extends KillableSubsystem
         armFeedForward.calculateWithVelocities(
             getArmAngle(), currentSetpoint.velocity, armPID.getSetpoint().velocity);
 
-    Logger.recordOutput("CoralArmTargetPosition", armPID.getSetpoint().position);
-    Logger.recordOutput("CoralArmTargetVelocity", armPID.getSetpoint().velocity);
-    Logger.recordOutput("CoralIntakeSetVoltage", pidOutputArm);
-    Logger.recordOutput("CoralIntakeSetVoltageFF", armFeedforwardOutput);
+    // Logger.recordOutput("CoralArmTargetPosition", armPID.getSetpoint().position);
+    // Logger.recordOutput("CoralArmTargetVelocity", armPID.getSetpoint().velocity);
+    // Logger.recordOutput("CoralIntakeSetVoltage", pidOutputArm);
+    // Logger.recordOutput("CoralIntakeSetVoltageFF", armFeedforwardOutput);
 
     io.setArmVoltage(pidOutputArm + armFeedforwardOutput);
     currentSetpoint = armPID.getSetpoint();
@@ -283,7 +314,7 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void kill() {
-    toggle(CoralIntakeStates.OFF);
+    toggle(CoralIntakeState.OFF);
     // io.setWheelVoltage(0);
     // io.setArmVoltage(0);
   }

@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.CoralIntakeToElevator;
-import frc.robot.subsystems.CoralIntake.CoralIntakeStates;
-import frc.robot.subsystems.CoralIntake.IntakeArmStates;
+import frc.robot.subsystems.CoralIntake.CoralIntakeState;
+import frc.robot.subsystems.CoralIntake.IntakeArmState;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 
 public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
@@ -21,7 +21,7 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
     addCommands(
         // raise the arm
         new InstantCommand(
-            () -> RobotContainer.coralIntake.toggleArm(IntakeArmStates.UP),
+            () -> RobotContainer.coralIntake.toggleArm(IntakeArmState.UP),
             RobotContainer.coralIntake),
         new WaitUntilCommand(() -> RobotContainer.coralIntake.armAtGoal()),
         new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
@@ -37,7 +37,7 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
             .andThen(
                 // push coral out
                 new InstantCommand(
-                    () -> RobotContainer.coralIntake.toggle(CoralIntakeStates.REVERSE),
+                    () -> RobotContainer.coralIntake.toggle(CoralIntakeState.PUSH_AND_PULL),
                     RobotContainer.coralIntake))
             .andThen(
                 // wait for elevator to have coral
@@ -47,8 +47,8 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
             .andThen(
                 new InstantCommand(
                     () -> {
-                      RobotContainer.coralIntake.toggleArm(IntakeArmStates.UP);
-                      RobotContainer.coralIntake.toggle(CoralIntakeStates.OFF);
+                      RobotContainer.coralIntake.toggleArm(IntakeArmState.UP);
+                      RobotContainer.coralIntake.toggle(CoralIntakeState.OFF);
                     },
                     RobotContainer.coralIntake))
             .andThen(

@@ -46,7 +46,7 @@ import frc.robot.control.AbstractControl.AutoScoreDirection;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Climber.ClimberState;
-import frc.robot.subsystems.CoralIntake.IntakeArmStates;
+import frc.robot.subsystems.CoralIntake.IntakeArmState;
 import frc.robot.subsystems.io.real.CoralIntakeReal;
 import frc.robot.subsystems.io.real.ElevatorArmReal;
 import frc.robot.subsystems.io.real.ElevatorHeadReal;
@@ -299,7 +299,7 @@ public class RobotContainer {
             Commands.either(
                 new CoralIntakeShootL1(),
                 new CoralIntakeMoveL1(),
-                () -> coralIntake.getArmState() == IntakeArmStates.SCORE_L1),
+                () -> coralIntake.getArmState() == IntakeArmState.SCORE_L1),
             new CoralIntakeFromGroundUpL1(),
             () -> coralIntake.getArmAngle() >= Constants.CoralIntake.ARM_SCORE_L1 - 0.1);
     coralScoreL1Cmd.addRequirements(coralIntakeMoveToggleRequirement);
