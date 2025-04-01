@@ -108,6 +108,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                     .withSupplyCurrentLimit(Constants.Elevator.SUPPLY_CURRENT_LIMIT)
+                    .withSupplyCurrentLowerLimit(Constants.Elevator.SUPPLY_CURRENT_LOWER_LIMIT)
+                    .withSupplyCurrentLowerTime(1)
                     .withStatorCurrentLimit(Constants.Elevator.STATOR_CURRENT_LIMIT)
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
@@ -182,6 +184,8 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
 
     // Get next setpoint from profile.
     m_setpoint = m_profile.calculate(Constants.Elevator.kDt, m_setpoint, m_goal);
+
+    Logger.recordOutput("Elevator/setpoint", m_setpoint.velocity);
 
     // Set setpoint of the linear system (position m, velocity m/s).
     loop.setNextR(VecBuilder.fill(m_setpoint.position, m_setpoint.velocity));

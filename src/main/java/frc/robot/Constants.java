@@ -786,7 +786,7 @@ public final class Constants {
 
   public final class Elevator {
     public static final double kDt = 0.02;
-    public static final double kMaxVelocity = 8;
+    public static final double kMaxVelocity = 2.3;
     public static final double kMaxAcceleration = 10;
     public static final double kV = 5.5255;
     public static final double kA = 0.1319;
@@ -796,8 +796,9 @@ public final class Constants {
     public static final double STARTING_HEIGHT = 0;
     public static final double LOWEST_HOLD_HEIGHT = Units.inchesToMeters(1.25);
 
-    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(10);
-    public static final Current STATOR_CURRENT_LIMIT = Amps.of(60);
+    public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(60);
+    public static final Current SUPPLY_CURRENT_LOWER_LIMIT = Amps.of(30);
+    public static final Current STATOR_CURRENT_LIMIT = Amps.of(100);
 
     public static final double STD_STATE_POSITION = 3.0; // m
     public static final double STD_STATE_VELOCITY = 3.0; // m/s
@@ -868,8 +869,8 @@ public final class Constants {
     public static final double SHOOT_BARGE_SPEED = -16;
     public static final double INTAKE_GROUND_SPEED = 4.2;
     public static final double INTAKE_REEF_SPEED = -5.5;
-    public static final double HOLD_GROUND_SPEED = 0.15;
-    public static final double HOLD_REEF_SPEED = -0.4;
+    public static final double HOLD_GROUND_SPEED = 1.15;
+    public static final double HOLD_REEF_SPEED = -5.4;
 
     public static final double SHOOT_TIME_GROUND = 2.3;
     public static final double SHOOT_TIME_REEF = 0.3;
@@ -910,7 +911,7 @@ public final class Constants {
     public static final double ARM_UP = Units.degreesToRadians(84.19);
     public static final double ARM_INTAKE = Units.degreesToRadians(77.08);
     public static final double ARM_SCORE_L1 = Units.degreesToRadians(22.35);
-    public static final double ARM_DOWN = Units.degreesToRadians(-50.5);
+    public static final double ARM_DOWN = Units.degreesToRadians(-48.5);
     public static final double ARM_START_POS = Units.degreesToRadians(84.19);
 
     public static final double ARM_GEAR_RATIO = 56.8889; // 16:1 * 64/18
