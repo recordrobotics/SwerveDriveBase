@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,8 +18,6 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotAlignPose;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.commands.Align;
-import frc.robot.commands.ClimbMove;
-import frc.robot.commands.ClimbUp;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
 import frc.robot.commands.CoralIntakeFromGroundUpL1;
 import frc.robot.commands.CoralIntakeFromSource;
@@ -45,7 +42,6 @@ import frc.robot.control.*;
 import frc.robot.control.AbstractControl.AutoScoreDirection;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climber.ClimberState;
 import frc.robot.subsystems.CoralIntake.IntakeArmState;
 import frc.robot.subsystems.io.real.CoralIntakeReal;
 import frc.robot.subsystems.io.real.ElevatorArmReal;
@@ -60,8 +56,6 @@ import frc.robot.subsystems.io.stub.ClimberStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
-import frc.robot.utils.libraries.Elastic;
-import java.util.Set;
 import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
@@ -202,26 +196,26 @@ public class RobotContainer {
         .onTrue(new InstantCommand(poseTracker::resetToLimelight).ignoringDisable(true));
 
     // Climb mode trigger
-    new Trigger(() -> DashboardUI.Overview.getControl().getClimbMode())
-        .onTrue(
-            new InstantCommand(
-                    () -> {
-                      if (!inClimbMode) {
-                        inClimbMode = true;
-                        Elastic.selectTab("Climb");
-                      } else {
-                        inClimbMode = false;
-                        DashboardUI.Overview.switchTo();
-                      }
-                    })
-                .andThen(
-                    new DeferredCommand(
-                        () ->
-                            new ClimbMove(
-                                climber.getCurrentState() == ClimberState.Extend
-                                    ? ClimberState.Park
-                                    : ClimberState.Extend),
-                        Set.of(climber))));
+    // new Trigger(() -> DashboardUI.Overview.getControl().getClimbMode())
+    //     .onTrue(
+    //         new InstantCommand(
+    //                 () -> {
+    //                   if (!inClimbMode) {
+    //                     inClimbMode = true;
+    //                     Elastic.selectTab("Climb");
+    //                   } else {
+    //                     inClimbMode = false;
+    //                     DashboardUI.Overview.switchTo();
+    //                   }
+    //                 })
+    //             .andThen(
+    //                 new DeferredCommand(
+    //                     () ->
+    //                         new ClimbMove(
+    //                             climber.getCurrentState() == ClimberState.Extend
+    //                                 ? ClimberState.Park
+    //                                 : ClimberState.Extend),
+    //                     Set.of(climber))));
 
     BooleanSupplier elevatorLock =
         () -> {
@@ -356,12 +350,12 @@ public class RobotContainer {
                     == AutoScoreDirection.Right)
         .onTrue(new AutoScore(AutoScoreDirection.Right));
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getClimb())
-        .onTrue(
-            Commands.either(
-                new ClimbUp(),
-                new ClimbMove(ClimberState.Extend),
-                () -> climber.getCurrentState() == ClimberState.Extend));
+    // new Trigger(() -> DashboardUI.Overview.getControl().getClimb())
+    //     .onTrue(
+    //         Commands.either(
+    //             new ClimbUp(),
+    //             new ClimbMove(ClimberState.Extend),
+    //             () -> climber.getCurrentState() == ClimberState.Extend));
 
     // Simulation control commands
     if (Constants.RobotState.getMode() == Mode.SIM) {
