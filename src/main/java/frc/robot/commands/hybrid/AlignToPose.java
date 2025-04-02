@@ -81,6 +81,9 @@ public class AlignToPose extends Command {
     double rot = rotPID.calculate(pose.getRotation().getRadians());
 
     Logger.recordOutput("AlignToPose/Target", targetPose);
+    Logger.recordOutput("AlignToPose/AtGoal/X", xPID.atGoal());
+    Logger.recordOutput("AlignToPose/AtGoal/Y", yPID.atGoal());
+    Logger.recordOutput("AlignToPose/AtGoal/Rot", rotPID.atGoal());
 
     if (doTranslation) {
       RobotContainer.drivetrain.drive(new DriveCommandData(x, y, rot, true));
