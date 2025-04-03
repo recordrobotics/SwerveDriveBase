@@ -16,6 +16,8 @@ public abstract class AbstractControl {
 
   public abstract Boolean getAutoAlign();
 
+  public abstract Boolean getAutoAlignNear();
+
   public abstract Boolean getElevatorRelativeDrive();
 
   public abstract Boolean getCoralIntakeRelativeDrive();

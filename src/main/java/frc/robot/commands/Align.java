@@ -16,7 +16,7 @@ public class Align {
 
   public static Command create(
       double tolerance, double rotTol, boolean forceUseTranslation, double maxDistance) {
-    return create(tolerance, rotTol, forceUseTranslation, maxDistance, false);
+    return create(tolerance, rotTol, forceUseTranslation, maxDistance, false, false);
   }
 
   public static Command create(
@@ -25,6 +25,16 @@ public class Align {
       boolean forceUseTranslation,
       double maxDistance,
       boolean useFirstStage) {
+    return create(tolerance, rotTol, forceUseTranslation, maxDistance, useFirstStage, false);
+  }
+
+  public static Command create(
+      double tolerance,
+      double rotTol,
+      boolean forceUseTranslation,
+      double maxDistance,
+      boolean useFirstStage,
+      boolean useNear) {
     return new DeferredCommand(
         () -> {
           RobotAlignPose alignPose =
@@ -35,6 +45,12 @@ public class Align {
           if (useFirstStage) {
             return new AlignToPose(
                 alignPose.getFirstStagePose(),
+                tolerance,
+                rotTol,
+                forceUseTranslation || alignPose.useTranslation());
+          } else if (useNear) {
+            return new AlignToPose(
+                alignPose.getNearPose(),
                 tolerance,
                 rotTol,
                 forceUseTranslation || alignPose.useTranslation());

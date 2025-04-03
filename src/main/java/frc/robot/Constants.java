@@ -277,7 +277,11 @@ public final class Constants {
     }
 
     public Pose2d getFirstStagePose() {
-      return pose.transformBy(new Transform2d(new Translation2d(-0.4, 0), Rotation2d.kZero));
+      return pose.transformBy(new Transform2d(new Translation2d(-0.2, 0), Rotation2d.kZero));
+    }
+
+    public Pose2d getNearPose() {
+      return pose.transformBy(new Transform2d(new Translation2d(0.04, 0), Rotation2d.kZero));
     }
 
     public Pose2d getPose() {

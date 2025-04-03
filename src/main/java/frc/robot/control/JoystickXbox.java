@@ -55,7 +55,11 @@ public class JoystickXbox extends AbstractControl {
   }
 
   public Boolean getAutoAlign() {
-    return joystick.getRawButton(7) || joystick.getRawButton(9) || joystick.getRawButton(11);
+    return joystick.getRawButton(9) || joystick.getRawButton(11);
+  }
+
+  public Boolean getAutoAlignNear() {
+    return joystick.getRawButton(7) || joystick.getRawButton(12);
   }
 
   public Boolean getElevatorRelativeDrive() {
