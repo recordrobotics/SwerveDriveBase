@@ -222,30 +222,30 @@ public final class Constants {
 
   public enum RobotAlignPose {
     // Reefs
-    BA(new Pose2d(3.2093371, 3.9602603000000003, Rotation2d.fromDegrees(0)), true),
-    RA(new Pose2d(14.338913300000002, 4.091641300000001, Rotation2d.fromDegrees(180)), true),
-    BB(new Pose2d(3.2093371, 3.6516413, Rotation2d.fromDegrees(0)), true),
-    RB(new Pose2d(14.338913300000002, 4.400260300000001, Rotation2d.fromDegrees(180)), true),
-    BC(new Pose2d(3.906226741787302, 2.884593033155919, Rotation2d.fromDegrees(60)), true),
-    RC(new Pose2d(13.642023658212699, 5.167308566844081, Rotation2d.fromDegrees(-120)), true),
-    BD(new Pose2d(4.173498635877851, 2.730283533155919, Rotation2d.fromDegrees(60)), true),
-    RD(new Pose2d(13.374751764122149, 5.321618066844081, Rotation2d.fromDegrees(-120)), true),
-    BE(new Pose2d(5.186226741787301, 2.9502835331559187, Rotation2d.fromDegrees(120)), true),
-    RE(new Pose2d(12.3620236582127, 5.1016180668440825, Rotation2d.fromDegrees(-60)), true),
-    BF(new Pose2d(5.453498635877851, 3.104593033155919, Rotation2d.fromDegrees(120)), true),
-    RF(new Pose2d(12.09475176412215, 4.947308566844082, Rotation2d.fromDegrees(-60)), true),
-    BG(new Pose2d(5.7693371, 4.0916413, Rotation2d.fromDegrees(180)), true),
-    RG(new Pose2d(11.7789133, 3.9602603000000007, Rotation2d.fromDegrees(0)), true),
-    BH(new Pose2d(5.7693371, 4.4002603, Rotation2d.fromDegrees(180)), true),
-    RH(new Pose2d(11.7789133, 3.6516413000000005, Rotation2d.fromDegrees(0)), true),
-    BI(new Pose2d(5.072447458212698, 5.167308566844082, Rotation2d.fromDegrees(-120)), true),
-    RI(new Pose2d(12.475802941787302, 2.8845930331559186, Rotation2d.fromDegrees(60)), true),
-    BJ(new Pose2d(4.805175564122148, 5.321618066844082, Rotation2d.fromDegrees(-120)), true),
-    RJ(new Pose2d(12.743074835877852, 2.7302835331559185, Rotation2d.fromDegrees(60)), true),
-    BK(new Pose2d(3.792447458212698, 5.101618066844082, Rotation2d.fromDegrees(-60)), true),
-    RK(new Pose2d(13.755802941787302, 2.950283533155919, Rotation2d.fromDegrees(120)), true),
-    BL(new Pose2d(3.525175564122149, 4.9473085668440815, Rotation2d.fromDegrees(-60)), true),
-    RL(new Pose2d(14.023074835877852, 3.1045930331559193, Rotation2d.fromDegrees(120)), true),
+    BA(new Pose2d(3.2093371, 3.9452603000000006, Rotation2d.fromDegrees(0)), true),
+    RA(new Pose2d(14.338913300000002, 4.1066413, Rotation2d.fromDegrees(180)), true),
+    BB(new Pose2d(3.2093371, 3.6566413000000004, Rotation2d.fromDegrees(0)), true),
+    RB(new Pose2d(14.338913300000002, 4.3952603, Rotation2d.fromDegrees(180)), true),
+    BC(new Pose2d(3.919217122844068, 2.8770930331559192, Rotation2d.fromDegrees(60)), true),
+    RC(new Pose2d(13.629033277155933, 5.1748085668440815, Rotation2d.fromDegrees(-120)), true),
+    BD(new Pose2d(4.169168508858929, 2.732783533155919, Rotation2d.fromDegrees(60)), true),
+    RD(new Pose2d(13.379081891141071, 5.319118066844082, Rotation2d.fromDegrees(-120)), true),
+    BE(new Pose2d(5.199217122844068, 2.9577835331559186, Rotation2d.fromDegrees(120)), true),
+    RE(new Pose2d(12.349033277155932, 5.094118066844082, Rotation2d.fromDegrees(-60)), true),
+    BF(new Pose2d(5.449168508858929, 3.102093033155919, Rotation2d.fromDegrees(120)), true),
+    RF(new Pose2d(12.099081891141072, 4.949808566844082, Rotation2d.fromDegrees(-60)), true),
+    BG(new Pose2d(5.7693371, 4.106641300000001, Rotation2d.fromDegrees(180)), true),
+    RG(new Pose2d(11.7789133, 3.9452603, Rotation2d.fromDegrees(0)), true),
+    BH(new Pose2d(5.7693371, 4.3952603, Rotation2d.fromDegrees(180)), true),
+    RH(new Pose2d(11.7789133, 3.6566413000000004, Rotation2d.fromDegrees(0)), true),
+    BI(new Pose2d(5.0594570771559315, 5.1748085668440815, Rotation2d.fromDegrees(-120)), true),
+    RI(new Pose2d(12.488793322844069, 2.8770930331559192, Rotation2d.fromDegrees(60)), true),
+    BJ(new Pose2d(4.809505691141071, 5.319118066844082, Rotation2d.fromDegrees(-120)), true),
+    RJ(new Pose2d(12.73874470885893, 2.732783533155919, Rotation2d.fromDegrees(60)), true),
+    BK(new Pose2d(3.779457077155932, 5.094118066844082, Rotation2d.fromDegrees(-60)), true),
+    RK(new Pose2d(13.768793322844068, 2.9577835331559186, Rotation2d.fromDegrees(120)), true),
+    BL(new Pose2d(3.529505691141071, 4.949808566844082, Rotation2d.fromDegrees(-60)), true),
+    RL(new Pose2d(14.018744708858929, 3.102093033155919, Rotation2d.fromDegrees(120)), true),
     // Processors
     BProcessor(new Pose2d(6, 0.43, Rotation2d.fromDegrees(270)), true),
     RProcessor(new Pose2d(11.5, 7.59, Rotation2d.fromDegrees(90)), true),
@@ -832,7 +832,7 @@ public final class Constants {
     public static final double kP = 0.047421;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kP_position = 5.629;
+    public static final double kP_position = 6.9;
     public static final double kI_position = 0.0;
     public static final double kD_position = 0.132;
     public static final double kS = 0.19168;
@@ -845,7 +845,7 @@ public final class Constants {
     public static final Distance WHEEL_DIAMETER =
         DISTANCE_BETWEEN_AXLES.minus(CORAL_OUTER_DIAMETER);
 
-    public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(0.2);
+    public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(1.2);
 
     // m/s coral
     public static final double POSITION_MODE_MAX_VELOCITY = 1.4;
