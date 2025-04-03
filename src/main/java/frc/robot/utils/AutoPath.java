@@ -43,7 +43,8 @@ public class AutoPath {
 
     NamedCommands.registerCommand(
         "AutoAlign",
-        CommandUtils.finishOnInterrupt(Align.create(0.01, 0.02, true, 2.5).withTimeout(1.0)));
+        CommandUtils.finishOnInterrupt(
+            Align.create(0.01, 0.02, true, 2.5).repeatedly().withTimeout(1.5)));
     NamedCommands.registerCommand("ElevatorL4", new ElevatorMove(ElevatorHeight.L4));
     NamedCommands.registerCommand("ElevatorL3", new ElevatorMove(ElevatorHeight.L3));
     NamedCommands.registerCommand("ElevatorL2", new ElevatorMove(ElevatorHeight.L2));
