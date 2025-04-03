@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger;
 public class AlignToPose extends Command {
   ProfiledPIDController xPID =
       new ProfiledPIDController(
-          4,
+          6,
           0,
           0.01,
           new TrapezoidProfile.Constraints(
@@ -22,7 +22,7 @@ public class AlignToPose extends Command {
               Constants.Swerve.MAX_AUTOALIGN_ACCELERATION));
   ProfiledPIDController yPID =
       new ProfiledPIDController(
-          4,
+          6,
           0,
           0.01,
           new TrapezoidProfile.Constraints(
