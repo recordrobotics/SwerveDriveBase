@@ -291,15 +291,17 @@ public class RobotContainer {
     var coralScoreL1Cmd =
         Commands.either(
             Commands.either(
-                new CoralIntakeShootL1(),
-                new CoralIntakeMoveL1(),
+                new CoralIntakeShootL1().asProxy(),
+                new CoralIntakeMoveL1().asProxy(),
                 () -> coralIntake.getArmState() == IntakeArmState.SCORE_L1),
-            new CoralIntakeFromGroundUpL1(),
+            new CoralIntakeFromGroundUpL1()
+                .asProxy()
+                .beforeStarting(() -> CoralIntakeFromGroundToggled.isGoingToL1 = true),
             () -> coralIntake.getArmAngle() >= Constants.CoralIntake.ARM_SCORE_L1 - 0.1);
-    coralScoreL1Cmd.addRequirements(coralIntakeMoveToggleRequirement);
+    // coralScoreL1Cmd.addRequirements(coralIntakeMoveToggleRequirement);
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralIntakeScoreL1())
-        .onTrue(coralScoreL1Cmd);
+        .onTrue(coralScoreL1Cmd.asProxy());
 
     // new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
     //     .onTrue(HybridSource.deferred());

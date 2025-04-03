@@ -908,11 +908,12 @@ public final class Constants {
     public static final double sV = 1.0261;
     public static final double sA = 0.053656;
 
-    public static final double ARM_UP = Units.degreesToRadians(84.19);
+    public static final double ARM_UP = Units.degreesToRadians(89.3);
+    public static final double ARM_PUSH = Units.degreesToRadians(84.19);
     public static final double ARM_INTAKE = Units.degreesToRadians(77.08);
     public static final double ARM_SCORE_L1 = Units.degreesToRadians(22.35);
     public static final double ARM_DOWN = Units.degreesToRadians(-48.5);
-    public static final double ARM_START_POS = Units.degreesToRadians(84.19);
+    public static final double ARM_START_POS = Units.degreesToRadians(89.3);
 
     public static final double ARM_GEAR_RATIO = 56.8889; // 16:1 * 64/18
 

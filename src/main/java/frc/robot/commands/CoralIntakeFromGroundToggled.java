@@ -5,6 +5,8 @@ import frc.robot.RobotContainer;
 
 public class CoralIntakeFromGroundToggled extends Command {
 
+  public static boolean isGoingToL1 = false;
+
   public CoralIntakeFromGroundToggled() {
     addRequirements(RobotContainer.coralIntakeMoveToggleRequirement);
   }
@@ -16,6 +18,8 @@ public class CoralIntakeFromGroundToggled extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    new CoralIntakeFromGroundUp().handleInterrupt(this::cancel).schedule();
+    if (!isGoingToL1) {
+      new CoralIntakeFromGroundUp().handleInterrupt(this::cancel).schedule();
+    }
   }
 }

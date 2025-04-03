@@ -131,6 +131,7 @@ public class CoralIntake extends KillableSubsystem
 
   public enum IntakeArmState {
     UP,
+    PUSH,
     INTAKE,
     SCORE_L1,
     DOWN;
@@ -192,6 +193,9 @@ public class CoralIntake extends KillableSubsystem
     switch (state) {
       case UP:
         toggleArm(Constants.CoralIntake.ARM_UP);
+        break;
+      case PUSH:
+        toggleArm(Constants.CoralIntake.ARM_PUSH);
         break;
       case DOWN:
         toggleArm(Constants.CoralIntake.ARM_DOWN);

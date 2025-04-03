@@ -14,10 +14,15 @@ public class CoralIntakeFromGroundUpL1 extends SequentialCommandGroup {
     addRequirements(RobotContainer.coralIntake);
 
     addCommands(
+        new InstantCommand(
+            () -> {
+              CoralIntakeFromGroundToggled.isGoingToL1 = false;
+            }),
         // raise the arm
         new InstantCommand(
             () -> RobotContainer.coralIntake.toggleArm(IntakeArmState.UP),
-            RobotContainer.coralIntake),
+            RobotContainer.coralIntake,
+            RobotContainer.coralIntakeMoveToggleRequirement),
         new WaitUntilCommand(() -> RobotContainer.coralIntake.armAtGoal()),
         new ScheduleCommand(
             RobotContainer.lights
