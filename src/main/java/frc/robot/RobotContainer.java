@@ -336,7 +336,9 @@ public class RobotContainer {
         .onTrue(new VibrateXbox(RumbleType.kLeftRumble, 1).withTimeout(0.1));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getAutoAlign())
-        .whileTrue(Align.create(0.01, 0.02, false, 2.5).repeatedly());
+        .whileTrue(
+            Align.create(0.1, 0.06, false, 2.5, true)
+                .andThen(Align.create(0.01, 0.02, false, 2.5).repeatedly()));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getAutoScore())
         .and(

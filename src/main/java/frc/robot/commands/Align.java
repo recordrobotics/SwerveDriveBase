@@ -13,8 +13,18 @@ import frc.robot.control.AbstractControl.AutoScoreDirection;
 import java.util.Set;
 
 public class Align {
+
   public static Command create(
       double tolerance, double rotTol, boolean forceUseTranslation, double maxDistance) {
+    return create(tolerance, rotTol, forceUseTranslation, maxDistance, false);
+  }
+
+  public static Command create(
+      double tolerance,
+      double rotTol,
+      boolean forceUseTranslation,
+      double maxDistance,
+      boolean useFirstStage) {
     return new DeferredCommand(
         () -> {
           RobotAlignPose alignPose =
@@ -22,11 +32,19 @@ public class Align {
                   RobotContainer.poseTracker.getEstimatedPosition(), maxDistance);
           if (alignPose == null) return Commands.none();
 
-          return new AlignToPose(
-              alignPose.getPose(),
-              tolerance,
-              rotTol,
-              forceUseTranslation || alignPose.useTranslation());
+          if (useFirstStage) {
+            return new AlignToPose(
+                alignPose.getFirstStagePose(),
+                tolerance,
+                rotTol,
+                forceUseTranslation || alignPose.useTranslation());
+          } else {
+            return new AlignToPose(
+                alignPose.getPose(),
+                tolerance,
+                rotTol,
+                forceUseTranslation || alignPose.useTranslation());
+          }
         },
         Set.of(RobotContainer.drivetrain));
   }
