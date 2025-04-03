@@ -28,12 +28,7 @@
       "linkedName": "ReefH"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
@@ -59,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
