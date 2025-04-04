@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1867827868906473,
-        "y": 0.7763319672073214
+        "x": 1.0788934426229508,
+        "y": 0.776331967213116
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7327827868906478,
-        "y": 0.9713319672073215
+        "x": 1.6248934426229515,
+        "y": 0.9713319672131161
       },
       "isLocked": false,
       "linkedName": "SourceRightOuter"
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -120
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "Source and Reef",

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7249324908863146,
-        "y": 6.109656675823857
+        "x": 3.108752830661977,
+        "y": 5.707259500761976
       },
       "isLocked": false,
       "linkedName": "ReefK"
     },
     {
       "anchor": {
-        "x": 1.312889627066736,
-        "y": 7.306224878646183
+        "x": 1.2227459016393443,
+        "y": 7.38155737704918
       },
       "prevControl": {
-        "x": 2.911748388696118,
-        "y": 6.428158371590013
+        "x": 2.565368852459016,
+        "y": 6.746209016393443
       },
       "nextControl": null,
       "isLocked": false,
@@ -60,14 +60,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 35.73438788748981
   },
   "reversed": false,
   "folder": "Source and Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -60
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": false
 }
