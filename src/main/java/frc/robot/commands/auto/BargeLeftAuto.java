@@ -36,12 +36,15 @@ public class BargeLeftAuto extends SequentialCommandGroup {
   }
 
   private Command alignWithVision() {
-    return new RepeatConditionallyCommand(
-        Align.create(0.01, 0.02, true, 1.5),
-        () ->
-            !(RobotContainer.limelight.getLeft().hasVision
-                || RobotContainer.limelight.getCenter().hasVision),
-        true);
+    return Align.create(0.1, 0.06, false, 1.5, true)
+        .andThen(
+            new RepeatConditionallyCommand(
+                // Align.create(0.01, 0.02, true, 1.5),
+                Align.create(0.01, 0.02, false, 1.5),
+                () ->
+                    !(RobotContainer.limelight.getLeft().hasVision
+                        || RobotContainer.limelight.getCenter().hasVision),
+                true));
   }
 
   private Command createSource(String reefLetter)
