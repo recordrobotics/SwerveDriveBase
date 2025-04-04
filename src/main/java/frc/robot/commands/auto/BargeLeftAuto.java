@@ -23,7 +23,7 @@ import org.json.simple.parser.ParseException;
 
 public class BargeLeftAuto extends SequentialCommandGroup {
 
-  private static final double SOURCE_TIMEOUT = 0.3;
+  private static final double SOURCE_TIMEOUT = 0.8;
   private static double sourceStart;
 
   private Command sourceWait() {
@@ -86,17 +86,17 @@ public class BargeLeftAuto extends SequentialCommandGroup {
   public BargeLeftAuto() throws FileVersionException, IOException, ParseException {
     addCommands(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("BargeLeftToL4")),
-        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(1.0)),
+        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(2.0)),
         new InstantCommand(() -> RobotContainer.drivetrain.kill()),
         CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
         createSource("J"),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefK")),
-        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(1.0)),
+        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(2.0)),
         new InstantCommand(() -> RobotContainer.drivetrain.kill()),
         CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
         createSource("K"),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefL")),
-        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(1.0)),
+        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(2.0)),
         new InstantCommand(() -> RobotContainer.drivetrain.kill()),
         CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("ReefLToPark")),
