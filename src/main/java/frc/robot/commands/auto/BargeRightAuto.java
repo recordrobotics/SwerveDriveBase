@@ -47,7 +47,7 @@ public class BargeRightAuto extends SequentialCommandGroup {
   private Command createSource(String reefLetter)
       throws FileVersionException, IOException, ParseException {
     return new CoralIntakeFromSource(false)
-        .beforeStarting(new WaitCommand(0.2))
+        .beforeStarting(new WaitCommand(0.3))
         .alongWith(
             Commands.either(
                     AutoBuilder.followPath(
