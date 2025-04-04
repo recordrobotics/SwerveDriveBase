@@ -3,8 +3,10 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -15,9 +17,22 @@ import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.CoralShoot;
 import frc.robot.utils.CommandUtils;
 import java.io.IOException;
+import java.util.Set;
 import org.json.simple.parser.ParseException;
 
 public class BargeLeftAuto extends SequentialCommandGroup {
+
+  private static final double SOURCE_TIMEOUT = 0.3;
+  private static double sourceStart;
+
+  private Command sourceWait() {
+    return new DeferredCommand(
+        () -> {
+          double time = Timer.getTimestamp() - sourceStart;
+          return new WaitCommand(time > SOURCE_TIMEOUT ? 0 : SOURCE_TIMEOUT - time);
+        },
+        Set.of());
+  }
 
   private Command createSource(String reefLetter)
       throws FileVersionException, IOException, ParseException {
@@ -30,9 +45,11 @@ public class BargeLeftAuto extends SequentialCommandGroup {
                                 "Reef" + reefLetter + "ToSourceLeftOuterNoElevator"))
                         .andThen(
                             CommandUtils.finishOnInterrupt(
-                                Align.create(0.01, 0.02, true, 1.5).withTimeout(0.6)))
+                                Align.create(0.01, 0.02, true, 1.5)
+                                    .withTimeout(SOURCE_TIMEOUT)
+                                    .beforeStarting(() -> sourceStart = Timer.getTimestamp())))
                         .andThen(new InstantCommand(() -> RobotContainer.drivetrain.kill()))
-                        .andThen(new WaitCommand(0.6))
+                        .andThen(sourceWait())
                         .andThen(
                             AutoBuilder.followPath(
                                 PathPlannerPath.fromPathFile("SourceLeftOuterToElevatorStart"))),
@@ -40,9 +57,11 @@ public class BargeLeftAuto extends SequentialCommandGroup {
                             PathPlannerPath.fromPathFile("ElevatorStartToSourceLeftOuter"))
                         .andThen(
                             CommandUtils.finishOnInterrupt(
-                                Align.create(0.01, 0.02, true, 1.5).withTimeout(0.6)))
+                                Align.create(0.01, 0.02, true, 1.5)
+                                    .withTimeout(SOURCE_TIMEOUT)
+                                    .beforeStarting(() -> sourceStart = Timer.getTimestamp())))
                         .andThen(new InstantCommand(() -> RobotContainer.drivetrain.kill()))
-                        .andThen(new WaitCommand(0.6))
+                        .andThen(sourceWait())
                         .andThen(
                             AutoBuilder.followPath(
                                 PathPlannerPath.fromPathFile("SourceLeftOuterToElevatorStart"))),

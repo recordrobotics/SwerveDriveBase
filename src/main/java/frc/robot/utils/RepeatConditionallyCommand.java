@@ -6,11 +6,10 @@ package frc.robot.utils;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.util.function.BooleanSupplier;
 
 /**
  * A command that runs another command repeatedly, restarting it when it ends, until this command is
@@ -27,6 +26,7 @@ public class RepeatConditionallyCommand extends Command {
   private final Command m_command;
   private boolean m_ended;
   private BooleanSupplier m_condition;
+  private boolean m_runAtleastOnce;
 
   /**
    * Creates a new RepeatCommand. Will run another command repeatedly, restarting it whenever it
@@ -35,9 +35,11 @@ public class RepeatConditionallyCommand extends Command {
    * @param command the command to run repeatedly
    */
   @SuppressWarnings("this-escape")
-  public RepeatConditionallyCommand(Command command, BooleanSupplier condition) {
-    m_command = requireNonNullParam(command, "command", "RepeatCommand");
+  public RepeatConditionallyCommand(
+      Command command, BooleanSupplier condition, boolean runAtleastOnce) {
+    m_command = requireNonNullParam(command, "command", "RepeatConditionallyCommand");
     m_condition = condition;
+    m_runAtleastOnce = runAtleastOnce;
     CommandScheduler.getInstance().registerComposedCommands(command);
     addRequirements(command.getRequirements());
     setName("RepeatConditionally(" + command.getName() + ")");
@@ -46,8 +48,10 @@ public class RepeatConditionallyCommand extends Command {
   @Override
   public void initialize() {
     m_ended = false;
-    if(m_condition.getAsBoolean()){
-    m_command.initialize();
+    if (m_condition.getAsBoolean() || m_runAtleastOnce) {
+      m_command.initialize();
+    } else {
+      m_ended = true;
     }
   }
 

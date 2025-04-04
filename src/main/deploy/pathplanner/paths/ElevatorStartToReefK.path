@@ -29,21 +29,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.41786600496278026,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 3.3,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [
     {
       "fieldPosition": {
@@ -79,7 +65,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": null,
