@@ -224,30 +224,30 @@ public final class Constants {
 
   public enum RobotAlignPose {
     // Reefs
-    BA(new Pose2d(2.8993371000000003, 3.9981723000000002, Rotation2d.fromDegrees(0)), true),
-    RA(new Pose2d(14.6489133, 4.0537293000000005, Rotation2d.fromDegrees(180)), true),
-    BB(new Pose2d(2.8993371000000003, 3.6695533000000005, Rotation2d.fromDegrees(0)), true),
-    RB(new Pose2d(14.6489133, 4.3823483, Rotation2d.fromDegrees(180)), true),
-    BC(new Pose2d(3.7183939866790263, 2.635081157982743, Rotation2d.fromDegrees(60)), true),
-    RC(new Pose2d(13.829856413320975, 5.416820442017258, Rotation2d.fromDegrees(-120)), true),
-    BD(new Pose2d(4.002986388845264, 2.470771657982743, Rotation2d.fromDegrees(60)), true),
-    RD(new Pose2d(13.545264011154735, 5.581129942017258, Rotation2d.fromDegrees(-120)), true),
-    BE(new Pose2d(5.308393986679026, 2.662859657982743, Rotation2d.fromDegrees(120)), true),
-    RE(new Pose2d(12.239856413320975, 5.389041942017258, Rotation2d.fromDegrees(-60)), true),
-    BF(new Pose2d(5.592986388845264, 2.827169157982743, Rotation2d.fromDegrees(120)), true),
-    RF(new Pose2d(11.955264011154735, 5.224732442017258, Rotation2d.fromDegrees(-60)), true),
-    BG(new Pose2d(6.0793371, 4.0537293000000005, Rotation2d.fromDegrees(180)), true),
-    RG(new Pose2d(11.4689133, 3.9981723000000002, Rotation2d.fromDegrees(0)), true),
-    BH(new Pose2d(6.0793371, 4.3823483, Rotation2d.fromDegrees(180)), true),
-    RH(new Pose2d(11.4689133, 3.6695533000000005, Rotation2d.fromDegrees(0)), true),
-    BI(new Pose2d(5.260280213320974, 5.416820442017258, Rotation2d.fromDegrees(-120)), true),
-    RI(new Pose2d(12.287970186679026, 2.635081157982743, Rotation2d.fromDegrees(60)), true),
-    BJ(new Pose2d(4.975687811154736, 5.581129942017258, Rotation2d.fromDegrees(-120)), true),
-    RJ(new Pose2d(12.572562588845265, 2.470771657982743, Rotation2d.fromDegrees(60)), true),
-    BK(new Pose2d(3.670280213320974, 5.389041942017258, Rotation2d.fromDegrees(-60)), true),
-    RK(new Pose2d(13.877970186679025, 2.662859657982743, Rotation2d.fromDegrees(120)), true),
-    BL(new Pose2d(3.385687811154736, 5.224732442017258, Rotation2d.fromDegrees(-60)), true),
-    RL(new Pose2d(14.162562588845265, 2.827169157982743, Rotation2d.fromDegrees(120)), true),
+    BA(new Pose2d(2.8993371000000003, 4.0181723, Rotation2d.fromDegrees(0)), true),
+RA(new Pose2d(14.6489133, 4.033729300000001, Rotation2d.fromDegrees(180)), true),
+BB(new Pose2d(2.8993371000000003, 3.6695533000000005, Rotation2d.fromDegrees(0)), true),
+RB(new Pose2d(14.6489133, 4.3823483, Rotation2d.fromDegrees(180)), true),
+BC(new Pose2d(3.7010734786033375, 2.6450811579827427, Rotation2d.fromDegrees(60)), true),
+RC(new Pose2d(13.847176921396663, 5.406820442017258, Rotation2d.fromDegrees(-120)), true),
+BD(new Pose2d(4.002986388845264, 2.470771657982743, Rotation2d.fromDegrees(60)), true),
+RD(new Pose2d(13.545264011154735, 5.581129942017258, Rotation2d.fromDegrees(-120)), true),
+BE(new Pose2d(5.291073478603337, 2.6528596579827433, Rotation2d.fromDegrees(120)), true),
+RE(new Pose2d(12.257176921396663, 5.3990419420172575, Rotation2d.fromDegrees(-60)), true),
+BF(new Pose2d(5.592986388845265, 2.827169157982743, Rotation2d.fromDegrees(120)), true),
+RF(new Pose2d(11.955264011154735, 5.224732442017258, Rotation2d.fromDegrees(-60)), true),
+BG(new Pose2d(6.0793371, 4.0337293, Rotation2d.fromDegrees(180)), true),
+RG(new Pose2d(11.4689133, 4.018172300000001, Rotation2d.fromDegrees(0)), true),
+BH(new Pose2d(6.0793371, 4.3823483, Rotation2d.fromDegrees(180)), true),
+RH(new Pose2d(11.4689133, 3.6695533000000005, Rotation2d.fromDegrees(0)), true),
+BI(new Pose2d(5.277600721396663, 5.406820442017258, Rotation2d.fromDegrees(-120)), true),
+RI(new Pose2d(12.270649678603338, 2.6450811579827427, Rotation2d.fromDegrees(60)), true),
+BJ(new Pose2d(4.975687811154735, 5.581129942017258, Rotation2d.fromDegrees(-120)), true),
+RJ(new Pose2d(12.572562588845265, 2.470771657982743, Rotation2d.fromDegrees(60)), true),
+BK(new Pose2d(3.687600721396663, 5.3990419420172575, Rotation2d.fromDegrees(-60)), true),
+RK(new Pose2d(13.860649678603338, 2.6528596579827433, Rotation2d.fromDegrees(120)), true),
+BL(new Pose2d(3.385687811154736, 5.224732442017258, Rotation2d.fromDegrees(-60)), true),
+RL(new Pose2d(14.162562588845265, 2.827169157982743, Rotation2d.fromDegrees(120)), true),
     // Processors
     BProcessor(new Pose2d(6, 0.43, Rotation2d.fromDegrees(270)), true),
     RProcessor(new Pose2d(11.5, 7.59, Rotation2d.fromDegrees(90)), true),
@@ -285,7 +285,7 @@ public final class Constants {
     }
 
     public Pose2d getFarPose() {
-      return pose.transformBy(new Transform2d(new Translation2d(0 + 0.2, 0), Rotation2d.kZero));
+      return pose.transformBy(new Transform2d(new Translation2d(0 + 0.25, 0), Rotation2d.kZero));
     }
 
     public boolean useTranslation() {
@@ -918,7 +918,7 @@ public final class Constants {
     public static final double sV = 1.0261;
     public static final double sA = 0.053656;
 
-    public static final double ARM_UP = Units.degreesToRadians(84.19);
+    public static final double ARM_UP = Units.degreesToRadians(80.19);
     public static final double ARM_PUSH = Units.degreesToRadians(84.19);
     public static final double ARM_INTAKE = Units.degreesToRadians(77.08);
     public static final double ARM_SCORE_L1 = Units.degreesToRadians(22.35);
