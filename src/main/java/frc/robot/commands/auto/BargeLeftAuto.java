@@ -16,6 +16,7 @@ import frc.robot.commands.Align;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.CoralShoot;
 import frc.robot.utils.CommandUtils;
+import frc.robot.utils.RepeatConditionallyCommand;
 import java.io.IOException;
 import java.util.Set;
 import org.json.simple.parser.ParseException;
@@ -32,6 +33,15 @@ public class BargeLeftAuto extends SequentialCommandGroup {
           return new WaitCommand(time > SOURCE_TIMEOUT ? 0 : SOURCE_TIMEOUT - time);
         },
         Set.of());
+  }
+
+  private Command alignWithVision() {
+    return new RepeatConditionallyCommand(
+        Align.create(0.01, 0.02, true, 1.5),
+        () ->
+            !(RobotContainer.limelight.getLeft().hasVision
+                || RobotContainer.limelight.getCenter().hasVision),
+        true);
   }
 
   private Command createSource(String reefLetter)
@@ -76,17 +86,17 @@ public class BargeLeftAuto extends SequentialCommandGroup {
   public BargeLeftAuto() throws FileVersionException, IOException, ParseException {
     addCommands(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("BargeLeftToL4")),
-        CommandUtils.finishOnInterrupt(Align.create(0.01, 0.02, true, 1.5).withTimeout(1.0)),
+        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(1.0)),
         new InstantCommand(() -> RobotContainer.drivetrain.kill()),
         CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
         createSource("J"),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefK")),
-        CommandUtils.finishOnInterrupt(Align.create(0.01, 0.02, true, 1.5).withTimeout(1.0)),
+        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(1.0)),
         new InstantCommand(() -> RobotContainer.drivetrain.kill()),
         CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
         createSource("K"),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefL")),
-        CommandUtils.finishOnInterrupt(Align.create(0.01, 0.02, true, 1.5).withTimeout(1.0)),
+        CommandUtils.finishOnInterrupt(alignWithVision().withTimeout(1.0)),
         new InstantCommand(() -> RobotContainer.drivetrain.kill()),
         CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("ReefLToPark")),
