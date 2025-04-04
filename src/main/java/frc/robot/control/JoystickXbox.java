@@ -36,9 +36,7 @@ public class JoystickXbox extends AbstractControl {
 
     if (getCoralIntakeRelativeDrive()) {
       y = -y;
-    }
-
-    if (getElevatorRelativeDrive()) {
+    } else if (getElevatorRelativeDrive()) {
       double temp = y;
       y = -x;
       x = -temp;
