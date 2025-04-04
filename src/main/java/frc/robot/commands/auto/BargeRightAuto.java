@@ -55,8 +55,8 @@ public class BargeRightAuto extends SequentialCommandGroup {
                                 "Reef" + reefLetter + "ToSourceRightOuterNoElevator"))
                         .andThen(
                             CommandUtils.finishOnInterrupt(
-                                Align.create(0.01, 0.02, true, 1.5)
-                                    .withTimeout(SOURCE_TIMEOUT)
+                                Align.create(0.01, 0.02, false, 1.5)
+                                    .withTimeout(0.1)
                                     .beforeStarting(() -> sourceStart = Timer.getTimestamp())))
                         .andThen(new InstantCommand(() -> RobotContainer.drivetrain.kill()))
                         .andThen(sourceWait())
@@ -67,8 +67,8 @@ public class BargeRightAuto extends SequentialCommandGroup {
                             PathPlannerPath.fromPathFile("ElevatorStartToSourceRightOuter"))
                         .andThen(
                             CommandUtils.finishOnInterrupt(
-                                Align.create(0.01, 0.02, true, 1.5)
-                                    .withTimeout(SOURCE_TIMEOUT)
+                                Align.create(0.01, 0.02, false, 1.5)
+                                    .withTimeout(0.1)
                                     .beforeStarting(() -> sourceStart = Timer.getTimestamp())))
                         .andThen(new InstantCommand(() -> RobotContainer.drivetrain.kill()))
                         .andThen(sourceWait())

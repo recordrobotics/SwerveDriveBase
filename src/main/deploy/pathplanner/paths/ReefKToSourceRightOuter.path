@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7201269501370096,
-        "y": 5.18688086126037
+        "x": 3.62012695013701,
+        "y": 5.360085942017258
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5002048643916868,
-        "y": 5.305768523368037
+        "x": 3.400204864391687,
+        "y": 5.478973604124925
       },
       "isLocked": false,
       "linkedName": "ReefK"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 1.2107581967213117,
-        "y": 0.8722336065573757
+        "x": 1.1867827868906473,
+        "y": 0.7763319672073214
       },
       "prevControl": {
-        "x": 1.391285974323828,
-        "y": 1.8941299235650066
+        "x": 1.3673105644931636,
+        "y": 1.7982282842149524
       },
       "nextControl": null,
       "isLocked": false,
@@ -76,7 +76,7 @@
   "folder": "Source and Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -60
   },
   "useDefaultConstraints": true
 }

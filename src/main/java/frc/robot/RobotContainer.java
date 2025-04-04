@@ -237,7 +237,7 @@ public class RobotContainer {
               closestReef != null
                   && Math.abs(
                           closestReef
-                              .getPose()
+                              .getFarPose()
                               .getRotation()
                               .minus(robot.getRotation())
                               .getDegrees())

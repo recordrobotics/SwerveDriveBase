@@ -56,7 +56,7 @@ public class Align {
                 forceUseTranslation || alignPose.useTranslation());
           } else {
             return new AlignToPose(
-                alignPose.getPose(),
+                alignPose.getFarPose(),
                 tolerance,
                 rotTol,
                 forceUseTranslation || alignPose.useTranslation());
@@ -78,7 +78,8 @@ public class Align {
               direction == AutoScoreDirection.Left
                   ? RobotAlignPose.leftReefPoses
                   : RobotAlignPose.rightReefPoses) {
-            double distance = align.getPose().getTranslation().getDistance(pose.getTranslation());
+            double distance =
+                align.getFarPose().getTranslation().getDistance(pose.getTranslation());
             if (distance <= maxDistance && distance < closestDistance) {
               closest = align;
               closestDistance = distance;
@@ -87,7 +88,7 @@ public class Align {
 
           if (closest == null) return Commands.none();
 
-          return new AlignToPose(closest.getPose(), tolerance, rotTol, true);
+          return new AlignToPose(closest.getFarPose(), tolerance, rotTol, true);
         },
         Set.of(RobotContainer.drivetrain));
   }
@@ -105,7 +106,8 @@ public class Align {
               direction == AutoScoreDirection.Left
                   ? RobotAlignPose.leftReefPoses
                   : RobotAlignPose.rightReefPoses) {
-            double distance = align.getPose().getTranslation().getDistance(pose.getTranslation());
+            double distance =
+                align.getFarPose().getTranslation().getDistance(pose.getTranslation());
             if (distance <= maxDistance && distance < closestDistance) {
               closest = align;
               closestDistance = distance;
@@ -115,7 +117,7 @@ public class Align {
           if (closest == null) return Commands.none();
 
           Pose2d backawayPose =
-              closest.getPose().transformBy(new Transform2d(-0.5, 0, Rotation2d.kZero));
+              closest.getFarPose().transformBy(new Transform2d(-0.5, 0, Rotation2d.kZero));
 
           return new AlignToPose(backawayPose, tolerance, rotTol, true);
         },
