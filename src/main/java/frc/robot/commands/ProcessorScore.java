@@ -32,38 +32,38 @@ public class ProcessorScore extends SequentialCommandGroup {
             maybieProxy(withProxy, new ElevatorMove(ElevatorHeight.GROUND_ALGAE_PROCESSOR))
                 .andThen(
                     new InstantCommand(
-                        () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OUT_GROUND),
+                        () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OUT_GROUND),
                         RobotContainer.elevatorHead))
                 .andThen(
                     new AlgaeGrabberToProcessor()
                         .simulateFor(new WaitCommand(Constants.ElevatorHead.SHOOT_TIME_GROUND)))
                 .andThen(
                     new InstantCommand(
-                        () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                        () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OFF),
                         RobotContainer.elevatorHead))
                 .andThen(maybieProxy(withProxy, new ElevatorMove(ElevatorHeight.BOTTOM))),
             Commands.either(
                 new InstantCommand(
-                        () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.SHOOT_BARGE),
+                        () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.SHOOT_BARGE),
                         RobotContainer.elevatorHead)
                     .andThen(
                         new AlgaeGrabberToProcessor()
                             .simulateFor(new WaitCommand(Constants.ElevatorHead.SHOOT_TIME_BARGE)))
                     .andThen(
                         new InstantCommand(
-                            () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                            () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OFF),
                             RobotContainer.elevatorHead)),
                 maybieProxy(withProxy, new ElevatorMove(ElevatorHeight.PROCESSOR_SCORE))
                     .andThen(
                         new InstantCommand(
-                            () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OUT_REEF),
+                            () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OUT_REEF),
                             RobotContainer.elevatorHead))
                     .andThen(
                         new AlgaeGrabberToProcessor()
                             .simulateFor(new WaitCommand(Constants.ElevatorHead.SHOOT_TIME_REEF)))
                     .andThen(
                         new InstantCommand(
-                            () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                            () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OFF),
                             RobotContainer.elevatorHead))
                     .andThen(maybieProxy(withProxy, new ElevatorMove(ElevatorHeight.BOTTOM))),
                 () -> RobotContainer.elevator.getNearestHeight() == ElevatorHeight.BARGE_ALAGAE),

@@ -59,7 +59,7 @@ public class ElevatorHead extends KillableSubsystem
   public ElevatorHead(ElevatorHeadIO io) {
     this.io = io;
 
-    toggle(CoralShooterStates.OFF); // initialize as off
+    set(CoralShooterStates.OFF); // initialize as off
     DashboardUI.Test.addSlider("Elevator Head", io.getPercent(), -1, 1).subscribe(io::setPercent);
 
     io.setPosition(0);
@@ -138,89 +138,89 @@ public class ElevatorHead extends KillableSubsystem
   }
 
   public void moveBy(double meters) {
-    toggle(0);
+    set(0);
     currentState = CoralShooterStates.POSITION;
     positionPid.reset(getPosition());
     positionPid.setGoal(getPosition() + meters);
   }
 
   /** Set shooter speed */
-  public void toggle(double speed) {
+  public void set(double speed) {
     pid.setSetpoint(speed);
   }
 
   /** Set the shooter speed to the preset ShooterStates state */
-  public void toggle(CoralShooterStates state) {
+  public void set(CoralShooterStates state) {
     waitingForAlgae = false;
     waitingForIntakeSpeed = false;
     hasAlgae = false;
     switch (state) {
       case OUT_FORWARD:
         currentState = CoralShooterStates.OUT_FORWARD;
-        toggle(Constants.ElevatorHead.OUT_SPEED_FORWARD);
+        set(Constants.ElevatorHead.OUT_SPEED_FORWARD);
         break;
       case OUT_BACKWARD:
         currentState = CoralShooterStates.OUT_BACKWARD;
-        toggle(Constants.ElevatorHead.OUT_SPEED_BACKWARD);
+        set(Constants.ElevatorHead.OUT_SPEED_BACKWARD);
         break;
       case INTAKE:
         currentState = CoralShooterStates.INTAKE;
-        toggle(Constants.ElevatorHead.INTAKE_SPEED);
+        set(Constants.ElevatorHead.INTAKE_SPEED);
         break;
       case POSITION:
         currentState = CoralShooterStates.POSITION;
-        toggle(0);
+        set(0);
         positionPid.setGoal(getPosition());
         break;
       case OFF: // Off
       default: // should never happen
         currentState = CoralShooterStates.OFF;
-        toggle(0);
+        set(0);
         break;
     }
   }
 
-  public void toggle(AlgaeGrabberStates state) {
+  public void set(AlgaeGrabberStates state) {
     currentState = CoralShooterStates.OFF;
     switch (state) {
       case OUT_GROUND:
-        toggle(Constants.ElevatorHead.OUT_GROUND_SPEED);
+        set(Constants.ElevatorHead.OUT_GROUND_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = false;
         hasAlgae = false;
         break;
       case OUT_REEF:
-        toggle(Constants.ElevatorHead.OUT_REEF_SPEED);
+        set(Constants.ElevatorHead.OUT_REEF_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = false;
         hasAlgae = false;
         break;
       case SHOOT_BARGE:
-        toggle(Constants.ElevatorHead.SHOOT_BARGE_SPEED);
+        set(Constants.ElevatorHead.SHOOT_BARGE_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = false;
         hasAlgae = false;
         break;
       case INTAKE_GROUND:
-        toggle(Constants.ElevatorHead.INTAKE_GROUND_SPEED);
+        set(Constants.ElevatorHead.INTAKE_GROUND_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = true;
         hasAlgae = false;
         break;
       case INTAKE_REEF:
-        toggle(Constants.ElevatorHead.INTAKE_REEF_SPEED);
+        set(Constants.ElevatorHead.INTAKE_REEF_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = true;
         hasAlgae = false;
         break;
       case HOLD_REEF:
-        toggle(Constants.ElevatorHead.HOLD_REEF_SPEED);
+        set(Constants.ElevatorHead.HOLD_REEF_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = false;
         hasAlgae = true;
         break;
       case HOLD_GROUND:
-        toggle(Constants.ElevatorHead.HOLD_GROUND_SPEED);
+        set(Constants.ElevatorHead.HOLD_GROUND_SPEED);
         waitingForAlgae = false;
         waitingForIntakeSpeed = false;
         hasAlgae = true;
@@ -229,7 +229,7 @@ public class ElevatorHead extends KillableSubsystem
       default: // should never happen
         waitingForIntakeSpeed = false;
         waitingForAlgae = false;
-        toggle(0);
+        set(0);
         break;
     }
   }
@@ -261,7 +261,7 @@ public class ElevatorHead extends KillableSubsystem
 
   @Override
   public void periodic() {
-    // toggle(0);
+    // set(0);
     // currentState = CoralShooterStates.POSITION;
     // positionPid.setGoal(SmartDashboard.getNumber("CoralShooter_Value", 0));
 
@@ -315,8 +315,8 @@ public class ElevatorHead extends KillableSubsystem
 
   @Override
   public void kill() {
-    toggle(CoralShooterStates.OFF);
-    toggle(AlgaeGrabberStates.OFF);
+    set(CoralShooterStates.OFF);
+    set(AlgaeGrabberStates.OFF);
     io.setVoltage(0);
   }
 

@@ -81,7 +81,7 @@ public class CoralIntake extends KillableSubsystem
     io.setArmPosition(
         Constants.CoralIntake.ARM_GEAR_RATIO
             * Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS));
-    toggle(CoralIntakeState.OFF);
+    set(CoralIntakeState.OFF);
     toggleArm(IntakeArmState.UP);
 
     armPID.setTolerance(0.15, 1.05);
@@ -176,7 +176,7 @@ public class CoralIntake extends KillableSubsystem
   }
 
   /** Set the current shooter speed on both wheels to speed */
-  public void toggle(double speed) {
+  public void set(double speed) {
     pid.setSetpoint(speed);
   }
 
@@ -213,25 +213,25 @@ public class CoralIntake extends KillableSubsystem
   }
 
   /** Set the shooter speed to the preset ShooterStates state */
-  public void toggle(CoralIntakeState state) {
+  public void set(CoralIntakeState state) {
     currentIntakeState = state;
     switch (state) {
       case SOURCE:
-        toggle(Constants.CoralIntake.SOURCE_SPEED);
+        set(Constants.CoralIntake.SOURCE_SPEED);
         break;
       case PUSH_AND_PULL:
         intakePushAndPullRampStart = Timer.getTimestamp();
-        toggle(Constants.CoralIntake.PUSH_OUT_SPEED);
+        set(Constants.CoralIntake.PUSH_OUT_SPEED);
         break;
       case INTAKE:
-        toggle(Constants.CoralIntake.INTAKE_SPEED);
+        set(Constants.CoralIntake.INTAKE_SPEED);
         break;
       case L1_SCORE:
-        toggle(Constants.CoralIntake.L1_SCORE_SPEED);
+        set(Constants.CoralIntake.L1_SCORE_SPEED);
         break;
       case OFF: // Off
       default: // should never happen
-        toggle(0);
+        set(0);
         break;
     }
   }
@@ -256,7 +256,7 @@ public class CoralIntake extends KillableSubsystem
               Constants.CoralIntake.PUSH_OUT_SPEED,
               Constants.CoralIntake.PULL_THROUGH_SPEED,
               rampT);
-      toggle(rampedSpeed);
+      set(rampedSpeed);
     }
 
     double pidOutput = pid.calculate(getWheelVelocity());
@@ -318,7 +318,7 @@ public class CoralIntake extends KillableSubsystem
 
   @Override
   public void kill() {
-    toggle(CoralIntakeState.OFF);
+    set(CoralIntakeState.OFF);
     // io.setWheelVoltage(0);
     // io.setArmVoltage(0);
   }

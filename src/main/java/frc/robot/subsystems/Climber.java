@@ -58,7 +58,7 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
 
     io.setPosition(
         Constants.Climber.START_ANGLE.in(Radians) / Constants.Climber.ARM_RADIANS_PER_ROTATION);
-    toggle(ClimberState.Park);
+    set(ClimberState.Park);
 
     pid.setTolerance(0.15, 1.05);
 
@@ -133,7 +133,7 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
     }
   }
 
-  public void toggle(ClimberState state) {
+  public void set(ClimberState state) {
     currentState = state;
     switch (state) {
       case Park:

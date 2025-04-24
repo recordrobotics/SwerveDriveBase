@@ -41,7 +41,7 @@ public class CoralIntakeFromGround extends SequentialCommandGroup {
                 .onlyWhile(this::isScheduled)),
         // start intaking
         new InstantCommand(
-            () -> RobotContainer.coralIntake.toggle(CoralIntakeState.INTAKE),
+            () -> RobotContainer.coralIntake.set(CoralIntakeState.INTAKE),
             RobotContainer.coralIntake),
         new ScheduleCommand(new CoralIntakeFromGroundSim(0.2))
             .onlyIf(() -> Constants.RobotState.getMode() != Mode.REAL));

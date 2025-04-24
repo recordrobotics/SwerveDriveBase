@@ -120,7 +120,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
         Constants.Elevator.STARTING_HEIGHT / Constants.Elevator.METERS_PER_ROTATION);
 
     m_setpoint = new TrapezoidProfile.State(getCurrentHeight(), 0);
-    toggle(Constants.Elevator.STARTING_HEIGHT);
+    set(Constants.Elevator.STARTING_HEIGHT);
 
     sysIdRoutine =
         new SysIdRoutine(
@@ -180,7 +180,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   @Override
   public void periodic() {
 
-    // toggle(SmartDashboard.getNumber("Elevator", Constants.Elevator.STARTING_HEIGHT));
+    // set(SmartDashboard.getNumber("Elevator", Constants.Elevator.STARTING_HEIGHT));
 
     // Get next setpoint from profile.
     m_setpoint = m_profile.calculate(Constants.Elevator.kDt, m_setpoint, m_goal);
@@ -228,12 +228,12 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
     setBothMotors(voltage.in(Volts));
   }
 
-  public void toggle(double heightMeters) {
+  public void set(double heightMeters) {
     m_goal = new TrapezoidProfile.State(heightMeters, 0.0);
   }
 
   public void moveTo(ElevatorHeight height) {
-    toggle(height.getHeight());
+    set(height.getHeight());
   }
 
   @AutoLogOutput
@@ -279,7 +279,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   @Override
   public void setupShuffleboard() {
     DashboardUI.Test.addSlider("Elevator Target", m_goal.position, 0, ElevatorHeight.L4.getHeight())
-        .subscribe(this::toggle);
+        .subscribe(this::set);
   }
 
   @Override

@@ -64,7 +64,7 @@ public class ElevatorArm extends KillableSubsystem
     io.setArmPosition(
         Constants.ElevatorArm.ARM_GEAR_RATIO
             * Units.radiansToRotations(Constants.ElevatorArm.START_POS));
-    toggle(ElevatorHeight.BOTTOM.getArmAngle());
+    set(ElevatorHeight.BOTTOM.getArmAngle());
 
     pid.setTolerance(0.15, 1.05);
 
@@ -105,7 +105,7 @@ public class ElevatorArm extends KillableSubsystem
     return io.getArmVoltage();
   }
 
-  public void toggle(double angleRadians) {
+  public void set(double angleRadians) {
     pid.setGoal(angleRadians);
   }
 
@@ -121,7 +121,7 @@ public class ElevatorArm extends KillableSubsystem
 
   @Override
   public void periodic() {
-    // toggle(SmartDashboard.getNumber("ElevatorArm", Constants.ElevatorArm.START_POS));
+    // set(SmartDashboard.getNumber("ElevatorArm", Constants.ElevatorArm.START_POS));
 
     double pidOutputArm = pid.calculate(getArmAngle());
 
@@ -157,8 +157,7 @@ public class ElevatorArm extends KillableSubsystem
 
   @Override
   public void setupShuffleboard() {
-    DashboardUI.Test.addSlider("Elevator Arm Pos", io.getArmPosition(), -1, 1)
-        .subscribe(this::toggle);
+    DashboardUI.Test.addSlider("Elevator Arm Pos", io.getArmPosition(), -1, 1).subscribe(this::set);
   }
 
   @Override

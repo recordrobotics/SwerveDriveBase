@@ -30,8 +30,8 @@ public class CoralShoot extends SequentialCommandGroup {
             () -> {
               if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.L4
                   || RobotContainer.elevator.getNearestHeight() == ElevatorHeight.BARGE_ALAGAE)
-                RobotContainer.elevatorHead.toggle(CoralShooterStates.OUT_BACKWARD);
-              else RobotContainer.elevatorHead.toggle(CoralShooterStates.OUT_FORWARD);
+                RobotContainer.elevatorHead.set(CoralShooterStates.OUT_BACKWARD);
+              else RobotContainer.elevatorHead.set(CoralShooterStates.OUT_FORWARD);
             },
             RobotContainer.elevatorHead),
         // Make sure coral left
@@ -39,7 +39,7 @@ public class CoralShoot extends SequentialCommandGroup {
             .simulateFor(new WaitUntilCommand(() -> !RobotContainer.elevatorHead.hasCoral())),
         new WaitCommand(Constants.ElevatorHead.SHOOT_TIME),
         new InstantCommand(
-            () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.OFF),
+            () -> RobotContainer.elevatorHead.set(CoralShooterStates.OFF),
             RobotContainer.elevatorHead),
         new ScheduleCommand(
             RobotContainer.lights

@@ -17,7 +17,7 @@ public class ClimbMove extends SequentialCommandGroup {
                     .stateVisualizer
                     .runPattern(Constants.Lights.cagePattern)
                     .schedule()),
-        new InstantCommand(() -> RobotContainer.climber.toggle(state)),
+        new InstantCommand(() -> RobotContainer.climber.set(state)),
         new WaitUntilCommand(() -> RobotContainer.climber.atGoal()),
         new InstantCommand(
             () ->

@@ -32,12 +32,12 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
                 .onlyWhile(this::isScheduled)),
         // once both the arm and elevator are at goal, start elevator intake
         new InstantCommand(
-                () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.INTAKE),
+                () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE),
                 RobotContainer.elevatorHead)
             .andThen(
                 // push coral out
                 new InstantCommand(
-                    () -> RobotContainer.coralIntake.toggle(CoralIntakeState.PUSH_AND_PULL),
+                    () -> RobotContainer.coralIntake.set(CoralIntakeState.PUSH_AND_PULL),
                     RobotContainer.coralIntake))
             .andThen(
                 // wait for elevator to have coral
@@ -48,7 +48,7 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
                 new InstantCommand(
                     () -> {
                       RobotContainer.coralIntake.toggleArm(IntakeArmState.UP);
-                      RobotContainer.coralIntake.toggle(CoralIntakeState.OFF);
+                      RobotContainer.coralIntake.set(CoralIntakeState.OFF);
                     },
                     RobotContainer.coralIntake))
             .andThen(
@@ -62,7 +62,7 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> RobotContainer.elevatorHead.positionAtGoal()),
                 // stop elevator intake
                 new InstantCommand(
-                    () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.OFF),
+                    () -> RobotContainer.elevatorHead.set(CoralShooterStates.OFF),
                     RobotContainer.elevatorHead)),
         new ScheduleCommand(
             RobotContainer.lights

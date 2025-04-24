@@ -31,7 +31,7 @@ public class CoralIntakeFromGroundUpL1 extends SequentialCommandGroup {
                 .onlyWhile(this::isScheduled)),
         new InstantCommand(
             () -> {
-              RobotContainer.coralIntake.toggle(CoralIntakeState.OFF);
+              RobotContainer.coralIntake.set(CoralIntakeState.OFF);
             },
             RobotContainer.coralIntake),
         new ScheduleCommand(

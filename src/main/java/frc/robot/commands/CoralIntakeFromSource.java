@@ -39,13 +39,13 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
         new InstantCommand(
             () -> {
               RobotContainer.coralIntake.toggleArm(IntakeArmState.INTAKE);
-              RobotContainer.coralIntake.toggle(CoralIntakeState.SOURCE);
+              RobotContainer.coralIntake.set(CoralIntakeState.SOURCE);
             },
             RobotContainer.coralIntake),
         // start moving elevator to intake position
         CommandUtils.maybeProxy(useProxy, new ElevatorMove(ElevatorHeight.INTAKE)),
         new InstantCommand(
-            () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.INTAKE),
+            () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE),
             RobotContainer.elevatorHead),
         new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
         new CoralIntakeFromSourceSim()
@@ -53,7 +53,7 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
         new InstantCommand(
             () -> {
               RobotContainer.coralIntake.toggleArm(IntakeArmState.UP);
-              RobotContainer.coralIntake.toggle(CoralIntakeState.OFF);
+              RobotContainer.coralIntake.set(CoralIntakeState.OFF);
             },
             RobotContainer.coralIntake),
         // move coral a set distance
@@ -62,7 +62,7 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
             RobotContainer.elevatorHead),
         new WaitUntilCommand(() -> RobotContainer.elevatorHead.positionAtGoal()),
         new InstantCommand(
-            () -> RobotContainer.elevatorHead.toggle(CoralShooterStates.OFF),
+            () -> RobotContainer.elevatorHead.set(CoralShooterStates.OFF),
             RobotContainer.elevatorHead),
         new ScheduleCommand(
             RobotContainer.lights

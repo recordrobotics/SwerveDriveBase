@@ -17,14 +17,14 @@ public class ElevatorMoveThenAlgaeGrabEnd extends SequentialCommandGroup {
         Commands.either(
             Commands.either(
                 new InstantCommand(
-                    () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.HOLD_GROUND),
+                    () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.HOLD_GROUND),
                     RobotContainer.elevatorHead),
                 new InstantCommand(
-                    () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.HOLD_REEF),
+                    () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.HOLD_REEF),
                     RobotContainer.elevatorHead),
                 () -> targetHeight == ElevatorHeight.GROUND_ALGAE),
             new InstantCommand(
-                () -> RobotContainer.elevatorHead.toggle(AlgaeGrabberStates.OFF),
+                () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OFF),
                 RobotContainer.elevatorHead),
             RobotContainer.elevatorHead::hasAlgae),
         withProxy

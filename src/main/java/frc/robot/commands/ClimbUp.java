@@ -17,7 +17,7 @@ public class ClimbUp extends SequentialCommandGroup {
                     .stateVisualizer
                     .runPattern(Constants.Lights.cagePattern)
                     .schedule()),
-        new InstantCommand(() -> RobotContainer.climber.toggle(ClimberState.Climb)),
+        new InstantCommand(() -> RobotContainer.climber.set(ClimberState.Climb)),
         new WaitUntilCommand(() -> RobotContainer.climber.atGoal()),
         new InstantCommand(
             () ->
