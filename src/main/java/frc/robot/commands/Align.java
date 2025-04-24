@@ -67,34 +67,16 @@ public class Align {
 
   public static Command createForReef(
       AutoScoreDirection direction, double tolerance, double rotTol) {
-    return new DeferredCommand(
-        () -> {
-          Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
-
-          double maxDistance = 2.5;
-          RobotAlignPose closest = null;
-          double closestDistance = Double.MAX_VALUE;
-          for (RobotAlignPose align :
-              direction == AutoScoreDirection.Left
-                  ? RobotAlignPose.leftReefPoses
-                  : RobotAlignPose.rightReefPoses) {
-            double distance =
-                align.getFarPose().getTranslation().getDistance(pose.getTranslation());
-            if (distance <= maxDistance && distance < closestDistance) {
-              closest = align;
-              closestDistance = distance;
-            }
-          }
-
-          if (closest == null) return Commands.none();
-
-          return new AlignToPose(closest.getFarPose(), tolerance, rotTol, true);
-        },
-        Set.of(RobotContainer.drivetrain));
+    return createForReef(direction, tolerance, rotTol, false);
   }
 
   public static Command createForReefBackaway(
       AutoScoreDirection direction, double tolerance, double rotTol) {
+    return createForReef(direction, tolerance, rotTol, true);
+  }
+
+  public static Command createForReef(
+      AutoScoreDirection direction, double tolerance, double rotTol, boolean isBackaway) {
     return new DeferredCommand(
         () -> {
           Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
@@ -116,10 +98,12 @@ public class Align {
 
           if (closest == null) return Commands.none();
 
-          Pose2d backawayPose =
-              closest.getFarPose().transformBy(new Transform2d(-0.5, 0, Rotation2d.kZero));
+          Pose2d targetPose = closest.getFarPose();
+          if (isBackaway) {
+            targetPose = targetPose.transformBy(new Transform2d(-0.5, 0, Rotation2d.kZero));
+          }
 
-          return new AlignToPose(backawayPose, tolerance, rotTol, true);
+          return new AlignToPose(targetPose, tolerance, rotTol, true);
         },
         Set.of(RobotContainer.drivetrain));
   }
