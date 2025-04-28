@@ -48,6 +48,16 @@ import java.util.function.Supplier;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public final class Align {
+    public static final double MAX_VELOCITY = 1.5; // m/s
+    public static final double MAX_ACCELERATION = 3.0; // m/s^2
+    public static final double MAX_ANGULAR_VELOCITY = 4.0; // rad/s
+    public static final double MAX_ANGULAR_ACCELERATION = 7.0; // rad/s^2
+
+    public static final double translationalTolerance = 0.01; // Meters
+    public static final double rotationalTolerance = 0.02; // Radians
+  }
+
   public final class HybridConstants {
     // Create the constraints to use while pathfinding. The constraints defined in the path will
     // only be used for the path. docs are here:
@@ -1209,11 +1219,6 @@ public final class Constants {
 
     /** The max speed the robot can travel safely */
     public static final double robotMaxSpeed = 4.35;
-
-    public static final double MAX_AUTOALIGN_VELOCITY = 1.5;
-    public static final double MAX_AUTOALIGN_ACCELERATION = 3.0;
-    public static final double MAX_AUTOALIGN_ANGULAR_VELOCITY = 4.0;
-    public static final double MAX_AUTOALIGN_ANGULAR_ACCELERATION = 7.0;
 
     /** The max jerk of the robot below which the pose is certain (in G/s) */
     public static final double MaxPoseCertaintyJerk = 80;

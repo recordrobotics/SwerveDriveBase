@@ -13,43 +13,40 @@ import org.littletonrobotics.junction.Logger;
 
 public class AlignToPose extends Command {
   ProfiledPIDController xPID =
+      new ProfiledPIDController( // meters
+          9,
+          0,
+          0.01,
+          new TrapezoidProfile.Constraints(
+              Constants.Align.MAX_VELOCITY, Constants.Align.MAX_ACCELERATION));
+  ProfiledPIDController yPID = // meters
       new ProfiledPIDController(
           9,
           0,
           0.01,
           new TrapezoidProfile.Constraints(
-              Constants.Swerve.MAX_AUTOALIGN_VELOCITY,
-              Constants.Swerve.MAX_AUTOALIGN_ACCELERATION));
-  ProfiledPIDController yPID =
-      new ProfiledPIDController(
-          9,
-          0,
-          0.01,
-          new TrapezoidProfile.Constraints(
-              Constants.Swerve.MAX_AUTOALIGN_VELOCITY,
-              Constants.Swerve.MAX_AUTOALIGN_ACCELERATION));
-  ProfiledPIDController rotPID =
+              Constants.Align.MAX_VELOCITY, Constants.Align.MAX_ACCELERATION));
+  ProfiledPIDController rotPID = // radians
       new ProfiledPIDController(
           4,
           0,
           0.05,
           new TrapezoidProfile.Constraints(
-              Constants.Swerve.MAX_AUTOALIGN_ANGULAR_VELOCITY,
-              Constants.Swerve.MAX_AUTOALIGN_ANGULAR_ACCELERATION));
+              Constants.Align.MAX_ANGULAR_VELOCITY, Constants.Align.MAX_ANGULAR_ACCELERATION));
   boolean doTranslation;
 
   private Pose2d targetPose;
 
-  public AlignToPose(Pose2d pose, double tolerance, double rotTol, boolean doTranslation) {
+  public AlignToPose(Pose2d pose, boolean doTranslation) {
     this.targetPose = pose;
 
     if (doTranslation) {
-      xPID.setTolerance(tolerance);
-      yPID.setTolerance(tolerance);
+      xPID.setTolerance(Constants.Align.translationalTolerance);
+      yPID.setTolerance(Constants.Align.translationalTolerance);
       xPID.setGoal(pose.getX());
       yPID.setGoal(pose.getY());
     }
-    rotPID.setTolerance(rotTol);
+    rotPID.setTolerance(Constants.Align.rotationalTolerance);
     rotPID.setGoal(pose.getRotation().getRadians());
     rotPID.enableContinuousInput(-Math.PI, Math.PI);
 

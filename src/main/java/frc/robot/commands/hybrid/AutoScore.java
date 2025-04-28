@@ -14,11 +14,11 @@ public class AutoScore extends SequentialCommandGroup {
     addRequirements(RobotContainer.drivetrain);
 
     addCommands(
-        Align.createForReef(direction, 0.01, 0.05)
+        Align.createForReef(direction)
             .withTimeout(1.0)
             .finallyDo(() -> RobotContainer.drivetrain.kill()),
         new CoralShoot(),
-        Align.createForReefBackaway(direction, 0.01, 0.05)
+        Align.createForReefBackaway(direction)
             .withTimeout(1.0)
             .finallyDo(() -> RobotContainer.drivetrain.kill())
             .andThen(

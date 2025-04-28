@@ -14,27 +14,17 @@ import java.util.Set;
 
 public class Align {
 
-  public static Command create(
-      double tolerance, double rotTol, boolean forceUseTranslation, double maxDistance) {
-    return create(tolerance, rotTol, forceUseTranslation, maxDistance, false, false);
+  public static Command create(boolean forceUseTranslation, double maxDistance) {
+    return create(forceUseTranslation, maxDistance, false, false);
   }
 
   public static Command create(
-      double tolerance,
-      double rotTol,
-      boolean forceUseTranslation,
-      double maxDistance,
-      boolean useFirstStage) {
-    return create(tolerance, rotTol, forceUseTranslation, maxDistance, useFirstStage, false);
+      boolean forceUseTranslation, double maxDistance, boolean useFirstStage) {
+    return create(forceUseTranslation, maxDistance, useFirstStage, false);
   }
 
   public static Command create(
-      double tolerance,
-      double rotTol,
-      boolean forceUseTranslation,
-      double maxDistance,
-      boolean useFirstStage,
-      boolean useNear) {
+      boolean forceUseTranslation, double maxDistance, boolean useFirstStage, boolean useNear) {
     return new DeferredCommand(
         () -> {
           RobotAlignPose alignPose =
@@ -44,39 +34,27 @@ public class Align {
 
           if (useFirstStage) {
             return new AlignToPose(
-                alignPose.getFirstStagePose(),
-                tolerance,
-                rotTol,
-                forceUseTranslation || alignPose.useTranslation());
+                alignPose.getFirstStagePose(), forceUseTranslation || alignPose.useTranslation());
           } else if (useNear) {
             return new AlignToPose(
-                alignPose.getNearPose(),
-                tolerance,
-                rotTol,
-                forceUseTranslation || alignPose.useTranslation());
+                alignPose.getNearPose(), forceUseTranslation || alignPose.useTranslation());
           } else {
             return new AlignToPose(
-                alignPose.getFarPose(),
-                tolerance,
-                rotTol,
-                forceUseTranslation || alignPose.useTranslation());
+                alignPose.getFarPose(), forceUseTranslation || alignPose.useTranslation());
           }
         },
         Set.of(RobotContainer.drivetrain));
   }
 
-  public static Command createForReef(
-      AutoScoreDirection direction, double tolerance, double rotTol) {
-    return createForReef(direction, tolerance, rotTol, false);
+  public static Command createForReef(AutoScoreDirection direction) {
+    return createForReef(direction, false);
   }
 
-  public static Command createForReefBackaway(
-      AutoScoreDirection direction, double tolerance, double rotTol) {
-    return createForReef(direction, tolerance, rotTol, true);
+  public static Command createForReefBackaway(AutoScoreDirection direction) {
+    return createForReef(direction, true);
   }
 
-  public static Command createForReef(
-      AutoScoreDirection direction, double tolerance, double rotTol, boolean isBackaway) {
+  public static Command createForReef(AutoScoreDirection direction, boolean isBackaway) {
     return new DeferredCommand(
         () -> {
           Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
@@ -103,7 +81,7 @@ public class Align {
             targetPose = targetPose.transformBy(new Transform2d(-0.5, 0, Rotation2d.kZero));
           }
 
-          return new AlignToPose(targetPose, tolerance, rotTol, true);
+          return new AlignToPose(targetPose, true);
         },
         Set.of(RobotContainer.drivetrain));
   }
