@@ -13,15 +13,6 @@ import frc.robot.control.AbstractControl.AutoScoreDirection;
 import java.util.Set;
 
 public class Align {
-
-  public static Command create(double maxDistance) {
-    return create(maxDistance, false, false);
-  }
-
-  public static Command create(double maxDistance, boolean useFirstStage) {
-    return create(maxDistance, useFirstStage, false);
-  }
-
   public static Command create(double maxDistance, boolean useFirstStage, boolean useNear) {
     return new DeferredCommand(
         () -> {

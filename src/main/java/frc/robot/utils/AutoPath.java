@@ -45,7 +45,7 @@ public class AutoPath {
         "AutoAlign",
         CommandUtils.finishOnInterrupt(
             new RepeatConditionallyCommand(
-                    Align.create(2.5),
+                    Align.create(2.5, false, false),
                     () ->
                         !(RobotContainer.limelight.getLeft().hasVision
                             || RobotContainer.limelight.getCenter()
