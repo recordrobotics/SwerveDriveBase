@@ -45,10 +45,11 @@ public class AutoPath {
         "AutoAlign",
         CommandUtils.finishOnInterrupt(
             new RepeatConditionallyCommand(
-                    Align.create(true, 2.5),
+                    Align.create(2.5),
                     () ->
                         !(RobotContainer.limelight.getLeft().hasVision
-                            || RobotContainer.limelight.getCenter().hasVision),
+                            || RobotContainer.limelight.getCenter()
+                                .hasVision), // TODO make this a Supplier<boolean> in robotcontainer
                     true)
                 .withTimeout(1.5)));
     NamedCommands.registerCommand("ElevatorL4", new ElevatorMove(ElevatorHeight.L4));

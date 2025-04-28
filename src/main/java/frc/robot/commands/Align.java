@@ -14,17 +14,15 @@ import java.util.Set;
 
 public class Align {
 
-  public static Command create(boolean forceUseTranslation, double maxDistance) {
-    return create(forceUseTranslation, maxDistance, false, false);
+  public static Command create(double maxDistance) {
+    return create(maxDistance, false, false);
   }
 
-  public static Command create(
-      boolean forceUseTranslation, double maxDistance, boolean useFirstStage) {
-    return create(forceUseTranslation, maxDistance, useFirstStage, false);
+  public static Command create(double maxDistance, boolean useFirstStage) {
+    return create(maxDistance, useFirstStage, false);
   }
 
-  public static Command create(
-      boolean forceUseTranslation, double maxDistance, boolean useFirstStage, boolean useNear) {
+  public static Command create(double maxDistance, boolean useFirstStage, boolean useNear) {
     return new DeferredCommand(
         () -> {
           RobotAlignPose alignPose =
@@ -33,14 +31,11 @@ public class Align {
           if (alignPose == null) return Commands.none();
 
           if (useFirstStage) {
-            return new AlignToPose(
-                alignPose.getFirstStagePose(), forceUseTranslation || alignPose.useTranslation());
+            return new AlignToPose(alignPose.getFirstStagePose(), alignPose.useTranslation());
           } else if (useNear) {
-            return new AlignToPose(
-                alignPose.getNearPose(), forceUseTranslation || alignPose.useTranslation());
+            return new AlignToPose(alignPose.getNearPose(), alignPose.useTranslation());
           } else {
-            return new AlignToPose(
-                alignPose.getFarPose(), forceUseTranslation || alignPose.useTranslation());
+            return new AlignToPose(alignPose.getFarPose(), alignPose.useTranslation());
           }
         },
         Set.of(RobotContainer.drivetrain));

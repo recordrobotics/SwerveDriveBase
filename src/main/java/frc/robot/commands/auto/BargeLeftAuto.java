@@ -36,11 +36,10 @@ public class BargeLeftAuto extends SequentialCommandGroup {
   }
 
   private Command alignWithVision() {
-    return Align.create(false, 1.5, true)
+    return Align.create(1.5, true)
         .andThen(
             new RepeatConditionallyCommand(
-                // Align.create(true, 1.5),
-                Align.create(false, 1.5),
+                Align.create(1.5),
                 () ->
                     !(RobotContainer.limelight.getLeft().hasVision
                         || RobotContainer.limelight.getCenter().hasVision),
@@ -58,7 +57,7 @@ public class BargeLeftAuto extends SequentialCommandGroup {
                                 "Reef" + reefLetter + "ToSourceLeftOuterNoElevator"))
                         .andThen(
                             CommandUtils.finishOnInterrupt(
-                                Align.create(false, 1.5)
+                                Align.create(1.5)
                                     .withTimeout(0.1)
                                     .beforeStarting(() -> sourceStart = Timer.getTimestamp())))
                         .andThen(new InstantCommand(() -> RobotContainer.drivetrain.kill()))
@@ -70,7 +69,7 @@ public class BargeLeftAuto extends SequentialCommandGroup {
                             PathPlannerPath.fromPathFile("ElevatorStartToSourceLeftOuter"))
                         .andThen(
                             CommandUtils.finishOnInterrupt(
-                                Align.create(false, 1.5)
+                                Align.create(1.5)
                                     .withTimeout(0.1)
                                     .beforeStarting(() -> sourceStart = Timer.getTimestamp())))
                         .andThen(new InstantCommand(() -> RobotContainer.drivetrain.kill()))
