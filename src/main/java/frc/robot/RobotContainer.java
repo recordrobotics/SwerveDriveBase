@@ -2,11 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -100,6 +103,12 @@ public class RobotContainer {
       new CoralIntakeMoveToggleRequirement();
 
   @AutoLogOutput private static boolean inClimbMode = false;
+
+  private static EventLoop eventLoop = new EventLoop();
+  private static BooleanEvent hasVision =
+      new BooleanEvent(
+              eventLoop, () -> limelight.getLeft().hasVision && limelight.getCenter().hasVision)
+          .debounce(0.1, DebounceType.kBoth);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -380,6 +389,10 @@ public class RobotContainer {
     DashboardUI.Test.testPeriodic();
   }
 
+  public void robotPeriodic() {
+    eventLoop.poll();
+  }
+
   public void simulationPeriodic() {
     updateSimulationBattery(drivetrain, elevator, elevatorHead, coralIntake);
     visionSim.update(model.getRobot());
@@ -397,6 +410,11 @@ public class RobotContainer {
 
   public static boolean isInClimbMode() {
     return inClimbMode;
+  }
+
+  @AutoLogOutput
+  public static boolean hasVision() { // TODO test then put in the CMD autos
+    return hasVision.getAsBoolean();
   }
 
   /** frees up all hardware allocations */
