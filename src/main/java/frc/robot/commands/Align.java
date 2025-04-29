@@ -32,14 +32,6 @@ public class Align {
         Set.of(RobotContainer.drivetrain));
   }
 
-  public static Command createForReef(AutoScoreDirection direction) {
-    return createForReef(direction, false);
-  }
-
-  public static Command createForReefBackaway(AutoScoreDirection direction) {
-    return createForReef(direction, true);
-  }
-
   public static Command createForReef(AutoScoreDirection direction, boolean isBackaway) {
     return new DeferredCommand(
         () -> {
