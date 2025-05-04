@@ -21,14 +21,14 @@ import frc.robot.utils.IndependentSwervePoseEstimator;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class PoseTracker extends SubsystemBase implements AutoCloseable {
+public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
 
   public final NavSensor nav;
 
   private static SwerveDrivePoseEstimator poseFilter;
   private static IndependentSwervePoseEstimator independentPoseEstimator;
 
-  public PoseTracker() {
+  public PoseSensorFusion() {
     nav =
         new NavSensor(
             Constants.RobotState.getMode() == Mode.REAL

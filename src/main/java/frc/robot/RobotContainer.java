@@ -72,7 +72,7 @@ public class RobotContainer {
   public static final RobotModel model = new RobotModel();
 
   public static Drivetrain drivetrain;
-  public static PoseTracker poseTracker;
+  public static PoseSensorFusion poseTracker;
   public static Limelight limelight;
   public static Elevator elevator;
   public static ElevatorArm elevatorArm;
@@ -114,7 +114,7 @@ public class RobotContainer {
   public RobotContainer() {
     if (Constants.RobotState.getMode() == Mode.REAL) {
       drivetrain = new Drivetrain();
-      poseTracker = new PoseTracker();
+      poseTracker = new PoseSensorFusion();
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
@@ -128,7 +128,7 @@ public class RobotContainer {
       visionSim.addAprilTags(AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark));
 
       drivetrain = new Drivetrain();
-      poseTracker = new PoseTracker();
+      poseTracker = new PoseSensorFusion();
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmSim(0.02));
