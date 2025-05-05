@@ -212,7 +212,7 @@ public class Drivetrain extends KillableSubsystem
                 xSpeed,
                 ySpeed,
                 rot,
-                RobotContainer.poseTracker.getEstimatedPosition().getRotation())
+                RobotContainer.poseSensorFusion.getEstimatedPosition().getRotation())
             : new ChassisSpeeds(xSpeed, ySpeed, rot);
 
     chassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);

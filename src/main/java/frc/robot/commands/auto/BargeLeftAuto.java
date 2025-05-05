@@ -79,7 +79,7 @@ public class BargeLeftAuto extends SequentialCommandGroup {
                                 PathPlannerPath.fromPathFile("SourceLeftOuterToElevatorStart"))),
                     () ->
                         RobotAlignPose.closestReefTo(
-                                RobotContainer.poseTracker.getEstimatedPosition(), 0.7)
+                                RobotContainer.poseSensorFusion.getEstimatedPosition(), 0.7)
                             != null)
                 .repeatedly()
                 .onlyWhile(() -> !RobotContainer.elevatorHead.hasCoral()));

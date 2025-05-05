@@ -72,7 +72,7 @@ public class RobotContainer {
   public static final RobotModel model = new RobotModel();
 
   public static Drivetrain drivetrain;
-  public static PoseSensorFusion poseTracker;
+  public static PoseSensorFusion poseSensorFusion;
   public static Limelight limelight;
   public static Elevator elevator;
   public static ElevatorArm elevatorArm;
@@ -114,7 +114,7 @@ public class RobotContainer {
   public RobotContainer() {
     if (Constants.RobotState.getMode() == Mode.REAL) {
       drivetrain = new Drivetrain();
-      poseTracker = new PoseSensorFusion();
+      poseSensorFusion = new PoseSensorFusion();
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
@@ -128,7 +128,7 @@ public class RobotContainer {
       visionSim.addAprilTags(AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark));
 
       drivetrain = new Drivetrain();
-      poseTracker = new PoseSensorFusion();
+      poseSensorFusion = new PoseSensorFusion();
       limelight = new Limelight();
       elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmSim(0.02));
@@ -153,7 +153,7 @@ public class RobotContainer {
     // Bindings and Teleop
     configureButtonBindings();
 
-    ShuffleboardPublisher.setup(poseTracker.nav, drivetrain, limelight);
+    ShuffleboardPublisher.setup(poseSensorFusion.nav, drivetrain, limelight);
 
     drivetrain.setDefaultCommand(new ManualSwerve());
     elevator.setDefaultCommand(new ManualElevator());
@@ -189,13 +189,13 @@ public class RobotContainer {
 
     // Reset pose trigger
     new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
-        .onTrue(new InstantCommand(poseTracker::resetDriverPose));
+        .onTrue(new InstantCommand(poseSensorFusion::resetDriverPose));
     new Trigger(() -> DashboardUI.Overview.getControl().getLimelightReset())
-        .onTrue(new InstantCommand(poseTracker::resetFullLimelight));
+        .onTrue(new InstantCommand(poseSensorFusion::resetFullLimelight));
     new Trigger(() -> DashboardUI.Autonomous.getResetLocation())
-        .onTrue(new InstantCommand(poseTracker::resetStartingPose).ignoringDisable(true));
+        .onTrue(new InstantCommand(poseSensorFusion::resetStartingPose).ignoringDisable(true));
     new Trigger(() -> DashboardUI.Autonomous.getLimelightRotation())
-        .onTrue(new InstantCommand(poseTracker::resetToLimelight).ignoringDisable(true));
+        .onTrue(new InstantCommand(poseSensorFusion::resetToLimelight).ignoringDisable(true));
 
     // Climb mode trigger
     // new Trigger(() -> DashboardUI.Overview.getControl().getClimbMode())
@@ -228,7 +228,7 @@ public class RobotContainer {
               elevator.getNearestHeight() == ElevatorHeight.L4
                   || elevator.getNearestHeight() == ElevatorHeight.BARGE_ALAGAE;
 
-          Pose2d robot = RobotContainer.poseTracker.getEstimatedPosition();
+          Pose2d robot = RobotContainer.poseSensorFusion.getEstimatedPosition();
           RobotAlignPose closestReef = RobotAlignPose.closestReefTo(robot, 0.2);
 
           boolean nearReef =

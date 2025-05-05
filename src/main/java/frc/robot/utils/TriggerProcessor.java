@@ -21,7 +21,7 @@ public class TriggerProcessor {
     // read the docs
     // NOPE!!!
     Translation2d swervePosition =
-        RobotContainer.poseTracker.getEstimatedPosition().getTranslation();
+        RobotContainer.poseSensorFusion.getEstimatedPosition().getTranslation();
     Translation2d annotationPosition = annotation.position().getPose();
     return Optional.of(swervePosition.getDistance(annotationPosition) <= annotation.distance());
   }

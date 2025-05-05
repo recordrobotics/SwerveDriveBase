@@ -98,8 +98,8 @@ public class AutoPath {
 
     // Configures auto builder
     AutoBuilder.configure(
-        RobotContainer.poseTracker::getEstimatedPosition, // Robot pose supplier
-        RobotContainer.poseTracker
+        RobotContainer.poseSensorFusion::getEstimatedPosition, // Robot pose supplier
+        RobotContainer.poseSensorFusion
             ::setToPose, // Method to reset odometry (will be called if your auto has a starting
         // pose)
         RobotContainer.drivetrain

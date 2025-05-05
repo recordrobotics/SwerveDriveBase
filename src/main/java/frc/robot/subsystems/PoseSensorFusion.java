@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -91,23 +93,14 @@ public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
       }
     }
 
-    poseFilter.addVisionMeasurement(
-        RobotContainer.limelight.getLeft().currentEstimate.pose,
-        RobotContainer.limelight.getLeft().currentEstimate.timestampSeconds,
-        VecBuilder.fill(
-            RobotContainer.limelight.getLeft().currentConfidence,
-            RobotContainer.limelight.getLeft().currentConfidence,
-            trustLimelightLeft ? 4 : 9999999) // some influence of limelight pose rotation
-        );
-
-    poseFilter.addVisionMeasurement(
-        RobotContainer.limelight.getCenter().currentEstimate.pose,
-        RobotContainer.limelight.getCenter().currentEstimate.timestampSeconds,
-        VecBuilder.fill(
-            RobotContainer.limelight.getCenter().currentConfidence,
-            RobotContainer.limelight.getCenter().currentConfidence,
-            trustLimelightCenter ? 4 : 9999999) // some influence of limelight pose rotation
-        );
+    RobotContainer.limelight.getLeft().updateEstimation(trustLimelightLeft);
+    RobotContainer.limelight.getCenter().updateEstimation(trustLimelightCenter);
+    DashboardUI.Autonomous.setVisionPoseLeft(
+        RobotContainer.limelight.getLeft().unsafeEstimate.pose);
+    DashboardUI.Autonomous.setVisionPoseCenter(
+        RobotContainer.limelight.getCenter().unsafeEstimate.pose);
+    RobotContainer.limelight.getLeft().logValues("Left");
+    RobotContainer.limelight.getCenter().logValues("Center");
 
     SmartDashboard.putNumber("gyro", nav.getAdjustedAngle().getDegrees());
     SmartDashboard.putNumber("pose", poseFilter.getEstimatedPosition().getRotation().getDegrees());
@@ -121,6 +114,10 @@ public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
 
   private SwerveModulePosition[] getModulePositions() {
     return RobotContainer.drivetrain.getModulePositions();
+  }
+
+  public void addVisionMeasurement(Pose2d pose, double timestampSeconds, Vector<N3> confidence) {
+    poseFilter.addVisionMeasurement(pose, timestampSeconds, confidence);
   }
 
   @AutoLogOutput(key = "Odometry/Robot")

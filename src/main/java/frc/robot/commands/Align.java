@@ -18,7 +18,7 @@ public class Align {
         () -> {
           RobotAlignPose alignPose =
               RobotAlignPose.closestTo(
-                  RobotContainer.poseTracker.getEstimatedPosition(), maxDistance);
+                  RobotContainer.poseSensorFusion.getEstimatedPosition(), maxDistance);
           if (alignPose == null) return Commands.none();
 
           if (useFirstStage) {
@@ -35,7 +35,7 @@ public class Align {
   public static Command createForReef(AutoScoreDirection direction, boolean isBackaway) {
     return new DeferredCommand(
         () -> {
-          Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
+          Pose2d pose = RobotContainer.poseSensorFusion.getEstimatedPosition();
 
           double maxDistance = 2.5;
           RobotAlignPose closest = null;

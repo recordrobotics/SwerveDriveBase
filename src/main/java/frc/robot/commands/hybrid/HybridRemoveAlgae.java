@@ -44,7 +44,7 @@ public class HybridRemoveAlgae extends SequentialCommandGroup {
     PathPlannerPath shortestPath = paths[0];
     double lowestDistance = 1000;
     Translation2d swerve_translation =
-        RobotContainer.poseTracker.getEstimatedPosition().getTranslation();
+        RobotContainer.poseSensorFusion.getEstimatedPosition().getTranslation();
     for (PathPlannerPath path : paths) {
       Translation2d path_translation = path.getStartingHolonomicPose().get().getTranslation();
       double distance = swerve_translation.getDistance(path_translation);

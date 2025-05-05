@@ -94,6 +94,8 @@ public final class Constants {
         new Transform3d(
             new Translation3d(0.219412, 0.050800, 0.156247),
             new Rotation3d(0, Units.degreesToRadians(-27), 0));
+
+    public static final double ROT_STD_DEV_WHEN_TRUSTING = 4;
   }
 
   public final class Climber {

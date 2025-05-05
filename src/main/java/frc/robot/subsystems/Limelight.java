@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
@@ -25,7 +25,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 
-public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
+public class Limelight implements ShuffleboardPublisher {
   public enum LimelightType {
     Limelight2(1280, 960, 2, 74.36, 33, 0.007, 0.0005, 35, 5),
     Limelight3G(
@@ -72,7 +72,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     }
   }
 
-  public static class LimelightData {
+  public static class LimelightCamera {
     public int numTags = 0;
     private double confidence = 0;
     public boolean hasVision = false;
@@ -95,7 +95,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     private PhotonPoseEstimator photonEstimator;
     private LimelightType type;
 
-    public LimelightData(String name, LimelightType type, Transform3d robotToCamera) {
+    public LimelightCamera(String name, LimelightType type, Transform3d robotToCamera) {
       this.name = name;
       this.type = type;
       this.MT1_CONFIDENCE = 0.65;
@@ -126,7 +126,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       }
     }
 
-    public LimelightData(
+    public LimelightCamera(
         String name,
         double mt1_confidence,
         double mt2_confidence,
@@ -143,11 +143,11 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       LimelightHelpers.setPipelineIndex(name, pipeline);
     }
 
-    public void updateEstimation() {
+    public void updateEstimation(boolean trust) {
       confidence = 0;
       LimelightHelpers.SetRobotOrientation(
           name,
-          RobotContainer.poseTracker.getEstimatedPosition().getRotation().getDegrees(),
+          RobotContainer.poseSensorFusion.getEstimatedPosition().getRotation().getDegrees(),
           0,
           0,
           0,
@@ -277,7 +277,7 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
       if (measurement
               .pose
               .getTranslation()
-              .getDistance(RobotContainer.poseTracker.getEstimatedPosition().getTranslation())
+              .getDistance(RobotContainer.poseSensorFusion.getEstimatedPosition().getTranslation())
           > MAX_POSE_ERROR) {
         confidence = 0;
       }
@@ -286,6 +286,16 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
         hasVision = true;
         currentEstimate = measurement;
         currentConfidence = confidence;
+        RobotContainer.poseSensorFusion.addVisionMeasurement(
+            currentEstimate.pose,
+            currentEstimate.timestampSeconds,
+            VecBuilder.fill(
+                currentConfidence,
+                currentConfidence,
+                trust
+                    ? Constants.Limelight.ROT_STD_DEV_WHEN_TRUSTING
+                    : 9999999) // some influence of limelight pose rotation
+            );
       } else {
         hasVision = false;
         currentConfidence = 9999999;
@@ -302,13 +312,13 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     }
   }
 
-  private LimelightData left =
-      new LimelightData(
+  private LimelightCamera left =
+      new LimelightCamera(
           Constants.Limelight.LIMELIGHT_LEFT_NAME,
           LimelightType.Limelight3G,
           Constants.Limelight.leftTransformRobotToCamera);
-  private LimelightData center =
-      new LimelightData(
+  private LimelightCamera center =
+      new LimelightCamera(
           Constants.Limelight.LIMELIGHT_CENTER_NAME,
           LimelightType.Limelight2,
           Constants.Limelight.centerTransformRobotToCamera);
@@ -318,23 +328,11 @@ public class Limelight extends SubsystemBase implements ShuffleboardPublisher {
     center.setPipeline(0);
   }
 
-  @Override
-  public void periodic() {
-    left.updateEstimation();
-    center.updateEstimation();
-
-    DashboardUI.Autonomous.setVisionPoseLeft(left.unsafeEstimate.pose);
-    DashboardUI.Autonomous.setVisionPoseCenter(center.unsafeEstimate.pose);
-
-    left.logValues("Left");
-    center.logValues("Center");
-  }
-
-  public LimelightData getLeft() {
+  public LimelightCamera getLeft() {
     return left;
   }
 
-  public LimelightData getCenter() {
+  public LimelightCamera getCenter() {
     return center;
   }
 

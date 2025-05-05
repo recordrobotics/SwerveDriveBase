@@ -57,7 +57,7 @@ public class AlignToPose extends Command {
 
   @Override
   public void initialize() {
-    Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
+    Pose2d pose = RobotContainer.poseSensorFusion.getEstimatedPosition();
     xPID.reset(pose.getX());
     yPID.reset(pose.getY());
     rotPID.reset(pose.getRotation().getRadians());
@@ -71,7 +71,7 @@ public class AlignToPose extends Command {
 
   @Override
   public void execute() {
-    Pose2d pose = RobotContainer.poseTracker.getEstimatedPosition();
+    Pose2d pose = RobotContainer.poseSensorFusion.getEstimatedPosition();
 
     double x = xPID.calculate(pose.getX());
     double y = yPID.calculate(pose.getY());
