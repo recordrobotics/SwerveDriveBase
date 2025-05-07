@@ -492,22 +492,34 @@ public class RobotModel extends SubsystemBase {
 
   @AutoLogOutput
   private Pose3d[] getCoralPositions() {
-    var corals = SimulatedArena.getInstance().getGamePiecesByType("Coral");
-    var robotCoralPose = robotCoral.poseSupplier.get();
-    if (robotCoralPose != null) {
-      corals.add(robotCoralPose);
+    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+      var corals = SimulatedArena.getInstance().getGamePiecesByType("Coral");
+      var robotCoralPose = robotCoral.poseSupplier.get();
+      if (robotCoralPose != null) {
+        corals.add(robotCoralPose);
+      }
+      return corals.toArray(new Pose3d[0]);
+    } else {
+      return new Pose3d[0];
     }
-    return corals.toArray(new Pose3d[0]);
   }
 
   @AutoLogOutput
   private Pose3d[] getAlgaePositions() {
-    return SimulatedArena.getInstance().getGamePiecesArrayByType("Algae");
+    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+      return SimulatedArena.getInstance().getGamePiecesArrayByType("Algae");
+    } else {
+      return new Pose3d[0];
+    }
   }
 
   @AutoLogOutput
   public Pose2d getRobot() {
-    return RobotContainer.drivetrain.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
+    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+      return RobotContainer.drivetrain.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
+    } else {
+      return Pose2d.kZero;
+    }
   }
 
   public static class RobotCoral {
