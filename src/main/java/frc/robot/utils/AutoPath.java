@@ -47,8 +47,8 @@ public class AutoPath {
             new RepeatConditionallyCommand(
                     Align.create(2.5, false, false),
                     () ->
-                        !(RobotContainer.limelight.getLeft().hasVision
-                            || RobotContainer.limelight.getCenter()
+                        !(RobotContainer.poseSensorFusion.getLeftCamera().hasVision
+                            || RobotContainer.poseSensorFusion.getCenterCamera()
                                 .hasVision), // TODO make this a Supplier<boolean> in robotcontainer
                     true)
                 .withTimeout(1.5)));

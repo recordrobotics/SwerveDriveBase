@@ -137,8 +137,6 @@ public class Robot extends LoggedRobot {
     Threads.setCurrentThreadPriority(false, 10);
 
     DashboardUI.update();
-
-    m_robotContainer.robotPeriodic();
   }
 
   boolean hasRun = false;

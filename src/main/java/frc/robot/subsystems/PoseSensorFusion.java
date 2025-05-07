@@ -18,17 +18,32 @@ import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.real.NavSensorReal;
 import frc.robot.subsystems.io.sim.NavSensorSim;
+import frc.robot.utils.CameraType;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.IndependentSwervePoseEstimator;
+import frc.robot.utils.LimelightCamera;
+import frc.robot.utils.ShuffleboardPublisher;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
+public class PoseSensorFusion extends SubsystemBase
+    implements AutoCloseable, ShuffleboardPublisher {
 
   public final NavSensor nav;
 
   private static SwerveDrivePoseEstimator poseFilter;
   private static IndependentSwervePoseEstimator independentPoseEstimator;
+
+  private LimelightCamera leftCamera =
+      new LimelightCamera(
+          Constants.Limelight.LIMELIGHT_LEFT_NAME,
+          CameraType.Limelight3G,
+          Constants.Limelight.leftTransformRobotToCamera);
+  private LimelightCamera centerCamera =
+      new LimelightCamera(
+          Constants.Limelight.LIMELIGHT_CENTER_NAME,
+          CameraType.Limelight2,
+          Constants.Limelight.centerTransformRobotToCamera);
 
   public PoseSensorFusion() {
     nav =
@@ -76,8 +91,7 @@ public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
 
     poseFilter.update(nav.getAdjustedAngle(), getModulePositions());
 
-    if (RobotContainer.limelight.getLeft().hasVision
-        || RobotContainer.limelight.getCenter().hasVision) {
+    if (leftCamera.hasVision || centerCamera.hasVision) {
       // when vision is correcting the pose, have that override the independent pose estimator
       independentPoseEstimator.reset(getEstimatedPosition());
       independentPoseEstimator.update(getEstimatedPosition().getRotation());
@@ -93,14 +107,12 @@ public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
       }
     }
 
-    RobotContainer.limelight.getLeft().updateEstimation(trustLimelightLeft);
-    RobotContainer.limelight.getCenter().updateEstimation(trustLimelightCenter);
-    DashboardUI.Autonomous.setVisionPoseLeft(
-        RobotContainer.limelight.getLeft().unsafeEstimate.pose);
-    DashboardUI.Autonomous.setVisionPoseCenter(
-        RobotContainer.limelight.getCenter().unsafeEstimate.pose);
-    RobotContainer.limelight.getLeft().logValues("Left");
-    RobotContainer.limelight.getCenter().logValues("Center");
+    leftCamera.updateEstimation(trustLimelightLeft);
+    centerCamera.updateEstimation(trustLimelightCenter);
+    DashboardUI.Autonomous.setVisionPoseLeft(leftCamera.unsafeEstimate.pose);
+    DashboardUI.Autonomous.setVisionPoseCenter(centerCamera.unsafeEstimate.pose);
+    leftCamera.logValues("Left");
+    centerCamera.logValues("Center");
 
     SmartDashboard.putNumber("gyro", nav.getAdjustedAngle().getDegrees());
     SmartDashboard.putNumber("pose", poseFilter.getEstimatedPosition().getRotation().getDegrees());
@@ -143,18 +155,18 @@ public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
     setToPose(
         new Pose2d(
             getEstimatedPosition().getTranslation(),
-            RobotContainer.limelight.getLeft().currentEstimate.pose.getRotation()));
+            leftCamera.currentEstimate.pose.getRotation()));
   }
 
   public void resetFullLimelight() {
     Translation2d translation;
 
-    if (RobotContainer.limelight.getLeft().hasVision) {
-      translation = RobotContainer.limelight.getLeft().currentEstimate.pose.getTranslation();
-    } else if (RobotContainer.limelight.getCenter().hasVision) {
-      translation = RobotContainer.limelight.getCenter().currentEstimate.pose.getTranslation();
+    if (leftCamera.hasVision) {
+      translation = leftCamera.currentEstimate.pose.getTranslation();
+    } else if (centerCamera.hasVision) {
+      translation = centerCamera.currentEstimate.pose.getTranslation();
     } else {
-      translation = RobotContainer.limelight.getLeft().currentEstimate.pose.getTranslation();
+      translation = leftCamera.currentEstimate.pose.getTranslation();
     }
 
     setToPose(new Pose2d(translation, getEstimatedPosition().getRotation()));
@@ -175,5 +187,26 @@ public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
 
   public void close() throws Exception {
     nav.close();
+  }
+
+  public LimelightCamera getLeftCamera() {
+    return leftCamera;
+  }
+
+  public LimelightCamera getCenterCamera() {
+    return centerCamera;
+  }
+
+  @Override
+  public void setupShuffleboard() {
+    DashboardUI.Overview.setTagNumLeft(() -> leftCamera.numTags);
+    DashboardUI.Overview.setConfidenceLeft(() -> leftCamera.getUnprocessedConfidence());
+    DashboardUI.Overview.setHasVisionLeft(() -> leftCamera.hasVision);
+    DashboardUI.Overview.setLimelightConnectedLeft(() -> leftCamera.limelightConnected);
+
+    DashboardUI.Overview.setTagNumCenter(() -> centerCamera.numTags);
+    DashboardUI.Overview.setConfidenceCenter(() -> centerCamera.getUnprocessedConfidence());
+    DashboardUI.Overview.setHasVisionCenter(() -> centerCamera.hasVision);
+    DashboardUI.Overview.setLimelightConnectedCenter(() -> centerCamera.limelightConnected);
   }
 }

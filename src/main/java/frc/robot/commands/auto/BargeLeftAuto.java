@@ -41,8 +41,8 @@ public class BargeLeftAuto extends SequentialCommandGroup {
             new RepeatConditionallyCommand(
                 Align.create(1.5, false, false),
                 () ->
-                    !(RobotContainer.limelight.getLeft().hasVision
-                        || RobotContainer.limelight.getCenter().hasVision),
+                    !(RobotContainer.poseSensorFusion.getLeftCamera().hasVision
+                        || RobotContainer.poseSensorFusion.getCenterCamera().hasVision),
                 true));
   }
 

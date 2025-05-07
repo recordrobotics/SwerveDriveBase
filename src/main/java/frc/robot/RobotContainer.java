@@ -2,14 +2,11 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.event.BooleanEvent;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -73,7 +70,6 @@ public class RobotContainer {
 
   public static Drivetrain drivetrain;
   public static PoseSensorFusion poseSensorFusion;
-  public static Limelight limelight;
   public static Elevator elevator;
   public static ElevatorArm elevatorArm;
   public static ElevatorHead elevatorHead;
@@ -104,18 +100,11 @@ public class RobotContainer {
 
   @AutoLogOutput private static boolean inClimbMode = false;
 
-  private static EventLoop eventLoop = new EventLoop();
-  private static BooleanEvent hasVision =
-      new BooleanEvent(
-              eventLoop, () -> limelight.getLeft().hasVision && limelight.getCenter().hasVision)
-          .debounce(0.1, DebounceType.kBoth);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     if (Constants.RobotState.getMode() == Mode.REAL) {
       drivetrain = new Drivetrain();
       poseSensorFusion = new PoseSensorFusion();
-      limelight = new Limelight();
       elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
       elevatorHead = new ElevatorHead(new ElevatorHeadReal(0.02));
@@ -129,7 +118,6 @@ public class RobotContainer {
 
       drivetrain = new Drivetrain();
       poseSensorFusion = new PoseSensorFusion();
-      limelight = new Limelight();
       elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
       elevatorArm = new ElevatorArm(new ElevatorArmSim(0.02));
       elevatorHead =
@@ -153,7 +141,7 @@ public class RobotContainer {
     // Bindings and Teleop
     configureButtonBindings();
 
-    ShuffleboardPublisher.setup(poseSensorFusion.nav, drivetrain, limelight);
+    ShuffleboardPublisher.setup(poseSensorFusion.nav, drivetrain, poseSensorFusion);
 
     drivetrain.setDefaultCommand(new ManualSwerve());
     elevator.setDefaultCommand(new ManualElevator());
@@ -389,10 +377,6 @@ public class RobotContainer {
     DashboardUI.Test.testPeriodic();
   }
 
-  public void robotPeriodic() {
-    eventLoop.poll();
-  }
-
   public void simulationPeriodic() {
     updateSimulationBattery(drivetrain, elevator, elevatorHead, coralIntake);
     visionSim.update(model.getRobot());
@@ -412,15 +396,10 @@ public class RobotContainer {
     return inClimbMode;
   }
 
-  @AutoLogOutput
-  public static boolean hasVision() { // TODO test then put in the CMD autos
-    return hasVision.getAsBoolean();
-  }
-
   /** frees up all hardware allocations */
   public void close() throws Exception {
     drivetrain.close();
-    limelight.close();
+    poseSensorFusion.close();
     elevator.close();
     elevatorArm.close();
     elevatorHead.close();
