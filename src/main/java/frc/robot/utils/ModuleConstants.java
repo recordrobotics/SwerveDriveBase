@@ -43,24 +43,9 @@ public class ModuleConstants {
   public double DRIVE_KA;
   public double DRIVE_KS;
 
-  public double DRIVE_STD_STATE_VELOCITY;
-  public double DRIVE_STD_ENCODER_VELOCITY;
-
-  public double DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE;
-  public double DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE;
-
   public double TURN_KV;
   public double TURN_KA;
   public double TURN_KS;
-
-  public double TURN_STD_STATE_POSITION;
-  public double TURN_STD_STATE_VELOCITY;
-  public double TURN_STD_ENCODER_POSITION;
-  public double TURN_STD_ENCODER_VELOCITY;
-
-  public double TURN_REGULATOR_POSITION_ERROR_TOLERANCE;
-  public double TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE;
-  public double TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE;
 
   public double TurnMaxAngularVelocity;
   public double TurnMaxAngularAcceleration;
@@ -123,16 +108,6 @@ public class ModuleConstants {
         this.TURN_KV = Constants.Swerve.FALCON_TURN_KV;
         this.TURN_KA = Constants.Swerve.FALCON_TURN_KA;
         this.TURN_KS = Constants.Swerve.FALCON_TURN_KS;
-        this.TURN_STD_STATE_POSITION = Constants.Swerve.FALCON_TURN_STD_STATE_POSITION;
-        this.TURN_STD_STATE_VELOCITY = Constants.Swerve.FALCON_TURN_STD_STATE_VELOCITY;
-        this.TURN_STD_ENCODER_POSITION = Constants.Swerve.FALCON_TURN_STD_ENCODER_POSITION;
-        this.TURN_STD_ENCODER_VELOCITY = Constants.Swerve.FALCON_TURN_STD_ENCODER_VELOCITY;
-        this.TURN_REGULATOR_POSITION_ERROR_TOLERANCE =
-            Constants.Swerve.FALCON_TURN_REGULATOR_POSITION_ERROR_TOLERANCE;
-        this.TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE =
-            Constants.Swerve.FALCON_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE;
-        this.TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE =
-            Constants.Swerve.FALCON_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE;
         this.TURN_GEAR_RATIO = Constants.Swerve.FALCON_TURN_GEAR_RATIO;
 
         this.turnMotorStatorCurrentLimit = Constants.Swerve.FALCON_TURN_STATOR_CURRENT_LIMIT;
@@ -142,16 +117,6 @@ public class ModuleConstants {
         this.TURN_KV = Constants.Swerve.KRAKEN_TURN_KV;
         this.TURN_KA = Constants.Swerve.KRAKEN_TURN_KA;
         this.TURN_KS = Constants.Swerve.KRAKEN_TURN_KS;
-        this.TURN_STD_STATE_POSITION = Constants.Swerve.KRAKEN_TURN_STD_STATE_POSITION;
-        this.TURN_STD_STATE_VELOCITY = Constants.Swerve.KRAKEN_TURN_STD_STATE_VELOCITY;
-        this.TURN_STD_ENCODER_POSITION = Constants.Swerve.KRAKEN_TURN_STD_ENCODER_POSITION;
-        this.TURN_STD_ENCODER_VELOCITY = Constants.Swerve.KRAKEN_TURN_STD_ENCODER_VELOCITY;
-        this.TURN_REGULATOR_POSITION_ERROR_TOLERANCE =
-            Constants.Swerve.KRAKEN_TURN_REGULATOR_POSITION_ERROR_TOLERANCE;
-        this.TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE =
-            Constants.Swerve.KRAKEN_TURN_REGULATOR_VELOCITY_ERROR_TOLERANCE;
-        this.TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE =
-            Constants.Swerve.KRAKEN_TURN_REGULATOR_CONTROL_EFFORT_TOLERANCE;
         this.TURN_GEAR_RATIO = Constants.Swerve.KRAKEN_TURN_GEAR_RATIO;
 
         this.turnMotorStatorCurrentLimit = Constants.Swerve.KRAKEN_TURN_STATOR_CURRENT_LIMIT;
@@ -167,12 +132,6 @@ public class ModuleConstants {
         this.DRIVE_KV = Constants.Swerve.FALCON_DRIVE_KV;
         this.DRIVE_KA = Constants.Swerve.FALCON_DRIVE_KA;
         this.DRIVE_KS = Constants.Swerve.FALCON_DRIVE_KS;
-        this.DRIVE_STD_STATE_VELOCITY = Constants.Swerve.FALCON_DRIVE_STD_STATE_VELOCITY;
-        this.DRIVE_STD_ENCODER_VELOCITY = Constants.Swerve.FALCON_DRIVE_STD_ENCODER_VELOCITY;
-        this.DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE =
-            Constants.Swerve.FALCON_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE;
-        this.DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE =
-            Constants.Swerve.FALCON_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE;
 
         this.driveMotorStatorCurrentLimit = Constants.Swerve.FALCON_DRIVE_STATOR_CURRENT_LIMIT;
         this.driveMotorSupplyCurrentLimit = Constants.Swerve.FALCON_DRIVE_SUPPLY_CURRENT_LIMIT;
@@ -183,12 +142,6 @@ public class ModuleConstants {
         this.DRIVE_KV = Constants.Swerve.KRAKEN_DRIVE_KV;
         this.DRIVE_KA = Constants.Swerve.KRAKEN_DRIVE_KA;
         this.DRIVE_KS = Constants.Swerve.KRAKEN_DRIVE_KS;
-        this.DRIVE_STD_STATE_VELOCITY = Constants.Swerve.KRAKEN_DRIVE_STD_STATE_VELOCITY;
-        this.DRIVE_STD_ENCODER_VELOCITY = Constants.Swerve.KRAKEN_DRIVE_STD_ENCODER_VELOCITY;
-        this.DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE =
-            Constants.Swerve.KRAKEN_DRIVE_REGULATOR_VELOCITY_ERROR_TOLERANCE;
-        this.DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE =
-            Constants.Swerve.KRAKEN_DRIVE_REGULATOR_CONTROL_EFFORT_TOLERANCE;
 
         this.driveMotorStatorCurrentLimit = Constants.Swerve.KRAKEN_DRIVE_STATOR_CURRENT_LIMIT;
         this.driveMotorSupplyCurrentLimit = Constants.Swerve.KRAKEN_DRIVE_SUPPLY_CURRENT_LIMIT;
