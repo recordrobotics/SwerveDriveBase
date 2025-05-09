@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.SwerveModuleIO;
 import frc.robot.utils.ModuleConstants;
@@ -69,7 +68,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     slot0Configs_drive.kS = m.DRIVE_KS;
     slot0Configs_drive.kV = m.DRIVE_KV;
     slot0Configs_drive.kA = m.DRIVE_KA;
-    slot0Configs_drive.kP = 0.1;
+    slot0Configs_drive.kP = m.DRIVE_P;
     slot0Configs_drive.kI = 0;
     slot0Configs_drive.kD = 0;
     driveConfig.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO;
@@ -96,9 +95,9 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     slot0Configs_turn.kS = m.TURN_KS;
     slot0Configs_turn.kV = m.TURN_KV;
     slot0Configs_turn.kA = m.TURN_KA;
-    slot0Configs_turn.kP = 55.543;
+    slot0Configs_turn.kP = m.TURN_P;
     slot0Configs_turn.kI = 0;
-    slot0Configs_turn.kD = 2.3952;
+    slot0Configs_turn.kD = m.TURN_D;
     turnConfig.ClosedLoopGeneral.ContinuousWrap = true;
     turnConfig.Feedback.SensorToMechanismRatio = TURN_GEAR_RATIO;
 
@@ -132,8 +131,6 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     io.setTurnMechanismPosition(getAbsWheelTurnOffset());
     turnRequest = new MotionMagicVoltage(getAbsWheelTurnOffset());
     driveRequest = new MotionMagicVelocityVoltage(0);
-
-    SmartDashboard.putNumber("SwerveTurn_" + turningMotorChannel, 0);
   }
 
   /**
@@ -236,7 +233,6 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
                     - getTurnWheelRotation2d().getRadians());
 
     io.setDriveMotorMotionMagic(driveRequest.withVelocity(actualTargetDriveVelocity));
-    SmartDashboard.putNumber("turn_" + turningMotorChannel, targetTurnPosition);
     io.setTurnMotorMotionMagic(turnRequest.withPosition(targetTurnPosition));
   }
 

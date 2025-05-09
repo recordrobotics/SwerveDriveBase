@@ -835,18 +835,24 @@ public final class Constants {
     public static final double FALCON_DRIVE_KS = 0.12373;
     public static final double FALCON_DRIVE_KV = 2.5609;
     public static final double FALCON_DRIVE_KA = 0.10075;
+    public static final double FALCON_DRIVE_P = 0.1;
 
     public static final double FALCON_TURN_KV = 1.7518;
     public static final double FALCON_TURN_KA = 0.015791;
     public static final double FALCON_TURN_KS = 0.08889;
+    public static final double FALCON_TURN_P = 1.2;
+    public static final double FALCON_TURN_D = 0.2;
 
     public static final double KRAKEN_DRIVE_KS = 0.089666;
     public static final double KRAKEN_DRIVE_KV = 2.5833;
     public static final double KRAKEN_DRIVE_KA = 0.18188;
+    public static final double KRAKEN_DRIVE_P = 0.1;
 
     public static final double KRAKEN_TURN_KV = 1.2993;
     public static final double KRAKEN_TURN_KA = 0.058972;
     public static final double KRAKEN_TURN_KS = 0.51562;
+    public static final double KRAKEN_TURN_P = 55.543;
+    public static final double KRAKEN_TURN_D = 2.3952;
 
     // Wheel diameter
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
