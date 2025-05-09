@@ -170,9 +170,11 @@ public class PoseSensorFusion extends SubsystemBase
   /** Resets the field relative position of the robot (mostly for testing). */
   public void resetStartingPose() {
     setToPose(DashboardUI.Autonomous.getStartingLocation().getPose());
-    RobotContainer.drivetrain
-        .getSwerveDriveSimulation()
-        .setSimulationWorldPose(DashboardUI.Autonomous.getStartingLocation().getPose());
+    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+      RobotContainer.drivetrain
+          .getSwerveDriveSimulation()
+          .setSimulationWorldPose(DashboardUI.Autonomous.getStartingLocation().getPose());
+    }
   }
 
   public void resetToLimelight() {

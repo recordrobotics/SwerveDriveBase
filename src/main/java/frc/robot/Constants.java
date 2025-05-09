@@ -844,9 +844,9 @@ public final class Constants {
     public static final double KRAKEN_DRIVE_KV = 2.5833;
     public static final double KRAKEN_DRIVE_KA = 0.18188;
 
-    public static final double KRAKEN_TURN_KV = 1.2961;
-    public static final double KRAKEN_TURN_KA = 0.021752;
-    public static final double KRAKEN_TURN_KS = 0.48355;
+    public static final double KRAKEN_TURN_KV = 1.2993;
+    public static final double KRAKEN_TURN_KA = 0.058972;
+    public static final double KRAKEN_TURN_KS = 0.51562;
 
     // Wheel diameter
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);

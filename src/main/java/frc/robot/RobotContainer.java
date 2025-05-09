@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotAlignPose;
 import frc.robot.Constants.RobotState.Mode;
@@ -30,7 +32,6 @@ import frc.robot.commands.GroundAlgaeToggled;
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
 import frc.robot.commands.VibrateXbox;
-import frc.robot.commands.auto.PlannedAuto;
 import frc.robot.commands.hybrid.AutoScore;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.ManualElevatorArm;
@@ -40,16 +41,16 @@ import frc.robot.control.AbstractControl.AutoScoreDirection;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.CoralIntake.IntakeArmState;
-import frc.robot.subsystems.io.real.CoralIntakeReal;
-import frc.robot.subsystems.io.real.ElevatorArmReal;
-import frc.robot.subsystems.io.real.ElevatorHeadReal;
-import frc.robot.subsystems.io.real.ElevatorReal;
 import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.subsystems.io.sim.ElevatorHeadSim;
 import frc.robot.subsystems.io.sim.ElevatorSim;
 import frc.robot.subsystems.io.stub.ClimberStub;
+import frc.robot.subsystems.io.stub.CoralIntakeStub;
+import frc.robot.subsystems.io.stub.ElevatorArmStub;
+import frc.robot.subsystems.io.stub.ElevatorHeadStub;
+import frc.robot.subsystems.io.stub.ElevatorStub;
 import frc.robot.utils.AutoPath;
 import frc.robot.utils.HumanPlayerSimulation;
 import frc.robot.utils.PoweredSubsystem;
@@ -105,10 +106,10 @@ public class RobotContainer {
     if (Constants.RobotState.getMode() == Mode.REAL) {
       drivetrain = new Drivetrain();
       poseSensorFusion = new PoseSensorFusion();
-      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
-      elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
-      elevatorHead = new ElevatorHead(new ElevatorHeadReal(0.02));
-      coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
+      elevator = new Elevator(new ElevatorStub(Constants.Elevator.kDt));
+      elevatorArm = new ElevatorArm(new ElevatorArmStub(0.02));
+      elevatorHead = new ElevatorHead(new ElevatorHeadStub(0.02));
+      coralIntake = new CoralIntake(new CoralIntakeStub(0.02));
       climber = new Climber(new ClimberStub(0.02));
       lights = new Lights();
       pdp = new PowerDistributionPanel();
@@ -361,16 +362,20 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    if (autoCommand == null) {
-      autoCommand = new PlannedAuto();
-    }
-    return autoCommand;
+    // if (autoCommand == null) {
+    //   autoCommand = new PlannedAuto();
+    // }
+    // return autoCommand;
 
-    // return new InstantCommand()
-    //     .andThen(elevatorArm.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
-    //     .andThen(elevatorArm.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
-    //     .andThen(elevatorArm.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
-    //     .andThen(elevatorArm.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
+    return new InstantCommand()
+        .andThen(
+            drivetrain.sysIdQuasistaticTurnMotors(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain.sysIdQuasistaticTurnMotors(Direction.kReverse).andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain.sysIdDynamicTurnMotors(Direction.kForward).andThen(new WaitCommand(0.4)))
+        .andThen(
+            drivetrain.sysIdDynamicTurnMotors(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {

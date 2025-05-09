@@ -96,9 +96,9 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     slot0Configs_turn.kS = m.TURN_KS;
     slot0Configs_turn.kV = m.TURN_KV;
     slot0Configs_turn.kA = m.TURN_KA;
-    slot0Configs_turn.kP = 4;
+    slot0Configs_turn.kP = 55.543;
     slot0Configs_turn.kI = 0;
-    slot0Configs_turn.kD = 0.1;
+    slot0Configs_turn.kD = 2.3952;
     turnConfig.ClosedLoopGeneral.ContinuousWrap = true;
     turnConfig.Feedback.SensorToMechanismRatio = TURN_GEAR_RATIO;
 
@@ -236,6 +236,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
                     - getTurnWheelRotation2d().getRadians());
 
     io.setDriveMotorMotionMagic(driveRequest.withVelocity(actualTargetDriveVelocity));
+    SmartDashboard.putNumber("turn_" + turningMotorChannel, targetTurnPosition);
     io.setTurnMotorMotionMagic(turnRequest.withPosition(targetTurnPosition));
   }
 

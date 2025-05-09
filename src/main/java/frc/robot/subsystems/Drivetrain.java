@@ -174,8 +174,8 @@ public class Drivetrain extends KillableSubsystem
             // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
             new SysIdRoutine.Config(
                 Volts.of(6).per(Second),
-                Volts.of(7),
-                Seconds.of(0.5),
+                Volts.of(2),
+                Seconds.of(1.0),
                 (state -> Logger.recordOutput("Drivetrain/Turn/SysIdTestState", state.toString()))),
             new SysIdRoutine.Mechanism(this::SysIdOnlyTurnMotors, null, this));
   }
