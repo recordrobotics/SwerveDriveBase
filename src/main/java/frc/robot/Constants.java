@@ -69,12 +69,12 @@ public final class Constants {
 
     public static final Transform3d l1TransformRobotToCamera =
         new Transform3d(
-            new Translation3d(0.311558, -0.330204, 0.246383),
-            new Rotation3d(0, Units.degreesToRadians(-21), 0));
+            new Translation3d(-0.122023, -0.372571, 0.197230),
+            new Rotation3d(0, Units.degreesToRadians(-12.894), Units.degreesToRadians(90)));
     public static final Transform3d sourceTransformRobotToCamera =
         new Transform3d(
-            new Translation3d(0.219412, 0.050800, 0.156247),
-            new Rotation3d(0, Units.degreesToRadians(-27), 0));
+            new Translation3d(0.019276, 0.370521, 0.197763),
+            new Rotation3d(0, Units.degreesToRadians(-18.951), Units.degreesToRadians(-90)));
 
     public static final double ROT_STD_DEV_WHEN_TRUSTING = 4;
   }
