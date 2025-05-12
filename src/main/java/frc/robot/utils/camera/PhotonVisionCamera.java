@@ -148,15 +148,24 @@ public class PhotonVisionCamera implements IVisionCamera {
     Optional<VisionCameraEstimate> measurement_far_opt =
         getEstimatedGlobalPose(photonEstimatorFar, true);
 
-    if (measurement_close_opt.isEmpty() || measurement_far_opt.isEmpty()) {
+    if (!camera.isConnected()) {
       connected = false;
       return;
     } else {
       connected = true;
     }
 
-    var measurement_close = measurement_close_opt.get();
-    var measurement_far = measurement_far_opt.get();
+    if (measurement_close_opt.isEmpty() && measurement_far_opt.isEmpty()) {
+      hasVision = false;
+      currentConfidence = 9999999;
+      confidence = 0;
+      return;
+    }
+
+    var measurement_close =
+        measurement_close_opt.isEmpty() ? measurement_far_opt.get() : measurement_close_opt.get();
+    var measurement_far =
+        measurement_far_opt.isEmpty() ? measurement_close_opt.get() : measurement_far_opt.get();
 
     numTags = measurement_close.tagCount;
 
