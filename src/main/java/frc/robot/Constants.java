@@ -167,10 +167,10 @@ public final class Constants {
     public static final double kP = 2.996;
     public static final double kI = 0;
     public static final double kD = 0.28181;
-    public static final double kG = 0.2269;
-    public static final double kS = 0.13495;
-    public static final double kV = 0.67446;
-    public static final double kA = 0.018492;
+    public static final double kG = 0.53175;
+    public static final double kS = 0.17279;
+    public static final double kV = 0.53109;
+    public static final double kA = 0.048931;
 
     public static final double START_POS = Units.degreesToRadians(-90);
     public static final double MIN_POS = Units.degreesToRadians(-103.54);
@@ -581,10 +581,10 @@ public final class Constants {
     public static final double sP = 4.8919;
     public static final double sI = 0;
     public static final double sD = 0.11072;
-    public static final double sG = 0.23377;
-    public static final double sS = 0.063707;
-    public static final double sV = 1.0261;
-    public static final double sA = 0.053656;
+    public static final double sG = 0.37793;
+    public static final double sS = 0.30532;
+    public static final double sV = 0.79648;
+    public static final double sA = 0.038737;
 
     public static final double ARM_UP = Units.degreesToRadians(80.19);
     public static final double ARM_PUSH = Units.degreesToRadians(84.19);
