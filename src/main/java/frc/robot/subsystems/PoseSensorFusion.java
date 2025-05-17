@@ -161,6 +161,12 @@ public class PoseSensorFusion extends SubsystemBase
     return poseFilter.getEstimatedPosition();
   }
 
+  public Pose2d getEstimatedPositionAt(double timestamp) {
+    var sample = poseFilter.sampleAt(timestamp);
+    if (sample.isEmpty()) return getEstimatedPosition();
+    else return sample.get();
+  }
+
   /** Similar to resetPose but adds an argument for the initial pose */
   public void setToPose(Pose2d pose) {
     poseFilter.resetPosition(nav.getAdjustedAngle(), getModulePositions(), pose);

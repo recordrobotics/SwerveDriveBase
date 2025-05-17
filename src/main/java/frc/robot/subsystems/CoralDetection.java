@@ -34,20 +34,12 @@ public class CoralDetection extends SubsystemBase {
   }
 
   public static class DetectedCoral {
-    public Transform3d cameraRelative;
+    public Pose3d fieldPose;
     public double timestamp;
 
-    public DetectedCoral(Transform3d cameraRelative, double timestamp) {
-      this.cameraRelative = cameraRelative;
+    public DetectedCoral(Pose3d fieldPose, double timestamp) {
+      this.fieldPose = fieldPose;
       this.timestamp = timestamp;
-    }
-
-    public Pose3d getPose(Pose3d currentCameraPose) {
-      return getCoralPose(cameraRelative, currentCameraPose);
-    }
-
-    public static Pose3d getCoralPose(Transform3d cameraRelative, Pose3d currentCameraPose) {
-      return currentCameraPose.transformBy(cameraRelative);
     }
   }
 
@@ -83,23 +75,25 @@ public class CoralDetection extends SubsystemBase {
         }
       }
 
-      var robot3d = new Pose3d(RobotContainer.poseSensorFusion.getEstimatedPosition());
-      var camera3d = robot3d.transformBy(Constants.PhotonVision.groundIntakeTransformRobotToCamera);
-
       // Update coral
 
       var projected = project2dPoses(targets);
       for (int i = 0; i < projected.size(); i++) {
-        var projectedField = DetectedCoral.getCoralPose(projected.get(i), camera3d);
+        var robot3d =
+            new Pose3d(
+                RobotContainer.poseSensorFusion.getEstimatedPositionAt(targets.get(i).timestamp));
+        var camera3d =
+            robot3d.transformBy(Constants.PhotonVision.groundIntakeTransformRobotToCamera);
+
+        var projectedField = camera3d.transformBy(projected.get(i));
         boolean isNew = true;
 
         for (var coral : detectedCorals) {
-          var coralField = coral.getPose(camera3d);
-          if (projectedField.getTranslation().getDistance(coralField.getTranslation())
+          if (projectedField.getTranslation().getDistance(coral.fieldPose.getTranslation())
               < Constants.PhotonVision.CORAL_ID_DISTANCE.in(Meters)) {
             isNew = false;
             if (targets.get(i).timestamp > coral.timestamp) {
-              coral.cameraRelative = projected.get(i);
+              coral.fieldPose = projectedField;
               coral.timestamp = targets.get(i).timestamp;
               break;
             }
@@ -107,7 +101,7 @@ public class CoralDetection extends SubsystemBase {
         }
 
         if (isNew) {
-          detectedCorals.add(new DetectedCoral(projected.get(i), targets.get(i).timestamp));
+          detectedCorals.add(new DetectedCoral(projectedField, targets.get(i).timestamp));
         }
       }
 
@@ -124,13 +118,10 @@ public class CoralDetection extends SubsystemBase {
   public Pose3d[] getCorals() {
     if (Constants.RobotState.getMode() == Mode.REAL
         || simulationMode == CoralDetectionSimulationMode.PHOTONVISION) {
-      var robot3d = new Pose3d(RobotContainer.poseSensorFusion.getEstimatedPosition());
-      var camera3d = robot3d.transformBy(Constants.PhotonVision.groundIntakeTransformRobotToCamera);
-
       Pose3d[] corals = new Pose3d[detectedCorals.size()];
       for (int i = 0; i < detectedCorals.size(); i++) {
         DetectedCoral coral = detectedCorals.get(i);
-        corals[i] = coral.getPose(camera3d);
+        corals[i] = coral.fieldPose;
       }
       return corals;
     } else {
