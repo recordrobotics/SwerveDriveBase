@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.RobotAlignPose;
 import frc.robot.Constants.RobotState.Mode;
@@ -33,6 +31,7 @@ import frc.robot.commands.GroundAlgaeToggled;
 import frc.robot.commands.KillSpecified;
 import frc.robot.commands.ProcessorScore;
 import frc.robot.commands.VibrateXbox;
+import frc.robot.commands.auto.PlannedAuto;
 import frc.robot.commands.hybrid.AutoScore;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.ManualElevatorArm;
@@ -375,16 +374,16 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // if (autoCommand == null) {
-    //   autoCommand = new PlannedAuto();
-    // }
-    // return autoCommand;
+    if (autoCommand == null) {
+      autoCommand = new PlannedAuto();
+    }
+    return autoCommand;
 
-    return new InstantCommand()
-        .andThen(climber.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(climber.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
-        .andThen(climber.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(climber.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
+    // return new InstantCommand()
+    //     .andThen(climber.sysIdQuasistatic(Direction.kForward).andThen(new WaitCommand(0.4)))
+    //     .andThen(climber.sysIdQuasistatic(Direction.kReverse).andThen(new WaitCommand(0.4)))
+    //     .andThen(climber.sysIdDynamic(Direction.kForward).andThen(new WaitCommand(0.4)))
+    //     .andThen(climber.sysIdDynamic(Direction.kReverse).andThen(new WaitCommand(0.4)));
   }
 
   public void testPeriodic() {
