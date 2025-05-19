@@ -226,7 +226,9 @@ public class LimelightCamera implements IVisionCamera {
     }
 
     if (measurement == null || measurement_m2 == null) {
-      limelightConnected = false;
+      if (Constants.RobotState.getMode() != Constants.RobotState.Mode.SIM) {
+        limelightConnected = false; // only can be disconnected out of sim
+      }
       return;
     } else {
       limelightConnected = true;
