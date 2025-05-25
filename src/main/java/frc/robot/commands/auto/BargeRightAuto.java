@@ -15,7 +15,7 @@ import org.json.simple.parser.ParseException;
 public class BargeRightAuto extends SequentialCommandGroup {
   public BargeRightAuto() throws FileVersionException, IOException, ParseException {
     addCommands(
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("BargeRightToL4")),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("BargeRightToReefE")),
         CommandUtils.finishOnInterrupt(AutoUtils.alignWithVision().withTimeout(1.5)),
         new InstantCommand(() -> RobotContainer.drivetrain.kill()),
         CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),

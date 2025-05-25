@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.868814388158241,
-        "y": 5.69382241813174
+        "x": 6.020260529549905,
+        "y": 6.078594088633164
       },
       "isLocked": false,
       "linkedName": "StartBargeLeft"
@@ -20,8 +20,8 @@
         "y": 6.012867148951827
       },
       "prevControl": {
-        "x": 6.240297854812723,
-        "y": 6.336265958509898
+        "x": 5.757410989683897,
+        "y": 6.0531040425771065
       },
       "nextControl": null,
       "isLocked": false,
