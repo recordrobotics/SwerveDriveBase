@@ -201,9 +201,7 @@ public class JoystickXboxSimple extends AbstractControl {
   }
 
   @Override
-  public void vibrate(RumbleType type, double value) {
-    xbox_controller.setRumble(type, value);
-  }
+  public void vibrate(RumbleType type, double value) {} // no vibrate on the joystick
 
   @Override
   public Boolean getAutoScore() {
