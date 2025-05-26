@@ -276,11 +276,13 @@ public class RobotContainer {
                     new CoralIntakeFromGroundUpL1()
                         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
                     new CoralIntakeFromGroundUpSimple()
-                        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-                        .handleInterrupt(
-                            () -> {
-                              System.out.println("INEREPT");
-                            }),
+                        .andThen(
+                            new CoralIntakeSimple(false)
+                                .finallyDo(
+                                    () -> {
+                                      CoralIntakeSimple.isRunning = false;
+                                    })
+                                .onlyIf(() -> !CoralIntakeSimple.isRunning)),
                     () ->
                         DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                             == ReefLevelSwitchValue.L1)
@@ -298,14 +300,16 @@ public class RobotContainer {
         .whileTrue(
             new RepeatConditionallyCommand(
                 new CoralIntakeSimple(true)
-                    .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                     .finallyDo(
                         () -> {
+                          CoralIntakeSimple.isRunning = false;
                           System.out.println("SOURCE ENDE!@!@H*&!*&@EQ#YQ#gyuaqd");
                           RobotContainer.elevatorHead.set(CoralShooterStates.OFF);
                           RobotContainer.coralIntake.set(CoralIntakeState.UP);
                         })
-                    .asProxy(),
+                    .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+                    .asProxy()
+                    .onlyIf(() -> !CoralIntakeSimple.isRunning),
                 () ->
                     !RobotContainer.elevatorHead.hasCoral()
                         && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()

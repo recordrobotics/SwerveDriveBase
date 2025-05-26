@@ -13,8 +13,12 @@ import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 import frc.robot.utils.CommandUtils;
 
 public class CoralIntakeSimple extends SequentialCommandGroup {
+
+  public static boolean isRunning = false;
+
   public CoralIntakeSimple(boolean useProxy) {
     addCommands(
+        new InstantCommand(() -> isRunning = true),
         new ScheduleCommand(
             RobotContainer.lights
                 .elevator
