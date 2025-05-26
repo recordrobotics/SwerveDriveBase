@@ -25,11 +25,12 @@ import frc.robot.commands.AutoScore;
 import frc.robot.commands.ClimbMove;
 import frc.robot.commands.CoralIntakeFromGround;
 import frc.robot.commands.CoralIntakeFromGroundToggled;
-import frc.robot.commands.CoralIntakeFromGroundUp;
 import frc.robot.commands.CoralIntakeFromGroundUpL1;
+import frc.robot.commands.CoralIntakeFromGroundUpSimple;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.CoralIntakeMoveL1;
 import frc.robot.commands.CoralIntakeShootL1;
+import frc.robot.commands.CoralIntakeSimple;
 import frc.robot.commands.CoralShoot;
 import frc.robot.commands.ElevatorAlgaeToggled;
 import frc.robot.commands.ElevatorReefToggled;
@@ -274,15 +275,20 @@ public class RobotContainer {
             Commands.either(
                     new CoralIntakeFromGroundUpL1()
                         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
-                    new CoralIntakeFromGroundUp()
-                        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
+                    new CoralIntakeFromGroundUpSimple()
+                        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+                        .handleInterrupt(
+                            () -> {
+                              System.out.println("INEREPT");
+                            }),
                     () ->
                         DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                             == ReefLevelSwitchValue.L1)
                 .onlyWhile(
                     () ->
                         elevatorHead.hasCoral()
-                            || !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()));
+                            || !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple())
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(new CoralIntakeFromSource(true));
@@ -291,7 +297,7 @@ public class RobotContainer {
         .debounce(0.2, DebounceType.kBoth)
         .whileTrue(
             new RepeatConditionallyCommand(
-                new CoralIntakeFromSource(true)
+                new CoralIntakeSimple(true)
                     .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                     .finallyDo(
                         () -> {
@@ -302,7 +308,9 @@ public class RobotContainer {
                     .asProxy(),
                 () ->
                     !RobotContainer.elevatorHead.hasCoral()
-                        && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple(),
+                        && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
+                        && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
+                            != ReefLevelSwitchValue.L1,
                 false));
 
     var coralScoreL1Cmd =
