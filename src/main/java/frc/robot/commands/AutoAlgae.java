@@ -45,8 +45,8 @@ public class AutoAlgae extends SequentialCommandGroup {
                         () -> {
                           Pose2d pose = reefPole.getPose();
 
-                          double clearanceMin = 0.2;
-                          double clearanceMax = 0.3;
+                          double clearanceMin = 0.4;
+                          double clearanceMax = 0.45;
 
                           double dist =
                               RobotContainer.poseSensorFusion
@@ -72,7 +72,7 @@ public class AutoAlgae extends SequentialCommandGroup {
                       .getTranslation()
                       .getDistance(pose.getTranslation());
 
-              return cancelCommand || dist > 0.4;
+              return cancelCommand || dist > 1.0;
             }),
         new ElevatorMoveThenAlgaeGrabEnd(reefPole.getLevel().getHeight(), true).asProxy());
   }

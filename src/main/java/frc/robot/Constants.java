@@ -371,11 +371,11 @@ public final class Constants {
 
     public static final Transform3d l1TransformRobotToCamera =
         new Transform3d(
-            new Translation3d(-0.031750, -0.373120, 0.196097),
+            new Translation3d(-0.031750, 0.373120, 0.196097),
             new Rotation3d(0, Units.degreesToRadians(-12.894), Units.degreesToRadians(90)));
     public static final Transform3d sourceTransformRobotToCamera =
         new Transform3d(
-            new Translation3d(-0.006350, 0.370769, 0.197020),
+            new Translation3d(-0.006350, -0.370769, 0.197020),
             new Rotation3d(0, Units.degreesToRadians(-18.951), Units.degreesToRadians(-90)));
     public static final Transform3d groundIntakeTransformRobotToCamera =
         new Transform3d(

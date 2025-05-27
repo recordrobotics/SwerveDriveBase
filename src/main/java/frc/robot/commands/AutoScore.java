@@ -53,8 +53,8 @@ public class AutoScore extends SequentialCommandGroup {
                           var level = getLevel();
                           Pose2d pose = reefPole.getPose(level);
 
-                          double clearanceMin = (level == CoralLevel.L1 ? 0.3 : 0.2);
-                          double clearanceMax = (level == CoralLevel.L1 ? 0.5 : 0.3);
+                          double clearanceMin = (level == CoralLevel.L1 ? 0.5 : 0.4);
+                          double clearanceMax = (level == CoralLevel.L1 ? 0.55 : 0.45);
 
                           double dist =
                               RobotContainer.poseSensorFusion
