@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.hybrid.AlignToPose;
 import frc.robot.dashboard.DashboardUI;
+import java.util.function.BiFunction;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class GameAlign {
@@ -87,5 +89,21 @@ public class GameAlign {
 
   public static boolean wasInterrupted() {
     return wasInterrupted;
+  }
+
+  public static Command makeAlignWithCommand(
+      BiFunction<Boolean, Boolean, Command> alignCommandFactory,
+      BooleanSupplier waitCondition,
+      Supplier<Command> performCommandFactory,
+      BooleanSupplier switchCondition) {
+    return Commands.either(
+        alignCommandFactory
+            .apply(true, true)
+            .alongWith(new WaitUntilCommand(waitCondition).andThen(performCommandFactory.get())),
+        alignCommandFactory
+            .apply(true, false)
+            .andThen(performCommandFactory.get())
+            .andThen(alignCommandFactory.apply(false, true)),
+        switchCondition);
   }
 }

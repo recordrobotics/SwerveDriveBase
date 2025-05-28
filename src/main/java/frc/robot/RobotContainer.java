@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorHeight;
@@ -370,16 +371,17 @@ public class RobotContainer {
             Commands.either(
                 new DeferredCommand(
                     () ->
-                        new AutoAlgae(
-                                IGamePosition.closestTo(
-                                    RobotContainer.poseSensorFusion.getEstimatedPosition(),
-                                    AlgaePosition.values()))
-                            .finallyDo(() -> AutoAlgae.stopRunning())
-                            .handleInterrupt(
-                                () -> {
-                                  System.out.println("AutoAlgae interrupted!!! :(");
-                                })
-                            .asProxy(),
+                        new ScheduleCommand(
+                            new AutoAlgae(
+                                    IGamePosition.closestTo(
+                                        RobotContainer.poseSensorFusion.getEstimatedPosition(),
+                                        AlgaePosition.values()))
+                                .finallyDo(() -> AutoAlgae.stopRunning())
+                                .handleInterrupt(
+                                    () -> {
+                                      System.out.println("AutoAlgae interrupted!!! :(");
+                                    })
+                                .asProxy()),
                     Set.of()),
                 new InstantCommand(() -> AutoAlgae.performCancel()),
                 () -> !AutoAlgae.isRunning()));

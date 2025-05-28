@@ -2,11 +2,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
+import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.Game.AlgaePosition;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
 import frc.robot.utils.CommandUtils;
 
 public class AutoAlgae extends SequentialCommandGroup {
@@ -27,6 +31,18 @@ public class AutoAlgae extends SequentialCommandGroup {
     isRunning = false;
   }
 
+  public static Command algaeGrabCommand(ElevatorHeight targetHeight) {
+    return new ElevatorMove(targetHeight)
+        .andThen(
+            new InstantCommand(
+                () -> {
+                  if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE)
+                    RobotContainer.elevatorHead.set(AlgaeGrabberStates.INTAKE_GROUND);
+                  else RobotContainer.elevatorHead.set(AlgaeGrabberStates.INTAKE_REEF);
+                },
+                RobotContainer.elevatorHead));
+  }
+
   public AutoAlgae(AlgaePosition reefPole) {
     addCommands(
         new InstantCommand(
@@ -35,32 +51,39 @@ public class AutoAlgae extends SequentialCommandGroup {
               cancelCommand = false;
               isRunning = true;
             }),
-        CommandUtils.finishOnInterrupt(
-                AlgaeAlign.alignTarget(reefPole, true, true, false)
-                    .handleInterrupt(() -> alignTimeout = true) // align until inturupted
-                    .withTimeout(2.5)
-                    .asProxy())
-            .alongWith(
-                new WaitUntilCommand(
-                        () -> {
-                          Pose2d pose = reefPole.getPose();
+        GameAlign.makeAlignWithCommand(
+                (usePath, useAlign) ->
+                    CommandUtils.finishOnInterrupt(
+                        AlgaeAlign.alignTarget(reefPole, usePath, useAlign, false)
+                            .handleInterrupt(() -> alignTimeout = true) // align until inturupted
+                            .withTimeout(2.5)
+                            .asProxy()),
+                () -> {
+                  Pose2d pose = reefPole.getPose();
 
-                          double clearanceMin = 0.95;
-                          double clearanceMax = 1.0;
+                  double dist =
+                      RobotContainer.poseSensorFusion
+                          .getEstimatedPosition()
+                          .getTranslation()
+                          .getDistance(pose.getTranslation());
 
-                          double dist =
-                              RobotContainer.poseSensorFusion
-                                  .getEstimatedPosition()
-                                  .getTranslation()
-                                  .getDistance(pose.getTranslation());
+                  return (dist < Constants.Align.CLEARANCE_MAX
+                          && dist > Constants.Align.CLEARANCE_MIN)
+                      || GameAlign.wasInterrupted()
+                      || alignTimeout;
+                },
+                () -> algaeGrabCommand(reefPole.getLevel().getHeight()).asProxy(),
+                () -> {
+                  Pose2d pose = reefPole.getPose();
 
-                          return (dist < clearanceMax && dist > clearanceMin)
-                              || GameAlign.wasInterrupted()
-                              || alignTimeout;
-                        })
-                    .andThen(
-                        ElevatorMoveThenAlgaeGrab.create(reefPole.getLevel().getHeight(), true)
-                            .asProxy()))
+                  double dist =
+                      RobotContainer.poseSensorFusion
+                          .getEstimatedPosition()
+                          .getTranslation()
+                          .getDistance(pose.getTranslation());
+
+                  return dist > Constants.Align.CLEARANCE_MAX;
+                })
             .onlyWhile(() -> RobotState.isAutonomous() || !cancelCommand),
         new WaitUntilCommand(
             () -> {

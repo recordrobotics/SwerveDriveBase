@@ -43,75 +43,49 @@ public class AutoScore extends SequentialCommandGroup {
                   DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                       == ReefLevelSwitchValue.L1;
             }),
-        Commands.either(
-                CommandUtils.finishOnInterrupt(
-                        ReefAlign.alignTarget(reefPole, this::getLevel, true, true, false)
+        GameAlign.makeAlignWithCommand(
+                (usePath, useAlign) ->
+                    CommandUtils.finishOnInterrupt(
+                        ReefAlign.alignTarget(reefPole, this::getLevel, usePath, useAlign, false)
                             .handleInterrupt(() -> alignTimeout = true) // align until inturupted
                             .withTimeout(2.5)
-                            .asProxy())
-                    .alongWith(
-                        new WaitUntilCommand(
-                                () -> {
-                                  var level = getLevel();
-                                  Pose2d pose = reefPole.getPose(level);
+                            .asProxy()),
+                () -> {
+                  var level = getLevel();
+                  Pose2d pose = reefPole.getPose(level);
 
-                                  double clearanceMin =
-                                      (level == CoralLevel.L1
-                                          ? Constants.Align.L1_CLEARANCE_MIN
-                                          : Constants.Align.CLEARANCE_MIN);
-                                  double clearanceMax =
-                                      (level == CoralLevel.L1
-                                          ? Constants.Align.L1_CLEARANCE_MAX
-                                          : Constants.Align.CLEARANCE_MAX);
+                  double clearanceMin =
+                      (level == CoralLevel.L1
+                          ? Constants.Align.L1_CLEARANCE_MIN
+                          : Constants.Align.CLEARANCE_MIN);
+                  double clearanceMax =
+                      (level == CoralLevel.L1
+                          ? Constants.Align.L1_CLEARANCE_MAX
+                          : Constants.Align.CLEARANCE_MAX);
 
-                                  double dist =
-                                      RobotContainer.poseSensorFusion
-                                          .getEstimatedPosition()
-                                          .getTranslation()
-                                          .getDistance(pose.getTranslation());
+                  double dist =
+                      RobotContainer.poseSensorFusion
+                          .getEstimatedPosition()
+                          .getTranslation()
+                          .getDistance(pose.getTranslation());
 
-                                  return (dist < clearanceMax && dist > clearanceMin)
-                                      || GameAlign.wasInterrupted()
-                                      || alignTimeout;
-                                })
-                            .andThen(
-                                Commands.either(
-                                    new DeferredCommand(
-                                        () ->
-                                            new ElevatorMove(
-                                                    DashboardUI.Overview.getControl()
-                                                        .getReefLevelSwitchValue()
-                                                        .toCoralLevel()
-                                                        .getHeight())
-                                                .asProxy(),
-                                        Set.of()),
-                                    new CoralIntakeMoveL1().asProxy(),
-                                    () -> getLevel() != CoralLevel.L1))),
-                CommandUtils.finishOnInterrupt(
-                        ReefAlign.alignTarget(reefPole, this::getLevel, true, false, false)
-                            .handleInterrupt(() -> alignTimeout = true) // align until inturupted
-                            .withTimeout(2.5)
-                            .asProxy())
-                    .andThen(
-                        Commands.either(
-                            new DeferredCommand(
-                                () ->
-                                    new ElevatorMove(
-                                            DashboardUI.Overview.getControl()
-                                                .getReefLevelSwitchValue()
-                                                .toCoralLevel()
-                                                .getHeight())
-                                        .asProxy(),
-                                Set.of()),
-                            new CoralIntakeMoveL1().asProxy(),
-                            () -> getLevel() != CoralLevel.L1))
-                    .andThen(
-                        CommandUtils.finishOnInterrupt(
-                            ReefAlign.alignTarget(reefPole, this::getLevel, false, true, false)
-                                .handleInterrupt(
-                                    () -> alignTimeout = true) // align until inturupted
-                                .withTimeout(2.5)
-                                .asProxy())),
+                  return (dist < clearanceMax && dist > clearanceMin)
+                      || GameAlign.wasInterrupted()
+                      || alignTimeout;
+                },
+                () ->
+                    Commands.either(
+                        new DeferredCommand(
+                            () ->
+                                new ElevatorMove(
+                                        DashboardUI.Overview.getControl()
+                                            .getReefLevelSwitchValue()
+                                            .toCoralLevel()
+                                            .getHeight())
+                                    .asProxy(),
+                            Set.of()),
+                        new CoralIntakeMoveL1().asProxy(),
+                        () -> getLevel() != CoralLevel.L1),
                 () -> {
                   var level = getLevel();
                   Pose2d pose = reefPole.getPose(level);
