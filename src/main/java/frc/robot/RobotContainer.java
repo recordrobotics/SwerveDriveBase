@@ -271,17 +271,24 @@ public class RobotContainer {
                 DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
                     && !elevatorHead.hasCoral())
         .onTrue(
-            new CoralIntakeFromGround().withInterruptBehavior(InterruptionBehavior.kCancelIncoming))
+            new CoralIntakeFromGround()
+            // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+            )
         .onFalse(
             Commands.either(
-                    new CoralIntakeFromGroundUpL1()
-                        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
+                    new CoralIntakeFromGroundUpL1(),
+                    // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
                     new CoralIntakeFromGroundUpSimple()
+                        .handleInterrupt(
+                            () -> {
+                              CoralIntakeFromGroundUpSimple.isRunning = false;
+                            })
                         .andThen(
                             new CoralIntakeSimple(false)
                                 .finallyDo(
                                     () -> {
                                       CoralIntakeSimple.isRunning = false;
+                                      CoralIntakeFromGroundUpSimple.isRunning = false;
                                     })
                                 .onlyIf(() -> !CoralIntakeSimple.isRunning)),
                     () ->
@@ -291,7 +298,8 @@ public class RobotContainer {
                     () ->
                         elevatorHead.hasCoral()
                             || !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple())
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
+            // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+            );
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(new CoralIntakeFromSource(true));
@@ -310,7 +318,10 @@ public class RobotContainer {
                         })
                     .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                     .asProxy()
-                    .onlyIf(() -> !CoralIntakeSimple.isRunning),
+                    .onlyIf(
+                        () ->
+                            !CoralIntakeSimple.isRunning
+                                && !CoralIntakeFromGroundUpSimple.isRunning),
                 () ->
                     !RobotContainer.elevatorHead.hasCoral()
                         && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()

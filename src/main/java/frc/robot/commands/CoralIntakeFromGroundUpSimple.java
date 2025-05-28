@@ -11,6 +11,9 @@ import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 
 public class CoralIntakeFromGroundUpSimple extends SequentialCommandGroup {
+
+  public static boolean isRunning = false;
+
   public CoralIntakeFromGroundUpSimple() {
     addRequirements(RobotContainer.coralIntake);
 
@@ -18,6 +21,7 @@ public class CoralIntakeFromGroundUpSimple extends SequentialCommandGroup {
     addRequirements(RobotContainer.elevator);
 
     addCommands(
+        new InstantCommand(() -> isRunning = true),
         // raise the arm
         new InstantCommand(
             () -> RobotContainer.coralIntake.set(CoralIntakeState.PUSH_READY),
