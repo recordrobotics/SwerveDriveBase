@@ -361,8 +361,10 @@ public final class Constants {
 
     public static final double L1_CLEARANCE_MIN = 0.5;
     public static final double L1_CLEARANCE_MAX = 0.95;
-    public static final double CLEARANCE_MIN = 0.4;
-    public static final double CLEARANCE_MAX = 1.0;
+    public static final double L4_CLEARANCE_MIN = 0.4;
+    public static final double L4_CLEARANCE_MAX = 1.0;
+    public static final double CLEARANCE_MIN = 0.3;
+    public static final double CLEARANCE_MAX = 0.7;
 
     public static final PathConstraints PATH_CONSTRAINTS =
         new PathConstraints(

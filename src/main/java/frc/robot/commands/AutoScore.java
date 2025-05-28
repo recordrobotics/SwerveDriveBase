@@ -57,11 +57,15 @@ public class AutoScore extends SequentialCommandGroup {
                   double clearanceMin =
                       (level == CoralLevel.L1
                           ? Constants.Align.L1_CLEARANCE_MIN
-                          : Constants.Align.CLEARANCE_MIN);
+                          : level == CoralLevel.L4
+                              ? Constants.Align.L4_CLEARANCE_MIN
+                              : Constants.Align.CLEARANCE_MIN);
                   double clearanceMax =
                       (level == CoralLevel.L1
                           ? Constants.Align.L1_CLEARANCE_MAX
-                          : Constants.Align.CLEARANCE_MAX);
+                          : level == CoralLevel.L4
+                              ? Constants.Align.L4_CLEARANCE_MAX
+                              : Constants.Align.CLEARANCE_MAX);
 
                   double dist =
                       RobotContainer.poseSensorFusion
@@ -93,7 +97,9 @@ public class AutoScore extends SequentialCommandGroup {
                   double clearanceMax =
                       (level == CoralLevel.L1
                           ? Constants.Align.L1_CLEARANCE_MAX
-                          : Constants.Align.CLEARANCE_MAX);
+                          : level == CoralLevel.L4
+                              ? Constants.Align.L4_CLEARANCE_MAX
+                              : Constants.Align.CLEARANCE_MAX);
 
                   double dist =
                       RobotContainer.poseSensorFusion
