@@ -48,10 +48,7 @@ public class AutoPath {
                     ReefAlign.alignClosest(true, true, false),
                     () ->
                         !(RobotContainer.poseSensorFusion.getLeftCamera().hasVision()
-                            || RobotContainer.poseSensorFusion
-                                .getCenterCamera()
-                                .hasVision()), // TODO make this a Supplier<boolean> in
-                    // robotcontainer
+                            || RobotContainer.poseSensorFusion.getCenterCamera().hasVision()),
                     true)
                 .withTimeout(1.5)));
     NamedCommands.registerCommand("ElevatorL4", new ElevatorMove(ElevatorHeight.L4));
