@@ -65,12 +65,14 @@ public class PoseSensorFusion extends ManagedSubsystemBase
       new PhotonVisionCamera(
           Constants.PhotonVision.PHOTON_L1_NAME,
           CameraType.SVPROGlobalShutter,
-          Constants.PhotonVision.l1TransformRobotToCamera);
+          Constants.PhotonVision.l1TransformRobotToCamera,
+          2.0);
   private PhotonVisionCamera sourceCamera =
       new PhotonVisionCamera(
           Constants.PhotonVision.PHOTON_SOURCE_NAME,
           CameraType.SVPROGlobalShutter,
-          Constants.PhotonVision.sourceTransformRobotToCamera);
+          Constants.PhotonVision.sourceTransformRobotToCamera,
+          8.0);
 
   private final Set<IVisionCamera> cameras =
       Set.of(leftCamera, centerCamera, l1Camera, sourceCamera);
@@ -214,10 +216,11 @@ public class PoseSensorFusion extends ManagedSubsystemBase
       }
     }
 
-    leftCamera.updateEstimation(trustLimelightLeft);
-    centerCamera.updateEstimation(trustLimelightCenter);
-    l1Camera.updateEstimation(false);
-    sourceCamera.updateEstimation(false);
+    leftCamera.updateEstimation(trustLimelightLeft, false);
+    centerCamera.updateEstimation(trustLimelightCenter, false);
+    l1Camera.updateEstimation(true, false);
+    sourceCamera.updateEstimation(
+        true, l1Camera.hasVision() && l1Camera.getUnsafeEstimate().avgTagDist < 2.5);
   }
 
   private void updateDashboard() {

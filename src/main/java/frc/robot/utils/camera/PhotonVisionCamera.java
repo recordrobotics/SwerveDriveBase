@@ -90,12 +90,13 @@ public class PhotonVisionCamera implements IVisionCamera {
     return confidence;
   }
 
-  public PhotonVisionCamera(String name, CameraType type, Transform3d robotToCamera) {
+  public PhotonVisionCamera(
+      String name, CameraType type, Transform3d robotToCamera, double stdMultiplier) {
     this.name = name;
     this.type = type;
-    this.SINGLE_TAG_CONFIDENCE = 0.65;
-    this.MULTI_TAG_CONFIDENCE_CLOSE = 0.65;
-    this.MULTI_TAG_CONFIDENCE_FAR = 0.7;
+    this.SINGLE_TAG_CONFIDENCE = 0.65 * stdMultiplier;
+    this.MULTI_TAG_CONFIDENCE_CLOSE = 0.65 * stdMultiplier;
+    this.MULTI_TAG_CONFIDENCE_FAR = 0.7 * stdMultiplier;
     this.MT_CLOSE_MAX_DIST = Units.feetToMeters(7);
     this.MAX_POSE_ERROR = 5; // 5 meters
 
@@ -136,7 +137,7 @@ public class PhotonVisionCamera implements IVisionCamera {
     camera.setPipelineIndex(pipeline);
   }
 
-  public void updateEstimation(boolean trust) {
+  public void updateEstimation(boolean trust, boolean ignore) {
     confidence = 0;
 
     Optional<VisionCameraEstimate> measurement_close_opt;

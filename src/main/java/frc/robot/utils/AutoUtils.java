@@ -38,7 +38,9 @@ public class AutoUtils {
                   DebounceType.kFalling); // says if either LL has seen the tag in the last 0.5s
 
           return new RepeatConditionallyCommand(
-                  ReefAlign.alignClosest(false), () -> !visionDebouncer.hasVision(), true)
+                  ReefAlign.alignClosest(true, true, false),
+                  () -> !visionDebouncer.hasVision(),
+                  true)
               .finallyDo(() -> RobotContainer.poseSensorFusion.releaseVisionCheck(visionDebouncer));
         },
         Set.of(RobotContainer.drivetrain));

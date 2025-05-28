@@ -226,12 +226,12 @@ public final class Constants {
       public Pose2d getPose(CoralLevel level) {
         switch (level) {
           case L1:
-            return pose.transformBy(new Transform2d(-0.1, 0, Rotation2d.kCW_90deg));
+            return pose.transformBy(new Transform2d(-0.4, 0, Rotation2d.kCW_90deg));
           case L2:
           case L3:
-            return pose.transformBy(new Transform2d(-0.05, 0, Rotation2d.kZero));
+            return pose.transformBy(new Transform2d(-0.02, 0, Rotation2d.kZero));
           case L4:
-            return pose.transformBy(new Transform2d(-0.1, 0, Rotation2d.kZero));
+            return pose.transformBy(new Transform2d(-0.05, 0, Rotation2d.kZero));
           default:
             return pose; // this is bad
         }
@@ -358,6 +358,11 @@ public final class Constants {
     public static final double rotationalTolerance = 0.02; // Radians
 
     public static final double MAX_REEF_ALIGN_DISTANCE = 2.5; // Meters
+
+    public static final double L1_CLEARANCE_MIN = 0.5;
+    public static final double L1_CLEARANCE_MAX = 0.95;
+    public static final double CLEARANCE_MIN = 0.4;
+    public static final double CLEARANCE_MAX = 1.0;
 
     public static final PathConstraints PATH_CONSTRAINTS =
         new PathConstraints(
@@ -500,9 +505,9 @@ public final class Constants {
   public enum ElevatorHeight {
     INTAKE(Units.inchesToMeters(0.1), Units.degreesToRadians(-103.54)),
     L1(0.26, Units.degreesToRadians(-101.69)),
-    L2(0.458, Units.degreesToRadians(-101.69)),
+    L2(0.458, Units.degreesToRadians(-90)),
     LOW_REEF_ALGAE(0.4849, Units.degreesToRadians(-37.841)),
-    L3(0.868, Units.degreesToRadians(-101.59)),
+    L3(0.898, Units.degreesToRadians(-101.59)),
     HIGH_REEF_ALGAE(0.916, Units.degreesToRadians(-40.26)),
     L4(1.309, Units.degreesToRadians(54.85)),
     BOTTOM(Constants.Elevator.LOWEST_HOLD_HEIGHT, Units.degreesToRadians(-90)),
@@ -653,7 +658,7 @@ public final class Constants {
     public static final double ARM_PUSH = Units.degreesToRadians(84.19);
     public static final double ARM_INTAKE = Units.degreesToRadians(77.08);
     public static final double ARM_SCORE_L1 = Units.degreesToRadians(22.35);
-    public static final double ARM_DOWN = Units.degreesToRadians(-49.5);
+    public static final double ARM_DOWN = Units.degreesToRadians(-51);
     public static final double ARM_START_POS =
         SysIdManager.getSysIdRoutine() == SysIdRoutine.CoralIntakeArm
             ? ARM_DOWN

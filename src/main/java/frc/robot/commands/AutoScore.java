@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.Game.CoralLevel;
 import frc.robot.Constants.Game.CoralPosition;
@@ -42,30 +43,55 @@ public class AutoScore extends SequentialCommandGroup {
                   DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                       == ReefLevelSwitchValue.L1;
             }),
-        CommandUtils.finishOnInterrupt(
-                ReefAlign.alignTarget(reefPole, this::getLevel, false)
-                    .handleInterrupt(() -> alignTimeout = true) // align until inturupted
-                    .withTimeout(2.5)
-                    .asProxy())
-            .alongWith(
-                new WaitUntilCommand(
-                        () -> {
-                          var level = getLevel();
-                          Pose2d pose = reefPole.getPose(level);
+        Commands.either(
+                CommandUtils.finishOnInterrupt(
+                        ReefAlign.alignTarget(reefPole, this::getLevel, true, true, false)
+                            .handleInterrupt(() -> alignTimeout = true) // align until inturupted
+                            .withTimeout(2.5)
+                            .asProxy())
+                    .alongWith(
+                        new WaitUntilCommand(
+                                () -> {
+                                  var level = getLevel();
+                                  Pose2d pose = reefPole.getPose(level);
 
-                          double clearanceMin = (level == CoralLevel.L1 ? 0.5 : 0.4);
-                          double clearanceMax = (level == CoralLevel.L1 ? 0.55 : 0.45);
+                                  double clearanceMin =
+                                      (level == CoralLevel.L1
+                                          ? Constants.Align.L1_CLEARANCE_MIN
+                                          : Constants.Align.CLEARANCE_MIN);
+                                  double clearanceMax =
+                                      (level == CoralLevel.L1
+                                          ? Constants.Align.L1_CLEARANCE_MAX
+                                          : Constants.Align.CLEARANCE_MAX);
 
-                          double dist =
-                              RobotContainer.poseSensorFusion
-                                  .getEstimatedPosition()
-                                  .getTranslation()
-                                  .getDistance(pose.getTranslation());
+                                  double dist =
+                                      RobotContainer.poseSensorFusion
+                                          .getEstimatedPosition()
+                                          .getTranslation()
+                                          .getDistance(pose.getTranslation());
 
-                          return (dist < clearanceMax && dist > clearanceMin)
-                              || GameAlign.wasInterrupted()
-                              || alignTimeout;
-                        })
+                                  return (dist < clearanceMax && dist > clearanceMin)
+                                      || GameAlign.wasInterrupted()
+                                      || alignTimeout;
+                                })
+                            .andThen(
+                                Commands.either(
+                                    new DeferredCommand(
+                                        () ->
+                                            new ElevatorMove(
+                                                    DashboardUI.Overview.getControl()
+                                                        .getReefLevelSwitchValue()
+                                                        .toCoralLevel()
+                                                        .getHeight())
+                                                .asProxy(),
+                                        Set.of()),
+                                    new CoralIntakeMoveL1().asProxy(),
+                                    () -> getLevel() != CoralLevel.L1))),
+                CommandUtils.finishOnInterrupt(
+                        ReefAlign.alignTarget(reefPole, this::getLevel, true, false, false)
+                            .handleInterrupt(() -> alignTimeout = true) // align until inturupted
+                            .withTimeout(2.5)
+                            .asProxy())
                     .andThen(
                         Commands.either(
                             new DeferredCommand(
@@ -78,7 +104,31 @@ public class AutoScore extends SequentialCommandGroup {
                                         .asProxy(),
                                 Set.of()),
                             new CoralIntakeMoveL1().asProxy(),
-                            () -> getLevel() != CoralLevel.L1)))
+                            () -> getLevel() != CoralLevel.L1))
+                    .andThen(
+                        CommandUtils.finishOnInterrupt(
+                            ReefAlign.alignTarget(reefPole, this::getLevel, false, true, false)
+                                .handleInterrupt(
+                                    () -> alignTimeout = true) // align until inturupted
+                                .withTimeout(2.5)
+                                .asProxy())),
+                () -> {
+                  var level = getLevel();
+                  Pose2d pose = reefPole.getPose(level);
+
+                  double clearanceMax =
+                      (level == CoralLevel.L1
+                          ? Constants.Align.L1_CLEARANCE_MAX
+                          : Constants.Align.CLEARANCE_MAX);
+
+                  double dist =
+                      RobotContainer.poseSensorFusion
+                          .getEstimatedPosition()
+                          .getTranslation()
+                          .getDistance(pose.getTranslation());
+
+                  return dist > clearanceMax;
+                })
             .onlyWhile(
                 () ->
                     RobotState.isAutonomous() || DashboardUI.Overview.getControl().getAutoScore()),
@@ -109,7 +159,7 @@ public class AutoScore extends SequentialCommandGroup {
                                                     new WaitCommand(
                                                         RobotContainer.elevator.getNearestHeight()
                                                                 == ElevatorHeight.L4
-                                                            ? 0.3
+                                                            ? 0.6
                                                             : 0),
                                                 Set.of())
                                             .andThen(

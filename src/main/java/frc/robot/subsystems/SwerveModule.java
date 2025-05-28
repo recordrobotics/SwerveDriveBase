@@ -139,10 +139,19 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     io.setTurnMotorVoltage(0);
 
     // Corrects for offset in absolute wheel position
-    turnPositionCached = getAbsWheelTurnOffset();
-    io.setTurnMechanismPosition(turnPositionCached);
+    if (isAbsEncoderConnected()) {
+      turnPositionCached = getAbsWheelTurnOffset();
+      io.setTurnMechanismPosition(turnPositionCached);
+    } else {
+      turnPositionCached = io.getTurnMechanismPosition();
+    }
+
     turnRequest = new MotionMagicVoltage(turnPositionCached);
     driveRequest = new MotionMagicVelocityVoltage(0);
+  }
+
+  public boolean isAbsEncoderConnected() {
+    return io.getAbsoluteEncoder() != 1; // value is exactly 1.0 when disconnected
   }
 
   /**
@@ -233,6 +242,9 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     targetDriveVelocity = desiredState.speedMetersPerSecond;
   }
 
+  private double lastMovementTime = Timer.getFPGATimestamp();
+  private boolean hasResetAbs = false;
+
   public void periodic() {
 
     drivePositionCached = io.getDriveMechanismPosition();
@@ -242,6 +254,17 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
     if (Constants.RobotState.AUTO_LOG_LEVEL.isAtLeast(Level.Sysid)) {
       driveVoltageCached = io.getDriveMotorVoltage();
       turnVoltageCached = io.getTurnMotorVoltage();
+    }
+
+    if (Math.abs(driveVelocityCached) > 0.01 || Math.abs(turnVelocityCached) > 0.1) {
+      hasResetAbs = false;
+      lastMovementTime = Timer.getFPGATimestamp();
+    } else if (Timer.getFPGATimestamp() - lastMovementTime > 2.0
+        && isAbsEncoderConnected()
+        && !hasResetAbs) { // if still for 2 seconds
+      hasResetAbs = true;
+      turnPositionCached = getAbsWheelTurnOffset();
+      io.setTurnMechanismPosition(turnPositionCached);
     }
 
     double actualTargetDriveVelocity =

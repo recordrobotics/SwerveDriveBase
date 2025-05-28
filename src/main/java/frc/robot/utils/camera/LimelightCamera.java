@@ -124,7 +124,7 @@ public class LimelightCamera implements IVisionCamera {
     LimelightHelpers.setPipelineIndex(name, pipeline);
   }
 
-  public void updateEstimation(boolean trust) {
+  public void updateEstimation(boolean trust, boolean ignore) {
     confidence = 0;
     LimelightHelpers.SetRobotOrientation(
         name,
@@ -298,16 +298,18 @@ public class LimelightCamera implements IVisionCamera {
       hasVision = true;
       currentEstimate = new VisionCameraEstimate(measurement);
       currentConfidence = confidence;
-      RobotContainer.poseSensorFusion.addVisionMeasurement(
-          currentEstimate.pose,
-          currentEstimate.timestampSeconds,
-          VecBuilder.fill(
-              currentConfidence,
-              currentConfidence,
-              trust
-                  ? Constants.Limelight.ROT_STD_DEV_WHEN_TRUSTING
-                  : 9999999) // some influence of limelight pose rotation
-          );
+      if (!ignore) {
+        RobotContainer.poseSensorFusion.addVisionMeasurement(
+            currentEstimate.pose,
+            currentEstimate.timestampSeconds,
+            VecBuilder.fill(
+                currentConfidence,
+                currentConfidence,
+                trust
+                    ? Constants.Limelight.ROT_STD_DEV_WHEN_TRUSTING
+                    : 9999999) // some influence of limelight pose rotation
+            );
+      }
     } else {
       hasVision = false;
       currentConfidence = 9999999;

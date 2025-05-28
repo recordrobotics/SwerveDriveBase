@@ -22,7 +22,7 @@ public interface IVisionCamera {
 
   public void setPipeline(int pipeline);
 
-  public void updateEstimation(boolean trust);
+  public void updateEstimation(boolean trust, boolean ignore);
 
   public void logValues(String id);
 }

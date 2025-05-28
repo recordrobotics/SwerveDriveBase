@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public class ReefAlign {
 
-  public static Command alignClosest(boolean repeatedly) {
+  public static Command alignClosest(boolean usePath, boolean useAlign, boolean repeatedly) {
     return new DeferredCommand(
         () -> {
           CoralPosition alignPose =
@@ -35,18 +35,26 @@ public class ReefAlign {
           return alignTarget(
               alignPose,
               () -> DashboardUI.Overview.getControl().getReefLevelSwitchValue().toCoralLevel(),
+              usePath,
+              useAlign,
               repeatedly);
         },
         Set.of(RobotContainer.drivetrain));
   }
 
   public static Command alignTarget(
-      CoralPosition pole, Supplier<CoralLevel> level, boolean repeatedly) {
+      CoralPosition pole,
+      Supplier<CoralLevel> level,
+      boolean usePath,
+      boolean useAlign,
+      boolean repeatedly) {
     return GameAlign.alignTarget(
         () -> pole.getPose(level.get()),
         level.get() == CoralLevel.L1
-            ? new Transform2d(0, -0.3, Rotation2d.kZero)
-            : new Transform2d(-0.3, 0, Rotation2d.kZero),
+            ? new Transform2d(0, -Constants.Align.L1_CLEARANCE_MIN, Rotation2d.kZero)
+            : new Transform2d(-Constants.Align.CLEARANCE_MIN, 0, Rotation2d.kZero),
+        usePath,
+        useAlign,
         repeatedly);
   }
 }

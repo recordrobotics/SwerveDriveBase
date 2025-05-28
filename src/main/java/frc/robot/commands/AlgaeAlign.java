@@ -7,8 +7,13 @@ import frc.robot.Constants.Game.AlgaePosition;
 
 public class AlgaeAlign {
 
-  public static Command alignTarget(AlgaePosition pole, boolean repeatedly) {
+  public static Command alignTarget(
+      AlgaePosition pole, boolean usePath, boolean useAlign, boolean repeatedly) {
     return GameAlign.alignTarget(
-        () -> pole.getPose(), new Transform2d(-0.3, 0, Rotation2d.kZero), repeatedly);
+        () -> pole.getPose(),
+        new Transform2d(-0.3, 0, Rotation2d.kZero),
+        usePath,
+        useAlign,
+        repeatedly);
   }
 }

@@ -36,7 +36,7 @@ public class AutoAlgae extends SequentialCommandGroup {
               isRunning = true;
             }),
         CommandUtils.finishOnInterrupt(
-                AlgaeAlign.alignTarget(reefPole, false)
+                AlgaeAlign.alignTarget(reefPole, true, true, false)
                     .handleInterrupt(() -> alignTimeout = true) // align until inturupted
                     .withTimeout(2.5)
                     .asProxy())
@@ -45,8 +45,8 @@ public class AutoAlgae extends SequentialCommandGroup {
                         () -> {
                           Pose2d pose = reefPole.getPose();
 
-                          double clearanceMin = 0.4;
-                          double clearanceMax = 0.45;
+                          double clearanceMin = 0.95;
+                          double clearanceMax = 1.0;
 
                           double dist =
                               RobotContainer.poseSensorFusion
