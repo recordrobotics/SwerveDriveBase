@@ -295,7 +295,7 @@ public class JoystickXboxSimple extends AbstractControl {
 
   @Override
   public AngularVelocity getManualElevatorArmVelocity() {
-    double axis = SimpleMath.povToVector(joystick.getPOV()).getY();
+    double axis = SimpleMath.povToVector(joystick.getPOV()).getX();
     return Degrees.of(180).per(Seconds).times(axis);
   }
 
