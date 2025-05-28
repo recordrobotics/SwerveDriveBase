@@ -48,7 +48,11 @@ public class XboxSimpleBackup extends AbstractControl {
 
   @Override
   public void update() {
-    var xy = getXY(!(getCoralIntakeRelativeDrive() || getElevatorRelativeDrive()));
+    var xy =
+        getXY(
+            !(getCoralIntakeRelativeDrive()
+                || getElevatorRelativeDrive()
+                || getClimbRelativeDrive()));
 
     double x = xy.getFirst() * getDirectionalSpeedLevel();
     double y = xy.getSecond() * getDirectionalSpeedLevel();
@@ -61,7 +65,7 @@ public class XboxSimpleBackup extends AbstractControl {
       x = -temp;
     } else if (getClimbRelativeDrive()) {
       double temp = y;
-      y = -x;
+      y = x;
       x = temp;
     }
 
