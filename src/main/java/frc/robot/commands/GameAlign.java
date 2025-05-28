@@ -61,14 +61,14 @@ public class GameAlign {
                       if (Math.signum(driverVelocity.getX()) != 0
                           && Math.signum(driverVelocity.getX())
                               != Math.signum(targetVelocity.getX())
-                          && Math.abs(driverVelocity.getX() - targetVelocity.getX()) > 2.5) {
+                          && Math.abs(driverVelocity.getX() - targetVelocity.getX()) > 1.0) {
                         return true;
                       }
 
                       if (Math.signum(driverVelocity.getY()) != 0
                           && Math.signum(driverVelocity.getY())
                               != Math.signum(targetVelocity.getY())
-                          && Math.abs(driverVelocity.getY() - targetVelocity.getY()) > 2.5) {
+                          && Math.abs(driverVelocity.getY() - targetVelocity.getY()) > 1.0) {
                         return true;
                       }
 

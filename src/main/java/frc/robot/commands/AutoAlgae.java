@@ -95,7 +95,7 @@ public class AutoAlgae extends SequentialCommandGroup {
                       .getTranslation()
                       .getDistance(pose.getTranslation());
 
-              return cancelCommand || dist > 1.0;
+              return cancelCommand || (dist > 1.0 && !GameAlign.wasInterrupted());
             }),
         new ElevatorMoveThenAlgaeGrabEnd(reefPole.getLevel().getHeight(), true).asProxy());
   }
