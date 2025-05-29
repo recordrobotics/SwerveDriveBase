@@ -321,7 +321,8 @@ public class RobotContainer {
                     .onlyIf(
                         () ->
                             !CoralIntakeSimple.isRunning
-                                && !CoralIntakeFromGroundUpSimple.isRunning),
+                                && !CoralIntakeFromGroundUpSimple.isRunning
+                                && !AutoAlgae.isRunning()),
                 () ->
                     !RobotContainer.elevatorHead.hasCoral()
                         && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
