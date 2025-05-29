@@ -166,7 +166,7 @@ public class RobotContainer {
 
     // Sets up Control scheme chooser
     DashboardUI.Overview.addControls(
-        new JoystickXbox(2, 0), new JoystickXboxSimple(2, 0), new XboxSimpleBackup(0));
+        new JoystickXboxSimple(2, 0), new JoystickXbox(2, 0), new XboxSimpleBackup(0));
 
     // Bindings and Teleop
     configureButtonBindings();
