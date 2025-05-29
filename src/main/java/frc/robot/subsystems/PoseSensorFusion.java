@@ -111,8 +111,8 @@ public class PoseSensorFusion extends ManagedSubsystemBase
               Constants.Swerve.backRightConstants.wheelLocation
             });
 
-    SmartDashboard.putBoolean("Autonomous/TrustLimelightLeft", false);
-    SmartDashboard.putBoolean("Autonomous/TrustLimelightCenter", false);
+    SmartDashboard.putBoolean("Autonomous/TrustLimelightLeft", true);
+    SmartDashboard.putBoolean("Autonomous/TrustLimelightCenter", true);
     SmartDashboard.putBoolean("Autonomous/UseISPE", true);
   }
 
