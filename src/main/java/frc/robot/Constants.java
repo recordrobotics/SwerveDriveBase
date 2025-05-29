@@ -360,7 +360,7 @@ public final class Constants {
     public static final double MAX_REEF_ALIGN_DISTANCE = 2.5; // Meters
 
     public static final double L1_CLEARANCE_MIN = 0.5;
-    public static final double L1_CLEARANCE_MAX = 0.95;
+    public static final double L1_CLEARANCE_MAX = 0.65;
     public static final double L4_CLEARANCE_MIN = 0.4;
     public static final double L4_CLEARANCE_MAX = 1.0;
     public static final double CLEARANCE_MIN = 0.3;
