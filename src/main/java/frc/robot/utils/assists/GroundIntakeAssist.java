@@ -116,31 +116,31 @@ public class GroundIntakeAssist implements IAssist {
     // If the driver is moving in the opposite direction of the target velocity, don't assist
     if (Math.signum(driverX) != 0
         && Math.signum(driverX) != Math.signum(targetVelocity.getX())
-        && Math.abs(driverX - targetVelocity.getX()) > 0.5) {
+        && Math.abs(driverX - targetVelocity.getX()) > 1.5) {
       return false;
     }
 
     // If driver is fighting assist, stop
-    if (Math.abs(driverX - targetVelocity.getX()) > 1.5) {
+    if (Math.abs(driverX - targetVelocity.getX()) > 2.0) {
       return false;
     }
 
     // If the driver is moving in the opposite direction of the target velocity, don't assist
     if (Math.signum(driverRot) != 0
         && Math.signum(driverRot) != Math.signum(targetAngularVelocity.getRadians())
-        && Math.abs(driverRot - targetAngularVelocity.getRadians()) > Units.degreesToRadians(20)) {
+        && Math.abs(driverRot - targetAngularVelocity.getRadians()) > Units.degreesToRadians(40)) {
       return false;
     }
 
     // If driver is fighting assist, stop
-    if (Math.abs(driverRot - targetAngularVelocity.getRadians()) > Units.degreesToRadians(60)) {
+    if (Math.abs(driverRot - targetAngularVelocity.getRadians()) > Units.degreesToRadians(70)) {
       return false;
     }
 
     control.applyWeightedVelocity(
         new Transform2d(
             targetVelocity.getX(), control.getTargetVelocity().getY(), targetAngularVelocity),
-        MathUtil.interpolate(0.4, 1.0, MathUtil.inverseInterpolate(0.1, 0.5, driverSpeed)));
+        MathUtil.interpolate(0.6, 1.0, MathUtil.inverseInterpolate(0.1, 0.5, driverSpeed)));
 
     return true;
   }
