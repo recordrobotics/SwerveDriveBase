@@ -595,6 +595,8 @@ public final class Constants {
 
     public static final Distance CORAL_INTAKE_DISTANCE = Inches.of(1.2);
 
+    public static final double SHOOT_STALL_THRESHOLD = 0.2;
+
     // m/s coral
     public static final double POSITION_MODE_MAX_VELOCITY = 1.4;
     public static final double POSITION_MODE_MAX_ACCELERATION = 0.7;

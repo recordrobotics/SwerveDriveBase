@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -11,10 +12,17 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 
 public class CoralShoot extends SequentialCommandGroup {
+
+  public static boolean failedToShoot = false;
+
   public CoralShoot() {
     addRequirements(RobotContainer.elevatorHead);
 
     addCommands(
+        new InstantCommand(
+            () -> {
+              failedToShoot = false;
+            }),
         new ScheduleCommand(
             RobotContainer.lights
                 .coralShooter
@@ -36,6 +44,35 @@ public class CoralShoot extends SequentialCommandGroup {
         // Make sure coral left
         new WaitUntilCommand(() -> !RobotContainer.elevatorHead.hasCoral()),
         new WaitCommand(Constants.ElevatorHead.SHOOT_TIME),
+        Commands.either(
+            new InstantCommand(
+                    () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE),
+                    RobotContainer.elevatorHead)
+                .andThen(
+                    // wait for elevator to have coral
+                    new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral()))
+                .andThen(
+                    // move coral a set distance
+                    new InstantCommand(
+                        () ->
+                            RobotContainer.elevatorHead.moveBy(
+                                Constants.ElevatorHead.CORAL_INTAKE_DISTANCE),
+                        RobotContainer.elevatorHead))
+                .andThen(new WaitUntilCommand(() -> RobotContainer.elevatorHead.positionAtGoal())),
+            Commands.none(),
+            () -> {
+              if (RobotContainer.elevator.getNearestHeight() != ElevatorHeight.L4) return false;
+
+              boolean stalled =
+                  Math.abs(RobotContainer.elevatorHead.getVelocity())
+                      < Constants.ElevatorHead.SHOOT_STALL_THRESHOLD;
+
+              if (stalled) {
+                failedToShoot = true;
+              }
+
+              return stalled;
+            }),
         new InstantCommand(
             () -> RobotContainer.elevatorHead.set(CoralShooterStates.OFF),
             RobotContainer.elevatorHead),

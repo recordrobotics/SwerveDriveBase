@@ -143,8 +143,8 @@ public class AutoScore extends SequentialCommandGroup {
                                                             : 0),
                                                 Set.of())
                                             .andThen(
-                                                new ElevatorMove(ElevatorHeight.BOTTOM)
-                                                    .asProxy()))),
+                                                new ElevatorMove(ElevatorHeight.BOTTOM).asProxy())
+                                            .onlyIf(() -> !CoralShoot.failedToShoot))),
                         new CoralIntakeShootL1().asProxy(),
                         () -> getLevel() != CoralLevel.L1)),
             Commands.either(
