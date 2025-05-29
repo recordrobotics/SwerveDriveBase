@@ -507,7 +507,7 @@ public final class Constants {
   public enum ElevatorHeight {
     INTAKE(Units.inchesToMeters(0.1), Units.degreesToRadians(-103.54)),
     L1(0.26, Units.degreesToRadians(-101.69)),
-    L2(0.36, Units.degreesToRadians(-90)),
+    L2(0.43, Units.degreesToRadians(-90)),
     LOW_REEF_ALGAE(0.4849, Units.degreesToRadians(-37.841)),
     L3(0.898, Units.degreesToRadians(-101.59)),
     HIGH_REEF_ALGAE(0.916, Units.degreesToRadians(-40.26)),

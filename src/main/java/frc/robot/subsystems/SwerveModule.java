@@ -256,7 +256,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
       turnVoltageCached = io.getTurnMotorVoltage();
     }
 
-    if (Math.abs(driveVelocityCached) > 0.01 || Math.abs(turnVelocityCached) > 0.1) {
+    if (Math.abs(driveVelocityCached) > 0.08 || Math.abs(turnVelocityCached) > 1.0) {
       hasResetAbs = false;
       lastMovementTime = Timer.getFPGATimestamp();
     } else if (Timer.getFPGATimestamp() - lastMovementTime > 2.0
