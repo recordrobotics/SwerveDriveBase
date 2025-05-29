@@ -42,8 +42,25 @@ public class CoralShoot extends SequentialCommandGroup {
             },
             RobotContainer.elevatorHead),
         // Make sure coral left
-        new WaitUntilCommand(() -> !RobotContainer.elevatorHead.hasCoral()),
-        new WaitCommand(Constants.ElevatorHead.SHOOT_TIME),
+        new WaitUntilCommand(() -> !RobotContainer.elevatorHead.hasCoral())
+            .raceWith(
+                new WaitCommand(Constants.ElevatorHead.SHOOT_STALL_TIME)
+                    .andThen(
+                        new WaitUntilCommand(
+                            () -> {
+                              if (RobotContainer.elevator.getNearestHeight() != ElevatorHeight.L4)
+                                return false;
+
+                              boolean stalled =
+                                  Math.abs(RobotContainer.elevatorHead.getVelocity())
+                                      < Constants.ElevatorHead.SHOOT_STALL_THRESHOLD;
+
+                              if (stalled) {
+                                failedToShoot = true;
+                              }
+
+                              return stalled;
+                            }))),
         Commands.either(
             new InstantCommand(
                     () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE),
@@ -59,19 +76,9 @@ public class CoralShoot extends SequentialCommandGroup {
                                 Constants.ElevatorHead.CORAL_INTAKE_DISTANCE),
                         RobotContainer.elevatorHead))
                 .andThen(new WaitUntilCommand(() -> RobotContainer.elevatorHead.positionAtGoal())),
-            Commands.none(),
+            new WaitCommand(Constants.ElevatorHead.SHOOT_TIME),
             () -> {
-              if (RobotContainer.elevator.getNearestHeight() != ElevatorHeight.L4) return false;
-
-              boolean stalled =
-                  Math.abs(RobotContainer.elevatorHead.getVelocity())
-                      < Constants.ElevatorHead.SHOOT_STALL_THRESHOLD;
-
-              if (stalled) {
-                failedToShoot = true;
-              }
-
-              return stalled;
+              return failedToShoot;
             }),
         new InstantCommand(
             () -> RobotContainer.elevatorHead.set(CoralShooterStates.OFF),
