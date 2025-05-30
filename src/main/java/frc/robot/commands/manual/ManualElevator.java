@@ -28,11 +28,14 @@ public class ManualElevator extends Command {
     AbstractControl controls = DashboardUI.Overview.getControl();
 
     LinearVelocity manualElevatorVelocity = controls.getManualElevatorVelocity();
-    height += manualElevatorVelocity.times(Milliseconds.of(20)).in(Meters);
+    double delta = manualElevatorVelocity.times(Milliseconds.of(20)).in(Meters);
+    height += delta;
     height =
         MathUtil.clamp(height, Constants.Elevator.STARTING_HEIGHT, Constants.Elevator.MAX_HEIGHT);
 
-    RobotContainer.elevator.set(height);
+    if (Math.abs(delta) > 0.001) {
+      RobotContainer.elevator.set(height);
+    }
   }
 
   // Returns true when the command should end.

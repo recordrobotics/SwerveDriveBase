@@ -28,10 +28,13 @@ public class ManualElevatorArm extends Command {
     AbstractControl controls = DashboardUI.Overview.getControl();
 
     AngularVelocity manualElevatorArmVelocity = controls.getManualElevatorArmVelocity();
-    angle += manualElevatorArmVelocity.times(Milliseconds.of(20)).in(Radians);
+    double delta = manualElevatorArmVelocity.times(Milliseconds.of(20)).in(Radians);
+    angle += delta;
     angle = MathUtil.clamp(angle, Constants.ElevatorArm.MIN_POS, Constants.ElevatorArm.MAX_POS);
 
-    RobotContainer.elevatorArm.set(angle);
+    if (Math.abs(delta) > 0.001) {
+      RobotContainer.elevatorArm.set(angle);
+    }
   }
 
   // Returns true when the command should end.
