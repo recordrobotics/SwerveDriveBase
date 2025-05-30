@@ -271,7 +271,7 @@ public class RobotContainer {
     new Trigger(
             () ->
                 DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
-                    && !elevatorHead.hasCoral())
+                    && !elevatorHead.hasCoralForSure())
         .onTrue(
             new CoralIntakeFromGround()
             // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
@@ -326,7 +326,7 @@ public class RobotContainer {
                                     && !CoralIntakeFromGroundUpSimple.isRunning
                                     && !AutoAlgae.isRunning()),
                     () ->
-                        !RobotContainer.elevatorHead.hasCoral()
+                        !RobotContainer.elevatorHead.hasCoralForSure()
                             && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
                             && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                                 != ReefLevelSwitchValue.L1,

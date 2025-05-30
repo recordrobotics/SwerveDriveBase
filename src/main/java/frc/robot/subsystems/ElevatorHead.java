@@ -34,8 +34,11 @@ public class ElevatorHead extends KillableSubsystem
   private final ElevatorHeadIO io;
 
   private static Boolean debounced_value = false;
+  private static Boolean debounced_for_sure_value = false;
   private Debouncer m_debouncer =
       new Debouncer(Constants.ElevatorHead.DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
+  private Debouncer m_debouncer_for_sure =
+      new Debouncer(Constants.ElevatorHead.DEBOUNCE_TIME_FOR_SURE, Debouncer.DebounceType.kBoth);
 
   private final PIDController pid =
       new PIDController(
@@ -256,6 +259,10 @@ public class ElevatorHead extends KillableSubsystem
     return debounced_value;
   }
 
+  public boolean hasCoralForSure() {
+    return debounced_for_sure_value;
+  }
+
   public boolean positionAtGoal() {
     return positionPid.atGoal();
   }
@@ -314,6 +321,7 @@ public class ElevatorHead extends KillableSubsystem
     }
 
     debounced_value = !m_debouncer.calculate(io.getCoralDetector());
+    debounced_for_sure_value = !m_debouncer_for_sure.calculate(io.getCoralDetector());
   }
 
   @Override

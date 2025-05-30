@@ -612,6 +612,7 @@ public final class Constants {
     public static final Time SHOOT_STALL_TIME = Seconds.of(0.3);
 
     public static final double DEBOUNCE_TIME = 0.02;
+    public static final double DEBOUNCE_TIME_FOR_SURE = 0.2;
 
     public static final double HOW_FAR_FORWARDS_FROM_THE_ELEVATOR_IS_THE_CORAL_SHOOTER = 0.25;
 
