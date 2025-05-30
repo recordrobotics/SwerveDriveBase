@@ -34,13 +34,17 @@ public class JoystickXboxSimple extends AbstractControl {
     xbox_controller = new XboxController(xboxPort);
 
     new Trigger(() -> xbox_controller.getAButtonPressed())
-        .onTrue(new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L1));
+        .onTrue(
+            new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L1).ignoringDisable(true));
     new Trigger(() -> xbox_controller.getXButtonPressed())
-        .onTrue(new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L2));
+        .onTrue(
+            new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L2).ignoringDisable(true));
     new Trigger(() -> xbox_controller.getBButtonPressed())
-        .onTrue(new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L3));
+        .onTrue(
+            new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L3).ignoringDisable(true));
     new Trigger(() -> xbox_controller.getYButtonPressed())
-        .onTrue(new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L4));
+        .onTrue(
+            new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L4).ignoringDisable(true));
   }
 
   private Transform2d lastVelocity = new Transform2d();
