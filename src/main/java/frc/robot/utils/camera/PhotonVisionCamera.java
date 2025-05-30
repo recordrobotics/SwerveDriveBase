@@ -98,7 +98,7 @@ public class PhotonVisionCamera implements IVisionCamera {
     this.MULTI_TAG_CONFIDENCE_CLOSE = 0.65 * stdMultiplier;
     this.MULTI_TAG_CONFIDENCE_FAR = 0.7 * stdMultiplier;
     this.MT_CLOSE_MAX_DIST = Units.feetToMeters(7);
-    this.MAX_POSE_ERROR = 5; // 5 meters
+    this.MAX_POSE_ERROR = 10; // 10 meters
 
     camera = new PhotonCamera(name);
 

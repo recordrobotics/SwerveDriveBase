@@ -305,7 +305,7 @@ public class RobotContainer {
         .onTrue(new CoralIntakeFromSource(true));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntakeAuto())
-        .debounce(0.2, DebounceType.kBoth)
+        .debounce(1.0, DebounceType.kFalling)
         .whileTrue(
             new RepeatConditionallyCommand(
                 new CoralIntakeSimple(true)

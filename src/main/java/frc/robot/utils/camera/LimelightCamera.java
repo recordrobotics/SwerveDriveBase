@@ -95,7 +95,7 @@ public class LimelightCamera implements IVisionCamera {
     this.MT1_CONFIDENCE = 0.65;
     this.MT2_CONFIDENCE = 0.7;
     this.MT1_MAX_DIST = Units.feetToMeters(7); // 7 feet is where the MT1 (yellow) gets bad wiggles
-    this.MAX_POSE_ERROR = 5; // 5 meters
+    this.MAX_POSE_ERROR = 10; // 10 meters
 
     if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL
         && Constants.RobotState.VISION_SIMULATION_MODE == VisionSimulationMode.PHOTON_SIM) {
