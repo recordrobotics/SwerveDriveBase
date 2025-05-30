@@ -146,7 +146,12 @@ public class Robot extends LoggedRobot {
     RobotContainer.poseSensorFusion.endCalculation();
     RobotContainer.poseSensorFusion.startCalculation();
 
-    CommandScheduler.getInstance().run();
+    try {
+      CommandScheduler.getInstance().run();
+    } catch (Exception e) {
+      e.printStackTrace();
+      DriverStation.reportError("CommandScheduler exception: " + e.getMessage(), false);
+    }
 
     SmartDashboard.putString(
         "Overview/LevelSwitch",
@@ -155,9 +160,19 @@ public class Robot extends LoggedRobot {
     // Return to normal thread priority
     // Threads.setCurrentThreadPriority(false, 10);
 
-    DashboardUI.update();
+    try {
+      DashboardUI.update();
+    } catch (Exception e) {
+      e.printStackTrace();
+      DriverStation.reportError("DashboardUI exception: " + e.getMessage(), false);
+    }
 
-    AutoLogLevelManager.periodic();
+    try {
+      AutoLogLevelManager.periodic();
+    } catch (Exception e) {
+      e.printStackTrace();
+      DriverStation.reportError("AutoLogLevelManager exception: " + e.getMessage(), false);
+    }
   }
 
   boolean hasRun = false;
