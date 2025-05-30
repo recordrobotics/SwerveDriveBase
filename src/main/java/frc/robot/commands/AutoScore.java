@@ -15,7 +15,6 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.Game.CoralLevel;
 import frc.robot.Constants.Game.CoralPosition;
 import frc.robot.RobotContainer;
-import frc.robot.commands.hybrid.AlignToPose;
 import frc.robot.control.AbstractControl.ReefLevelSwitchValue;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
@@ -126,11 +125,16 @@ public class AutoScore extends SequentialCommandGroup {
                                         RobotContainer.poseSensorFusion
                                             .getEstimatedPosition()
                                             .transformBy(
-                                                new Transform2d(-0.3, 0, Rotation2d.kZero)))
+                                                new Transform2d(-0.6, 0, Rotation2d.kZero)))
                             .andThen(
                                 CommandUtils.finishOnInterrupt(
-                                        new AlignToPose(() -> backawayTargetPose) // back away
-                                            .withTimeout(1.0)
+                                        GameAlign.alignTarget(
+                                                () -> backawayTargetPose,
+                                                Transform2d.kZero,
+                                                false,
+                                                true,
+                                                false) // back away
+                                            .withTimeout(2.0)
                                             .asProxy())
                                     .finallyDo(() -> RobotContainer.drivetrain.kill())
                                     .alongWith(
@@ -139,7 +143,7 @@ public class AutoScore extends SequentialCommandGroup {
                                                     new WaitCommand(
                                                         RobotContainer.elevator.getNearestHeight()
                                                                 == ElevatorHeight.L4
-                                                            ? 0.6
+                                                            ? 1.0
                                                             : 0),
                                                 Set.of())
                                             .andThen(

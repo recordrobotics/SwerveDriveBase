@@ -49,7 +49,11 @@ public class RepeatConditionallyCommand extends Command {
   public void initialize() {
     m_ended = false;
     if (m_condition.getAsBoolean() || m_runAtleastOnce) {
-      m_command.initialize();
+      try {
+        m_command.initialize();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     } else {
       m_ended = true;
     }
@@ -59,13 +63,28 @@ public class RepeatConditionallyCommand extends Command {
   public void execute() {
     if (m_ended && m_condition.getAsBoolean()) {
       m_ended = false;
-      m_command.initialize();
+      try {
+        m_command.initialize();
+      } catch (Exception e) {
+        e.printStackTrace();
+        return;
+      }
     }
-    m_command.execute();
-    if (m_command.isFinished()) {
-      // restart command
-      m_command.end(false);
-      m_ended = true;
+    try {
+      m_command.execute();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return;
+    }
+    try {
+      if (m_command.isFinished()) {
+        // restart command
+        m_command.end(false);
+        m_ended = true;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return;
     }
   }
 
@@ -79,7 +98,11 @@ public class RepeatConditionallyCommand extends Command {
     // Make sure we didn't already call end() (which would happen if the command finished in the
     // last call to our execute())
     if (!m_ended) {
-      m_command.end(interrupted);
+      try {
+        m_command.end(interrupted);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
       m_ended = true;
     }
   }

@@ -26,7 +26,10 @@ public class GameAlign {
       boolean repeatedly) {
     Pose2d targetPose = target.get();
 
-    Pose2d pathTarget = targetPose.transformBy(pathTargetTransform);
+    Pose2d pathTarget = null;
+    if (usePath) {
+      pathTarget = targetPose.transformBy(pathTargetTransform);
+    }
 
     Command alignCmd = null;
     if (useAlign) {
