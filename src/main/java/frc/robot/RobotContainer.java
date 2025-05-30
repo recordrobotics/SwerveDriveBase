@@ -213,6 +213,8 @@ public class RobotContainer {
         .onTrue(new InstantCommand(poseSensorFusion::resetStartingPose).ignoringDisable(true));
     new Trigger(() -> DashboardUI.Autonomous.getLimelightRotation())
         .onTrue(new InstantCommand(poseSensorFusion::resetToVision).ignoringDisable(true));
+    new Trigger(() -> DashboardUI.Autonomous.getEncoderReset())
+        .onTrue(new InstantCommand(this::resetEncoders).ignoringDisable(true));
 
     BooleanSupplier elevatorLock =
         () -> {
@@ -461,6 +463,13 @@ public class RobotContainer {
 
     // RoboRioSim.setVInVoltage(
     //     MathUtil.clamp(BatterySim.calculateDefaultBatteryLoadedVoltage(currents), 0, 13));
+  }
+
+  private void resetEncoders() {
+    climber.resetEncoders();
+    elevator.resetEncoders();
+    elevatorArm.resetEncoders();
+    coralIntake.resetEncoders();
   }
 
   /** frees up all hardware allocations */

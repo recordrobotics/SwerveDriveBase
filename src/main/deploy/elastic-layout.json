@@ -410,6 +410,19 @@
               "period": 0.06,
               "data_type": "boolean"
             }
+          },
+          {
+            "title": "EncoderReset",
+            "x": 768.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Button",
+            "properties": {
+              "topic": "/SmartDashboard/Autonomous/EncoderReset",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
           }
         ]
       }

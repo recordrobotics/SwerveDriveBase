@@ -5,8 +5,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.control.AbstractControl;
 import frc.robot.utils.libraries.Elastic;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -32,8 +30,6 @@ public class OverviewLayout extends AbstractLayout {
 
   // private Supplier<Boolean> poseCertainValue = () -> false;
   private Supplier<Boolean> navSensorValue = () -> false;
-
-  private static final Map<Integer, TuningData> shooterSpeedData = new HashMap<>();
 
   public OverviewLayout() {
     addValueSendable("Nav Sensor", () -> navSensorValue.get(), "boolean");
@@ -62,10 +58,6 @@ public class OverviewLayout extends AbstractLayout {
 
   public void setNavSensor(Supplier<Boolean> navSensor) {
     navSensorValue = navSensor;
-  }
-
-  public void putShooterSpeedData(int id, double current, double target) {
-    shooterSpeedData.put(id, new TuningData(current, target));
   }
 
   @Override

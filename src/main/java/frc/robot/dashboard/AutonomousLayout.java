@@ -14,8 +14,6 @@ import frc.robot.commands.auto.BargeRightAuto;
 import frc.robot.utils.libraries.Elastic;
 import java.io.IOException;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -26,8 +24,6 @@ public class AutonomousLayout extends AbstractLayout {
   private static LoggedDashboardChooser<FieldStartingLocation> fieldStartingLocationChooser =
       new LoggedDashboardChooser<>("Starting Location");
 
-  private static final Map<Integer, TuningData> velocityGraphData = new HashMap<>();
-
   public AutonomousLayout() {
     buildSendable("Field", field);
 
@@ -36,10 +32,9 @@ public class AutonomousLayout extends AbstractLayout {
     fieldStartingLocationChooser.addDefaultOption(
         FieldStartingLocation.BargeCenter.name(), FieldStartingLocation.BargeCenter);
 
-    addValueSendable("Velocity", () -> TuningData.MapToArray(velocityGraphData), "double[]");
-
     SmartDashboard.putBoolean("Autonomous/ResetLocationButton", false);
     SmartDashboard.putBoolean("Autonomous/LimelightRotation", false);
+    SmartDashboard.putBoolean("Autonomous/EncoderReset", false);
     SmartDashboard.putBoolean("Autonomous/ForceMT1", false);
   }
 
@@ -63,10 +58,6 @@ public class AutonomousLayout extends AbstractLayout {
 
   public void setVisionPose(String name, Pose2d pose) {
     field.getObject(name).setPose(pose);
-  }
-
-  public void putSwerveVelocityData(int id, double current, double target) {
-    velocityGraphData.put(id, new TuningData(current, target));
   }
 
   @Override
@@ -95,6 +86,10 @@ public class AutonomousLayout extends AbstractLayout {
 
   public boolean getLimelightRotation() {
     return SmartDashboard.getBoolean("Autonomous/LimelightRotation", false);
+  }
+
+  public boolean getEncoderReset() {
+    return SmartDashboard.getBoolean("Autonomous/EncoderReset", false);
   }
 
   public boolean getForceMT1() {

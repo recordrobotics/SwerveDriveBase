@@ -28,6 +28,7 @@ import frc.robot.subsystems.io.CoralIntakeIO;
 import frc.robot.subsystems.io.sim.CoralIntakeSim;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
+import frc.robot.utils.EncoderResettableSubsystem;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -36,7 +37,7 @@ import frc.robot.utils.SysIdManager;
 import org.littletonrobotics.junction.Logger;
 
 public class CoralIntake extends KillableSubsystem
-    implements ShuffleboardPublisher, PoweredSubsystem {
+    implements ShuffleboardPublisher, PoweredSubsystem, EncoderResettableSubsystem {
 
   private final CoralIntakeIO io;
 
@@ -100,8 +101,8 @@ public class CoralIntake extends KillableSubsystem
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
 
-    io.setArmPosition(Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS));
-    armPositionCached = Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS);
+    armPositionCached = io.getArmPosition();
+
     armRequest =
         new MotionMagicExpoVoltage(Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS));
     set(CoralIntakeState.UP);
@@ -343,5 +344,11 @@ public class CoralIntake extends KillableSubsystem
   @Override
   public double getCurrentDrawAmps() {
     return io.getWheelCurrentDrawAmps() + io.getArmCurrentDrawAmps();
+  }
+
+  @Override
+  public void resetEncoders() {
+    io.setArmPosition(Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS));
+    armPositionCached = Units.radiansToRotations(Constants.CoralIntake.ARM_START_POS);
   }
 }

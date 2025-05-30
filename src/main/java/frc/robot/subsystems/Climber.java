@@ -20,6 +20,7 @@ import frc.robot.subsystems.io.ClimberIO;
 import frc.robot.subsystems.io.sim.ClimberSim;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
+import frc.robot.utils.EncoderResettableSubsystem;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -27,7 +28,8 @@ import frc.robot.utils.SimpleMath;
 import frc.robot.utils.SysIdManager;
 import org.littletonrobotics.junction.Logger;
 
-public class Climber extends KillableSubsystem implements ShuffleboardPublisher, PoweredSubsystem {
+public class Climber extends KillableSubsystem
+    implements ShuffleboardPublisher, PoweredSubsystem, EncoderResettableSubsystem {
 
   private final ClimberIO io;
   private final SysIdRoutine sysIdRoutine;
@@ -72,8 +74,7 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
 
-    io.setPosition(Constants.Climber.START_ROTATIONS.in(Rotations));
-    positionCached = Constants.Climber.START_ROTATIONS.in(Rotations);
+    positionCached = io.getPosition();
     armRequest = new MotionMagicVoltage(Constants.Climber.START_ROTATIONS.in(Rotations));
     set(ClimberState.Park);
 
@@ -241,5 +242,11 @@ public class Climber extends KillableSubsystem implements ShuffleboardPublisher,
   @Override
   public double getCurrentDrawAmps() {
     return io.getCurrentDrawAmps();
+  }
+
+  @Override
+  public void resetEncoders() {
+    io.setPosition(Constants.Climber.START_ROTATIONS.in(Rotations));
+    positionCached = Constants.Climber.START_ROTATIONS.in(Rotations);
   }
 }

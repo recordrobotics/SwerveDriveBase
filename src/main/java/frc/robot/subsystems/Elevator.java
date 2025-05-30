@@ -20,6 +20,7 @@ import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.ElevatorIO;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
+import frc.robot.utils.EncoderResettableSubsystem;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -27,7 +28,8 @@ import frc.robot.utils.SysIdManager;
 import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
-public class Elevator extends KillableSubsystem implements ShuffleboardPublisher, PoweredSubsystem {
+public class Elevator extends KillableSubsystem
+    implements ShuffleboardPublisher, PoweredSubsystem, EncoderResettableSubsystem {
   private final ElevatorIO io;
 
   private final MotionMagicExpoVoltage elevatorRequest;
@@ -77,10 +79,7 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
 
-    io.setLeadMotorPosition(Constants.Elevator.STARTING_HEIGHT);
-    io.setFollowerMotorPosition(Constants.Elevator.STARTING_HEIGHT);
-
-    leadPositionCached = Constants.Elevator.STARTING_HEIGHT;
+    leadPositionCached = io.getLeadMotorPosition();
 
     elevatorRequest = new MotionMagicExpoVoltage(Constants.Elevator.STARTING_HEIGHT);
     elevatorFollower = io.createFollower();
@@ -211,5 +210,13 @@ public class Elevator extends KillableSubsystem implements ShuffleboardPublisher
   @Override
   public double getCurrentDrawAmps() {
     return io.getLeadMotorCurrentDraw() + io.getFollowerMotorCurrentDraw();
+  }
+
+  @Override
+  public void resetEncoders() {
+    io.setLeadMotorPosition(Constants.Elevator.STARTING_HEIGHT);
+    io.setFollowerMotorPosition(Constants.Elevator.STARTING_HEIGHT);
+
+    leadPositionCached = Constants.Elevator.STARTING_HEIGHT;
   }
 }

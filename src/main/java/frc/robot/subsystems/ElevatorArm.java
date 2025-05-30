@@ -22,6 +22,7 @@ import frc.robot.subsystems.io.ElevatorArmIO;
 import frc.robot.subsystems.io.sim.ElevatorArmSim;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
+import frc.robot.utils.EncoderResettableSubsystem;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.ShuffleboardPublisher;
@@ -30,7 +31,7 @@ import frc.robot.utils.SysIdManager;
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorArm extends KillableSubsystem
-    implements ShuffleboardPublisher, PoweredSubsystem {
+    implements ShuffleboardPublisher, PoweredSubsystem, EncoderResettableSubsystem {
 
   private final ElevatorArmIO io;
   private final SysIdRoutine sysIdRoutine;
@@ -79,8 +80,8 @@ public class ElevatorArm extends KillableSubsystem
                     .withSupplyCurrentLimitEnable(true)
                     .withStatorCurrentLimitEnable(true)));
 
-    io.setArmPosition(Units.radiansToRotations(Constants.ElevatorArm.START_POS));
-    positionCached = Units.radiansToRotations(Constants.ElevatorArm.START_POS);
+    positionCached = io.getArmPosition();
+
     armRequest =
         new MotionMagicExpoVoltage(Units.radiansToRotations(Constants.ElevatorArm.START_POS));
     set(ElevatorHeight.BOTTOM.getArmAngle());
@@ -192,5 +193,11 @@ public class ElevatorArm extends KillableSubsystem
   @Override
   public double getCurrentDrawAmps() {
     return io.getArmCurrentDrawAmps();
+  }
+
+  @Override
+  public void resetEncoders() {
+    io.setArmPosition(Units.radiansToRotations(Constants.ElevatorArm.START_POS));
+    positionCached = Units.radiansToRotations(Constants.ElevatorArm.START_POS);
   }
 }
