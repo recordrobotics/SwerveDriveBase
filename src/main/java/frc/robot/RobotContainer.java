@@ -208,11 +208,11 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
         .onTrue(new InstantCommand(poseSensorFusion::resetDriverPose));
     new Trigger(() -> DashboardUI.Overview.getControl().getLimelightReset())
-        .onTrue(new InstantCommand(poseSensorFusion::resetFullLimelight));
+        .onTrue(new InstantCommand(poseSensorFusion::resetToVision));
     new Trigger(() -> DashboardUI.Autonomous.getResetLocation())
         .onTrue(new InstantCommand(poseSensorFusion::resetStartingPose).ignoringDisable(true));
     new Trigger(() -> DashboardUI.Autonomous.getLimelightRotation())
-        .onTrue(new InstantCommand(poseSensorFusion::resetToLimelight).ignoringDisable(true));
+        .onTrue(new InstantCommand(poseSensorFusion::resetToVision).ignoringDisable(true));
 
     BooleanSupplier elevatorLock =
         () -> {

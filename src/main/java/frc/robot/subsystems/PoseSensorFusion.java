@@ -264,25 +264,21 @@ public class PoseSensorFusion extends ManagedSubsystemBase
     }
   }
 
-  public void resetToLimelight() {
-    setToPose(
-        new Pose2d(
-            getEstimatedPosition().getTranslation(),
-            leftCamera.getCurrentEstimate().pose.getRotation()));
-  }
-
-  public void resetFullLimelight() {
-    Translation2d translation;
-
-    if (leftCamera.hasVision()) {
-      translation = leftCamera.getCurrentEstimate().pose.getTranslation();
-    } else if (centerCamera.hasVision()) {
-      translation = centerCamera.getCurrentEstimate().pose.getTranslation();
-    } else {
-      translation = leftCamera.getCurrentEstimate().pose.getTranslation();
-    }
-
-    setToPose(new Pose2d(translation, getEstimatedPosition().getRotation()));
+  public void resetToVision() {
+    cameras.stream()
+        .filter(IVisionCamera::hasVision)
+        .sorted(
+            (a, b) ->
+                Double.compare(
+                    a.getCurrentEstimate().avgTagDist, b.getCurrentEstimate().avgTagDist))
+        .findFirst()
+        .ifPresentOrElse(
+            camera -> {
+              setToPose(camera.getCurrentEstimate().pose);
+            },
+            () -> {
+              DriverStation.reportWarning("No camera has vision!", false);
+            });
   }
 
   /**
