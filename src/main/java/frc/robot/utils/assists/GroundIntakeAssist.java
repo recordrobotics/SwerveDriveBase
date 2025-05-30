@@ -20,6 +20,18 @@ public class GroundIntakeAssist implements IAssist {
 
   private boolean enabled = true;
 
+  public static enum FailReason {
+    NONE,
+    NO_OR_UNREACHABLE_CORAL,
+    NOT_IN_GROUND_MODE,
+    NOT_DRIVING,
+    TOO_MUCH_ANGLE_ERROR,
+    DRIVER_MOVING_IN_OPPOSITE_DIRECTION,
+    DRIVER_FIGHTING_ASSIST,
+    DRIVER_ROTATE_IN_OPPOSITE_DIRECTION,
+    DRIVER_ROTATE_FIGHTING_ASSIST
+  }
+
   @Override
   public boolean apply(DrivetrainControl control) {
 
@@ -27,6 +39,7 @@ public class GroundIntakeAssist implements IAssist {
     if (RobotContainer.coralIntake.getState() != CoralIntakeState.GROUND) {
       Logger.recordOutput("GroundIntakeAssist/Corals", new Pose3d[0]);
       Logger.recordOutput("GroundIntakeAssist/TargetCoral", new Pose3d[0]);
+      Logger.recordOutput("GroundIntakeAssist/FailReason", FailReason.NOT_IN_GROUND_MODE);
       return false;
     }
 
@@ -48,6 +61,7 @@ public class GroundIntakeAssist implements IAssist {
     if (driverSpeed < 0.1) {
       Logger.recordOutput("GroundIntakeAssist/Corals", new Pose3d[0]);
       Logger.recordOutput("GroundIntakeAssist/TargetCoral", new Pose3d[0]);
+      Logger.recordOutput("GroundIntakeAssist/FailReason", FailReason.NOT_DRIVING);
       return false;
     }
 
@@ -80,7 +94,10 @@ public class GroundIntakeAssist implements IAssist {
         "GroundIntakeAssist/TargetCoral",
         closestCoral == null ? new Pose3d[0] : new Pose3d[] {closestCoral});
 
-    if (closestCoral == null) return false;
+    if (closestCoral == null) {
+      Logger.recordOutput("GroundIntakeAssist/FailReason", FailReason.NO_OR_UNREACHABLE_CORAL);
+      return false;
+    }
 
     // Find the angle to the closest coral
     var robotToCoral =
@@ -100,6 +117,7 @@ public class GroundIntakeAssist implements IAssist {
 
     // If the angle is too large, don't assist
     if (Math.abs(angleDiff) > Constants.Assits.GROUND_ASSIST_MAX_ANGLE_ERROR.in(Radians)) {
+      Logger.recordOutput("GroundIntakeAssist/FailReason", FailReason.TOO_MUCH_ANGLE_ERROR);
       return false;
     }
 
@@ -116,12 +134,15 @@ public class GroundIntakeAssist implements IAssist {
     // If the driver is moving in the opposite direction of the target velocity, don't assist
     if (Math.signum(driverX) != 0
         && Math.signum(driverX) != Math.signum(targetVelocity.getX())
-        && Math.abs(driverX - targetVelocity.getX()) > 1.5) {
+        && Math.abs(driverX - targetVelocity.getX()) > 2.5) {
+      Logger.recordOutput(
+          "GroundIntakeAssist/FailReason", FailReason.DRIVER_MOVING_IN_OPPOSITE_DIRECTION);
       return false;
     }
 
     // If driver is fighting assist, stop
-    if (Math.abs(driverX - targetVelocity.getX()) > 2.0) {
+    if (Math.abs(driverX - targetVelocity.getX()) > 3.0) {
+      Logger.recordOutput("GroundIntakeAssist/FailReason", FailReason.DRIVER_FIGHTING_ASSIST);
       return false;
     }
 
@@ -129,11 +150,15 @@ public class GroundIntakeAssist implements IAssist {
     if (Math.signum(driverRot) != 0
         && Math.signum(driverRot) != Math.signum(targetAngularVelocity.getRadians())
         && Math.abs(driverRot - targetAngularVelocity.getRadians()) > Units.degreesToRadians(40)) {
+      Logger.recordOutput(
+          "GroundIntakeAssist/FailReason", FailReason.DRIVER_ROTATE_IN_OPPOSITE_DIRECTION);
       return false;
     }
 
     // If driver is fighting assist, stop
     if (Math.abs(driverRot - targetAngularVelocity.getRadians()) > Units.degreesToRadians(70)) {
+      Logger.recordOutput(
+          "GroundIntakeAssist/FailReason", FailReason.DRIVER_ROTATE_FIGHTING_ASSIST);
       return false;
     }
 
@@ -141,6 +166,8 @@ public class GroundIntakeAssist implements IAssist {
         new Transform2d(
             targetVelocity.getX(), control.getTargetVelocity().getY(), targetAngularVelocity),
         MathUtil.interpolate(0.6, 1.0, MathUtil.inverseInterpolate(0.1, 0.5, driverSpeed)));
+
+    Logger.recordOutput("GroundIntakeAssist/FailReason", FailReason.NONE);
 
     return true;
   }
