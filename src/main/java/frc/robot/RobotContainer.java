@@ -308,27 +308,28 @@ public class RobotContainer {
         .debounce(1.0, DebounceType.kFalling)
         .whileTrue(
             new RepeatConditionallyCommand(
-                new CoralIntakeSimple(true)
-                    .finallyDo(
-                        () -> {
-                          CoralIntakeSimple.isRunning = false;
-                          System.out.println("SOURCE ENDE!@!@H*&!*&@EQ#YQ#gyuaqd");
-                          RobotContainer.elevatorHead.set(CoralShooterStates.OFF);
-                          RobotContainer.coralIntake.set(CoralIntakeState.UP);
-                        })
-                    .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-                    .asProxy()
-                    .onlyIf(
-                        () ->
-                            !CoralIntakeSimple.isRunning
-                                && !CoralIntakeFromGroundUpSimple.isRunning
-                                && !AutoAlgae.isRunning()),
-                () ->
-                    !RobotContainer.elevatorHead.hasCoral()
-                        && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
-                        && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
-                            != ReefLevelSwitchValue.L1,
-                false));
+                    new CoralIntakeSimple(true)
+                        .finallyDo(
+                            () -> {
+                              CoralIntakeSimple.isRunning = false;
+                              System.out.println("SOURCE ENDE!@!@H*&!*&@EQ#YQ#gyuaqd");
+                              RobotContainer.elevatorHead.set(CoralShooterStates.OFF);
+                              RobotContainer.coralIntake.set(CoralIntakeState.UP);
+                            })
+                        .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+                        .asProxy()
+                        .onlyIf(
+                            () ->
+                                !CoralIntakeSimple.isRunning
+                                    && !CoralIntakeFromGroundUpSimple.isRunning
+                                    && !AutoAlgae.isRunning()),
+                    () ->
+                        !RobotContainer.elevatorHead.hasCoral()
+                            && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
+                            && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
+                                != ReefLevelSwitchValue.L1,
+                    false)
+                .ignoringDisable(true));
 
     var coralScoreL1Cmd =
         Commands.either(
