@@ -3,50 +3,55 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.5845959999999994,
-        "y": 4.3772175
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 7.299258900000001,
-        "y": 4.357266699999999
-      },
-      "isLocked": false,
-      "linkedName": "ReefH"
-    },
-    {
-      "anchor": {
         "x": 5.844596,
         "y": 3.9152667694000005
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.821004098360655,
+        "y": 4.138883196721311
+      },
+      "isLocked": false,
+      "linkedName": "ReefGH"
+    },
+    {
+      "anchor": {
+        "x": 6.317999999999568,
+        "y": 2.8062500000031334
+      },
       "prevControl": {
-        "x": 6.517346,
-        "y": 3.9347667694000004
+        "x": 6.3061087126453605,
+        "y": 3.0559670344342265
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefGH"
+      "linkedName": "AlgaeDrop"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2736425746134501,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "AlgaeL2",
-      "waypointRelativePos": 0.30272952853598245,
+      "name": "ProcessorScore",
+      "waypointRelativePos": 0.7479935794542564,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "AlgaeL2"
+          "name": "ProcessorScore"
         }
       }
     }
   ],
   "globalConstraints": {
     "maxVelocity": 2.8,
-    "maxAcceleration": 0.8,
+    "maxAcceleration": 3.1,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -54,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -96.92344891481052
   },
   "reversed": false,
   "folder": null,
@@ -62,5 +67,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
