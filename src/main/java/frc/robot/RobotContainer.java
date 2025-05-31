@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -306,7 +307,10 @@ public class RobotContainer {
     new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
         .onTrue(new CoralIntakeFromSource(true));
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntakeAuto())
+    new Trigger(
+            () ->
+                DashboardUI.Overview.getControl().getCoralSourceIntakeAuto()
+                    && !DriverStation.isAutonomous())
         .debounce(1.0, DebounceType.kFalling)
         .whileTrue(
             new RepeatConditionallyCommand(
