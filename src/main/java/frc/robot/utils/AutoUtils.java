@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
+import frc.robot.Constants.Game.CoralLevel;
 import frc.robot.Constants.Game.CoralPosition;
 import frc.robot.Constants.Game.IGamePosition;
 import frc.robot.RobotContainer;
@@ -38,7 +39,7 @@ public class AutoUtils {
                   DebounceType.kFalling); // says if either LL has seen the tag in the last 0.5s
 
           return new RepeatConditionallyCommand(
-                  ReefAlign.alignClosest(true, true, false),
+                  ReefAlign.alignClosest(() -> CoralLevel.L4, true, true, false, true),
                   () -> !visionDebouncer.hasVision(),
                   true)
               .finallyDo(() -> RobotContainer.poseSensorFusion.releaseVisionCheck(visionDebouncer));

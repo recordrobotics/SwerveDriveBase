@@ -366,6 +366,8 @@ public final class Constants {
     public static final double CLEARANCE_MIN = 0.3;
     public static final double CLEARANCE_MAX = 0.7;
 
+    public static final double ADDITIONAL_OFFSET = 0.04;
+
     public static final PathConstraints PATH_CONSTRAINTS =
         new PathConstraints(
             MAX_VELOCITY, MAX_ACCELERATION, MAX_ANGULAR_VELOCITY, MAX_ANGULAR_ACCELERATION);

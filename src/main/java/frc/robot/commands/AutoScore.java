@@ -45,7 +45,8 @@ public class AutoScore extends SequentialCommandGroup {
         GameAlign.makeAlignWithCommand(
                 (usePath, useAlign) ->
                     CommandUtils.finishOnInterrupt(
-                        ReefAlign.alignTarget(reefPole, this::getLevel, usePath, useAlign, false)
+                        ReefAlign.alignTarget(
+                                reefPole, this::getLevel, usePath, useAlign, false, false)
                             .handleInterrupt(() -> alignTimeout = true) // align until inturupted
                             .withTimeout(2.5)
                             .asProxy()),

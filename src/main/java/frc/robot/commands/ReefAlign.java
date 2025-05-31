@@ -16,28 +16,36 @@ import java.util.function.Supplier;
 
 public class ReefAlign {
 
-  public static Command alignClosest(boolean usePath, boolean useAlign, boolean repeatedly) {
+  public static Command alignClosest(
+      boolean usePath, boolean useAlign, boolean repeatedly, boolean useAdditionalOffset) {
+    return alignClosest(
+        () -> DashboardUI.Overview.getControl().getReefLevelSwitchValue().toCoralLevel(),
+        usePath,
+        useAlign,
+        repeatedly,
+        useAdditionalOffset);
+  }
+
+  public static Command alignClosest(
+      Supplier<CoralLevel> level,
+      boolean usePath,
+      boolean useAlign,
+      boolean repeatedly,
+      boolean useAdditionalOffset) {
     return new DeferredCommand(
         () -> {
           CoralPosition alignPose =
               IGamePosition.closestTo(
                   RobotContainer.poseSensorFusion.getEstimatedPosition(), CoralPosition.values());
 
-          var level = DashboardUI.Overview.getControl().getReefLevelSwitchValue().toCoralLevel();
-
           if (alignPose
-                  .getPose(level)
+                  .getPose(level.get())
                   .getTranslation()
                   .getDistance(
                       RobotContainer.poseSensorFusion.getEstimatedPosition().getTranslation())
               > Constants.Align.MAX_REEF_ALIGN_DISTANCE) return Commands.none();
 
-          return alignTarget(
-              alignPose,
-              () -> DashboardUI.Overview.getControl().getReefLevelSwitchValue().toCoralLevel(),
-              usePath,
-              useAlign,
-              repeatedly);
+          return alignTarget(alignPose, level, usePath, useAlign, repeatedly, useAdditionalOffset);
         },
         Set.of(RobotContainer.drivetrain));
   }
@@ -47,9 +55,15 @@ public class ReefAlign {
       Supplier<CoralLevel> level,
       boolean usePath,
       boolean useAlign,
-      boolean repeatedly) {
+      boolean repeatedly,
+      boolean useAdditionalOffset) {
     return GameAlign.alignTarget(
-        () -> pole.getPose(level.get()),
+        () ->
+            useAdditionalOffset
+                ? pole.getPose(level.get())
+                    .transformBy(
+                        new Transform2d(-Constants.Align.ADDITIONAL_OFFSET, 0, Rotation2d.kZero))
+                : pole.getPose(level.get()),
         level.get() == CoralLevel.L1
             ? new Transform2d(0, -Constants.Align.L1_CLEARANCE_MIN, Rotation2d.kZero)
             : new Transform2d(-Constants.Align.CLEARANCE_MIN, 0, Rotation2d.kZero),

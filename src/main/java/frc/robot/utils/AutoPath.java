@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
+import frc.robot.Constants.Game.CoralLevel;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.CoralIntakeMoveL1;
@@ -45,7 +46,7 @@ public class AutoPath {
         "AutoAlign",
         CommandUtils.finishOnInterrupt(
             new RepeatConditionallyCommand(
-                    ReefAlign.alignClosest(true, true, false),
+                    ReefAlign.alignClosest(() -> CoralLevel.L4, true, true, false, true),
                     () ->
                         !(RobotContainer.poseSensorFusion.getLeftCamera().hasVision()
                             || RobotContainer.poseSensorFusion.getCenterCamera().hasVision()),
