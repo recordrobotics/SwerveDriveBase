@@ -12,10 +12,8 @@ import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 
 public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
   public CoralIntakeFromGroundUp() {
-    addRequirements(RobotContainer.coralIntake);
-
-    addRequirements(RobotContainer.elevatorHead);
-    addRequirements(RobotContainer.elevator);
+    addRequirements(
+        RobotContainer.coralIntake, RobotContainer.elevatorHead, RobotContainer.elevator);
 
     addCommands(
         // raise the arm
