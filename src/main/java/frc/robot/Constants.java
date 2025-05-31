@@ -666,7 +666,7 @@ public final class Constants {
     public static final double ARM_PUSH = Units.degreesToRadians(84.19);
     public static final double ARM_INTAKE = Units.degreesToRadians(77.08);
     public static final double ARM_SCORE_L1 = Units.degreesToRadians(22.35);
-    public static final double ARM_DOWN = Units.degreesToRadians(-51);
+    public static final double ARM_DOWN = Units.degreesToRadians(-52);
     public static final double ARM_START_POS =
         SysIdManager.getSysIdRoutine() == SysIdRoutine.CoralIntakeArm
             ? ARM_DOWN
