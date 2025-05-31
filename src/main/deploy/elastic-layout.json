@@ -423,6 +423,18 @@
               "period": 0.06,
               "data_type": "boolean"
             }
+          },
+          {
+            "title": "Alerts",
+            "x": 768.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/Alerts",
+              "period": 0.06
+            }
           }
         ]
       }

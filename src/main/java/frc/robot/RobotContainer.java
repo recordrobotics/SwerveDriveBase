@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 // WPILib imports
 import edu.wpi.first.wpilibj.GenericHID;
@@ -73,6 +75,8 @@ import frc.robot.utils.SysIdManager.SysIdRoutine;
 import frc.robot.utils.assists.GroundIntakeAssist;
 import frc.robot.utils.assists.IAssist;
 import frc.robot.utils.libraries.Elastic;
+import frc.robot.utils.libraries.Elastic.Notification;
+import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
@@ -121,6 +125,8 @@ public class RobotContainer {
       new CoralIntakeMoveToggleRequirement();
 
   public static final List<IAssist> assits = List.of(new GroundIntakeAssist());
+
+  private Alert noEncoderResetAlert = new Alert("Encoders not reset!", AlertType.kError);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -177,6 +183,8 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new ManualSwerve());
     elevator.setDefaultCommand(new ManualElevator());
     elevatorArm.setDefaultCommand(new ManualElevatorArm());
+
+    noEncoderResetAlert.set(true);
   }
 
   public void teleopInit() {}
@@ -474,6 +482,11 @@ public class RobotContainer {
     elevator.resetEncoders();
     elevatorArm.resetEncoders();
     coralIntake.resetEncoders();
+
+    noEncoderResetAlert.set(false);
+    Elastic.sendNotification(
+        new Notification(
+            NotificationLevel.INFO, "Encoders reset!", "Successfully reset arm encoders."));
   }
 
   /** frees up all hardware allocations */
