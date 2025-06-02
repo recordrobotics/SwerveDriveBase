@@ -1,4 +1,4 @@
-Navsensor
+NavSensor
 =============================
 
 gets the Adjusted angle of the robot through ``getAjustedAngle()``, and detects crash by measuring the jerk ``getJerkMagnitude()``. 

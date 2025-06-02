@@ -1,4 +1,4 @@
-Intake
+PowerDistributionPanel
 =============================
 ``public class Intake extends KillableSubsystem``
 Section of the Robot resposible for collecting notes from the field

@@ -1,4 +1,4 @@
-Photosensor
+ElevatorArm
 =============================
 
 gets photosensor values, checks accuracy using debouncer

@@ -1,4 +1,4 @@
-Channel
+CoralIntake
 =============================
 The motor that moves the Note from the Intake to the Shooter
 

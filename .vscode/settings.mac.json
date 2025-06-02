@@ -1,0 +1,81 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.server.launchMode": "Standard",
+    "files.exclude": {
+      "**/.classpath": true,
+      "**/.DS_Store": true,
+      "**/.factorypath": true,
+      "**/.git": false,
+      "**/.hg": true,
+      "**/.project": true,
+      "**/.settings": true,
+      "**/.svn": true,
+      "**/*~": true,
+      "**/CVS": true,
+      "bin/": true
+    },
+    "java.test.config": [
+      {
+        "name": "WPIlibUnitTests",
+        "workingDirectory": "${workspaceFolder}/build/jni/release",
+        "vmargs": [ "-Djava.library.path=${workspaceFolder}/build/jni/release" ],
+        "env": {
+          "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
+          "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
+        }
+      }
+    ],
+    "java.test.defaultConfig": "WPIlibUnitTests",
+    "java.import.gradle.annotationProcessing.enabled": false,
+    "java.completion.favoriteStaticMembers": [
+      "org.junit.Assert.*",
+      "org.junit.Assume.*",
+      "org.junit.jupiter.api.Assertions.*",
+      "org.junit.jupiter.api.Assumptions.*",
+      "org.junit.jupiter.api.DynamicContainer.*",
+      "org.junit.jupiter.api.DynamicTest.*",
+      "org.mockito.Mockito.*",
+      "org.mockito.ArgumentMatchers.*",
+      "org.mockito.Answers.*",
+      "edu.wpi.first.units.Units.*"
+    ],
+    "java.completion.filteredTypes": [
+      "java.awt.*",
+      "com.sun.*",
+      "sun.*",
+      "jdk.*",
+      "org.graalvm.*",
+      "io.micrometer.shaded.*",
+      "java.beans.*",
+      "java.util.Base64.*",
+      "java.util.Timer",
+      "java.sql.*",
+      "javax.swing.*",
+      "javax.management.*",
+      "javax.smartcardio.*",
+      "edu.wpi.first.math.proto.*",
+      "edu.wpi.first.math.**.proto.*",
+      "edu.wpi.first.math.**.struct.*"
+    ],
+    "restructuredtext.linter.doc8.extraArgs": [
+      "--config",
+      "${workspaceFolder}/docs/doc8.ini"
+    ],
+    "esbonio.sphinx.numJobs": 0,
+    "esbonio.sphinx.buildDir": "${workspaceFolder}\\docs\\build",
+    "esbonio.sphinx.confDir": "${workspaceFolder}\\docs\\source",
+    "filewatcher.commands": [
+        {
+        "event": "onFileChange",
+        "match": "\\.rst*",
+        "cmd": "\"${workspaceRoot}/docs/make.sh\" html"
+        }
+    ],
+    "livePreview.defaultPreviewPath": "/docs/build/html/index.html",
+    "livePreview.previewDebounceDelay": 3000,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "iis.configDir": "",
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable"
+}
