@@ -11,7 +11,6 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.Game.AlgaePosition;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
-import frc.robot.utils.CommandUtils;
 
 public class AutoAlgae extends SequentialCommandGroup {
 
@@ -53,11 +52,7 @@ public class AutoAlgae extends SequentialCommandGroup {
             }),
         GameAlign.makeAlignWithCommand(
                 (usePath, useAlign) ->
-                    CommandUtils.finishOnInterrupt(
-                        AlgaeAlign.alignTarget(reefPole, usePath, useAlign, false)
-                            .handleInterrupt(() -> alignTimeout = true) // align until inturupted
-                            .withTimeout(2.5)
-                            .asProxy()),
+                    AlgaeAlign.alignTarget(reefPole, usePath, useAlign, false, 2.0, 1.0).asProxy(),
                 () -> {
                   Pose2d pose = reefPole.getPose();
 
@@ -69,7 +64,6 @@ public class AutoAlgae extends SequentialCommandGroup {
 
                   return (dist < Constants.Align.CLEARANCE_MAX
                           && dist > Constants.Align.CLEARANCE_MIN)
-                      || GameAlign.wasInterrupted()
                       || alignTimeout;
                 },
                 () -> algaeGrabCommand(reefPole.getLevel().getHeight()).asProxy(),
@@ -95,7 +89,7 @@ public class AutoAlgae extends SequentialCommandGroup {
                       .getTranslation()
                       .getDistance(pose.getTranslation());
 
-              return cancelCommand || (dist > 1.0 && !GameAlign.wasInterrupted());
+              return cancelCommand || (dist > 1.0);
             }),
         new ElevatorMoveThenAlgaeGrabEnd(reefPole.getLevel().getHeight(), true).asProxy());
   }

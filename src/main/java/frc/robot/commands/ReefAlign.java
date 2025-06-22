@@ -17,12 +17,19 @@ import java.util.function.Supplier;
 public class ReefAlign {
 
   public static Command alignClosest(
-      boolean usePath, boolean useAlign, boolean repeatedly, boolean useAdditionalOffset) {
+      boolean usePath,
+      boolean useAlign,
+      boolean repeatedly,
+      double pathTimeout,
+      double alignTimeout,
+      boolean useAdditionalOffset) {
     return alignClosest(
         () -> DashboardUI.Overview.getControl().getReefLevelSwitchValue().toCoralLevel(),
         usePath,
         useAlign,
         repeatedly,
+        pathTimeout,
+        alignTimeout,
         useAdditionalOffset);
   }
 
@@ -31,6 +38,8 @@ public class ReefAlign {
       boolean usePath,
       boolean useAlign,
       boolean repeatedly,
+      double pathTimeout,
+      double alignTimeout,
       boolean useAdditionalOffset) {
     return new DeferredCommand(
         () -> {
@@ -45,7 +54,15 @@ public class ReefAlign {
                       RobotContainer.poseSensorFusion.getEstimatedPosition().getTranslation())
               > Constants.Align.MAX_REEF_ALIGN_DISTANCE) return Commands.none();
 
-          return alignTarget(alignPose, level, usePath, useAlign, repeatedly, useAdditionalOffset);
+          return alignTarget(
+              alignPose,
+              level,
+              usePath,
+              useAlign,
+              repeatedly,
+              pathTimeout,
+              alignTimeout,
+              useAdditionalOffset);
         },
         Set.of(RobotContainer.drivetrain));
   }
@@ -56,6 +73,8 @@ public class ReefAlign {
       boolean usePath,
       boolean useAlign,
       boolean repeatedly,
+      double pathTimeout,
+      double alignTimeout,
       boolean useAdditionalOffset) {
     return GameAlign.alignTarget(
         () ->
@@ -69,6 +88,8 @@ public class ReefAlign {
             : new Transform2d(-Constants.Align.CLEARANCE_MIN, 0, Rotation2d.kZero),
         usePath,
         useAlign,
-        repeatedly);
+        repeatedly,
+        pathTimeout,
+        alignTimeout);
   }
 }

@@ -192,9 +192,7 @@ public class Elevator extends KillableSubsystem
   }
 
   @Override
-  public void kill() {
-    io.setLeadMotorVoltage(0);
-  }
+  public void kill() {}
 
   @Override
   public void close() throws Exception {

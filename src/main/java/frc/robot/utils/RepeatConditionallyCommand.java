@@ -70,21 +70,24 @@ public class RepeatConditionallyCommand extends Command {
         return;
       }
     }
-    try {
-      m_command.execute();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return;
-    }
-    try {
-      if (m_command.isFinished()) {
-        // restart command
-        m_command.end(false);
-        m_ended = true;
+
+    if (!m_ended) {
+      try {
+        m_command.execute();
+      } catch (Exception e) {
+        e.printStackTrace();
+        return;
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return;
+      try {
+        if (m_command.isFinished()) {
+          // restart command
+          m_command.end(false);
+          m_ended = true;
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+        return;
+      }
     }
   }
 

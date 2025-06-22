@@ -414,7 +414,7 @@ public class RobotContainer {
                 () -> !AutoAlgae.isRunning()));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getAutoAlign())
-        .whileTrue(ReefAlign.alignClosest(true, true, true, false));
+        .whileTrue(ReefAlign.alignClosest(true, true, true, 2.0, 1.0, false));
 
     new Trigger(() -> DashboardUI.Overview.getControl().getAutoScore())
         .onTrue(

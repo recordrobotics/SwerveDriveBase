@@ -181,9 +181,7 @@ public class ElevatorArm extends KillableSubsystem
   }
 
   @Override
-  public void kill() {
-    io.setArmVoltage(0);
-  }
+  public void kill() {}
 
   /** frees up all hardware allocations */
   public void close() throws Exception {

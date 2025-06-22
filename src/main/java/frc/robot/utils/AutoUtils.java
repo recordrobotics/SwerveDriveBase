@@ -39,7 +39,7 @@ public class AutoUtils {
                   DebounceType.kFalling); // says if either LL has seen the tag in the last 0.5s
 
           return new RepeatConditionallyCommand(
-                  ReefAlign.alignClosest(() -> CoralLevel.L4, true, true, false, true),
+                  ReefAlign.alignClosest(() -> CoralLevel.L4, true, true, false, 2.0, 1.0, true),
                   () -> !visionDebouncer.hasVision(),
                   true)
               .finallyDo(() -> RobotContainer.poseSensorFusion.releaseVisionCheck(visionDebouncer));

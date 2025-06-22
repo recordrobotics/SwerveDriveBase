@@ -18,13 +18,11 @@ import frc.robot.RobotContainer;
 import frc.robot.control.AbstractControl.ReefLevelSwitchValue;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
-import frc.robot.utils.CommandUtils;
 import java.util.Set;
 
 public class AutoScore extends SequentialCommandGroup {
 
   private Pose2d backawayTargetPose = null;
-  private boolean alignTimeout = false;
   private boolean isL1 = false;
 
   private CoralLevel getLevel() {
@@ -37,19 +35,15 @@ public class AutoScore extends SequentialCommandGroup {
     addCommands(
         new InstantCommand(
             () -> {
-              alignTimeout = false;
               isL1 =
                   DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                       == ReefLevelSwitchValue.L1;
             }),
         GameAlign.makeAlignWithCommand(
                 (usePath, useAlign) ->
-                    CommandUtils.finishOnInterrupt(
-                        ReefAlign.alignTarget(
-                                reefPole, this::getLevel, usePath, useAlign, false, false)
-                            .handleInterrupt(() -> alignTimeout = true) // align until inturupted
-                            .withTimeout(2.5)
-                            .asProxy()),
+                    ReefAlign.alignTarget(
+                            reefPole, this::getLevel, usePath, useAlign, true, 2.0, 1.0, false)
+                        .asProxy(),
                 () -> {
                   var level = getLevel();
                   Pose2d pose = reefPole.getPose(level);
@@ -73,9 +67,7 @@ public class AutoScore extends SequentialCommandGroup {
                           .getTranslation()
                           .getDistance(pose.getTranslation());
 
-                  return (dist < clearanceMax && dist > clearanceMin)
-                      || GameAlign.wasInterrupted()
-                      || alignTimeout;
+                  return (dist < clearanceMax && dist > clearanceMin);
                 },
                 () ->
                     Commands.either(
@@ -128,15 +120,15 @@ public class AutoScore extends SequentialCommandGroup {
                                             .transformBy(
                                                 new Transform2d(-0.6, 0, Rotation2d.kZero)))
                             .andThen(
-                                CommandUtils.finishOnInterrupt(
-                                        GameAlign.alignTarget(
-                                                () -> backawayTargetPose,
-                                                Transform2d.kZero,
-                                                false,
-                                                true,
-                                                false) // back away
-                                            .withTimeout(2.0)
-                                            .asProxy())
+                                GameAlign.alignTarget(
+                                        () -> backawayTargetPose,
+                                        Transform2d.kZero,
+                                        false,
+                                        true,
+                                        false,
+                                        2.0,
+                                        2.0) // back away
+                                    .asProxy()
                                     .finallyDo(() -> RobotContainer.drivetrain.kill())
                                     .alongWith(
                                         new DeferredCommand(

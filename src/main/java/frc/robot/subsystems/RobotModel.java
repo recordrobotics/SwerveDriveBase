@@ -320,7 +320,7 @@ public class RobotModel extends ManagedSubsystemBase {
       if (RobotContainer.model != null) robotOrigin = new Pose3d(RobotContainer.model.getRobot());
 
       var pose =
-          new Pose3d(0.32 + 0.165, 0.2, 0.54, new Rotation3d())
+          new Pose3d(0.32 + 0.166, 0.19, 0.54, new Rotation3d())
               .rotateAround(
                   new Translation3d(0.318, 0, 0.575),
                   new Rotation3d(0, -Units.degreesToRadians(elevatorarm.getAngle()), 0));
