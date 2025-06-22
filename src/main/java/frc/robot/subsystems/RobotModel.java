@@ -340,7 +340,7 @@ public class RobotModel extends ManagedSubsystemBase {
           robotOrigin.transformBy(new Transform3d(pose.getTranslation(), pose.getRotation()));
 
       return coralShooterPose.transformBy(
-          new Transform3d(0, 0, 0, new Rotation3d(0, Units.degreesToRadians(180 + 90 + 18), 0)));
+          new Transform3d(0, 0, 0, new Rotation3d(0, Units.degreesToRadians(180 + 90 + 20), 0)));
     }
 
     public Pose3d getAlgaeGrabberTargetPoseTop() {

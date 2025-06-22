@@ -181,7 +181,9 @@ public class ElevatorHeadSim implements ElevatorHeadIO {
                     // The height at which the coral is ejected
                     ejectPose.getMeasureZ(),
                     // The initial speed of the coral
-                    MetersPerSecond.of(Math.abs(RobotContainer.elevatorHead.getVelocity())),
+                    MetersPerSecond.of(
+                        Math.abs(RobotContainer.elevatorHead.getVelocity())
+                            * 2 /* help maplesim reef simulation */),
                     angle));
       }
     }

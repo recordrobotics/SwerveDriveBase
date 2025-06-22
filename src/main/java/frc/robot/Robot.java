@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.KillSpecified;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.utils.AutoLogLevelManager;
+import frc.robot.utils.ImprovedArena2025Reefscape;
 import frc.robot.utils.LocalADStarAK;
 import frc.robot.utils.SysIdManager;
 import frc.robot.utils.SysIdManager.SysIdRoutine;
@@ -91,6 +92,11 @@ public class Robot extends LoggedRobot {
             false);
       }
       SignalLogger.start();
+    }
+
+    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+      // Use custom improved simulation
+      SimulatedArena.overrideInstance(new ImprovedArena2025Reefscape());
     }
   }
 
