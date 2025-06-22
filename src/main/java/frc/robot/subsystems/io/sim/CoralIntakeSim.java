@@ -118,6 +118,20 @@ public class CoralIntakeSim implements CoralIntakeIO {
 
   @Override
   public void setArmPosition(double newValue) {
+    // Reset internal sim state
+    armSimModel.setState(Units.rotationsToRadians(newValue), 0);
+
+    // Update raw rotor position to match internal sim state (has to be called before setPosition to
+    // have correct offset)
+    armSim.setRawRotorPosition(
+        Constants.CoralIntake.ARM_GEAR_RATIO
+            * Units.radiansToRotations(
+                armSimModel.getAngleRads() - Constants.CoralIntake.ARM_START_POS));
+    armSim.setRotorVelocity(
+        Constants.CoralIntake.ARM_GEAR_RATIO
+            * Units.radiansToRotations(armSimModel.getVelocityRadPerSec()));
+
+    // Update internal raw position offset
     arm.setPosition(newValue);
   }
 
