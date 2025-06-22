@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
+import frc.robot.commands.simulation.CoralIntakeToElevator;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 import frc.robot.utils.CommandUtils;
@@ -46,7 +47,8 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
             () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE),
             RobotContainer.elevatorHead),
         new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
-        new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral()),
+        new CoralIntakeToElevator()
+            .simulateFor(new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral())),
         new InstantCommand(
             () -> {
               RobotContainer.coralIntake.set(CoralIntakeState.UP);
