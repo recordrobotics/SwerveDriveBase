@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 import frc.robot.subsystems.io.ElevatorHeadIO;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
@@ -159,7 +160,9 @@ public class ElevatorHeadSim implements ElevatorHeadIO {
               .elevatorArm
               .getCoralShooterTargetPose()
               .relativeTo(new Pose3d(RobotContainer.model.getRobot()));
-      if (Math.abs(velocityFilter.lastValue()) > 1.3) {
+      if (Math.abs(velocityFilter.lastValue()) > 1.4
+          && RobotContainer.elevatorHead.getCurrentCoralShooterState()
+              != CoralShooterStates.POSITION) {
         RobotContainer.model.getRobotCoral().poseSupplier = () -> null;
         setCoralDetectorSim(true); // NC
 
