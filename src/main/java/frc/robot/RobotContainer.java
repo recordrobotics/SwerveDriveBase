@@ -393,7 +393,10 @@ public class RobotContainer {
             () -> DashboardUI.Overview.getControl().getScoreAlgae() && !algaeLock.getAsBoolean())
         .onTrue(new VibrateXbox(RumbleType.kLeftRumble, 1).withTimeout(0.1));
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeSimple())
+    new Trigger(
+            () ->
+                DashboardUI.Overview.getControl().getReefAlgaeSimple()
+                    && !elevatorHead.hasCoralForSure())
         .onTrue(
             Commands.either(
                 new DeferredCommand(
