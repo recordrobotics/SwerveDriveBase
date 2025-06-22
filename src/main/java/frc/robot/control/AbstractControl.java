@@ -2,6 +2,7 @@ package frc.robot.control;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -17,6 +18,8 @@ public abstract class AbstractControl {
 
   // Movement
   public abstract DrivetrainControl getDrivetrainControl();
+
+  public abstract Transform2d getRawDriverInput();
 
   public abstract Boolean getAutoAlign();
 

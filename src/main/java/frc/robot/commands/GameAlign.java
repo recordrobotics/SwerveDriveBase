@@ -58,26 +58,19 @@ public class GameAlign {
 
                           if (AlignToPose.getDrivetrainControl() == null) return true;
 
-                          var driverVelocity =
-                              DashboardUI.Overview.getControl()
-                                  .getDrivetrainControl()
-                                  .getDriverVelocity();
-                          var targetVelocity =
-                              AlignToPose.getDrivetrainControl().getTargetVelocity();
+                          var driverInput = DashboardUI.Overview.getControl().getRawDriverInput();
 
                           // If the driver is manually adjusting, stop autoalign
-                          if (Math.abs(driverVelocity.getX() - targetVelocity.getX()) > 0.3) {
+                          if (Math.abs(driverInput.getX()) > 0.55) {
                             return false;
                           }
 
-                          if (Math.abs(driverVelocity.getY() - targetVelocity.getY()) > 0.3) {
+                          if (Math.abs(driverInput.getY()) > 0.55) {
                             return false;
                           }
 
-                          if (Math.abs(
-                                  driverVelocity.getRotation().getRadians()
-                                      - targetVelocity.getRotation().getRadians())
-                              > Units.degreesToRadians(20)) {
+                          if (Math.abs(driverInput.getRotation().getRadians())
+                              > Units.degreesToRadians(40)) {
                             return false;
                           }
 

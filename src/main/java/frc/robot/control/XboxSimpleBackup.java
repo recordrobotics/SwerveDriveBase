@@ -90,6 +90,13 @@ public class XboxSimpleBackup extends AbstractControl {
   }
 
   @Override
+  public Transform2d getRawDriverInput() {
+    var xy = getXY(false);
+    // Returns the raw driver input as a Transform2d
+    return new Transform2d(xy.getFirst(), xy.getSecond(), Rotation2d.fromRadians(getSpin()));
+  }
+
+  @Override
   public DrivetrainControl getDrivetrainControl() {
     if (getElevatorRelativeDrive() || getCoralIntakeRelativeDrive() || getClimbRelativeDrive()) {
       return DrivetrainControl.createRobotRelative(velocity, acceleration, jerk);
