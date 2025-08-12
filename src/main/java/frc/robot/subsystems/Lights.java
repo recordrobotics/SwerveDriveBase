@@ -14,39 +14,39 @@ import frc.robot.subsystems.lights.StateVisualizerLights;
 
 public class Lights extends SubsystemBase implements AutoCloseable {
 
-  public AlgaeGrabberLights algaeGrabber;
-  public CoralIntakeLights coralIntake;
-  public CoralShooterLights coralShooter;
-  public ElevatorLights elevator;
-  public StateVisualizerLights stateVisualizer;
+    public AlgaeGrabberLights algaeGrabber;
+    public CoralIntakeLights coralIntake;
+    public CoralShooterLights coralShooter;
+    public ElevatorLights elevator;
+    public StateVisualizerLights stateVisualizer;
 
-  private AddressableLED LEDs;
-  private AddressableLEDBuffer buffer;
+    private AddressableLED LEDs;
+    private AddressableLEDBuffer buffer;
 
-  public Lights() {
-    LEDs = new AddressableLED(RobotMap.Lights.LED_ID);
-    buffer = new AddressableLEDBuffer(Constants.Lights.LENGTH);
-    LEDs.setColorOrder(ColorOrder.kRGB);
-    LEDs.setLength(Constants.Lights.LENGTH);
-    LEDs.start();
+    public Lights() {
+        LEDs = new AddressableLED(RobotMap.Lights.LED_ID);
+        buffer = new AddressableLEDBuffer(Constants.Lights.LENGTH);
+        LEDs.setColorOrder(ColorOrder.kRGB);
+        LEDs.setLength(Constants.Lights.LENGTH);
+        LEDs.start();
 
-    algaeGrabber = new AlgaeGrabberLights(this);
-    coralIntake = new CoralIntakeLights(this);
-    coralShooter = new CoralShooterLights(this);
-    elevator = new ElevatorLights(this);
-    stateVisualizer = new StateVisualizerLights(this);
-  }
+        algaeGrabber = new AlgaeGrabberLights(this);
+        coralIntake = new CoralIntakeLights(this);
+        coralShooter = new CoralShooterLights(this);
+        elevator = new ElevatorLights(this);
+        stateVisualizer = new StateVisualizerLights(this);
+    }
 
-  public void periodicManaged() {
-    // Send the latest LED color data to the LED strip
-    LEDs.setData(buffer);
-  }
+    public void periodicManaged() {
+        // Send the latest LED color data to the LED strip
+        LEDs.setData(buffer);
+    }
 
-  public AddressableLEDBuffer getBuffer() {
-    return buffer;
-  }
+    public AddressableLEDBuffer getBuffer() {
+        return buffer;
+    }
 
-  public void close() {
-    LEDs.close();
-  }
+    public void close() {
+        LEDs.close();
+    }
 }

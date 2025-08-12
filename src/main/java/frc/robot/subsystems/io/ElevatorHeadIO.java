@@ -2,23 +2,23 @@ package frc.robot.subsystems.io;
 
 public interface ElevatorHeadIO extends AutoCloseable {
 
-  public void setVoltage(double outputVolts);
+    void setVoltage(double outputVolts);
 
-  public void setPosition(double newValue);
+    void setPosition(double newValue);
 
-  public double getPosition();
+    double getPosition();
 
-  public double getVelocity();
+    double getVelocity();
 
-  public double getVoltage();
+    double getVoltage();
 
-  public void setPercent(double newValue);
+    void setPercent(double newValue);
 
-  public double getPercent();
+    double getPercent();
 
-  public boolean getCoralDetector();
+    boolean getCoralDetector();
 
-  public double getCurrentDrawAmps();
+    double getCurrentDrawAmps();
 
-  public void simulationPeriodic();
+    void simulationPeriodic();
 }

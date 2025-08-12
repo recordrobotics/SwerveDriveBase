@@ -10,23 +10,21 @@ import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 
 public class CoralIntakeMoveL1 extends SequentialCommandGroup {
 
-  public CoralIntakeMoveL1() {
-    addCommands(
-        new ScheduleCommand(
-            RobotContainer.lights
-                .coralIntake
-                .runPattern(Constants.Lights.coralIntakePattern)
-                .onlyWhile(this::isScheduled)),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .stateVisualizer
-                .runPattern(Constants.Lights.coralScorePattern)
-                .onlyWhile(this::isScheduled)),
-        new InstantCommand(
-            () -> {
-              RobotContainer.coralIntake.set(CoralIntakeState.L1_DOWN);
-            },
-            RobotContainer.coralIntake),
-        new WaitUntilCommand(() -> RobotContainer.coralIntake.armAtGoal()));
-  }
+    public CoralIntakeMoveL1() {
+        addCommands(
+                new ScheduleCommand(RobotContainer.lights
+                        .coralIntake
+                        .runPattern(Constants.Lights.coralIntakePattern)
+                        .onlyWhile(this::isScheduled)),
+                new ScheduleCommand(RobotContainer.lights
+                        .stateVisualizer
+                        .runPattern(Constants.Lights.coralScorePattern)
+                        .onlyWhile(this::isScheduled)),
+                new InstantCommand(
+                        () -> {
+                            RobotContainer.coralIntake.set(CoralIntakeState.L1_DOWN);
+                        },
+                        RobotContainer.coralIntake),
+                new WaitUntilCommand(() -> RobotContainer.coralIntake.armAtGoal()));
+    }
 }

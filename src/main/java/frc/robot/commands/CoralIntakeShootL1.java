@@ -10,36 +10,31 @@ import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 
 public class CoralIntakeShootL1 extends SequentialCommandGroup {
 
-  public CoralIntakeShootL1() {
-    addCommands(
-        new ScheduleCommand(
-            RobotContainer.lights
-                .coralIntake
-                .runPattern(Constants.Lights.coralIntakePattern)
-                .onlyWhile(this::isScheduled)),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .stateVisualizer
-                .runPattern(Constants.Lights.coralScorePattern)
-                .onlyWhile(this::isScheduled)),
-        new InstantCommand(
-            () -> {
-              RobotContainer.coralIntake.set(CoralIntakeState.L1_SCORE);
-            },
-            RobotContainer.coralIntake),
-        new WaitCommand(Constants.CoralIntake.SHOOT_TIME),
-        new InstantCommand(
-            () -> {
-              RobotContainer.coralIntake.set(CoralIntakeState.UP);
-            },
-            RobotContainer.coralIntake),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .coralIntake
-                .runPattern(Constants.Lights.FLASHING_GREEN)
-                .alongWith(
-                    RobotContainer.lights.stateVisualizer.runPattern(
-                        Constants.Lights.FLASHING_GREEN))
-                .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)));
-  }
+    public CoralIntakeShootL1() {
+        addCommands(
+                new ScheduleCommand(RobotContainer.lights
+                        .coralIntake
+                        .runPattern(Constants.Lights.coralIntakePattern)
+                        .onlyWhile(this::isScheduled)),
+                new ScheduleCommand(RobotContainer.lights
+                        .stateVisualizer
+                        .runPattern(Constants.Lights.coralScorePattern)
+                        .onlyWhile(this::isScheduled)),
+                new InstantCommand(
+                        () -> {
+                            RobotContainer.coralIntake.set(CoralIntakeState.L1_SCORE);
+                        },
+                        RobotContainer.coralIntake),
+                new WaitCommand(Constants.CoralIntake.SHOOT_TIME),
+                new InstantCommand(
+                        () -> {
+                            RobotContainer.coralIntake.set(CoralIntakeState.UP);
+                        },
+                        RobotContainer.coralIntake),
+                new ScheduleCommand(RobotContainer.lights
+                        .coralIntake
+                        .runPattern(Constants.Lights.FLASHING_GREEN)
+                        .alongWith(RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.FLASHING_GREEN))
+                        .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)));
+    }
 }

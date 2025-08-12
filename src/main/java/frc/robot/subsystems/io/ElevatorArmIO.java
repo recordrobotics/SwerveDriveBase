@@ -5,25 +5,25 @@ import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 
 public interface ElevatorArmIO extends AutoCloseable {
 
-  public void applyArmTalonFXConfig(TalonFXConfiguration configuration);
+    void applyArmTalonFXConfig(TalonFXConfiguration configuration);
 
-  public void setArmVoltage(double outputVolts);
+    void setArmVoltage(double outputVolts);
 
-  public void setArmPosition(double newValue);
+    void setArmPosition(double newValue);
 
-  public void setArmMotionMagic(MotionMagicExpoVoltage request);
+    void setArmMotionMagic(MotionMagicExpoVoltage request);
 
-  public double getArmPosition();
+    double getArmPosition();
 
-  public double getArmVelocity();
+    double getArmVelocity();
 
-  public void setArmPercent(double newValue);
+    void setArmPercent(double newValue);
 
-  public double getArmPercent();
+    double getArmPercent();
 
-  public double getArmVoltage();
+    double getArmVoltage();
 
-  public double getArmCurrentDrawAmps();
+    double getArmCurrentDrawAmps();
 
-  public void simulationPeriodic();
+    void simulationPeriodic();
 }

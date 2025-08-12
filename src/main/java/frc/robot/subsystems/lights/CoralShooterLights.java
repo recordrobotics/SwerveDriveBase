@@ -5,9 +5,9 @@ import frc.robot.subsystems.Lights;
 
 public class CoralShooterLights extends VirtualLightsSubsystem {
 
-  public CoralShooterLights(Lights lights) {
-    super(lights, 112, 117);
-    setDefaultCommand(
-        runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY_WITH_CLIMB).ignoringDisable(true));
-  }
+    public CoralShooterLights(Lights lights) {
+        super(lights, 112, 117);
+        setDefaultCommand(
+                runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY_WITH_CLIMB).ignoringDisable(true));
+    }
 }

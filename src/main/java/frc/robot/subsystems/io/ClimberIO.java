@@ -4,27 +4,27 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
 public interface ClimberIO extends AutoCloseable {
-  public void applyTalonFXConfig(TalonFXConfiguration configuration);
+    void applyTalonFXConfig(TalonFXConfiguration configuration);
 
-  public void setVoltage(double outputVolts);
+    void setVoltage(double outputVolts);
 
-  public void setPosition(double newValue);
+    void setPosition(double newValue);
 
-  public void setMotionMagic(MotionMagicVoltage request);
+    void setMotionMagic(MotionMagicVoltage request);
 
-  public double getPosition();
+    double getPosition();
 
-  public double getVelocity();
+    double getVelocity();
 
-  public void setPercent(double newValue);
+    void setPercent(double newValue);
 
-  public double getPercent();
+    double getPercent();
 
-  public double getVoltage();
+    double getVoltage();
 
-  public void setRatchet(double value);
+    void setRatchet(double value);
 
-  public double getCurrentDrawAmps();
+    double getCurrentDrawAmps();
 
-  public void simulationPeriodic();
+    void simulationPeriodic();
 }

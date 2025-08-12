@@ -6,47 +6,47 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
 public interface SwerveModuleIO extends AutoCloseable {
 
-  public void applyDriveTalonFXConfig(TalonFXConfiguration configuration);
+    void applyDriveTalonFXConfig(TalonFXConfiguration configuration);
 
-  public void applyTurnTalonFXConfig(TalonFXConfiguration configuration);
+    void applyTurnTalonFXConfig(TalonFXConfiguration configuration);
 
-  public void setDriveMotorVoltage(double newValue);
+    void setDriveMotorVoltage(double newValue);
 
-  public void setTurnMotorVoltage(double newValue);
+    void setTurnMotorVoltage(double newValue);
 
-  public void setTurnMotorMotionMagic(MotionMagicVoltage request);
+    void setTurnMotorMotionMagic(MotionMagicVoltage request);
 
-  public void setDriveMotorMotionMagic(MotionMagicVelocityVoltage request);
+    void setDriveMotorMotionMagic(MotionMagicVelocityVoltage request);
 
-  public double getDriveMotorVoltage();
+    double getDriveMotorVoltage();
 
-  public double getTurnMotorVoltage();
+    double getTurnMotorVoltage();
 
-  public void setDriveMotorPercent(double newValue);
+    void setDriveMotorPercent(double newValue);
 
-  public void setTurnMotorPercent(double newValue);
+    void setTurnMotorPercent(double newValue);
 
-  public double getDriveMotorPercent();
+    double getDriveMotorPercent();
 
-  public double getTurnMotorPercent();
+    double getTurnMotorPercent();
 
-  public double getAbsoluteEncoder();
+    double getAbsoluteEncoder();
 
-  public double getTurnMechanismPosition();
+    double getTurnMechanismPosition();
 
-  public double getTurnMechanismVelocity();
+    double getTurnMechanismVelocity();
 
-  public double getDriveMechanismPosition();
+    double getDriveMechanismPosition();
 
-  public double getDriveMechanismVelocity();
+    double getDriveMechanismVelocity();
 
-  public void setDriveMechanismPosition(double newValue);
+    void setDriveMechanismPosition(double newValue);
 
-  public void setTurnMechanismPosition(double newValue);
+    void setTurnMechanismPosition(double newValue);
 
-  public double getDriveMotorCurrentDrawAmps();
+    double getDriveMotorCurrentDrawAmps();
 
-  public double getTurnMotorCurrentDrawAmps();
+    double getTurnMotorCurrentDrawAmps();
 
-  public void simulationPeriodic();
+    void simulationPeriodic();
 }

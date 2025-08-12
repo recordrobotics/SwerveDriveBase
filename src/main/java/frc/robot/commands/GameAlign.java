@@ -17,88 +17,81 @@ import java.util.function.Supplier;
 
 public class GameAlign {
 
-  public static Command alignTarget(
-      Supplier<Pose2d> target,
-      Transform2d pathTargetTransform,
-      boolean usePath,
-      boolean useAlign,
-      boolean repeatedly,
-      double pathTimeout,
-      double alignTimeout) {
-    Pose2d targetPose = target.get();
+    public static Command alignTarget(
+            Supplier<Pose2d> target,
+            Transform2d pathTargetTransform,
+            boolean usePath,
+            boolean useAlign,
+            boolean repeatedly,
+            double pathTimeout,
+            double alignTimeout) {
+        Pose2d targetPose = target.get();
 
-    Pose2d pathTarget = null;
-    if (usePath) {
-      pathTarget = targetPose.transformBy(pathTargetTransform);
-    }
+        Pose2d pathTarget = null;
+        if (usePath) {
+            pathTarget = targetPose.transformBy(pathTargetTransform);
+        }
 
-    Command alignCmd = null;
-    if (useAlign) {
-      alignCmd =
-          CommandUtils.finishOnInterrupt(
-              new AlignToPose(
-                      () -> {
+        Command alignCmd = null;
+        if (useAlign) {
+            alignCmd = CommandUtils.finishOnInterrupt(new AlignToPose(() -> {
                         return target.get();
-                      })
-                  .withTimeout(alignTimeout));
+                    })
+                    .withTimeout(alignTimeout));
 
-      if (repeatedly) {
-        alignCmd =
-            alignCmd.andThen(
-                CommandUtils.finishOnInterrupt(
-                        new AlignToPose(
-                                () -> {
-                                  return target.get();
+            if (repeatedly) {
+                alignCmd = alignCmd.andThen(CommandUtils.finishOnInterrupt(new AlignToPose(() -> {
+                                    return target.get();
                                 })
-                            .withTimeout(alignTimeout))
-                    .repeatedly()
-                    .onlyWhile(
-                        () -> {
-                          if (RobotState.isAutonomous()) return true;
+                                .withTimeout(alignTimeout))
+                        .repeatedly()
+                        .onlyWhile(() -> {
+                            if (RobotState.isAutonomous()) return true;
 
-                          if (AlignToPose.getDrivetrainControl() == null) return true;
+                            if (AlignToPose.getDrivetrainControl() == null) return true;
 
-                          var driverInput = DashboardUI.Overview.getControl().getRawDriverInput();
+                            Transform2d driverInput =
+                                    DashboardUI.Overview.getControl().getRawDriverInput();
 
-                          // If the driver is manually adjusting, stop autoalign
-                          if (Math.abs(driverInput.getX()) > 0.55) {
-                            return false;
-                          }
+                            // If the driver is manually adjusting, stop autoalign
+                            if (Math.abs(driverInput.getX()) > 0.55) {
+                                return false;
+                            }
 
-                          if (Math.abs(driverInput.getY()) > 0.55) {
-                            return false;
-                          }
+                            if (Math.abs(driverInput.getY()) > 0.55) {
+                                return false;
+                            }
 
-                          if (Math.abs(driverInput.getRotation().getRadians())
-                              > Units.degreesToRadians(40)) {
-                            return false;
-                          }
+                            if (Math.abs(driverInput.getRotation().getRadians()) > Units.degreesToRadians(40)) {
+                                return false;
+                            }
 
-                          return true;
+                            return true;
                         }));
-      }
+            }
+        }
+
+        return new SequentialCommandGroup(
+                usePath
+                        ? CommandUtils.finishOnInterrupt(
+                                PathAlign.create(pathTarget).withTimeout(pathTimeout))
+                        : Commands.none(),
+                useAlign ? alignCmd : Commands.none());
     }
 
-    return new SequentialCommandGroup(
-        usePath
-            ? CommandUtils.finishOnInterrupt(PathAlign.create(pathTarget).withTimeout(pathTimeout))
-            : Commands.none(),
-        useAlign ? alignCmd : Commands.none());
-  }
-
-  public static Command makeAlignWithCommand(
-      BiFunction<Boolean, Boolean, Command> alignCommandFactory,
-      BooleanSupplier waitCondition,
-      Supplier<Command> performCommandFactory,
-      BooleanSupplier switchCondition) {
-    return Commands.either(
-        alignCommandFactory
-            .apply(true, true)
-            .alongWith(new WaitUntilCommand(waitCondition).andThen(performCommandFactory.get())),
-        alignCommandFactory
-            .apply(true, false)
-            .andThen(performCommandFactory.get())
-            .andThen(alignCommandFactory.apply(false, true)),
-        switchCondition);
-  }
+    public static Command makeAlignWithCommand(
+            BiFunction<Boolean, Boolean, Command> alignCommandFactory,
+            BooleanSupplier waitCondition,
+            Supplier<Command> performCommandFactory,
+            BooleanSupplier switchCondition) {
+        return Commands.either(
+                alignCommandFactory
+                        .apply(true, true)
+                        .alongWith(new WaitUntilCommand(waitCondition).andThen(performCommandFactory.get())),
+                alignCommandFactory
+                        .apply(true, false)
+                        .andThen(performCommandFactory.get())
+                        .andThen(alignCommandFactory.apply(false, true)),
+                switchCondition);
+    }
 }

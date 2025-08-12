@@ -9,50 +9,51 @@ import frc.robot.RobotContainer;
 import frc.robot.control.AbstractControl;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.utils.assists.DrivetrainControl;
+import frc.robot.utils.assists.IAssist;
 import org.littletonrobotics.junction.Logger;
 
 /** An example command that uses an example subsystem. */
 public class ManualSwerve extends Command {
 
-  /**
-   * @param drivetrain
-   */
-  public ManualSwerve() {
-    addRequirements(RobotContainer.drivetrain);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    AbstractControl controls = DashboardUI.Overview.getControl();
-
-    DrivetrainControl drivetrainControl = controls.getDrivetrainControl();
-
-    int applyCount = 0;
-    for (var assist : RobotContainer.assits) {
-      if (assist.isEnabled()) {
-        if (assist.apply(drivetrainControl)) {
-          applyCount++;
-        }
-      }
+    /**
+     * @param drivetrain
+     */
+    public ManualSwerve() {
+        addRequirements(RobotContainer.drivetrain);
     }
 
-    Logger.recordOutput("ManualSwerve/AssistsApplied", applyCount);
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {}
 
-    RobotContainer.drivetrain.drive(drivetrainControl.toChassisSpeeds());
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        AbstractControl controls = DashboardUI.Overview.getControl();
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+        DrivetrainControl drivetrainControl = controls.getDrivetrainControl();
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+        int applyCount = 0;
+        for (IAssist assist : RobotContainer.assits) {
+            if (assist.isEnabled()) {
+                if (assist.apply(drivetrainControl)) {
+                    applyCount++;
+                }
+            }
+        }
+
+        Logger.recordOutput("ManualSwerve/AssistsApplied", applyCount);
+
+        RobotContainer.drivetrain.drive(drivetrainControl.toChassisSpeeds());
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

@@ -18,204 +18,199 @@ import frc.robot.subsystems.io.ElevatorIO;
 
 public class ElevatorSim implements ElevatorIO {
 
-  private final double periodicDt;
+    private final double periodicDt;
 
-  private final TalonFX motorLead;
-  private final TalonFX motorFollower;
+    private final TalonFX motorLead;
+    private final TalonFX motorFollower;
 
-  private final TalonFXSimState motorLeadSim;
-  private final TalonFXSimState motorFollowerSim;
+    private final TalonFXSimState motorLeadSim;
+    private final TalonFXSimState motorFollowerSim;
 
-  private final edu.wpi.first.wpilibj.simulation.ElevatorSim elevatorSim =
-      new edu.wpi.first.wpilibj.simulation.ElevatorSim(
-          DCMotor.getKrakenX60(2),
-          Constants.Elevator.GEAR_RATIO,
-          1.0,
-          Constants.Elevator.DRUM_RADIUS,
-          0,
-          Constants.Elevator.MAX_HEIGHT,
-          true,
-          0,
-          0.0003,
-          0.0003);
+    private final edu.wpi.first.wpilibj.simulation.ElevatorSim elevatorSim =
+            new edu.wpi.first.wpilibj.simulation.ElevatorSim(
+                    DCMotor.getKrakenX60(2),
+                    Constants.Elevator.GEAR_RATIO,
+                    1.0,
+                    Constants.Elevator.DRUM_RADIUS,
+                    0,
+                    Constants.Elevator.MAX_HEIGHT,
+                    true,
+                    0,
+                    0.0003,
+                    0.0003);
 
-  private final DigitalInput bottomEndStop = new DigitalInput(RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
-  private final DigitalInput topEndStop = new DigitalInput(RobotMap.Elevator.TOP_ENDSTOP_ID);
-  private final SimDevice bottomEndStopSim =
-      SimDevice.create("DigitalInput", RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
-  private final SimDevice topEndStopSim =
-      SimDevice.create("DigitalInput", RobotMap.Elevator.TOP_ENDSTOP_ID);
-  private final SimBoolean bottomEndStopSimValue;
-  private final SimBoolean topEndStopSimValue;
+    private final DigitalInput bottomEndStop = new DigitalInput(RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
+    private final DigitalInput topEndStop = new DigitalInput(RobotMap.Elevator.TOP_ENDSTOP_ID);
+    private final SimDevice bottomEndStopSim = SimDevice.create("DigitalInput", RobotMap.Elevator.BOTTOM_ENDSTOP_ID);
+    private final SimDevice topEndStopSim = SimDevice.create("DigitalInput", RobotMap.Elevator.TOP_ENDSTOP_ID);
+    private final SimBoolean bottomEndStopSimValue;
+    private final SimBoolean topEndStopSimValue;
 
-  public ElevatorSim(double periodicDt) {
-    this.periodicDt = periodicDt;
+    public ElevatorSim(double periodicDt) {
+        this.periodicDt = periodicDt;
 
-    motorLead = new TalonFX(RobotMap.Elevator.MOTOR_LEAD_ID);
-    motorFollower = new TalonFX(RobotMap.Elevator.MOTOR_FOLLOWER_ID);
+        motorLead = new TalonFX(RobotMap.Elevator.MOTOR_LEAD_ID);
+        motorFollower = new TalonFX(RobotMap.Elevator.MOTOR_FOLLOWER_ID);
 
-    motorLeadSim = motorLead.getSimState();
-    motorFollowerSim = motorFollower.getSimState();
+        motorLeadSim = motorLead.getSimState();
+        motorFollowerSim = motorFollower.getSimState();
 
-    motorLeadSim.Orientation = ChassisReference.Clockwise_Positive;
-    motorFollowerSim.Orientation = ChassisReference.Clockwise_Positive;
+        motorLeadSim.Orientation = ChassisReference.Clockwise_Positive;
+        motorFollowerSim.Orientation = ChassisReference.Clockwise_Positive;
 
-    if (bottomEndStopSim != null)
-      bottomEndStopSimValue = bottomEndStopSim.createBoolean("Value", Direction.kOutput, false);
-    else bottomEndStopSimValue = null;
+        if (bottomEndStopSim != null)
+            bottomEndStopSimValue = bottomEndStopSim.createBoolean("Value", Direction.kOutput, false);
+        else bottomEndStopSimValue = null;
 
-    if (topEndStopSim != null)
-      topEndStopSimValue = topEndStopSim.createBoolean("Value", Direction.kOutput, false);
-    else topEndStopSimValue = null;
+        if (topEndStopSim != null) topEndStopSimValue = topEndStopSim.createBoolean("Value", Direction.kOutput, false);
+        else topEndStopSimValue = null;
 
-    if (bottomEndStopSim != null) bottomEndStop.setSimDevice(bottomEndStopSim);
-    else bottomEndStop.close();
+        if (bottomEndStopSim != null) bottomEndStop.setSimDevice(bottomEndStopSim);
+        else bottomEndStop.close();
 
-    if (topEndStopSim != null) topEndStop.setSimDevice(topEndStopSim);
-    else topEndStop.close();
-  }
-
-  @Override
-  public void applyTalonFXConfig(TalonFXConfiguration configuration) {
-    motorLead.getConfigurator().apply(configuration);
-    motorFollower.getConfigurator().apply(configuration);
-  }
-
-  @Override
-  public Follower createFollower() {
-    return new Follower(RobotMap.Elevator.MOTOR_LEAD_ID, false);
-  }
-
-  @Override
-  public void setLeadMotorVoltage(double outputVolts) {
-    motorLead.setVoltage(outputVolts);
-  }
-
-  @Override
-  public void setLeadMotionMagic(MotionMagicExpoVoltage request) {
-    motorLead.setControl(request);
-  }
-
-  @Override
-  public void setFollowerMotionMagic(Follower request) {
-    motorFollower.setControl(request);
-  }
-
-  @Override
-  public double getLeadMotorVoltage() {
-    return motorLead.getMotorVoltage().getValueAsDouble();
-  }
-
-  @Override
-  public double getFollowerMotorVoltage() {
-    return motorFollower.getMotorVoltage().getValueAsDouble();
-  }
-
-  @Override
-  public void setLeadMotorPosition(double newValue) {
-    motorLead.setPosition(newValue);
-  }
-
-  @Override
-  public void setFollowerMotorPosition(double newValue) {
-    motorFollower.setPosition(newValue);
-  }
-
-  @Override
-  public double getLeadMotorPosition() {
-    return motorLead.getPosition().getValueAsDouble();
-  }
-
-  @Override
-  public double getLeadMotorVelocity() {
-    return motorLead.getVelocity().getValueAsDouble();
-  }
-
-  @Override
-  public double getFollowerMotorPosition() {
-    return motorFollower.getPosition().getValueAsDouble();
-  }
-
-  @Override
-  public double getFollowerMotorVelocity() {
-    return motorFollower.getVelocity().getValueAsDouble();
-  }
-
-  @Override
-  public void setLeadMotorPercent(double newValue) {
-    motorLead.set(newValue);
-  }
-
-  @Override
-  public double getLeadMotorPercent() {
-    return motorLead.get();
-  }
-
-  @Override
-  public boolean getTopEndStop() {
-    if (topEndStopSimValue != null) return topEndStopSimValue.get();
-    else return false;
-    // return topEndStop.get();
-  }
-
-  @Override
-  public boolean getBottomEndStop() {
-    if (bottomEndStopSimValue != null) return bottomEndStopSimValue.get();
-    else return false;
-    // return bottomEndStop.get();
-  }
-
-  public void setTopEndStopSim(boolean newValue) {
-    if (topEndStopSimValue != null) topEndStopSimValue.set(newValue);
-  }
-
-  public void setBottomEndStopSim(boolean newValue) {
-    if (bottomEndStopSimValue != null) bottomEndStopSimValue.set(newValue);
-  }
-
-  @Override
-  public double getLeadMotorCurrentDraw() {
-    return motorLead.getSupplyCurrent().getValueAsDouble();
-  }
-
-  @Override
-  public double getFollowerMotorCurrentDraw() {
-    return motorFollower.getSupplyCurrent().getValueAsDouble();
-  }
-
-  @Override
-  public void close() throws Exception {
-    motorLead.close();
-    motorFollower.close();
-
-    if (bottomEndStopSim != null) {
-      bottomEndStopSim.close();
-      bottomEndStop.close();
+        if (topEndStopSim != null) topEndStop.setSimDevice(topEndStopSim);
+        else topEndStop.close();
     }
-    if (topEndStopSim != null) {
-      topEndStopSim.close();
-      topEndStop.close();
+
+    @Override
+    public void applyTalonFXConfig(TalonFXConfiguration configuration) {
+        motorLead.getConfigurator().apply(configuration);
+        motorFollower.getConfigurator().apply(configuration);
     }
-  }
 
-  @Override
-  public void simulationPeriodic() {
-    motorLeadSim.setSupplyVoltage(RobotController.getBatteryVoltage());
-    motorFollowerSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+    @Override
+    public Follower createFollower() {
+        return new Follower(RobotMap.Elevator.MOTOR_LEAD_ID, false);
+    }
 
-    var motorLeftVoltage = motorLeadSim.getMotorVoltage();
-    var motorRightVoltage = motorFollowerSim.getMotorVoltage();
+    @Override
+    public void setLeadMotorVoltage(double outputVolts) {
+        motorLead.setVoltage(outputVolts);
+    }
 
-    elevatorSim.setInputVoltage((motorLeftVoltage + motorRightVoltage) / 2.0);
-    elevatorSim.update(periodicDt);
+    @Override
+    public void setLeadMotionMagic(MotionMagicExpoVoltage request) {
+        motorLead.setControl(request);
+    }
 
-    motorLeadSim.setRawRotorPosition(
-        elevatorSim.getPositionMeters() / Constants.Elevator.METERS_PER_ROTATION);
-    motorLeadSim.setRotorVelocity(
-        elevatorSim.getVelocityMetersPerSecond() / Constants.Elevator.METERS_PER_ROTATION);
-    motorFollowerSim.setRawRotorPosition(
-        elevatorSim.getPositionMeters() / Constants.Elevator.METERS_PER_ROTATION);
-    motorFollowerSim.setRotorVelocity(
-        elevatorSim.getVelocityMetersPerSecond() / Constants.Elevator.METERS_PER_ROTATION);
-  }
+    @Override
+    public void setFollowerMotionMagic(Follower request) {
+        motorFollower.setControl(request);
+    }
+
+    @Override
+    public double getLeadMotorVoltage() {
+        return motorLead.getMotorVoltage().getValueAsDouble();
+    }
+
+    @Override
+    public double getFollowerMotorVoltage() {
+        return motorFollower.getMotorVoltage().getValueAsDouble();
+    }
+
+    @Override
+    public void setLeadMotorPosition(double newValue) {
+        motorLead.setPosition(newValue);
+    }
+
+    @Override
+    public void setFollowerMotorPosition(double newValue) {
+        motorFollower.setPosition(newValue);
+    }
+
+    @Override
+    public double getLeadMotorPosition() {
+        return motorLead.getPosition().getValueAsDouble();
+    }
+
+    @Override
+    public double getLeadMotorVelocity() {
+        return motorLead.getVelocity().getValueAsDouble();
+    }
+
+    @Override
+    public double getFollowerMotorPosition() {
+        return motorFollower.getPosition().getValueAsDouble();
+    }
+
+    @Override
+    public double getFollowerMotorVelocity() {
+        return motorFollower.getVelocity().getValueAsDouble();
+    }
+
+    @Override
+    public void setLeadMotorPercent(double newValue) {
+        motorLead.set(newValue);
+    }
+
+    @Override
+    public double getLeadMotorPercent() {
+        return motorLead.get();
+    }
+
+    @Override
+    public boolean getTopEndStop() {
+        if (topEndStopSimValue != null) return topEndStopSimValue.get();
+        else return false;
+        // return topEndStop.get();
+    }
+
+    @Override
+    public boolean getBottomEndStop() {
+        if (bottomEndStopSimValue != null) return bottomEndStopSimValue.get();
+        else return false;
+        // return bottomEndStop.get();
+    }
+
+    public void setTopEndStopSim(boolean newValue) {
+        if (topEndStopSimValue != null) topEndStopSimValue.set(newValue);
+    }
+
+    public void setBottomEndStopSim(boolean newValue) {
+        if (bottomEndStopSimValue != null) bottomEndStopSimValue.set(newValue);
+    }
+
+    @Override
+    public double getLeadMotorCurrentDraw() {
+        return motorLead.getSupplyCurrent().getValueAsDouble();
+    }
+
+    @Override
+    public double getFollowerMotorCurrentDraw() {
+        return motorFollower.getSupplyCurrent().getValueAsDouble();
+    }
+
+    @Override
+    public void close() throws Exception {
+        motorLead.close();
+        motorFollower.close();
+
+        if (bottomEndStopSim != null) {
+            bottomEndStopSim.close();
+            bottomEndStop.close();
+        }
+        if (topEndStopSim != null) {
+            topEndStopSim.close();
+            topEndStop.close();
+        }
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        motorLeadSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+        motorFollowerSim.setSupplyVoltage(RobotController.getBatteryVoltage());
+
+        double motorLeftVoltage = motorLeadSim.getMotorVoltage();
+        double motorRightVoltage = motorFollowerSim.getMotorVoltage();
+
+        elevatorSim.setInputVoltage((motorLeftVoltage + motorRightVoltage) / 2.0);
+        elevatorSim.update(periodicDt);
+
+        motorLeadSim.setRawRotorPosition(elevatorSim.getPositionMeters() / Constants.Elevator.METERS_PER_ROTATION);
+        motorLeadSim.setRotorVelocity(
+                elevatorSim.getVelocityMetersPerSecond() / Constants.Elevator.METERS_PER_ROTATION);
+        motorFollowerSim.setRawRotorPosition(elevatorSim.getPositionMeters() / Constants.Elevator.METERS_PER_ROTATION);
+        motorFollowerSim.setRotorVelocity(
+                elevatorSim.getVelocityMetersPerSecond() / Constants.Elevator.METERS_PER_ROTATION);
+    }
 }

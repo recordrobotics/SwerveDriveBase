@@ -2,17 +2,17 @@ package frc.robot.subsystems.io;
 
 public interface NavSensorIO extends AutoCloseable {
 
-  public void reset();
+    void reset();
 
-  public void resetDisplacement();
+    void resetDisplacement();
 
-  public double getAngle();
+    double getAngle();
 
-  public double getWorldLinearAccelX();
+    double getWorldLinearAccelX();
 
-  public double getWorldLinearAccelY();
+    double getWorldLinearAccelY();
 
-  public boolean isConnected();
+    boolean isConnected();
 
-  public void simulationPeriodic();
+    void simulationPeriodic();
 }

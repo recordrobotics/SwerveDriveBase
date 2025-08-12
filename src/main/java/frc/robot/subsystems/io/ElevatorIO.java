@@ -6,43 +6,43 @@ import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 
 public interface ElevatorIO extends AutoCloseable {
 
-  public void applyTalonFXConfig(TalonFXConfiguration configuration);
+    void applyTalonFXConfig(TalonFXConfiguration configuration);
 
-  public Follower createFollower();
+    Follower createFollower();
 
-  public void setLeadMotorVoltage(double outputVolts);
+    void setLeadMotorVoltage(double outputVolts);
 
-  public double getLeadMotorVoltage();
+    double getLeadMotorVoltage();
 
-  public double getFollowerMotorVoltage();
+    double getFollowerMotorVoltage();
 
-  public void setLeadMotorPosition(double newValue);
+    void setLeadMotorPosition(double newValue);
 
-  public void setFollowerMotorPosition(double newValue);
+    void setFollowerMotorPosition(double newValue);
 
-  public void setLeadMotionMagic(MotionMagicExpoVoltage request);
+    void setLeadMotionMagic(MotionMagicExpoVoltage request);
 
-  public void setFollowerMotionMagic(Follower request);
+    void setFollowerMotionMagic(Follower request);
 
-  public double getLeadMotorPosition();
+    double getLeadMotorPosition();
 
-  public double getLeadMotorVelocity();
+    double getLeadMotorVelocity();
 
-  public double getFollowerMotorPosition();
+    double getFollowerMotorPosition();
 
-  public double getFollowerMotorVelocity();
+    double getFollowerMotorVelocity();
 
-  public void setLeadMotorPercent(double newValue);
+    void setLeadMotorPercent(double newValue);
 
-  public double getLeadMotorPercent();
+    double getLeadMotorPercent();
 
-  public boolean getTopEndStop();
+    boolean getTopEndStop();
 
-  public boolean getBottomEndStop();
+    boolean getBottomEndStop();
 
-  public double getLeadMotorCurrentDraw();
+    double getLeadMotorCurrentDraw();
 
-  public double getFollowerMotorCurrentDraw();
+    double getFollowerMotorCurrentDraw();
 
-  public void simulationPeriodic();
+    void simulationPeriodic();
 }

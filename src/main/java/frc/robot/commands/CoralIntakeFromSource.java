@@ -13,66 +13,55 @@ import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 import frc.robot.utils.CommandUtils;
 
 public class CoralIntakeFromSource extends SequentialCommandGroup {
-  public CoralIntakeFromSource(boolean useProxy) {
-    addCommands(
-        new InstantCommand(() -> System.out.println("SOURCE START")),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .elevator
-                .runPattern(Constants.Lights.elevatorPattern)
-                .onlyWhile(this::isScheduled)),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .coralIntake
-                .runPattern(Constants.Lights.coralIntakePattern)
-                .onlyWhile(this::isScheduled)),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .coralShooter
-                .runPattern(Constants.Lights.elevatorHeadPattern)
-                .onlyWhile(this::isScheduled)),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .stateVisualizer
-                .runPattern(Constants.Lights.PULSATING_ORANGE)
-                .onlyWhile(this::isScheduled)),
-        new InstantCommand(
-            () -> {
-              RobotContainer.coralIntake.set(CoralIntakeState.SOURCE);
-            },
-            RobotContainer.coralIntake),
-        // start moving elevator to intake position
-        CommandUtils.maybeProxy(useProxy, new ElevatorMove(ElevatorHeight.INTAKE)),
-        new InstantCommand(
-            () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE),
-            RobotContainer.elevatorHead),
-        new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
-        new CoralIntakeToElevator()
-            .simulateFor(new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral())),
-        new InstantCommand(
-            () -> {
-              RobotContainer.coralIntake.set(CoralIntakeState.UP);
-            },
-            RobotContainer.coralIntake),
-        // move coral a set distance
-        new InstantCommand(
-            () -> RobotContainer.elevatorHead.moveBy(Constants.ElevatorHead.CORAL_INTAKE_DISTANCE),
-            RobotContainer.elevatorHead),
-        new WaitUntilCommand(() -> RobotContainer.elevatorHead.positionAtGoal()),
-        new InstantCommand(
-            () -> RobotContainer.elevatorHead.set(CoralShooterStates.OFF),
-            RobotContainer.elevatorHead),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .elevator
-                .runPattern(Constants.Lights.FLASHING_GREEN)
-                .alongWith(
-                    RobotContainer.lights.coralIntake.runPattern(Constants.Lights.FLASHING_GREEN))
-                .alongWith(
-                    RobotContainer.lights.coralShooter.runPattern(Constants.Lights.FLASHING_GREEN))
-                .alongWith(
-                    RobotContainer.lights.stateVisualizer.runPattern(
-                        Constants.Lights.PULSATING_GREEN))
-                .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)));
-  }
+    public CoralIntakeFromSource(boolean useProxy) {
+        addCommands(
+                new InstantCommand(() -> System.out.println("SOURCE START")),
+                new ScheduleCommand(RobotContainer.lights
+                        .elevator
+                        .runPattern(Constants.Lights.elevatorPattern)
+                        .onlyWhile(this::isScheduled)),
+                new ScheduleCommand(RobotContainer.lights
+                        .coralIntake
+                        .runPattern(Constants.Lights.coralIntakePattern)
+                        .onlyWhile(this::isScheduled)),
+                new ScheduleCommand(RobotContainer.lights
+                        .coralShooter
+                        .runPattern(Constants.Lights.elevatorHeadPattern)
+                        .onlyWhile(this::isScheduled)),
+                new ScheduleCommand(RobotContainer.lights
+                        .stateVisualizer
+                        .runPattern(Constants.Lights.PULSATING_ORANGE)
+                        .onlyWhile(this::isScheduled)),
+                new InstantCommand(
+                        () -> {
+                            RobotContainer.coralIntake.set(CoralIntakeState.SOURCE);
+                        },
+                        RobotContainer.coralIntake),
+                // start moving elevator to intake position
+                CommandUtils.maybeProxy(useProxy, new ElevatorMove(ElevatorHeight.INTAKE)),
+                new InstantCommand(
+                        () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE), RobotContainer.elevatorHead),
+                new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
+                new CoralIntakeToElevator()
+                        .simulateFor(new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral())),
+                new InstantCommand(
+                        () -> {
+                            RobotContainer.coralIntake.set(CoralIntakeState.UP);
+                        },
+                        RobotContainer.coralIntake),
+                // move coral a set distance
+                new InstantCommand(
+                        () -> RobotContainer.elevatorHead.moveBy(Constants.ElevatorHead.CORAL_INTAKE_DISTANCE),
+                        RobotContainer.elevatorHead),
+                new WaitUntilCommand(() -> RobotContainer.elevatorHead.positionAtGoal()),
+                new InstantCommand(
+                        () -> RobotContainer.elevatorHead.set(CoralShooterStates.OFF), RobotContainer.elevatorHead),
+                new ScheduleCommand(RobotContainer.lights
+                        .elevator
+                        .runPattern(Constants.Lights.FLASHING_GREEN)
+                        .alongWith(RobotContainer.lights.coralIntake.runPattern(Constants.Lights.FLASHING_GREEN))
+                        .alongWith(RobotContainer.lights.coralShooter.runPattern(Constants.Lights.FLASHING_GREEN))
+                        .alongWith(RobotContainer.lights.stateVisualizer.runPattern(Constants.Lights.PULSATING_GREEN))
+                        .withTimeout(Constants.Lights.SUCCESS_FLASH_TIME)));
+    }
 }

@@ -10,27 +10,26 @@ import frc.robot.Constants.Game.CoralPosition;
 import java.util.stream.Stream;
 
 public final class Main {
-  private Main() {}
+    private Main() {}
 
-  public static final Distance FIRST_STAGE_OFFSET = Meters.of(-0.6);
+    public static final Distance FIRST_STAGE_OFFSET = Meters.of(-0.6);
 
-  public static void main(String... args) {
-    for (var coral :
-        Stream.of(CoralPosition.values()).filter(c -> c.name().startsWith("Blue")).toList()) {
-      PathHelper.editLinkedWaypoint(
-          "Reef" + coral.name().substring("Blue".length()),
-          coral
-              .getFirstStagePose()
-              .transformBy(new Transform2d(FIRST_STAGE_OFFSET, Meters.of(0), Rotation2d.kZero)));
+    public static void main(String... args) {
+        for (CoralPosition coral : Stream.of(CoralPosition.values())
+                .filter(c -> c.name().startsWith("Blue"))
+                .toList()) {
+            PathHelper.editLinkedWaypoint(
+                    "Reef" + coral.name().substring("Blue".length()),
+                    coral.getFirstStagePose()
+                            .transformBy(new Transform2d(FIRST_STAGE_OFFSET, Meters.of(0), Rotation2d.kZero)));
+        }
+
+        for (AlgaePosition algae : Stream.of(AlgaePosition.values())
+                .filter(c -> c.name().startsWith("Blue"))
+                .toList()) {
+            PathHelper.editLinkedWaypoint("Reef" + algae.name().substring("Blue".length()), algae.getPose());
+        }
+
+        System.out.println("PathGenerator finished with " + PathHelper.getCounter() + " waypoints updated.");
     }
-
-    for (var algae :
-        Stream.of(AlgaePosition.values()).filter(c -> c.name().startsWith("Blue")).toList()) {
-      PathHelper.editLinkedWaypoint(
-          "Reef" + algae.name().substring("Blue".length()), algae.getPose());
-    }
-
-    System.out.println(
-        "PathGenerator finished with " + PathHelper.getCounter() + " waypoints updated.");
-  }
 }

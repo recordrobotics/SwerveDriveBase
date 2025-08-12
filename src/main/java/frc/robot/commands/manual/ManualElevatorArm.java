@@ -11,35 +11,35 @@ import frc.robot.control.AbstractControl;
 import frc.robot.dashboard.DashboardUI;
 
 public class ManualElevatorArm extends Command {
-  public ManualElevatorArm() {
-    addRequirements(RobotContainer.elevatorArm);
-  }
-
-  private double angle = 0;
-
-  @Override
-  public void initialize() {
-    angle = RobotContainer.elevatorArm.getArmAngle();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    AbstractControl controls = DashboardUI.Overview.getControl();
-
-    AngularVelocity manualElevatorArmVelocity = controls.getManualElevatorArmVelocity();
-    double delta = manualElevatorArmVelocity.times(Milliseconds.of(20)).in(Radians);
-    angle += delta;
-    angle = MathUtil.clamp(angle, Constants.ElevatorArm.MIN_POS, Constants.ElevatorArm.MAX_POS);
-
-    if (Math.abs(delta) > 0.001) {
-      RobotContainer.elevatorArm.set(angle);
+    public ManualElevatorArm() {
+        addRequirements(RobotContainer.elevatorArm);
     }
-  }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    private double angle = 0;
+
+    @Override
+    public void initialize() {
+        angle = RobotContainer.elevatorArm.getArmAngle();
+    }
+
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        AbstractControl controls = DashboardUI.Overview.getControl();
+
+        AngularVelocity manualElevatorArmVelocity = controls.getManualElevatorArmVelocity();
+        double delta = manualElevatorArmVelocity.times(Milliseconds.of(20)).in(Radians);
+        angle += delta;
+        angle = MathUtil.clamp(angle, Constants.ElevatorArm.MIN_POS, Constants.ElevatorArm.MAX_POS);
+
+        if (Math.abs(delta) > 0.001) {
+            RobotContainer.elevatorArm.set(angle);
+        }
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

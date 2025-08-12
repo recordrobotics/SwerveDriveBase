@@ -10,72 +10,70 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class OverviewLayout extends AbstractLayout {
 
-  public enum DriverOrientation {
-    XAxisTowardsTrigger("Competition"),
-    YAxisTowardsTrigger("Y Axis"),
-    XAxisInvertTowardsTrigger("Couch Drive");
+    public enum DriverOrientation {
+        XAxisTowardsTrigger("Competition"),
+        YAxisTowardsTrigger("Y Axis"),
+        XAxisInvertTowardsTrigger("Couch Drive");
 
-    public final String display_name;
+        public final String display_name;
 
-    DriverOrientation(String orientation) {
-      display_name = orientation;
+        DriverOrientation(String orientation) {
+            display_name = orientation;
+        }
     }
-  }
 
-  private static LoggedDashboardChooser<DriverOrientation> driverOrientation =
-      new LoggedDashboardChooser<DriverOrientation>("Driver Orientation");
-  private static LoggedDashboardChooser<AbstractControl> driveMode =
-      new LoggedDashboardChooser<AbstractControl>("Drive Mode");
-  private static AbstractControl _defaultControl;
+    private static LoggedDashboardChooser<DriverOrientation> driverOrientation =
+            new LoggedDashboardChooser<>("Driver Orientation");
+    private static LoggedDashboardChooser<AbstractControl> driveMode = new LoggedDashboardChooser<>("Drive Mode");
+    private static AbstractControl _defaultControl;
 
-  // private Supplier<Boolean> poseCertainValue = () -> false;
-  private Supplier<Boolean> navSensorValue = () -> false;
+    // private Supplier<Boolean> poseCertainValue = () -> false;
+    private Supplier<Boolean> navSensorValue = () -> false;
 
-  public OverviewLayout() {
-    addValueSendable("Nav Sensor", () -> navSensorValue.get(), "boolean");
-  }
-
-  /**
-   * Initializes the control object
-   *
-   * @param defaultControl the first term will always be the default control object
-   * @param controls any other control objects you want to initialize
-   */
-  public void addControls(AbstractControl defaultControl, AbstractControl... controls) {
-    _defaultControl = defaultControl;
-
-    // Sets up drive mode options
-    for (AbstractControl abstractControl : controls) {
-      driveMode.addOption(abstractControl.getClass().getSimpleName(), abstractControl);
+    public OverviewLayout() {
+        addValueSendable("Nav Sensor", () -> navSensorValue.get(), "boolean");
     }
-    driveMode.addDefaultOption(defaultControl.getClass().getSimpleName(), defaultControl);
 
-    EnumSet.allOf(DriverOrientation.class)
-        .forEach(v -> driverOrientation.addOption(v.display_name, v));
-    driverOrientation.addDefaultOption(
-        DriverOrientation.XAxisTowardsTrigger.display_name, DriverOrientation.XAxisTowardsTrigger);
-  }
+    /**
+     * Initializes the control object
+     *
+     * @param defaultControl the first term will always be the default control object
+     * @param controls any other control objects you want to initialize
+     */
+    public void addControls(AbstractControl defaultControl, AbstractControl... controls) {
+        _defaultControl = defaultControl;
 
-  public void setNavSensor(Supplier<Boolean> navSensor) {
-    navSensorValue = navSensor;
-  }
+        // Sets up drive mode options
+        for (AbstractControl abstractControl : controls) {
+            driveMode.addOption(abstractControl.getClass().getSimpleName(), abstractControl);
+        }
+        driveMode.addDefaultOption(defaultControl.getClass().getSimpleName(), defaultControl);
 
-  @Override
-  public void switchTo() {
-    Elastic.selectTab("Overview");
-  }
+        EnumSet.allOf(DriverOrientation.class).forEach(v -> driverOrientation.addOption(v.display_name, v));
+        driverOrientation.addDefaultOption(
+                DriverOrientation.XAxisTowardsTrigger.display_name, DriverOrientation.XAxisTowardsTrigger);
+    }
 
-  @Override
-  protected NetworkTable getNetworkTable() {
-    return NetworkTableInstance.getDefault().getTable("/SmartDashboard/Overview");
-  }
+    public void setNavSensor(Supplier<Boolean> navSensor) {
+        navSensorValue = navSensor;
+    }
 
-  public DriverOrientation getDriverOrientation() {
-    return driverOrientation.get();
-  }
+    @Override
+    public void switchTo() {
+        Elastic.selectTab("Overview");
+    }
 
-  public AbstractControl getControl() {
-    if (driveMode.get() == null) return _defaultControl;
-    return driveMode.get();
-  }
+    @Override
+    protected NetworkTable getNetworkTable() {
+        return NetworkTableInstance.getDefault().getTable("/SmartDashboard/Overview");
+    }
+
+    public DriverOrientation getDriverOrientation() {
+        return driverOrientation.get();
+    }
+
+    public AbstractControl getControl() {
+        if (driveMode.get() == null) return _defaultControl;
+        return driveMode.get();
+    }
 }

@@ -90,416 +90,358 @@ import org.photonvision.simulation.VisionSystemSim;
  */
 public class RobotContainer {
 
-  public static Drivetrain drivetrain;
-  public static PoseSensorFusion poseSensorFusion;
-  public static Elevator elevator;
-  public static ElevatorArm elevatorArm;
-  public static ElevatorHead elevatorHead;
-  public static Climber climber;
-  public static Lights lights;
-  public static PowerDistributionPanel pdp;
-  public static CoralIntake coralIntake;
+    public static Drivetrain drivetrain;
+    public static PoseSensorFusion poseSensorFusion;
+    public static Elevator elevator;
+    public static ElevatorArm elevatorArm;
+    public static ElevatorHead elevatorHead;
+    public static Climber climber;
+    public static Lights lights;
+    public static PowerDistributionPanel pdp;
+    public static CoralIntake coralIntake;
 
-  public static RobotModel model;
+    public static RobotModel model;
 
-  public static CoralDetection coralDetection;
+    public static CoralDetection coralDetection;
 
-  public static VisionSystemSim visionSim;
+    public static VisionSystemSim visionSim;
 
-  public static HumanPlayerSimulation humanPlayerSimulation;
+    public static HumanPlayerSimulation humanPlayerSimulation;
 
-  // Autonomous
-  @SuppressWarnings("unused")
-  private final AutoPath autoPath;
+    // Autonomous
+    @SuppressWarnings("unused")
+    private final AutoPath autoPath;
 
-  private Command autoCommand;
+    private Command autoCommand;
 
-  public static class ElevatorMoveToggleRequirement extends SubsystemBase {}
+    public static class ElevatorMoveToggleRequirement extends SubsystemBase {}
 
-  public static ElevatorMoveToggleRequirement elevatorMoveToggleRequirement =
-      new ElevatorMoveToggleRequirement();
+    public static ElevatorMoveToggleRequirement elevatorMoveToggleRequirement = new ElevatorMoveToggleRequirement();
 
-  public static class CoralIntakeMoveToggleRequirement extends SubsystemBase {}
+    public static class CoralIntakeMoveToggleRequirement extends SubsystemBase {}
 
-  public static CoralIntakeMoveToggleRequirement coralIntakeMoveToggleRequirement =
-      new CoralIntakeMoveToggleRequirement();
+    public static CoralIntakeMoveToggleRequirement coralIntakeMoveToggleRequirement =
+            new CoralIntakeMoveToggleRequirement();
 
-  public static final List<IAssist> assits = List.of(new GroundIntakeAssist());
+    public static final List<IAssist> assits = List.of(new GroundIntakeAssist());
 
-  private Alert noEncoderResetAlert = new Alert("Encoders not reset!", AlertType.kError);
+    private Alert noEncoderResetAlert = new Alert("Encoders not reset!", AlertType.kError);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    if (Constants.RobotState.getMode() == Mode.REAL) {
-      drivetrain = new Drivetrain();
-      poseSensorFusion = new PoseSensorFusion();
-      elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
-      elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
-      elevatorHead = new ElevatorHead(new ElevatorHeadReal(0.02));
-      coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
-      climber = new Climber(new ClimberReal(0.02));
-      lights = new Lights();
-      pdp = new PowerDistributionPanel();
-      coralDetection = new CoralDetection();
-    } else {
-      if (Constants.RobotState.VISION_SIMULATION_MODE == VisionSimulationMode.PHOTON_SIM) {
-        visionSim = new VisionSystemSim("main");
-        visionSim.addAprilTags(Constants.Game.APRILTAG_LAYOUT);
-      }
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
+        if (Constants.RobotState.getMode() == Mode.REAL) {
+            drivetrain = new Drivetrain();
+            poseSensorFusion = new PoseSensorFusion();
+            elevator = new Elevator(new ElevatorReal(Constants.Elevator.kDt));
+            elevatorArm = new ElevatorArm(new ElevatorArmReal(0.02));
+            elevatorHead = new ElevatorHead(new ElevatorHeadReal(0.02));
+            coralIntake = new CoralIntake(new CoralIntakeReal(0.02));
+            climber = new Climber(new ClimberReal(0.02));
+            lights = new Lights();
+            pdp = new PowerDistributionPanel();
+            coralDetection = new CoralDetection();
+        } else {
+            if (Constants.RobotState.VISION_SIMULATION_MODE == VisionSimulationMode.PHOTON_SIM) {
+                visionSim = new VisionSystemSim("main");
+                visionSim.addAprilTags(Constants.Game.APRILTAG_LAYOUT);
+            }
 
-      drivetrain = new Drivetrain();
-      poseSensorFusion = new PoseSensorFusion();
-      elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
-      elevatorArm = new ElevatorArm(new ElevatorArmSim(0.02));
-      elevatorHead =
-          new ElevatorHead(new ElevatorHeadSim(0.02, drivetrain.getSwerveDriveSimulation()));
-      coralIntake =
-          new CoralIntake(new CoralIntakeSim(0.02, drivetrain.getSwerveDriveSimulation()));
-      climber = new Climber(new ClimberSim(0.02));
-      lights = new Lights();
-      pdp = new PowerDistributionPanel();
-      coralDetection = new CoralDetection();
-      // uncomment to use an external photonvision client for coral detection simulation
-      // coralDetection.setSimulationMode(CoralDetection.CoralDetectionSimulationMode.PHOTONVISION);
-      humanPlayerSimulation = new HumanPlayerSimulation();
+            drivetrain = new Drivetrain();
+            poseSensorFusion = new PoseSensorFusion();
+            elevator = new Elevator(new ElevatorSim(Constants.Elevator.kDt));
+            elevatorArm = new ElevatorArm(new ElevatorArmSim(0.02));
+            elevatorHead = new ElevatorHead(new ElevatorHeadSim(0.02, drivetrain.getSwerveDriveSimulation()));
+            coralIntake = new CoralIntake(new CoralIntakeSim(0.02, drivetrain.getSwerveDriveSimulation()));
+            climber = new Climber(new ClimberSim(0.02));
+            lights = new Lights();
+            pdp = new PowerDistributionPanel();
+            coralDetection = new CoralDetection();
+            // uncomment to use an external photonvision client for coral detection simulation
+            // coralDetection.setSimulationMode(CoralDetection.CoralDetectionSimulationMode.PHOTONVISION);
+            humanPlayerSimulation = new HumanPlayerSimulation();
+        }
+
+        model = new RobotModel();
+
+        // Sets up auto path
+        autoPath = new AutoPath();
+
+        DashboardUI.Autonomous.setupAutoChooser();
+
+        // Sets up Control scheme chooser
+        DashboardUI.Overview.addControls(
+                new JoystickXboxSimple(2, 0), new JoystickXbox(2, 0) /*, new XboxSimpleBackup(0)*/);
+
+        // Bindings and Teleop
+        configureButtonBindings();
+
+        ShuffleboardPublisher.setup(poseSensorFusion.nav, drivetrain, poseSensorFusion);
+
+        drivetrain.setDefaultCommand(new ManualSwerve());
+        elevator.setDefaultCommand(new ManualElevator());
+        elevatorArm.setDefaultCommand(new ManualElevatorArm());
+
+        noEncoderResetAlert.set(true);
     }
 
-    model = new RobotModel();
+    public void teleopInit() {}
 
-    // Sets up auto path
-    autoPath = new AutoPath();
+    public void disabledInit() {}
 
-    DashboardUI.Autonomous.setupAutoChooser();
+    /**
+     * Use this method to define your button->command mappings. Buttons can be created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
 
-    // Sets up Control scheme chooser
-    DashboardUI.Overview.addControls(
-        new JoystickXboxSimple(2, 0), new JoystickXbox(2, 0) /*, new XboxSimpleBackup(0)*/);
+        // Command to kill robot
+        new Trigger(() -> DashboardUI.Overview.getControl().getKill())
+                .whileTrue(new KillSpecified(drivetrain, elevator, elevatorArm, elevatorHead, coralIntake, climber)
+                        .alongWith(new InstantCommand(
+                                () -> CommandScheduler.getInstance().cancelAll())));
 
-    // Bindings and Teleop
-    configureButtonBindings();
+        new Trigger(() -> DashboardUI.Overview.getControl().getClimb())
+                .onTrue(Commands.either(
+                                new ClimbMove(ClimberState.Climb),
+                                new ClimbMove(ClimberState.Extend),
+                                () -> climber.getCurrentState() == ClimberState.Extend)
+                        .alongWith(new InstantCommand(() -> Elastic.selectTab("Climb"))));
 
-    ShuffleboardPublisher.setup(poseSensorFusion.nav, drivetrain, poseSensorFusion);
+        // Reset pose trigger
+        new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
+                .onTrue(new InstantCommand(poseSensorFusion::resetDriverPose));
+        new Trigger(() -> DashboardUI.Overview.getControl().getLimelightReset())
+                .onTrue(new InstantCommand(poseSensorFusion::resetToVision));
+        new Trigger(() -> DashboardUI.Autonomous.getResetLocation())
+                .onTrue(new InstantCommand(poseSensorFusion::resetStartingPose).ignoringDisable(true));
+        new Trigger(() -> DashboardUI.Autonomous.getLimelightRotation())
+                .onTrue(new InstantCommand(poseSensorFusion::resetToVision).ignoringDisable(true));
+        new Trigger(() -> DashboardUI.Autonomous.getEncoderReset())
+                .onTrue(new InstantCommand(this::resetEncoders).ignoringDisable(true));
 
-    drivetrain.setDefaultCommand(new ManualSwerve());
-    elevator.setDefaultCommand(new ManualElevator());
-    elevatorArm.setDefaultCommand(new ManualElevatorArm());
+        BooleanSupplier elevatorLock = () -> {
+            boolean atBottom = elevator.getNearestHeight() == ElevatorHeight.INTAKE
+                    || elevator.getNearestHeight() == ElevatorHeight.BOTTOM;
+            boolean atL4 = elevator.getNearestHeight() == ElevatorHeight.L4
+                    || elevator.getNearestHeight() == ElevatorHeight.BARGE_ALAGAE;
 
-    noEncoderResetAlert.set(true);
-  }
+            Pose2d robot = RobotContainer.poseSensorFusion.getEstimatedPosition();
+            CoralPosition closestReef = IGamePosition.closestTo(robot, CoralPosition.values());
 
-  public void teleopInit() {}
+            boolean nearReef =
+                    closestReef.getFirstStagePose().getTranslation().getDistance(robot.getTranslation()) < 0.2
+                            && Math.abs(closestReef
+                                            .getFirstStagePose()
+                                            .getRotation()
+                                            .minus(robot.getRotation())
+                                            .getDegrees())
+                                    < 80;
 
-  public void disabledInit() {}
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-
-    // Command to kill robot
-    new Trigger(() -> DashboardUI.Overview.getControl().getKill())
-        .whileTrue(
-            new KillSpecified(drivetrain, elevator, elevatorArm, elevatorHead, coralIntake, climber)
-                .alongWith(new InstantCommand(() -> CommandScheduler.getInstance().cancelAll())));
-
-    new Trigger(() -> DashboardUI.Overview.getControl().getClimb())
-        .onTrue(
-            Commands.either(
-                    new ClimbMove(ClimberState.Climb),
-                    new ClimbMove(ClimberState.Extend),
-                    () -> climber.getCurrentState() == ClimberState.Extend)
-                .alongWith(new InstantCommand(() -> Elastic.selectTab("Climb"))));
-
-    // Reset pose trigger
-    new Trigger(() -> DashboardUI.Overview.getControl().getPoseReset())
-        .onTrue(new InstantCommand(poseSensorFusion::resetDriverPose));
-    new Trigger(() -> DashboardUI.Overview.getControl().getLimelightReset())
-        .onTrue(new InstantCommand(poseSensorFusion::resetToVision));
-    new Trigger(() -> DashboardUI.Autonomous.getResetLocation())
-        .onTrue(new InstantCommand(poseSensorFusion::resetStartingPose).ignoringDisable(true));
-    new Trigger(() -> DashboardUI.Autonomous.getLimelightRotation())
-        .onTrue(new InstantCommand(poseSensorFusion::resetToVision).ignoringDisable(true));
-    new Trigger(() -> DashboardUI.Autonomous.getEncoderReset())
-        .onTrue(new InstantCommand(this::resetEncoders).ignoringDisable(true));
-
-    BooleanSupplier elevatorLock =
-        () -> {
-          boolean atBottom =
-              elevator.getNearestHeight() == ElevatorHeight.INTAKE
-                  || elevator.getNearestHeight() == ElevatorHeight.BOTTOM;
-          boolean atL4 =
-              elevator.getNearestHeight() == ElevatorHeight.L4
-                  || elevator.getNearestHeight() == ElevatorHeight.BARGE_ALAGAE;
-
-          Pose2d robot = RobotContainer.poseSensorFusion.getEstimatedPosition();
-          CoralPosition closestReef = IGamePosition.closestTo(robot, CoralPosition.values());
-
-          boolean nearReef =
-              closestReef.getFirstStagePose().getTranslation().getDistance(robot.getTranslation())
-                      < 0.2
-                  && Math.abs(
-                          closestReef
-                              .getFirstStagePose()
-                              .getRotation()
-                              .minus(robot.getRotation())
-                              .getDegrees())
-                      < 80;
-
-          return DashboardUI.Overview.getControl().getManualOverride()
-              || (atBottom && elevatorHead.coralReady())
-              || (atL4 && !nearReef)
-              || (!atBottom && !atL4);
+            return DashboardUI.Overview.getControl().getManualOverride()
+                    || (atBottom && elevatorHead.coralReady())
+                    || (atL4 && !nearReef)
+                    || (!atBottom && !atL4);
         };
 
-    new Trigger(
-            () -> DashboardUI.Overview.getControl().getElevatorL2() && elevatorLock.getAsBoolean())
-        .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L2));
-    new Trigger(
-            () -> DashboardUI.Overview.getControl().getElevatorL3() && elevatorLock.getAsBoolean())
-        .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L3));
-    new Trigger(
-            () -> DashboardUI.Overview.getControl().getElevatorL4() && elevatorLock.getAsBoolean())
-        .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L4));
+        new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL2() && elevatorLock.getAsBoolean())
+                .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L2));
+        new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL3() && elevatorLock.getAsBoolean())
+                .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L3));
+        new Trigger(() -> DashboardUI.Overview.getControl().getElevatorL4() && elevatorLock.getAsBoolean())
+                .toggleOnTrue(new ElevatorReefToggled(ElevatorHeight.L4));
 
-    new Trigger(
-            () ->
-                (DashboardUI.Overview.getControl().getElevatorL2()
-                        || DashboardUI.Overview.getControl().getElevatorL3()
-                        || DashboardUI.Overview.getControl().getElevatorL4())
-                    && !elevatorLock.getAsBoolean())
-        .onTrue(new VibrateXbox(RumbleType.kRightRumble, 1).withTimeout(0.1));
+        new Trigger(() -> (DashboardUI.Overview.getControl().getElevatorL2()
+                                || DashboardUI.Overview.getControl().getElevatorL3()
+                                || DashboardUI.Overview.getControl().getElevatorL4())
+                        && !elevatorLock.getAsBoolean())
+                .onTrue(new VibrateXbox(RumbleType.kRightRumble, 1).withTimeout(0.1));
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralShoot()).onTrue(new CoralShoot());
+        new Trigger(() -> DashboardUI.Overview.getControl().getCoralShoot()).onTrue(new CoralShoot());
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
-        .toggleOnTrue(new CoralIntakeFromGroundToggled());
+        new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntake())
+                .toggleOnTrue(new CoralIntakeFromGroundToggled());
 
-    new Trigger(
-            () ->
-                DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
-                    && !elevatorHead.hasCoralForSure())
-        .onTrue(
-            new CoralIntakeFromGround()
-            // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-            )
-        .onFalse(
-            Commands.either(
-                    new CoralIntakeFromGroundUpL1(),
-                    // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
-                    new CoralIntakeFromGroundUpSimple()
-                        .handleInterrupt(
-                            () -> {
-                              CoralIntakeFromGroundUpSimple.isRunning = false;
-                            })
-                        .andThen(
-                            new CoralIntakeSimple(false)
-                                .finallyDo(
-                                    () -> {
-                                      CoralIntakeSimple.isRunning = false;
-                                      CoralIntakeFromGroundUpSimple.isRunning = false;
-                                    })
-                                .onlyIf(() -> !CoralIntakeSimple.isRunning)),
-                    () ->
-                        DashboardUI.Overview.getControl().getReefLevelSwitchValue()
-                            == ReefLevelSwitchValue.L1)
-                .onlyWhile(
-                    () ->
-                        elevatorHead.hasCoral()
-                            || !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple())
-            // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-            );
+        new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
+                        && !elevatorHead.hasCoralForSure())
+                .onTrue(
+                        new CoralIntakeFromGround()
+                        // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+                        )
+                .onFalse(
+                        Commands.either(
+                                        new CoralIntakeFromGroundUpL1(),
+                                        // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
+                                        new CoralIntakeFromGroundUpSimple()
+                                                .handleInterrupt(() -> {
+                                                    CoralIntakeFromGroundUpSimple.isRunning = false;
+                                                })
+                                                .andThen(new CoralIntakeSimple(false)
+                                                        .finallyDo(() -> {
+                                                            CoralIntakeSimple.isRunning = false;
+                                                            CoralIntakeFromGroundUpSimple.isRunning = false;
+                                                        })
+                                                        .onlyIf(() -> !CoralIntakeSimple.isRunning)),
+                                        () -> DashboardUI.Overview.getControl().getReefLevelSwitchValue()
+                                                == ReefLevelSwitchValue.L1)
+                                .onlyWhile(() -> elevatorHead.hasCoral()
+                                        || !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple())
+                        // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+                        );
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
-        .onTrue(new CoralIntakeFromSource(true));
+        new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntake())
+                .onTrue(new CoralIntakeFromSource(true));
 
-    new Trigger(
-            () ->
-                DashboardUI.Overview.getControl().getCoralSourceIntakeAuto()
-                    && !DriverStation.isAutonomous())
-        .debounce(1.0, DebounceType.kFalling)
-        .whileTrue(
-            new RepeatConditionallyCommand(
-                    new CoralIntakeSimple(true)
-                        .finallyDo(
-                            () -> {
-                              CoralIntakeSimple.isRunning = false;
-                              System.out.println("SOURCE ENDE!@!@H*&!*&@EQ#YQ#gyuaqd");
-                              RobotContainer.elevatorHead.set(CoralShooterStates.OFF);
-                              RobotContainer.coralIntake.set(CoralIntakeState.UP);
-                            })
-                        .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+        new Trigger(() -> DashboardUI.Overview.getControl().getCoralSourceIntakeAuto() && !DriverStation.isAutonomous())
+                .debounce(1.0, DebounceType.kFalling)
+                .whileTrue(new RepeatConditionallyCommand(
+                                new CoralIntakeSimple(true)
+                                        .finallyDo(() -> {
+                                            CoralIntakeSimple.isRunning = false;
+                                            System.out.println("SOURCE ENDE!@!@H*&!*&@EQ#YQ#gyuaqd");
+                                            RobotContainer.elevatorHead.set(CoralShooterStates.OFF);
+                                            RobotContainer.coralIntake.set(CoralIntakeState.UP);
+                                        })
+                                        .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+                                        .asProxy()
+                                        .onlyIf(() -> !CoralIntakeSimple.isRunning
+                                                && !CoralIntakeFromGroundUpSimple.isRunning
+                                                && !AutoAlgae.isRunning()),
+                                () -> !RobotContainer.elevatorHead.hasCoralForSure()
+                                        && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
+                                        && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
+                                                != ReefLevelSwitchValue.L1,
+                                false)
+                        .ignoringDisable(true));
+
+        Command coralScoreL1Cmd = Commands.either(
+                Commands.either(
+                        new CoralIntakeShootL1().asProxy(),
+                        new CoralIntakeMoveL1().asProxy(),
+                        () -> coralIntake.getState() == CoralIntakeState.L1_DOWN),
+                new CoralIntakeFromGroundUpL1()
                         .asProxy()
-                        .onlyIf(
-                            () ->
-                                !CoralIntakeSimple.isRunning
-                                    && !CoralIntakeFromGroundUpSimple.isRunning
-                                    && !AutoAlgae.isRunning()),
-                    () ->
-                        !RobotContainer.elevatorHead.hasCoralForSure()
-                            && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
-                            && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
-                                != ReefLevelSwitchValue.L1,
-                    false)
-                .ignoringDisable(true));
+                        .beforeStarting(() -> CoralIntakeFromGroundToggled.isGoingToL1 = true),
+                () -> coralIntake.getState() != CoralIntakeState.GROUND);
+        // coralScoreL1Cmd.addRequirements(coralIntakeMoveToggleRequirement);
 
-    var coralScoreL1Cmd =
-        Commands.either(
-            Commands.either(
-                new CoralIntakeShootL1().asProxy(),
-                new CoralIntakeMoveL1().asProxy(),
-                () -> coralIntake.getState() == CoralIntakeState.L1_DOWN),
-            new CoralIntakeFromGroundUpL1()
-                .asProxy()
-                .beforeStarting(() -> CoralIntakeFromGroundToggled.isGoingToL1 = true),
-            () -> coralIntake.getState() != CoralIntakeState.GROUND);
-    // coralScoreL1Cmd.addRequirements(coralIntakeMoveToggleRequirement);
+        new Trigger(() -> DashboardUI.Overview.getControl().getCoralIntakeScoreL1()).onTrue(coralScoreL1Cmd.asProxy());
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getCoralIntakeScoreL1())
-        .onTrue(coralScoreL1Cmd.asProxy());
+        BooleanSupplier algaeLock =
+                () -> DashboardUI.Overview.getControl().getManualOverride() || !elevatorHead.hasCoral();
 
-    BooleanSupplier algaeLock =
-        () -> DashboardUI.Overview.getControl().getManualOverride() || !elevatorHead.hasCoral();
+        new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae() && algaeLock.getAsBoolean())
+                .toggleOnTrue(new GroundAlgaeToggled(ElevatorHeight.GROUND_ALGAE));
+        new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeLow() && algaeLock.getAsBoolean())
+                .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
+        new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh() && algaeLock.getAsBoolean())
+                .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.HIGH_REEF_ALGAE));
+        new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae() && algaeLock.getAsBoolean())
+                .onTrue(new ProcessorScore(true));
 
-    new Trigger(
-            () -> DashboardUI.Overview.getControl().getGroundAlgae() && algaeLock.getAsBoolean())
-        .toggleOnTrue(new GroundAlgaeToggled(ElevatorHeight.GROUND_ALGAE));
-    new Trigger(
-            () ->
-                DashboardUI.Overview.getControl().getElevatorAlgaeLow() && algaeLock.getAsBoolean())
-        .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.LOW_REEF_ALGAE));
-    new Trigger(
-            () ->
-                DashboardUI.Overview.getControl().getElevatorAlgaeHigh()
-                    && algaeLock.getAsBoolean())
-        .toggleOnTrue(new ElevatorAlgaeToggled(ElevatorHeight.HIGH_REEF_ALGAE));
-    new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae() && algaeLock.getAsBoolean())
-        .onTrue(new ProcessorScore(true));
+        new Trigger(() -> (DashboardUI.Overview.getControl().getGroundAlgae()
+                                || DashboardUI.Overview.getControl().getElevatorAlgaeLow())
+                        && !algaeLock.getAsBoolean())
+                .onTrue(new VibrateXbox(RumbleType.kRightRumble, 1).withTimeout(0.1));
+        new Trigger(() -> DashboardUI.Overview.getControl().getElevatorAlgaeHigh() && !algaeLock.getAsBoolean())
+                .onTrue(new VibrateXbox(RumbleType.kBothRumble, 1).withTimeout(0.1));
+        new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae() && !algaeLock.getAsBoolean())
+                .onTrue(new VibrateXbox(RumbleType.kLeftRumble, 1).withTimeout(0.1));
 
-    new Trigger(
-            () ->
-                (DashboardUI.Overview.getControl().getGroundAlgae()
-                        || DashboardUI.Overview.getControl().getElevatorAlgaeLow())
-                    && !algaeLock.getAsBoolean())
-        .onTrue(new VibrateXbox(RumbleType.kRightRumble, 1).withTimeout(0.1));
-    new Trigger(
-            () ->
-                DashboardUI.Overview.getControl().getElevatorAlgaeHigh()
-                    && !algaeLock.getAsBoolean())
-        .onTrue(new VibrateXbox(RumbleType.kBothRumble, 1).withTimeout(0.1));
-    new Trigger(
-            () -> DashboardUI.Overview.getControl().getScoreAlgae() && !algaeLock.getAsBoolean())
-        .onTrue(new VibrateXbox(RumbleType.kLeftRumble, 1).withTimeout(0.1));
+        new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeSimple() && !elevatorHead.hasCoralForSure())
+                .onTrue(Commands.either(
+                        new DeferredCommand(
+                                () -> new ScheduleCommand(new AutoAlgae(IGamePosition.closestTo(
+                                                RobotContainer.poseSensorFusion.getEstimatedPosition(),
+                                                AlgaePosition.values()))
+                                        .finallyDo(() -> AutoAlgae.stopRunning())
+                                        .handleInterrupt(() -> {
+                                            System.out.println("AutoAlgae interrupted!!! :(");
+                                        })
+                                        .asProxy()),
+                                Set.of()),
+                        new InstantCommand(() -> AutoAlgae.performCancel()),
+                        () -> !AutoAlgae.isRunning()));
 
-    new Trigger(
-            () ->
-                DashboardUI.Overview.getControl().getReefAlgaeSimple()
-                    && !elevatorHead.hasCoralForSure())
-        .onTrue(
-            Commands.either(
-                new DeferredCommand(
-                    () ->
-                        new ScheduleCommand(
-                            new AutoAlgae(
-                                    IGamePosition.closestTo(
-                                        RobotContainer.poseSensorFusion.getEstimatedPosition(),
-                                        AlgaePosition.values()))
-                                .finallyDo(() -> AutoAlgae.stopRunning())
-                                .handleInterrupt(
-                                    () -> {
-                                      System.out.println("AutoAlgae interrupted!!! :(");
-                                    })
-                                .asProxy()),
-                    Set.of()),
-                new InstantCommand(() -> AutoAlgae.performCancel()),
-                () -> !AutoAlgae.isRunning()));
+        new Trigger(() -> DashboardUI.Overview.getControl().getAutoAlign())
+                .whileTrue(ReefAlign.alignClosest(true, true, true, 2.0, 1.0, false));
 
-    new Trigger(() -> DashboardUI.Overview.getControl().getAutoAlign())
-        .whileTrue(ReefAlign.alignClosest(true, true, true, 2.0, 1.0, false));
-
-    new Trigger(() -> DashboardUI.Overview.getControl().getAutoScore())
-        .onTrue(
-            Commands.either(
-                new DeferredCommand(
-                    () ->
-                        new AutoScore(
-                                IGamePosition.closestTo(
-                                    RobotContainer.poseSensorFusion.getEstimatedPosition(),
-                                    CoralPosition.values()))
-                            .handleInterrupt(
-                                () -> {
-                                  System.out.println("AutoScore interrupted!!! :(");
-                                })
-                            .asProxy(),
-                    Set.of()),
-                new ProcessorScore(false).asProxy(),
-                () ->
-                    elevatorHead.hasCoral()
-                        || (DashboardUI.Overview.getControl().getReefLevelSwitchValue()
-                                == ReefLevelSwitchValue.L1
-                            && !elevatorHead.hasAlgae())));
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-
-    if (SysIdManager.getSysIdRoutine() != SysIdRoutine.None) {
-      return SysIdManager.getSysIdRoutine().createCommand();
+        new Trigger(() -> DashboardUI.Overview.getControl().getAutoScore())
+                .onTrue(Commands.either(
+                        new DeferredCommand(
+                                () -> new AutoScore(IGamePosition.closestTo(
+                                                RobotContainer.poseSensorFusion.getEstimatedPosition(),
+                                                CoralPosition.values()))
+                                        .handleInterrupt(() -> {
+                                            System.out.println("AutoScore interrupted!!! :(");
+                                        })
+                                        .asProxy(),
+                                Set.of()),
+                        new ProcessorScore(false).asProxy(),
+                        () -> elevatorHead.hasCoral()
+                                || (DashboardUI.Overview.getControl().getReefLevelSwitchValue()
+                                                == ReefLevelSwitchValue.L1
+                                        && !elevatorHead.hasAlgae())));
     }
 
-    if (autoCommand == null) {
-      autoCommand = new PlannedAuto();
-    }
-    return autoCommand;
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
 
-  public void testPeriodic() {
-    DashboardUI.Test.testPeriodic();
-  }
+        if (SysIdManager.getSysIdRoutine() != SysIdRoutine.None) {
+            return SysIdManager.getSysIdRoutine().createCommand();
+        }
 
-  public void simulationPeriodic() {
-    updateSimulationBattery(drivetrain, elevator, elevatorHead, coralIntake);
-    if (Constants.RobotState.VISION_SIMULATION_MODE == VisionSimulationMode.PHOTON_SIM) {
-      visionSim.update(model.getRobot());
-    }
-  }
-
-  public void updateSimulationBattery(PoweredSubsystem... subsystems) {
-    double[] currents = new double[subsystems.length];
-    for (int i = 0; i < subsystems.length; i++) {
-      currents[i] = subsystems[i].getCurrentDrawAmps();
+        if (autoCommand == null) {
+            autoCommand = new PlannedAuto();
+        }
+        return autoCommand;
     }
 
-    // RoboRioSim.setVInVoltage(
-    //     MathUtil.clamp(BatterySim.calculateDefaultBatteryLoadedVoltage(currents), 0, 13));
-  }
+    public void testPeriodic() {
+        DashboardUI.Test.testPeriodic();
+    }
 
-  private void resetEncoders() {
-    climber.resetEncoders();
-    elevator.resetEncoders();
-    elevatorArm.resetEncoders();
-    coralIntake.resetEncoders();
+    public void simulationPeriodic() {
+        updateSimulationBattery(drivetrain, elevator, elevatorHead, coralIntake);
+        if (Constants.RobotState.VISION_SIMULATION_MODE == VisionSimulationMode.PHOTON_SIM) {
+            visionSim.update(model.getRobot());
+        }
+    }
 
-    noEncoderResetAlert.set(false);
-    Elastic.sendNotification(
-        new Notification(
-            NotificationLevel.INFO, "Encoders reset!", "Successfully reset arm encoders."));
-  }
+    public void updateSimulationBattery(PoweredSubsystem... subsystems) {
+        double[] currents = new double[subsystems.length];
+        for (int i = 0; i < subsystems.length; i++) {
+            currents[i] = subsystems[i].getCurrentDrawAmps();
+        }
 
-  /** frees up all hardware allocations */
-  public void close() throws Exception {
-    drivetrain.close();
-    poseSensorFusion.close();
-    elevator.close();
-    elevatorArm.close();
-    elevatorHead.close();
-    coralIntake.close();
-    pdp.close();
-  }
+        // RoboRioSim.setVInVoltage(
+        //     MathUtil.clamp(BatterySim.calculateDefaultBatteryLoadedVoltage(currents), 0, 13));
+    }
+
+    private void resetEncoders() {
+        climber.resetEncoders();
+        elevator.resetEncoders();
+        elevatorArm.resetEncoders();
+        coralIntake.resetEncoders();
+
+        noEncoderResetAlert.set(false);
+        Elastic.sendNotification(
+                new Notification(NotificationLevel.INFO, "Encoders reset!", "Successfully reset arm encoders."));
+    }
+
+    /** frees up all hardware allocations */
+    public void close() throws Exception {
+        drivetrain.close();
+        poseSensorFusion.close();
+        elevator.close();
+        elevatorArm.close();
+        elevatorHead.close();
+        coralIntake.close();
+        pdp.close();
+    }
 }

@@ -11,76 +11,69 @@ import java.util.function.Supplier;
 
 public class SysIdManager {
 
-  public static Command createCommand(
-      Function<Direction, Command> quasistatic, Function<Direction, Command> dynamic) {
-    return new InstantCommand()
-        .andThen(quasistatic.apply(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(quasistatic.apply(Direction.kReverse).andThen(new WaitCommand(0.4)))
-        .andThen(dynamic.apply(Direction.kForward).andThen(new WaitCommand(0.4)))
-        .andThen(dynamic.apply(Direction.kReverse).andThen(new WaitCommand(0.4)));
-  }
-
-  public static SysIdRoutine getSysIdRoutine() {
-    return SysIdRoutine.None;
-  }
-
-  public static enum SysIdRoutine {
-    None,
-    Climber(
-        () -> RobotContainer.climber::sysIdQuasistatic, () -> RobotContainer.climber::sysIdDynamic),
-    CoralIntakeArm(
-        () -> RobotContainer.coralIntake::sysIdQuasistaticArm,
-        () -> RobotContainer.coralIntake::sysIdDynamicArm),
-    CoralIntakeWheel(
-        () -> RobotContainer.coralIntake::sysIdQuasistaticWheel,
-        () -> RobotContainer.coralIntake::sysIdDynamicWheel),
-    DrivetrainTurn(
-        () -> RobotContainer.drivetrain::sysIdQuasistaticTurnMotors,
-        () -> RobotContainer.drivetrain::sysIdDynamicTurnMotors),
-    DrivetrainSpin(
-        () -> RobotContainer.drivetrain::sysIdQuasistaticDriveMotorsSpin,
-        () -> RobotContainer.drivetrain::sysIdDynamicDriveMotorsSpin),
-    DrivetrainForward(
-        () -> RobotContainer.drivetrain::sysIdQuasistaticDriveMotorsForward,
-        () -> RobotContainer.drivetrain::sysIdDynamicDriveMotorsForward),
-    Elevator(
-        () -> RobotContainer.elevator::sysIdQuasistatic,
-        () -> RobotContainer.elevator::sysIdDynamic),
-    ElevatorArm(
-        () -> RobotContainer.elevator::sysIdQuasistatic,
-        () -> RobotContainer.elevator::sysIdDynamic),
-    ElevatorHead(
-        () -> RobotContainer.elevatorHead::sysIdQuasistatic,
-        () -> RobotContainer.elevatorHead::sysIdDynamic);
-
-    private final boolean enabled;
-    private final Supplier<Function<Direction, Command>> quasistatic;
-    private final Supplier<Function<Direction, Command>> dynamic;
-
-    SysIdRoutine(
-        Supplier<Function<Direction, Command>> quasistatic,
-        Supplier<Function<Direction, Command>> dynamic) {
-      this.quasistatic = quasistatic;
-      this.dynamic = dynamic;
-      enabled = true;
+    public static Command createCommand(
+            Function<Direction, Command> quasistatic, Function<Direction, Command> dynamic) {
+        return new InstantCommand()
+                .andThen(quasistatic.apply(Direction.kForward).andThen(new WaitCommand(0.4)))
+                .andThen(quasistatic.apply(Direction.kReverse).andThen(new WaitCommand(0.4)))
+                .andThen(dynamic.apply(Direction.kForward).andThen(new WaitCommand(0.4)))
+                .andThen(dynamic.apply(Direction.kReverse).andThen(new WaitCommand(0.4)));
     }
 
-    SysIdRoutine() {
-      this.quasistatic = null;
-      this.dynamic = null;
-      enabled = false;
+    public static SysIdRoutine getSysIdRoutine() {
+        return SysIdRoutine.None;
     }
 
-    public boolean isEnabled() {
-      return enabled;
-    }
+    public enum SysIdRoutine {
+        None,
+        Climber(() -> RobotContainer.climber::sysIdQuasistatic, () -> RobotContainer.climber::sysIdDynamic),
+        CoralIntakeArm(
+                () -> RobotContainer.coralIntake::sysIdQuasistaticArm,
+                () -> RobotContainer.coralIntake::sysIdDynamicArm),
+        CoralIntakeWheel(
+                () -> RobotContainer.coralIntake::sysIdQuasistaticWheel,
+                () -> RobotContainer.coralIntake::sysIdDynamicWheel),
+        DrivetrainTurn(
+                () -> RobotContainer.drivetrain::sysIdQuasistaticTurnMotors,
+                () -> RobotContainer.drivetrain::sysIdDynamicTurnMotors),
+        DrivetrainSpin(
+                () -> RobotContainer.drivetrain::sysIdQuasistaticDriveMotorsSpin,
+                () -> RobotContainer.drivetrain::sysIdDynamicDriveMotorsSpin),
+        DrivetrainForward(
+                () -> RobotContainer.drivetrain::sysIdQuasistaticDriveMotorsForward,
+                () -> RobotContainer.drivetrain::sysIdDynamicDriveMotorsForward),
+        Elevator(() -> RobotContainer.elevator::sysIdQuasistatic, () -> RobotContainer.elevator::sysIdDynamic),
+        ElevatorArm(() -> RobotContainer.elevator::sysIdQuasistatic, () -> RobotContainer.elevator::sysIdDynamic),
+        ElevatorHead(
+                () -> RobotContainer.elevatorHead::sysIdQuasistatic, () -> RobotContainer.elevatorHead::sysIdDynamic);
 
-    public Command createCommand() {
-      if (enabled) {
-        return SysIdManager.createCommand(quasistatic.get(), dynamic.get());
-      } else {
-        return Commands.none();
-      }
+        private final boolean enabled;
+        private final Supplier<Function<Direction, Command>> quasistatic;
+        private final Supplier<Function<Direction, Command>> dynamic;
+
+        SysIdRoutine(
+                Supplier<Function<Direction, Command>> quasistatic, Supplier<Function<Direction, Command>> dynamic) {
+            this.quasistatic = quasistatic;
+            this.dynamic = dynamic;
+            enabled = true;
+        }
+
+        SysIdRoutine() {
+            this.quasistatic = null;
+            this.dynamic = null;
+            enabled = false;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public Command createCommand() {
+            if (enabled) {
+                return SysIdManager.createCommand(quasistatic.get(), dynamic.get());
+            } else {
+                return Commands.none();
+            }
+        }
     }
-  }
 }

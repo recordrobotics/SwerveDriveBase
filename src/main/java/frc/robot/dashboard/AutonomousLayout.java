@@ -19,80 +19,79 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class AutonomousLayout extends AbstractLayout {
 
-  private static final Field2d field = new Field2d();
-  private static LoggedDashboardChooser<Command> autoChooser;
-  private static LoggedDashboardChooser<FieldStartingLocation> fieldStartingLocationChooser =
-      new LoggedDashboardChooser<>("Starting Location");
+    private static final Field2d field = new Field2d();
+    private static LoggedDashboardChooser<Command> autoChooser;
+    private static LoggedDashboardChooser<FieldStartingLocation> fieldStartingLocationChooser =
+            new LoggedDashboardChooser<>("Starting Location");
 
-  public AutonomousLayout() {
-    buildSendable("Field", field);
+    public AutonomousLayout() {
+        buildSendable("Field", field);
 
-    EnumSet.allOf(FieldStartingLocation.class)
-        .forEach(v -> fieldStartingLocationChooser.addOption(v.name(), v));
-    fieldStartingLocationChooser.addDefaultOption(
-        FieldStartingLocation.BargeCenter.name(), FieldStartingLocation.BargeCenter);
+        EnumSet.allOf(FieldStartingLocation.class).forEach(v -> fieldStartingLocationChooser.addOption(v.name(), v));
+        fieldStartingLocationChooser.addDefaultOption(
+                FieldStartingLocation.BargeCenter.name(), FieldStartingLocation.BargeCenter);
 
-    SmartDashboard.putBoolean("Autonomous/ResetLocationButton", false);
-    SmartDashboard.putBoolean("Autonomous/LimelightRotation", false);
-    SmartDashboard.putBoolean("Autonomous/EncoderReset", false);
-    SmartDashboard.putBoolean("Autonomous/ForceMT1", false);
-  }
-
-  public void setupAutoChooser() {
-    autoChooser = new LoggedDashboardChooser<>("Auto Code", AutoBuilder.buildAutoChooser());
-    try {
-      autoChooser.addOption("CMD_BargeLeftOuter", new BargeLeftAuto());
-    } catch (FileVersionException | IOException | ParseException e) {
-      e.printStackTrace();
+        SmartDashboard.putBoolean("Autonomous/ResetLocationButton", false);
+        SmartDashboard.putBoolean("Autonomous/LimelightRotation", false);
+        SmartDashboard.putBoolean("Autonomous/EncoderReset", false);
+        SmartDashboard.putBoolean("Autonomous/ForceMT1", false);
     }
-    try {
-      autoChooser.addOption("CMD_BargeRightOuter", new BargeRightAuto());
-    } catch (FileVersionException | IOException | ParseException e) {
-      e.printStackTrace();
+
+    public void setupAutoChooser() {
+        autoChooser = new LoggedDashboardChooser<>("Auto Code", AutoBuilder.buildAutoChooser());
+        try {
+            autoChooser.addOption("CMD_BargeLeftOuter", new BargeLeftAuto());
+        } catch (FileVersionException | IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            autoChooser.addOption("CMD_BargeRightOuter", new BargeRightAuto());
+        } catch (FileVersionException | IOException | ParseException e) {
+            e.printStackTrace();
+        }
     }
-  }
 
-  public void setRobotPose(Pose2d pose) {
-    field.setRobotPose(pose);
-  }
+    public void setRobotPose(Pose2d pose) {
+        field.setRobotPose(pose);
+    }
 
-  public void setVisionPose(String name, Pose2d pose) {
-    field.getObject(name).setPose(pose);
-  }
+    public void setVisionPose(String name, Pose2d pose) {
+        field.getObject(name).setPose(pose);
+    }
 
-  @Override
-  public void switchTo() {
-    Elastic.selectTab("Autonomous");
-  }
+    @Override
+    public void switchTo() {
+        Elastic.selectTab("Autonomous");
+    }
 
-  @Override
-  protected NetworkTable getNetworkTable() {
-    return NetworkTableInstance.getDefault().getTable("/SmartDashboard/Autonomous");
-  }
+    @Override
+    protected NetworkTable getNetworkTable() {
+        return NetworkTableInstance.getDefault().getTable("/SmartDashboard/Autonomous");
+    }
 
-  public Command getAutoChooser() {
-    return autoChooser.get();
-  }
+    public Command getAutoChooser() {
+        return autoChooser.get();
+    }
 
-  public FieldStartingLocation getStartingLocation() {
-    return fieldStartingLocationChooser.get() == null
-        ? FieldStartingLocation.BargeCenter
-        : fieldStartingLocationChooser.get();
-  }
+    public FieldStartingLocation getStartingLocation() {
+        return fieldStartingLocationChooser.get() == null
+                ? FieldStartingLocation.BargeCenter
+                : fieldStartingLocationChooser.get();
+    }
 
-  public boolean getResetLocation() {
-    return SmartDashboard.getBoolean("Autonomous/ResetLocationButton", false);
-  }
+    public boolean getResetLocation() {
+        return SmartDashboard.getBoolean("Autonomous/ResetLocationButton", false);
+    }
 
-  public boolean getLimelightRotation() {
-    return SmartDashboard.getBoolean("Autonomous/LimelightRotation", false);
-  }
+    public boolean getLimelightRotation() {
+        return SmartDashboard.getBoolean("Autonomous/LimelightRotation", false);
+    }
 
-  public boolean getEncoderReset() {
-    return SmartDashboard.getBoolean("Autonomous/EncoderReset", false);
-  }
+    public boolean getEncoderReset() {
+        return SmartDashboard.getBoolean("Autonomous/EncoderReset", false);
+    }
 
-  public boolean getForceMT1() {
-    return SmartDashboard.getBoolean("Autonomous/ForceMT1", false);
-  }
+    public boolean getForceMT1() {
+        return SmartDashboard.getBoolean("Autonomous/ForceMT1", false);
+    }
 }

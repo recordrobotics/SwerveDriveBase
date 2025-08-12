@@ -13,24 +13,24 @@ import java.io.IOException;
 import org.json.simple.parser.ParseException;
 
 public class BargeRightAuto extends SequentialCommandGroup {
-  public BargeRightAuto() throws FileVersionException, IOException, ParseException {
-    addCommands(
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("BargeRightToReefE")),
-        CommandUtils.finishOnInterrupt(AutoUtils.alignWithVision().withTimeout(1.5)),
-        new InstantCommand(() -> RobotContainer.drivetrain.kill()),
-        CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
-        AutoUtils.createSource("E", "Right"),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefD")),
-        CommandUtils.finishOnInterrupt(AutoUtils.alignWithVision().withTimeout(1.5)),
-        new InstantCommand(() -> RobotContainer.drivetrain.kill()),
-        CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
-        AutoUtils.createSource("D", "Right"),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefC")),
-        CommandUtils.finishOnInterrupt(AutoUtils.alignWithVision().withTimeout(1.5)),
-        new InstantCommand(() -> RobotContainer.drivetrain.kill()),
-        CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("ReefCToPark")),
-        new InstantCommand(() -> RobotContainer.drivetrain.kill()));
-    addRequirements(RobotContainer.drivetrain);
-  }
+    public BargeRightAuto() throws FileVersionException, IOException, ParseException {
+        addCommands(
+                AutoBuilder.followPath(PathPlannerPath.fromPathFile("BargeRightToReefE")),
+                CommandUtils.finishOnInterrupt(AutoUtils.alignWithVision().withTimeout(1.5)),
+                new InstantCommand(() -> RobotContainer.drivetrain.kill()),
+                CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
+                AutoUtils.createSource("E", "Right"),
+                AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefD")),
+                CommandUtils.finishOnInterrupt(AutoUtils.alignWithVision().withTimeout(1.5)),
+                new InstantCommand(() -> RobotContainer.drivetrain.kill()),
+                CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
+                AutoUtils.createSource("D", "Right"),
+                AutoBuilder.followPath(PathPlannerPath.fromPathFile("ElevatorStartToReefC")),
+                CommandUtils.finishOnInterrupt(AutoUtils.alignWithVision().withTimeout(1.5)),
+                new InstantCommand(() -> RobotContainer.drivetrain.kill()),
+                CommandUtils.finishOnInterrupt(new CoralShoot().withTimeout(1.0)),
+                AutoBuilder.followPath(PathPlannerPath.fromPathFile("ReefCToPark")),
+                new InstantCommand(() -> RobotContainer.drivetrain.kill()));
+        addRequirements(RobotContainer.drivetrain);
+    }
 }

@@ -14,143 +14,115 @@ import frc.robot.subsystems.RobotModel.RobotCoral;
 import java.util.Set;
 import java.util.function.Supplier;
 import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.gamepieces.GamePieceProjectile;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnField;
 
 public class CoralIntakeToElevator extends SequentialCommandGroup implements SimulationCommand {
 
-  private RobotCoral coral;
+    private RobotCoral coral;
 
-  public CoralIntakeToElevator() {
-    if (Constants.RobotState.getMode() == Mode.REAL) return;
+    public CoralIntakeToElevator() {
+        if (Constants.RobotState.getMode() == Mode.REAL) return;
 
-    addCommands(
-        new InstantCommand(() -> coral = RobotContainer.model.getRobotCoral()),
-        // move coral to elevator
-        new DeferredCommand(
-            () -> {
-              Supplier<Command> anim =
-                  () ->
-                      new PoseAnimator(
-                              coral
-                                  .poseSupplier
-                                  .get()
-                                  .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                              () ->
-                                  RobotContainer.model
-                                      .elevator
-                                      .getCoralIntakeEjectPose()
-                                      .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                              p ->
-                                  coral.poseSupplier =
-                                      () ->
-                                          new Pose3d(RobotContainer.model.getRobot())
-                                              .plus(
-                                                  new Transform3d(
-                                                      p.getTranslation(), p.getRotation())),
-                              0.1)
-                          .andThen(
-                              new PoseAnimator(
-                                  RobotContainer.model
-                                      .elevator
-                                      .getCoralIntakeEjectPose()
-                                      .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                                  () ->
-                                      RobotContainer.model
-                                          .elevator
-                                          .getCoralIntakeEjectFinalPose()
-                                          .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                                  p ->
-                                      coral.poseSupplier =
-                                          () ->
-                                              new Pose3d(RobotContainer.model.getRobot())
-                                                  .plus(
-                                                      new Transform3d(
-                                                          p.getTranslation(), p.getRotation())),
-                                  0.1))
-                          .andThen(
-                              new PoseAnimator(
-                                  RobotContainer.model
-                                      .elevator
-                                      .getCoralIntakeEjectFinalPose()
-                                      .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                                  () ->
-                                      RobotContainer.model
-                                          .elevator
-                                          .getCoralIntakeChannelPose()
-                                          .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                                  p ->
-                                      coral.poseSupplier =
-                                          () ->
-                                              new Pose3d(RobotContainer.model.getRobot())
-                                                  .plus(
-                                                      new Transform3d(
-                                                          p.getTranslation(), p.getRotation())),
-                                  0.15))
-                          .andThen(
-                              new PoseAnimator(
-                                  RobotContainer.model
-                                      .elevator
-                                      .getCoralIntakeChannelPose()
-                                      .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                                  () ->
-                                      RobotContainer.model
-                                          .elevatorArm
-                                          .getCoralShooterTargetPose()
-                                          .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
-                                  p ->
-                                      coral.poseSupplier =
-                                          () ->
-                                              new Pose3d(RobotContainer.model.getRobot())
-                                                  .plus(
-                                                      new Transform3d(
-                                                          p.getTranslation(), p.getRotation())),
-                                  0.4))
-                          .andThen(
-                              () -> {
-                                // set has elevator coral (NC)
-                                coral.poseSupplier =
-                                    () ->
-                                        RobotContainer.model.elevatorArm
-                                            .getCoralShooterTargetPose();
-                                try {
-                                  RobotContainer.elevatorHead.getSimIO().setCoralDetectorSim(false);
-                                } catch (Exception e) {
-                                  e.printStackTrace();
-                                }
-                              });
-              return (coral.poseSupplier.get() == null
-                  ? new WaitUntilCommand(
-                          () -> {
-                            if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
-                              for (var c : SimulatedArena.getInstance().gamePieceLaunched()) {
-                                if (c.gamePieceType
-                                    == ReefscapeCoralOnField.REEFSCAPE_CORAL_INFO.type()) {
-                                  Pose3d pose = c.getPose3d();
-                                  Pose3d targetPose =
-                                      RobotContainer.model.elevator.getCoralIntakeEjectPose();
-                                  if (pose.getTranslation().getDistance(targetPose.getTranslation())
-                                      < 0.3) {
-                                    coral.poseSupplier = () -> pose;
-                                    return true;
-                                  }
-                                }
-                              }
-                            }
+        addCommands(
+                new InstantCommand(() -> coral = RobotContainer.model.getRobotCoral()),
+                // move coral to elevator
+                new DeferredCommand(
+                        () -> {
+                            Supplier<Command> anim = () -> new PoseAnimator(
+                                            coral.poseSupplier
+                                                    .get()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            () -> RobotContainer.model
+                                                    .elevator
+                                                    .getCoralIntakeEjectPose()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            p -> coral.poseSupplier = () -> new Pose3d(RobotContainer.model.getRobot())
+                                                    .plus(new Transform3d(p.getTranslation(), p.getRotation())),
+                                            0.1)
+                                    .andThen(new PoseAnimator(
+                                            RobotContainer.model
+                                                    .elevator
+                                                    .getCoralIntakeEjectPose()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            () -> RobotContainer.model
+                                                    .elevator
+                                                    .getCoralIntakeEjectFinalPose()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            p -> coral.poseSupplier = () -> new Pose3d(RobotContainer.model.getRobot())
+                                                    .plus(new Transform3d(p.getTranslation(), p.getRotation())),
+                                            0.1))
+                                    .andThen(new PoseAnimator(
+                                            RobotContainer.model
+                                                    .elevator
+                                                    .getCoralIntakeEjectFinalPose()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            () -> RobotContainer.model
+                                                    .elevator
+                                                    .getCoralIntakeChannelPose()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            p -> coral.poseSupplier = () -> new Pose3d(RobotContainer.model.getRobot())
+                                                    .plus(new Transform3d(p.getTranslation(), p.getRotation())),
+                                            0.15))
+                                    .andThen(new PoseAnimator(
+                                            RobotContainer.model
+                                                    .elevator
+                                                    .getCoralIntakeChannelPose()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            () -> RobotContainer.model
+                                                    .elevatorArm
+                                                    .getCoralShooterTargetPose()
+                                                    .relativeTo(new Pose3d(RobotContainer.model.getRobot())),
+                                            p -> coral.poseSupplier = () -> new Pose3d(RobotContainer.model.getRobot())
+                                                    .plus(new Transform3d(p.getTranslation(), p.getRotation())),
+                                            0.4))
+                                    .andThen(() -> {
+                                        // set has elevator coral (NC)
+                                        coral.poseSupplier =
+                                                () -> RobotContainer.model.elevatorArm.getCoralShooterTargetPose();
+                                        try {
+                                            RobotContainer.elevatorHead
+                                                    .getSimIO()
+                                                    .setCoralDetectorSim(false);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    });
+                            return (coral.poseSupplier.get() == null
+                                    ? new WaitUntilCommand(() -> {
+                                                if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+                                                    for (GamePieceProjectile c : SimulatedArena.getInstance()
+                                                            .gamePieceLaunched()) {
+                                                        if (c.gamePieceType
+                                                                == ReefscapeCoralOnField.REEFSCAPE_CORAL_INFO.type()) {
+                                                            Pose3d pose = c.getPose3d();
+                                                            Pose3d targetPose =
+                                                                    RobotContainer.model.elevator
+                                                                            .getCoralIntakeEjectPose();
+                                                            if (pose.getTranslation()
+                                                                            .getDistance(targetPose.getTranslation())
+                                                                    < 0.3) {
+                                                                coral.poseSupplier = () -> pose;
+                                                                return true;
+                                                            }
+                                                        }
+                                                    }
+                                                }
 
-                            return false;
-                          })
-                      .andThen(new DeferredCommand(anim, Set.of()))
-                  : anim.get());
-            },
-            Set.of()));
-  }
-
-  @Override
-  public Command simulateFor(Command command) {
-    if (Constants.RobotState.getMode() == Mode.REAL) {
-      return command;
-    } else {
-      return command.alongWith(this);
+                                                return false;
+                                            })
+                                            .andThen(new DeferredCommand(anim, Set.of()))
+                                    : anim.get());
+                        },
+                        Set.of()));
     }
-  }
+
+    @Override
+    public Command simulateFor(Command command) {
+        if (Constants.RobotState.getMode() == Mode.REAL) {
+            return command;
+        } else {
+            return command.alongWith(this);
+        }
+    }
 }

@@ -5,41 +5,41 @@ import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 
 public interface CoralIntakeIO extends AutoCloseable {
 
-  public void applyArmTalonFXConfig(TalonFXConfiguration configuration);
+    void applyArmTalonFXConfig(TalonFXConfiguration configuration);
 
-  public void setWheelVoltage(double outputVolts);
+    void setWheelVoltage(double outputVolts);
 
-  public void setArmVoltage(double outputVolts);
+    void setArmVoltage(double outputVolts);
 
-  public void setWheelPosition(double newValue);
+    void setWheelPosition(double newValue);
 
-  public void setArmPosition(double newValue);
+    void setArmPosition(double newValue);
 
-  public void setArmMotionMagic(MotionMagicExpoVoltage request);
+    void setArmMotionMagic(MotionMagicExpoVoltage request);
 
-  public double getWheelPosition();
+    double getWheelPosition();
 
-  public double getWheelVelocity();
+    double getWheelVelocity();
 
-  public double getWheelVoltage();
+    double getWheelVoltage();
 
-  public double getArmVoltage();
+    double getArmVoltage();
 
-  public double getArmPosition();
+    double getArmPosition();
 
-  public double getArmVelocity();
+    double getArmVelocity();
 
-  public void setWheelPercent(double newValue);
+    void setWheelPercent(double newValue);
 
-  public void setArmPercent(double newValue);
+    void setArmPercent(double newValue);
 
-  public double getWheelPercent();
+    double getWheelPercent();
 
-  public double getArmPercent();
+    double getArmPercent();
 
-  public double getWheelCurrentDrawAmps();
+    double getWheelCurrentDrawAmps();
 
-  public double getArmCurrentDrawAmps();
+    double getArmCurrentDrawAmps();
 
-  public void simulationPeriodic();
+    void simulationPeriodic();
 }

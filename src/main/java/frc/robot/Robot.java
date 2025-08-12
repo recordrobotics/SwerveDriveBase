@@ -36,247 +36,243 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
-  private Command m_autonomousCommand;
-  private RobotContainer m_robotContainer;
+    private Command m_autonomousCommand;
+    private RobotContainer m_robotContainer;
 
-  private static double autoStartTimestamp;
+    private static double autoStartTimestamp;
 
-  private static final String defaultPathRio = "/home/lvuser/logs";
-  private static final String defaultPathSim = "logs";
+    private static final String defaultPathRio = "/home/lvuser/logs";
+    private static final String defaultPathSim = "logs";
 
-  public Robot() {
-    // Record metadata
-    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-    switch (BuildConstants.DIRTY) {
-      case 0:
-        Logger.recordMetadata("GitDirty", "All changes committed");
-        break;
-      case 1:
-        Logger.recordMetadata("GitDirty", "Uncomitted changes");
-        break;
-      default:
-        Logger.recordMetadata("GitDirty", "Unknown");
-        break;
+    public Robot() {
+        // Record metadata
+        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+        switch (BuildConstants.DIRTY) {
+            case 0:
+                Logger.recordMetadata("GitDirty", "All changes committed");
+                break;
+            case 1:
+                Logger.recordMetadata("GitDirty", "Uncomitted changes");
+                break;
+            default:
+                Logger.recordMetadata("GitDirty", "Unknown");
+                break;
+        }
+
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REPLAY) {
+            setUseTiming(true); // Run at standard robot speed (20 ms)
+            Logger.addDataReceiver(new WPILOGWriter(RobotBase.isSimulation() ? defaultPathSim : defaultPathRio));
+            Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        } else {
+            setUseTiming(false); // Run as fast as possible
+            String logPath =
+                    LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+            Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+            Logger.addDataReceiver(
+                    new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+        }
+
+        DriverStation.silenceJoystickConnectionWarning(Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM);
+
+        Logger.start();
+
+        if (Constants.RobotState.MOTOR_LOGGING_ENABLED) {
+            for (int i = 0; i < 10; i++) {
+                DriverStation.reportWarning(
+                        "[WARNING] Motor logging enabled, DON'T FORGET to delete old logs to make space on disk.\n"
+                                + "[WARNING] During competition, set MOTOR_LOGGING_ENABLED to false since logging is enabled automatically.",
+                        false);
+            }
+            SignalLogger.start();
+        }
+
+        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+            // Use custom improved simulation
+            SimulatedArena.overrideInstance(new ImprovedArena2025Reefscape());
+        }
     }
 
-    if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REPLAY) {
-      setUseTiming(true); // Run at standard robot speed (20 ms)
-      Logger.addDataReceiver(
-          new WPILOGWriter(RobotBase.isSimulation() ? defaultPathSim : defaultPathRio));
-      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    } else {
-      setUseTiming(false); // Run as fast as possible
-      String logPath =
-          LogFileUtil
-              .findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-      Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-      Logger.addDataReceiver(
-          new WPILOGWriter(
-              LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+    /**
+     * This function is run when the robot is first started up and should be used for any
+     * initialization code.
+     */
+    @Override
+    public void robotInit() {
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        // Instantiate our RobotContainer. This will perform all our button bindings,
+        // and put our
+        // autonomous chooser on the dashboard.
+        m_robotContainer = new RobotContainer();
+
+        // Elastic layout webserver
+        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+
+        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+            // Reset simulation field
+            SimulatedArena.getInstance().resetFieldForAuto();
+        }
+
+        // MAKE SURE FIRST CALL TO ELASTIC IS NOT IN TELEOP OR AUTO INIT!!
+        DashboardUI.Autonomous.switchTo();
+
+        AutoLogLevelManager.addObject(this);
     }
 
-    DriverStation.silenceJoystickConnectionWarning(
-        Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM);
+    /**
+     * This function is called every robot packet, no matter the mode. Use this for items like
+     * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+     *
+     * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+     * SmartDashboard integrated updating.
+     */
+    @Override
+    public void robotPeriodic() {
+        // Switch thread to high priority to improve loop timing
+        // Threads.setCurrentThreadPriority(true, 99);
 
-    Logger.start();
+        // Runs the Scheduler. This is responsible for polling buttons, adding
+        // newly-scheduled
+        // commands, running already-scheduled commands, removing finished or
+        // interrupted commands,
+        // and running subsystem periodic() methods. This must be called from the
+        // robot's periodic
+        // block in order for anything in the Command-based framework to work.
 
-    if (Constants.RobotState.MOTOR_LOGGING_ENABLED) {
-      for (int i = 0; i < 10; i++) {
-        DriverStation.reportWarning(
-            "[WARNING] Motor logging enabled, DON'T FORGET to delete old logs to make space on disk.\n"
-                + "[WARNING] During competition, set MOTOR_LOGGING_ENABLED to false since logging is enabled automatically.",
-            false);
-      }
-      SignalLogger.start();
+        DashboardUI.Overview.getControl().update();
+
+        // End and start reversed to make sure we get latest data before command scheduler
+        RobotContainer.poseSensorFusion.endCalculation();
+        RobotContainer.poseSensorFusion.startCalculation();
+
+        try {
+            CommandScheduler.getInstance().run();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DriverStation.reportError("CommandScheduler exception: " + e.getMessage(), false);
+        }
+
+        SmartDashboard.putString(
+                "Overview/LevelSwitch",
+                DashboardUI.Overview.getControl().getReefLevelSwitchValue().toString());
+
+        // Return to normal thread priority
+        // Threads.setCurrentThreadPriority(false, 10);
+
+        try {
+            DashboardUI.update();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DriverStation.reportError("DashboardUI exception: " + e.getMessage(), false);
+        }
+
+        try {
+            AutoLogLevelManager.periodic();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DriverStation.reportError("AutoLogLevelManager exception: " + e.getMessage(), false);
+        }
     }
 
-    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
-      // Use custom improved simulation
-      SimulatedArena.overrideInstance(new ImprovedArena2025Reefscape());
-    }
-  }
+    boolean hasRun = false;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    Pathfinding.setPathfinder(new LocalADStarAK());
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    /** This function is called once each time the robot enters Disabled mode. */
+    @Override
+    public void disabledInit() {
+        if (SysIdManager.getSysIdRoutine() != SysIdRoutine.None && hasRun) {
+            Logger.end();
+            SignalLogger.stop();
+        }
 
-    // Elastic layout webserver
-    WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
-
-    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
-      // Reset simulation field
-      SimulatedArena.getInstance().resetFieldForAuto();
+        m_robotContainer.disabledInit();
     }
 
-    // MAKE SURE FIRST CALL TO ELASTIC IS NOT IN TELEOP OR AUTO INIT!!
-    DashboardUI.Autonomous.switchTo();
+    @Override
+    public void disabledPeriodic() {}
 
-    AutoLogLevelManager.addObject(this);
-  }
+    /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+    @Override
+    public void autonomousInit() {
+        autoStartTimestamp = Timer.getFPGATimestamp();
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Switch thread to high priority to improve loop timing
-    // Threads.setCurrentThreadPriority(true, 99);
+        // Cancel any previous commands
+        CommandScheduler.getInstance().cancelAll();
 
-    // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
-    // block in order for anything in the Command-based framework to work.
+        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+            // Reset simulation field
+            SimulatedArena.getInstance().resetFieldForAuto();
+            RobotContainer.humanPlayerSimulation.reset();
 
-    DashboardUI.Overview.getControl().update();
+            // Give robot preload
+            try {
+                RobotContainer.elevatorHead.getSimIO().setPreload();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-    // End and start reversed to make sure we get latest data before command scheduler
-    RobotContainer.poseSensorFusion.endCalculation();
-    RobotContainer.poseSensorFusion.startCalculation();
+        // schedule the autonomous command (example)
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.schedule();
+        }
 
-    try {
-      CommandScheduler.getInstance().run();
-    } catch (Exception e) {
-      e.printStackTrace();
-      DriverStation.reportError("CommandScheduler exception: " + e.getMessage(), false);
+        DashboardUI.Autonomous.switchTo();
+
+        hasRun = true;
     }
 
-    SmartDashboard.putString(
-        "Overview/LevelSwitch",
-        DashboardUI.Overview.getControl().getReefLevelSwitchValue().toString());
+    /** This function is called periodically during autonomous. */
+    @Override
+    public void autonomousPeriodic() {}
 
-    // Return to normal thread priority
-    // Threads.setCurrentThreadPriority(false, 10);
+    @Override
+    public void teleopInit() {
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.cancel();
+        }
 
-    try {
-      DashboardUI.update();
-    } catch (Exception e) {
-      e.printStackTrace();
-      DriverStation.reportError("DashboardUI exception: " + e.getMessage(), false);
+        new KillSpecified(RobotContainer.elevatorHead, RobotContainer.coralIntake).schedule();
+
+        m_robotContainer.teleopInit();
+        hasRun = true;
+
+        DashboardUI.Overview.switchTo();
     }
 
-    try {
-      AutoLogLevelManager.periodic();
-    } catch (Exception e) {
-      e.printStackTrace();
-      DriverStation.reportError("AutoLogLevelManager exception: " + e.getMessage(), false);
-    }
-  }
-
-  boolean hasRun = false;
-
-  /** This function is called once each time the robot enters Disabled mode. */
-  @Override
-  public void disabledInit() {
-    if (SysIdManager.getSysIdRoutine() != SysIdRoutine.None && hasRun) {
-      Logger.end();
-      SignalLogger.stop();
+    /** This function is called periodically during operator control. */
+    @Override
+    public void teleopPeriodic() {
+        Logger.recordOutput(
+                "Control/ReefLevelSwitch", DashboardUI.Overview.getControl().getReefLevelSwitchValue());
     }
 
-    m_robotContainer.disabledInit();
-  }
-
-  @Override
-  public void disabledPeriodic() {}
-
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
-  public void autonomousInit() {
-    autoStartTimestamp = Timer.getFPGATimestamp();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // Cancel any previous commands
-    CommandScheduler.getInstance().cancelAll();
-
-    if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
-      // Reset simulation field
-      SimulatedArena.getInstance().resetFieldForAuto();
-      RobotContainer.humanPlayerSimulation.reset();
-
-      // Give robot preload
-      try {
-        RobotContainer.elevatorHead.getSimIO().setPreload();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    @Override
+    public void testInit() {
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll();
     }
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    /** This function is called periodically during test mode. */
+    @Override
+    public void testPeriodic() {
+        m_robotContainer.testPeriodic();
     }
 
-    DashboardUI.Autonomous.switchTo();
-
-    hasRun = true;
-  }
-
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
-
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    @Override
+    public void simulationPeriodic() {
+        SimulatedArena.getInstance().simulationPeriodic();
+        m_robotContainer.simulationPeriodic();
     }
 
-    new KillSpecified(RobotContainer.elevatorHead, RobotContainer.coralIntake).schedule();
-
-    m_robotContainer.teleopInit();
-    hasRun = true;
-
-    DashboardUI.Overview.switchTo();
-  }
-
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {
-    Logger.recordOutput(
-        "Control/ReefLevelSwitch", DashboardUI.Overview.getControl().getReefLevelSwitchValue());
-  }
-
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
-
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {
-    m_robotContainer.testPeriodic();
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    SimulatedArena.getInstance().simulationPeriodic();
-    m_robotContainer.simulationPeriodic();
-  }
-
-  public static double getAutoStartTime() {
-    return autoStartTimestamp;
-  }
+    public static double getAutoStartTime() {
+        return autoStartTimestamp;
+    }
 }

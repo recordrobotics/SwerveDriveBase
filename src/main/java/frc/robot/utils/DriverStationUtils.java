@@ -6,11 +6,11 @@ import java.util.Optional;
 
 public class DriverStationUtils {
 
-  public static Alliance getCurrentAlliance() {
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      return alliance.get();
+    public static Alliance getCurrentAlliance() {
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get();
+        }
+        return Alliance.Blue;
     }
-    return Alliance.Blue;
-  }
 }

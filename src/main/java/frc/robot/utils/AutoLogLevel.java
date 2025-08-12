@@ -16,19 +16,19 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface AutoLogLevel {
 
-  public enum Level {
-    DebugSim,
-    DebugReal,
-    Sim,
-    Sysid,
-    Real;
+    enum Level {
+        DebugSim,
+        DebugReal,
+        Sim,
+        Sysid,
+        Real;
 
-    public boolean isAtLeast(Level other) {
-      return this.compareTo(other) >= 0;
+        public boolean isAtLeast(Level other) {
+            return this.compareTo(other) >= 0;
+        }
     }
-  }
 
-  public String key() default "";
+    String key() default "";
 
-  public Level level() default Level.Real;
+    Level level() default Level.Real;
 }

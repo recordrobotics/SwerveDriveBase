@@ -5,9 +5,9 @@ import frc.robot.subsystems.Lights;
 
 public class StateVisualizerLights extends VirtualLightsSubsystem {
 
-  public StateVisualizerLights(Lights lights) {
-    super(lights, 0, 29);
-    setDefaultCommand(
-        runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY_WITH_CLIMB).ignoringDisable(true));
-  }
+    public StateVisualizerLights(Lights lights) {
+        super(lights, 0, 29);
+        setDefaultCommand(
+                runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY_WITH_CLIMB).ignoringDisable(true));
+    }
 }

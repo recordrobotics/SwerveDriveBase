@@ -11,36 +11,35 @@ import frc.robot.control.AbstractControl;
 import frc.robot.dashboard.DashboardUI;
 
 public class ManualElevator extends Command {
-  public ManualElevator() {
-    addRequirements(RobotContainer.elevator);
-  }
-
-  private double height = 0;
-
-  @Override
-  public void initialize() {
-    height = RobotContainer.elevator.getCurrentHeight();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    AbstractControl controls = DashboardUI.Overview.getControl();
-
-    LinearVelocity manualElevatorVelocity = controls.getManualElevatorVelocity();
-    double delta = manualElevatorVelocity.times(Milliseconds.of(20)).in(Meters);
-    height += delta;
-    height =
-        MathUtil.clamp(height, Constants.Elevator.STARTING_HEIGHT, Constants.Elevator.MAX_HEIGHT);
-
-    if (Math.abs(delta) > 0.001) {
-      RobotContainer.elevator.set(height);
+    public ManualElevator() {
+        addRequirements(RobotContainer.elevator);
     }
-  }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    private double height = 0;
+
+    @Override
+    public void initialize() {
+        height = RobotContainer.elevator.getCurrentHeight();
+    }
+
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        AbstractControl controls = DashboardUI.Overview.getControl();
+
+        LinearVelocity manualElevatorVelocity = controls.getManualElevatorVelocity();
+        double delta = manualElevatorVelocity.times(Milliseconds.of(20)).in(Meters);
+        height += delta;
+        height = MathUtil.clamp(height, Constants.Elevator.STARTING_HEIGHT, Constants.Elevator.MAX_HEIGHT);
+
+        if (Math.abs(delta) > 0.001) {
+            RobotContainer.elevator.set(height);
+        }
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

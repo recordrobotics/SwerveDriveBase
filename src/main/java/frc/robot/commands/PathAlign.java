@@ -11,30 +11,27 @@ import frc.robot.RobotContainer;
 import java.util.List;
 
 public class PathAlign {
-  public static Command create(Pose2d target) {
-    Pose2d startPose =
-        new Pose2d(
-            RobotContainer.poseSensorFusion.getEstimatedPosition().getTranslation(),
-            target
-                .minus(RobotContainer.poseSensorFusion.getEstimatedPosition())
-                .getRotation()); // Sometimes is wrong/goofy idk how to consistently reproduce
-    // though
+    public static Command create(Pose2d target) {
+        Pose2d startPose = new Pose2d(
+                RobotContainer.poseSensorFusion.getEstimatedPosition().getTranslation(),
+                target.minus(RobotContainer.poseSensorFusion.getEstimatedPosition())
+                        .getRotation()); // Sometimes is wrong/goofy idk how to consistently reproduce
+        // though
 
-    // The rotation component of the pose should be the direction of travel. Do not use holonomic
-    // rotation.
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose, target);
+        // The rotation component of the pose should be the direction of travel. Do not use holonomic
+        // rotation.
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(startPose, target);
 
-    PathPlannerPath path =
-        new PathPlannerPath(
-            waypoints,
-            Constants.Align.PATH_CONSTRAINTS,
-            null, // null for OTF paths.
-            new GoalEndState(1.0, target.getRotation()) // holonomic rotation
-            );
+        PathPlannerPath path = new PathPlannerPath(
+                waypoints,
+                Constants.Align.PATH_CONSTRAINTS,
+                null, // null for OTF paths.
+                new GoalEndState(1.0, target.getRotation()) // holonomic rotation
+                );
 
-    // Prevent the path from being flipped if the coordinates are already correct
-    path.preventFlipping = true;
+        // Prevent the path from being flipped if the coordinates are already correct
+        path.preventFlipping = true;
 
-    return AutoBuilder.followPath(path);
-  }
+        return AutoBuilder.followPath(path);
+    }
 }

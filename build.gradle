@@ -1,8 +1,8 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2025.3.2"
-    id 'com.diffplug.spotless' version '6.20.0'
-    id "com.peterabeles.gversion" version "1.10"
+    id 'com.diffplug.spotless' version '7.2.1'
+    id "com.peterabeles.gversion" version "1.10.3"
 }
 
 java {
@@ -143,11 +143,25 @@ spotless {
             include '**/*.java'
             exclude 'build/**', '**/build-*/**', 'src/main/java/frc/robot/Main.java', '**/BuildConstants.java' // Main has ascii art, don't touch
         }
+
         toggleOffOn()
-        googleJavaFormat()
-        removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
+
+        cleanthat()
+                .groupArtifact('org.recordrobotics.cleanthat:java')
+                .version("2.26")
+                .sourceCompatibility("17")
+                .addMutator("UseExplicitTypes")
+                .addMutator('SafeAndConsensual')
+                .addMutator('UnnecessaryFullyQualifiedName')
+                .excludeMutator('LocalVariableTypeInference')
+                .includeDraft(false)
+
+        removeUnusedImports()
+
+        palantirJavaFormat()
+        formatAnnotations()
     }
     groovyGradle {
         target fileTree('.') {
@@ -155,7 +169,7 @@ spotless {
             exclude '**/build/**', '**/build-*/**'
         }
         greclipse()
-        indentWithSpaces(4)
+        leadingTabsToSpaces(4)
         trimTrailingWhitespace()
         endWithNewline()
     }
@@ -166,7 +180,7 @@ spotless {
         }
         eclipseWtp('xml')
         trimTrailingWhitespace()
-        indentWithSpaces(2)
+        leadingTabsToSpaces(2)
         endWithNewline()
     }
     format 'misc', {
@@ -175,7 +189,7 @@ spotless {
             exclude '**/build/**', '**/build-*/**'
         }
         trimTrailingWhitespace()
-        indentWithSpaces(2)
+        leadingTabsToSpaces(2)
         endWithNewline()
     }
 }

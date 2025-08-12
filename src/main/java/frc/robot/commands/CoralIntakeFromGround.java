@@ -9,26 +9,23 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 
 public class CoralIntakeFromGround extends SequentialCommandGroup {
-  public CoralIntakeFromGround() {
-    addRequirements(RobotContainer.coralIntake);
-    addRequirements(RobotContainer.elevatorHead);
+    public CoralIntakeFromGround() {
+        addRequirements(RobotContainer.coralIntake);
+        addRequirements(RobotContainer.elevatorHead);
 
-    addCommands(
-        new ScheduleCommand(
-            RobotContainer.lights
-                .stateVisualizer
-                .runPattern(Constants.Lights.PULSATING_ORANGE)
-                .onlyWhile(this::isScheduled)),
-        new ScheduleCommand(
-            RobotContainer.lights
-                .coralIntake
-                .runPattern(Constants.Lights.coralIntakePattern)
-                .onlyWhile(this::isScheduled)),
-        new InstantCommand(
-            () -> RobotContainer.coralIntake.set(CoralIntakeState.GROUND),
-            RobotContainer.coralIntake),
-        new InstantCommand(() -> System.out.println("Coral Intake From Ground Command Started")),
-        new ElevatorMove(ElevatorHeight.INTAKE),
-        new InstantCommand(() -> System.out.println("Elevator Move Command Started")));
-  }
+        addCommands(
+                new ScheduleCommand(RobotContainer.lights
+                        .stateVisualizer
+                        .runPattern(Constants.Lights.PULSATING_ORANGE)
+                        .onlyWhile(this::isScheduled)),
+                new ScheduleCommand(RobotContainer.lights
+                        .coralIntake
+                        .runPattern(Constants.Lights.coralIntakePattern)
+                        .onlyWhile(this::isScheduled)),
+                new InstantCommand(
+                        () -> RobotContainer.coralIntake.set(CoralIntakeState.GROUND), RobotContainer.coralIntake),
+                new InstantCommand(() -> System.out.println("Coral Intake From Ground Command Started")),
+                new ElevatorMove(ElevatorHeight.INTAKE),
+                new InstantCommand(() -> System.out.println("Elevator Move Command Started")));
+    }
 }

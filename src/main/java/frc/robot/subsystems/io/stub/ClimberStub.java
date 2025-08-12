@@ -6,59 +6,59 @@ import frc.robot.subsystems.io.ClimberIO;
 
 public class ClimberStub implements ClimberIO {
 
-  @SuppressWarnings("unused")
-  private final double periodicDt;
+    @SuppressWarnings("unused")
+    private final double periodicDt;
 
-  public ClimberStub(double periodicDt) {
-    this.periodicDt = periodicDt;
-  }
+    public ClimberStub(double periodicDt) {
+        this.periodicDt = periodicDt;
+    }
 
-  @Override
-  public void applyTalonFXConfig(TalonFXConfiguration configuration) {}
+    @Override
+    public void applyTalonFXConfig(TalonFXConfiguration configuration) {}
 
-  @Override
-  public void setVoltage(double outputVolts) {}
+    @Override
+    public void setVoltage(double outputVolts) {}
 
-  @Override
-  public void setPosition(double newValue) {}
+    @Override
+    public void setPosition(double newValue) {}
 
-  @Override
-  public void setMotionMagic(MotionMagicVoltage request) {}
+    @Override
+    public void setMotionMagic(MotionMagicVoltage request) {}
 
-  @Override
-  public double getPosition() {
-    return 0;
-  }
+    @Override
+    public double getPosition() {
+        return 0;
+    }
 
-  @Override
-  public double getVelocity() {
-    return 0;
-  }
+    @Override
+    public double getVelocity() {
+        return 0;
+    }
 
-  @Override
-  public void setPercent(double newValue) {}
+    @Override
+    public void setPercent(double newValue) {}
 
-  @Override
-  public double getPercent() {
-    return 0;
-  }
+    @Override
+    public double getPercent() {
+        return 0;
+    }
 
-  @Override
-  public double getVoltage() {
-    return 0;
-  }
+    @Override
+    public double getVoltage() {
+        return 0;
+    }
 
-  @Override
-  public double getCurrentDrawAmps() {
-    return 0;
-  }
+    @Override
+    public double getCurrentDrawAmps() {
+        return 0;
+    }
 
-  @Override
-  public void setRatchet(double value) {}
+    @Override
+    public void setRatchet(double value) {}
 
-  @Override
-  public void simulationPeriodic() {}
+    @Override
+    public void simulationPeriodic() {}
 
-  @Override
-  public void close() {}
+    @Override
+    public void close() {}
 }

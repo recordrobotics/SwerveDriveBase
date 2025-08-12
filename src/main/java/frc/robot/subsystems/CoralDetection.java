@@ -21,198 +21,187 @@ import java.util.ArrayList;
 import java.util.List;
 import org.ironmaple.simulation.SimulatedArena;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.TargetCorner;
 
 public class CoralDetection extends ManagedSubsystemBase {
 
-  // no IO since simulation does not currently support non-apriltag pipelines, so no point
-  private PhotonCamera camera;
-  // instead simulation can choose between maple sim coral or external photonvision client
-  private CoralDetectionSimulationMode simulationMode = CoralDetectionSimulationMode.MAPLE_SIM;
+    // no IO since simulation does not currently support non-apriltag pipelines, so no point
+    private PhotonCamera camera;
+    // instead simulation can choose between maple sim coral or external photonvision client
+    private CoralDetectionSimulationMode simulationMode = CoralDetectionSimulationMode.MAPLE_SIM;
 
-  public enum CoralDetectionSimulationMode {
-    PHOTONVISION,
-    MAPLE_SIM
-  }
-
-  public static class DetectedCoral {
-    public Pose3d fieldPose;
-    public double timestamp;
-
-    public DetectedCoral(Pose3d fieldPose, double timestamp) {
-      this.fieldPose = fieldPose;
-      this.timestamp = timestamp;
+    public enum CoralDetectionSimulationMode {
+        PHOTONVISION,
+        MAPLE_SIM
     }
-  }
 
-  record PhotonTrackedTargetTimestamped(PhotonTrackedTarget target, double timestamp) {}
+    public static class DetectedCoral {
+        public Pose3d fieldPose;
+        public double timestamp;
 
-  private List<DetectedCoral> detectedCorals = new ArrayList<>();
-
-  public CoralDetection() {
-    camera = new PhotonCamera(Constants.PhotonVision.PHOTON_CORAL_INTAKE);
-  }
-
-  @Override
-  public void periodicManaged() {
-    if (Constants.RobotState.getMode() == Mode.REAL
-        || simulationMode == CoralDetectionSimulationMode.PHOTONVISION) {
-      List<PhotonTrackedTargetTimestamped> targets = new ArrayList<>();
-
-      if (Constants.RobotState.getMode() == Mode.SIM && !camera.isConnected()) {
-        DriverStation.reportError(
-            "Coral Detection camera not connected! Did you forget to setSimulationMode(CoralDetectionSimulationMode.MAPLE_SIM)?",
-            false);
-      }
-
-      for (var result : camera.getAllUnreadResults()) {
-        if (result.hasTargets()) {
-          targets.addAll(
-              result.getTargets().stream()
-                  .filter(target -> target.objDetectId == Constants.PhotonVision.CORAL_ID)
-                  .map(
-                      target ->
-                          new PhotonTrackedTargetTimestamped(target, result.getTimestampSeconds()))
-                  .toList());
+        public DetectedCoral(Pose3d fieldPose, double timestamp) {
+            this.fieldPose = fieldPose;
+            this.timestamp = timestamp;
         }
-      }
+    }
 
-      // Update coral
+    record PhotonTrackedTargetTimestamped(PhotonTrackedTarget target, double timestamp) {}
 
-      var projected = project2dPoses(targets);
-      for (int i = 0; i < projected.size(); i++) {
-        var robot3d =
-            new Pose3d(
-                RobotContainer.poseSensorFusion.getEstimatedPositionAt(targets.get(i).timestamp));
-        var camera3d =
-            robot3d.transformBy(Constants.PhotonVision.groundIntakeTransformRobotToCamera);
+    private List<DetectedCoral> detectedCorals = new ArrayList<>();
 
-        var projectedField = camera3d.transformBy(projected.get(i));
-        boolean isNew = true;
+    public CoralDetection() {
+        camera = new PhotonCamera(Constants.PhotonVision.PHOTON_CORAL_INTAKE);
+    }
 
-        for (var coral : detectedCorals) {
-          if (projectedField.getTranslation().getDistance(coral.fieldPose.getTranslation())
-              < Constants.PhotonVision.CORAL_ID_DISTANCE.in(Meters)) {
-            isNew = false;
-            if (targets.get(i).timestamp > coral.timestamp) {
-              coral.fieldPose = projectedField;
-              coral.timestamp = targets.get(i).timestamp;
-              break;
+    @Override
+    public void periodicManaged() {
+        if (Constants.RobotState.getMode() == Mode.REAL
+                || simulationMode == CoralDetectionSimulationMode.PHOTONVISION) {
+            List<PhotonTrackedTargetTimestamped> targets = new ArrayList<>();
+
+            if (Constants.RobotState.getMode() == Mode.SIM && !camera.isConnected()) {
+                DriverStation.reportError(
+                        "Coral Detection camera not connected! Did you forget to setSimulationMode(CoralDetectionSimulationMode.MAPLE_SIM)?",
+                        false);
             }
-          }
+
+            for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
+                if (result.hasTargets()) {
+                    targets.addAll(result.getTargets().stream()
+                            .filter(target -> target.objDetectId == Constants.PhotonVision.CORAL_ID)
+                            .map(target -> new PhotonTrackedTargetTimestamped(target, result.getTimestampSeconds()))
+                            .toList());
+                }
+            }
+
+            // Update coral
+
+            List<Transform3d> projected = project2dPoses(targets);
+            for (int i = 0; i < projected.size(); i++) {
+                Pose3d robot3d =
+                        new Pose3d(RobotContainer.poseSensorFusion.getEstimatedPositionAt(targets.get(i).timestamp));
+                Pose3d camera3d = robot3d.transformBy(Constants.PhotonVision.groundIntakeTransformRobotToCamera);
+
+                Pose3d projectedField = camera3d.transformBy(projected.get(i));
+                boolean isNew = true;
+
+                for (DetectedCoral coral : detectedCorals) {
+                    if (projectedField.getTranslation().getDistance(coral.fieldPose.getTranslation())
+                            < Constants.PhotonVision.CORAL_ID_DISTANCE.in(Meters)) {
+                        isNew = false;
+                        if (targets.get(i).timestamp > coral.timestamp) {
+                            coral.fieldPose = projectedField;
+                            coral.timestamp = targets.get(i).timestamp;
+                            break;
+                        }
+                    }
+                }
+
+                if (isNew) {
+                    detectedCorals.add(new DetectedCoral(projectedField, targets.get(i).timestamp));
+                }
+            }
+
+            // Remove old corals
+            detectedCorals.removeIf(coral -> {
+                double age = Timer.getFPGATimestamp() - coral.timestamp;
+                return age > Constants.PhotonVision.CORAL_TIMEOUT.in(Seconds) || age < 0;
+            });
         }
+    }
 
-        if (isNew) {
-          detectedCorals.add(new DetectedCoral(projectedField, targets.get(i).timestamp));
+    @AutoLogLevel(level = Level.Real)
+    public Pose3d[] getCorals() {
+        if (Constants.RobotState.getMode() == Mode.REAL
+                || simulationMode == CoralDetectionSimulationMode.PHOTONVISION) {
+            Pose3d[] corals = new Pose3d[detectedCorals.size()];
+            for (int i = 0; i < detectedCorals.size(); i++) {
+                DetectedCoral coral = detectedCorals.get(i);
+                corals[i] = coral.fieldPose;
+            }
+            return corals;
+        } else {
+            return SimulatedArena.getInstance().getGamePiecesByType("Coral").toArray(new Pose3d[0]);
         }
-      }
-
-      // Remove old corals
-      detectedCorals.removeIf(
-          coral -> {
-            double age = Timer.getFPGATimestamp() - coral.timestamp;
-            return age > Constants.PhotonVision.CORAL_TIMEOUT.in(Seconds) || age < 0;
-          });
     }
-  }
 
-  @AutoLogLevel(level = Level.Real)
-  public Pose3d[] getCorals() {
-    if (Constants.RobotState.getMode() == Mode.REAL
-        || simulationMode == CoralDetectionSimulationMode.PHOTONVISION) {
-      Pose3d[] corals = new Pose3d[detectedCorals.size()];
-      for (int i = 0; i < detectedCorals.size(); i++) {
-        DetectedCoral coral = detectedCorals.get(i);
-        corals[i] = coral.fieldPose;
-      }
-      return corals;
-    } else {
-      return SimulatedArena.getInstance().getGamePiecesByType("Coral").toArray(new Pose3d[0]);
+    public void setSimulationMode(CoralDetectionSimulationMode mode) {
+        simulationMode = mode;
     }
-  }
 
-  public void setSimulationMode(CoralDetectionSimulationMode mode) {
-    simulationMode = mode;
-  }
+    public CoralDetectionSimulationMode getSimulationMode() {
+        return simulationMode;
+    }
 
-  public CoralDetectionSimulationMode getSimulationMode() {
-    return simulationMode;
-  }
+    /**
+     * Uses law of sines assuming a constant height ground plane to project 2d targets into 3d
+     *
+     * @param targets
+     * @return
+     */
+    private List<Transform3d> project2dPoses(List<PhotonTrackedTargetTimestamped> targets) {
+        return targets.stream()
+                .map(t -> {
+                    PhotonTrackedTarget target = t.target;
+                    double theta = Math.PI / 2
+                            + Constants.PhotonVision.groundIntakeTransformRobotToCamera
+                                    .getRotation()
+                                    .getMeasureY()
+                                    .in(Radians)
+                            + Units.degreesToRadians(SimpleMath.Remap(target.getPitch(), -28.7, 28.7, -40, 40));
 
-  /**
-   * Uses law of sines assuming a constant height ground plane to project 2d targets into 3d
-   *
-   * @param targets
-   * @return
-   */
-  private List<Transform3d> project2dPoses(List<PhotonTrackedTargetTimestamped> targets) {
-    return targets.stream()
-        .map(
-            t -> {
-              var target = t.target;
-              double theta =
-                  Math.PI / 2
-                      + Constants.PhotonVision.groundIntakeTransformRobotToCamera
-                          .getRotation()
-                          .getMeasureY()
-                          .in(Radians)
-                      + Units.degreesToRadians(
-                          SimpleMath.Remap(target.getPitch(), -28.7, 28.7, -40, 40));
+                    double forward = Constants.PhotonVision.groundIntakeTransformRobotToCamera
+                                    .getTranslation()
+                                    .getMeasureZ()
+                                    .in(Meters)
+                            * Math.tan(theta);
 
-              double forward =
-                  Constants.PhotonVision.groundIntakeTransformRobotToCamera
-                          .getTranslation()
-                          .getMeasureZ()
-                          .in(Meters)
-                      * Math.tan(theta);
+                    double minX = Double.MAX_VALUE;
+                    double maxX = Double.MIN_VALUE;
+                    double minY = Double.MAX_VALUE;
+                    double maxY = Double.MIN_VALUE;
 
-              double minX = Double.MAX_VALUE;
-              double maxX = Double.MIN_VALUE;
-              double minY = Double.MAX_VALUE;
-              double maxY = Double.MIN_VALUE;
+                    for (TargetCorner corner : target.minAreaRectCorners) {
+                        minX = Math.min(minX, corner.x);
+                        maxX = Math.max(maxX, corner.x);
+                        minY = Math.min(minY, corner.y);
+                        maxY = Math.max(maxY, corner.y);
+                    }
 
-              for (var corner : target.minAreaRectCorners) {
-                minX = Math.min(minX, corner.x);
-                maxX = Math.max(maxX, corner.x);
-                minY = Math.min(minY, corner.y);
-                maxY = Math.max(maxY, corner.y);
-              }
+                    double width = maxX - minX;
+                    double height = maxY - minY;
+                    double aspectRatio = width / height;
 
-              double width = maxX - minX;
-              double height = maxY - minY;
-              double aspectRatio = width / height;
+                    double cameraRelativeYaw = Math.PI / 2 * MathUtil.inverseInterpolate(0.5, 2.5, aspectRatio);
 
-              double cameraRelativeYaw =
-                  Math.PI / 2 * MathUtil.inverseInterpolate(0.5, 2.5, aspectRatio);
-
-              return new Transform3d(
-                  new Translation3d(
-                          forward,
-                          0,
-                          -Constants.PhotonVision.groundIntakeTransformRobotToCamera
-                              .getTranslation()
-                              .getMeasureZ()
-                              .in(Meters))
-                      .rotateBy(
-                          new Rotation3d(
-                              0,
-                              -Constants.PhotonVision.groundIntakeTransformRobotToCamera
-                                  .getRotation()
-                                  .getY(),
-                              Units.degreesToRadians(
-                                  -SimpleMath.Remap(target.getYaw(), -27.4, 27.4, -39.8, 39.8)))),
-                  new Rotation3d(
-                          0,
-                          0,
-                          cameraRelativeYaw
-                              + Constants.PhotonVision.groundIntakeTransformRobotToCamera
-                                  .getRotation()
-                                  .getZ())
-                      .rotateBy(
-                          Constants.PhotonVision.groundIntakeTransformRobotToCamera
-                              .getRotation()
-                              .unaryMinus()));
-            })
-        .toList();
-  }
+                    return new Transform3d(
+                            new Translation3d(
+                                            forward,
+                                            0,
+                                            -Constants.PhotonVision.groundIntakeTransformRobotToCamera
+                                                    .getTranslation()
+                                                    .getMeasureZ()
+                                                    .in(Meters))
+                                    .rotateBy(new Rotation3d(
+                                            0,
+                                            -Constants.PhotonVision.groundIntakeTransformRobotToCamera
+                                                    .getRotation()
+                                                    .getY(),
+                                            Units.degreesToRadians(
+                                                    -SimpleMath.Remap(target.getYaw(), -27.4, 27.4, -39.8, 39.8)))),
+                            new Rotation3d(
+                                            0,
+                                            0,
+                                            cameraRelativeYaw
+                                                    + Constants.PhotonVision.groundIntakeTransformRobotToCamera
+                                                            .getRotation()
+                                                            .getZ())
+                                    .rotateBy(Constants.PhotonVision.groundIntakeTransformRobotToCamera
+                                            .getRotation()
+                                            .unaryMinus()));
+                })
+                .toList();
+    }
 }

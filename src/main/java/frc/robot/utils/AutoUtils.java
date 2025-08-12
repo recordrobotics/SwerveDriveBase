@@ -22,65 +22,55 @@ import java.util.Set;
 import org.json.simple.parser.ParseException;
 
 public class AutoUtils {
-  public static Command alignWithVision() {
-    return new DeferredCommand(
-        () -> {
-          int[] visionTagTarget = {
-            IGamePosition.closestTo(
-                    RobotContainer.poseSensorFusion.getEstimatedPosition(), CoralPosition.values())
-                .apriltagId
-          };
-
-          VisionDebouncer visionDebouncer =
-              RobotContainer.poseSensorFusion.registerVisionCheck(
-                  CameraTarget.Elevator,
-                  visionTagTarget,
-                  0.5,
-                  DebounceType.kFalling); // says if either LL has seen the tag in the last 0.5s
-
-          return new RepeatConditionallyCommand(
-                  ReefAlign.alignClosest(() -> CoralLevel.L4, true, true, false, 2.0, 1.0, true),
-                  () -> !visionDebouncer.hasVision(),
-                  true)
-              .finallyDo(() -> RobotContainer.poseSensorFusion.releaseVisionCheck(visionDebouncer));
-        },
-        Set.of(RobotContainer.drivetrain));
-  }
-
-  public static Command createSource(String reefLetter, String sourceSide)
-      throws FileVersionException, IOException, ParseException {
-    return new CoralIntakeFromSource(false)
-        .beforeStarting(new WaitCommand(0.3))
-        .alongWith(
-            Commands.either(
-                    AutoBuilder.followPath(
-                            PathPlannerPath.fromPathFile(
-                                "Reef" + reefLetter + "ToSource" + sourceSide + "OuterNoElevator"))
-                        .andThen(new WaitCommand(Auto.SOURCE_TIMEOUT))
-                        .andThen(
-                            AutoBuilder.followPath(
-                                PathPlannerPath.fromPathFile(
-                                    "Source" + sourceSide + "OuterToElevatorStart"))),
-                    AutoBuilder.followPath(
-                            PathPlannerPath.fromPathFile(
-                                "ElevatorStartToSource" + sourceSide + "Outer"))
-                        .andThen(new WaitCommand(Auto.SOURCE_TIMEOUT))
-                        .andThen(
-                            AutoBuilder.followPath(
-                                PathPlannerPath.fromPathFile(
-                                    "Source" + sourceSide + "OuterToElevatorStart"))),
-                    () ->
+    public static Command alignWithVision() {
+        return new DeferredCommand(
+                () -> {
+                    int[] visionTagTarget = {
                         IGamePosition.closestTo(
-                                    RobotContainer.poseSensorFusion.getEstimatedPosition(),
-                                    CoralPosition.values())
-                                .getFirstStagePose()
-                                .getTranslation()
-                                .getDistance(
-                                    RobotContainer.poseSensorFusion
-                                        .getEstimatedPosition()
-                                        .getTranslation())
-                            < 0.7)
-                .repeatedly()
-                .onlyWhile(() -> !RobotContainer.elevatorHead.hasCoral()));
-  }
+                                        RobotContainer.poseSensorFusion.getEstimatedPosition(), CoralPosition.values())
+                                .apriltagId
+                    };
+
+                    VisionDebouncer visionDebouncer = RobotContainer.poseSensorFusion.registerVisionCheck(
+                            CameraTarget.Elevator,
+                            visionTagTarget,
+                            0.5,
+                            DebounceType.kFalling); // says if either LL has seen the tag in the last 0.5s
+
+                    return new RepeatConditionallyCommand(
+                                    ReefAlign.alignClosest(() -> CoralLevel.L4, true, true, false, 2.0, 1.0, true),
+                                    () -> !visionDebouncer.hasVision(),
+                                    true)
+                            .finallyDo(() -> RobotContainer.poseSensorFusion.releaseVisionCheck(visionDebouncer));
+                },
+                Set.of(RobotContainer.drivetrain));
+    }
+
+    public static Command createSource(String reefLetter, String sourceSide)
+            throws FileVersionException, IOException, ParseException {
+        return new CoralIntakeFromSource(false)
+                .beforeStarting(new WaitCommand(0.3))
+                .alongWith(Commands.either(
+                                AutoBuilder.followPath(PathPlannerPath.fromPathFile(
+                                                "Reef" + reefLetter + "ToSource" + sourceSide + "OuterNoElevator"))
+                                        .andThen(new WaitCommand(Auto.SOURCE_TIMEOUT))
+                                        .andThen(AutoBuilder.followPath(PathPlannerPath.fromPathFile(
+                                                "Source" + sourceSide + "OuterToElevatorStart"))),
+                                AutoBuilder.followPath(PathPlannerPath.fromPathFile(
+                                                "ElevatorStartToSource" + sourceSide + "Outer"))
+                                        .andThen(new WaitCommand(Auto.SOURCE_TIMEOUT))
+                                        .andThen(AutoBuilder.followPath(PathPlannerPath.fromPathFile(
+                                                "Source" + sourceSide + "OuterToElevatorStart"))),
+                                () -> IGamePosition.closestTo(
+                                                        RobotContainer.poseSensorFusion.getEstimatedPosition(),
+                                                        CoralPosition.values())
+                                                .getFirstStagePose()
+                                                .getTranslation()
+                                                .getDistance(RobotContainer.poseSensorFusion
+                                                        .getEstimatedPosition()
+                                                        .getTranslation())
+                                        < 0.7)
+                        .repeatedly()
+                        .onlyWhile(() -> !RobotContainer.elevatorHead.hasCoral()));
+    }
 }

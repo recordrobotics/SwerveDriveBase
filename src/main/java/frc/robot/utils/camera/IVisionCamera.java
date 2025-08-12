@@ -2,27 +2,27 @@ package frc.robot.utils.camera;
 
 public interface IVisionCamera {
 
-  public String getName();
+    String getName();
 
-  public CameraType getCameraType();
+    CameraType getCameraType();
 
-  public boolean hasVision();
+    boolean hasVision();
 
-  public boolean isConnected();
+    boolean isConnected();
 
-  public double getConfidence();
+    double getConfidence();
 
-  public double getUnprocessedConfidence();
+    double getUnprocessedConfidence();
 
-  public int getNumTags();
+    int getNumTags();
 
-  public VisionCameraEstimate getCurrentEstimate();
+    VisionCameraEstimate getCurrentEstimate();
 
-  public VisionCameraEstimate getUnsafeEstimate();
+    VisionCameraEstimate getUnsafeEstimate();
 
-  public void setPipeline(int pipeline);
+    void setPipeline(int pipeline);
 
-  public void updateEstimation(boolean trust, boolean ignore);
+    void updateEstimation(boolean trust, boolean ignore);
 
-  public void logValues(String id);
+    void logValues(String id);
 }
