@@ -37,60 +37,58 @@ public class AutoScore extends SequentialCommandGroup {
                     isL1 = DashboardUI.Overview.getControl().getReefLevelSwitchValue() == ReefLevelSwitchValue.L1;
                 }),
                 GameAlign.makeAlignWithCommand(
-                                (usePath, useAlign) -> ReefAlign.alignTarget(
-                                                reefPole, this::getLevel, usePath, useAlign, true, 2.0, 1.0, false)
-                                        .asProxy(),
-                                () -> {
-                                    CoralLevel level = getLevel();
-                                    Pose2d pose = reefPole.getPose(level);
+                        (usePath, useAlign) -> ReefAlign.alignTarget(
+                                        reefPole, this::getLevel, usePath, useAlign, true, 2.0, 1.0, false)
+                                .asProxy(),
+                        () -> {
+                            CoralLevel level = getLevel();
+                            Pose2d pose = reefPole.getPose(level);
 
-                                    double clearanceMin = (level == CoralLevel.L1
-                                            ? Constants.Align.L1_CLEARANCE_MIN
-                                            : level == CoralLevel.L4
-                                                    ? Constants.Align.L4_CLEARANCE_MIN
-                                                    : Constants.Align.CLEARANCE_MIN);
-                                    double clearanceMax = (level == CoralLevel.L1
-                                            ? Constants.Align.L1_CLEARANCE_MAX
-                                            : level == CoralLevel.L4
-                                                    ? Constants.Align.L4_CLEARANCE_MAX
-                                                    : Constants.Align.CLEARANCE_MAX);
+                            double clearanceMin = (level == CoralLevel.L1
+                                    ? Constants.Align.L1_CLEARANCE_MIN
+                                    : level == CoralLevel.L4
+                                            ? Constants.Align.L4_CLEARANCE_MIN
+                                            : Constants.Align.CLEARANCE_MIN);
+                            double clearanceMax = (level == CoralLevel.L1
+                                    ? Constants.Align.L1_CLEARANCE_MAX
+                                    : level == CoralLevel.L4
+                                            ? Constants.Align.L4_CLEARANCE_MAX
+                                            : Constants.Align.CLEARANCE_MAX);
 
-                                    double dist = RobotContainer.poseSensorFusion
-                                            .getEstimatedPosition()
-                                            .getTranslation()
-                                            .getDistance(pose.getTranslation());
+                            double dist = RobotContainer.poseSensorFusion
+                                    .getEstimatedPosition()
+                                    .getTranslation()
+                                    .getDistance(pose.getTranslation());
 
-                                    return (dist < clearanceMax && dist > clearanceMin);
-                                },
-                                () -> Commands.either(
-                                        new DeferredCommand(
-                                                () -> new ElevatorMove(DashboardUI.Overview.getControl()
-                                                                .getReefLevelSwitchValue()
-                                                                .toCoralLevel()
-                                                                .getHeight())
-                                                        .asProxy(),
-                                                Set.of()),
-                                        new CoralIntakeMoveL1().asProxy(),
-                                        () -> getLevel() != CoralLevel.L1),
-                                () -> {
-                                    CoralLevel level = getLevel();
-                                    Pose2d pose = reefPole.getPose(level);
+                            return (dist < clearanceMax && dist > clearanceMin);
+                        },
+                        () -> Commands.either(
+                                new DeferredCommand(
+                                        () -> new ElevatorMove(DashboardUI.Overview.getControl()
+                                                        .getReefLevelSwitchValue()
+                                                        .toCoralLevel()
+                                                        .getHeight())
+                                                .asProxy(),
+                                        Set.of()),
+                                new CoralIntakeMoveL1().asProxy(),
+                                () -> getLevel() != CoralLevel.L1),
+                        () -> {
+                            CoralLevel level = getLevel();
+                            Pose2d pose = reefPole.getPose(level);
 
-                                    double clearanceMax = (level == CoralLevel.L1
-                                            ? Constants.Align.L1_CLEARANCE_MAX
-                                            : level == CoralLevel.L4
-                                                    ? Constants.Align.L4_CLEARANCE_MAX
-                                                    : Constants.Align.CLEARANCE_MAX);
+                            double clearanceMax = (level == CoralLevel.L1
+                                    ? Constants.Align.L1_CLEARANCE_MAX
+                                    : level == CoralLevel.L4
+                                            ? Constants.Align.L4_CLEARANCE_MAX
+                                            : Constants.Align.CLEARANCE_MAX);
 
-                                    double dist = RobotContainer.poseSensorFusion
-                                            .getEstimatedPosition()
-                                            .getTranslation()
-                                            .getDistance(pose.getTranslation());
+                            double dist = RobotContainer.poseSensorFusion
+                                    .getEstimatedPosition()
+                                    .getTranslation()
+                                    .getDistance(pose.getTranslation());
 
-                                    return dist > clearanceMax;
-                                })
-                        .onlyWhile(() -> RobotState.isAutonomous()
-                                || DashboardUI.Overview.getControl().getAutoScore()),
+                            return dist > clearanceMax;
+                        }),
                 Commands.either(
                         new WaitUntilCommand(() -> RobotState.isAutonomous()
                                         || !DashboardUI.Overview.getControl().getAutoScore())

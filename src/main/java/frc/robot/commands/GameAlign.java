@@ -46,6 +46,9 @@ public class GameAlign {
                                 .withTimeout(alignTimeout))
                         .repeatedly()
                         .onlyWhile(() -> {
+                            if (!DashboardUI.Overview.getControl().getAutoScore())
+                                return false; // driver let go, driver wants to score ASAP
+
                             if (RobotState.isAutonomous()) return true;
 
                             if (AlignToPose.getDrivetrainControl() == null) return true;
