@@ -305,7 +305,6 @@ public class RobotContainer {
                                 new CoralIntakeSimple(true)
                                         .finallyDo(() -> {
                                             CoralIntakeSimple.isRunning = false;
-                                            System.out.println("SOURCE ENDE!@!@H*&!*&@EQ#YQ#gyuaqd");
                                             RobotContainer.elevatorHead.set(CoralShooterStates.OFF);
                                             RobotContainer.coralIntake.set(CoralIntakeState.UP);
                                         })
@@ -363,9 +362,6 @@ public class RobotContainer {
                                                 RobotContainer.poseSensorFusion.getEstimatedPosition(),
                                                 AlgaePosition.values()))
                                         .finallyDo(() -> AutoAlgae.stopRunning())
-                                        .handleInterrupt(() -> {
-                                            System.out.println("AutoAlgae interrupted!!! :(");
-                                        })
                                         .asProxy()),
                                 Set.of()),
                         new InstantCommand(() -> AutoAlgae.performCancel()),
@@ -380,9 +376,6 @@ public class RobotContainer {
                                 () -> new AutoScore(IGamePosition.closestTo(
                                                 RobotContainer.poseSensorFusion.getEstimatedPosition(),
                                                 CoralPosition.values()))
-                                        .handleInterrupt(() -> {
-                                            System.out.println("AutoScore interrupted!!! :(");
-                                        })
                                         .asProxy(),
                                 Set.of()),
                         new ProcessorScore(false).asProxy(),
