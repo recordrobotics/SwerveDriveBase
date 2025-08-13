@@ -182,6 +182,11 @@ public class RobotContainer {
         elevatorArm.setDefaultCommand(new ManualElevatorArm());
 
         noEncoderResetAlert.set(true);
+
+        if (Constants.RobotState.getMode() == Mode.SIM) {
+            // No point in manually resetting encoders in simulation since starting config is always in the right spot
+            resetEncoders();
+        }
     }
 
     public void teleopInit() {}
