@@ -18,6 +18,7 @@ import frc.robot.RobotContainer;
 import frc.robot.control.AbstractControl.ReefLevelSwitchValue;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 import java.util.Set;
 
 public class AutoScore extends SequentialCommandGroup {
@@ -26,7 +27,7 @@ public class AutoScore extends SequentialCommandGroup {
     private boolean isL1 = false;
 
     private CoralLevel getLevel() {
-        return isL1 && !RobotContainer.elevatorHead.hasCoral()
+        return isL1 && RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL
                 ? CoralLevel.L1
                 : DashboardUI.Overview.getControl().getReefLevelSwitchValue().toCoralLevel();
     }

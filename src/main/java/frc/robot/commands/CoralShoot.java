@@ -10,6 +10,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 
 public class CoralShoot extends SequentialCommandGroup {
 
@@ -39,7 +40,7 @@ public class CoralShoot extends SequentialCommandGroup {
                         },
                         RobotContainer.elevatorHead),
                 // Make sure coral left
-                new WaitUntilCommand(() -> !RobotContainer.elevatorHead.hasCoral())
+                new WaitUntilCommand(() -> RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL)
                         .raceWith(new WaitCommand(Constants.ElevatorHead.SHOOT_STALL_TIME)
                                 .andThen(new WaitUntilCommand(() -> {
                                     if (RobotContainer.elevator.getNearestHeight() != ElevatorHeight.L4) return false;
@@ -59,7 +60,9 @@ public class CoralShoot extends SequentialCommandGroup {
                                         RobotContainer.elevatorHead)
                                 .andThen(
                                         // wait for elevator to have coral
-                                        new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral()))
+                                        new WaitUntilCommand(() -> RobotContainer.elevatorHead
+                                                .getGamePiece()
+                                                .equals(GamePiece.CORAL)))
                                 .andThen(
                                         // move coral a set distance
                                         new InstantCommand(

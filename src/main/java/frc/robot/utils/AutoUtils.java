@@ -15,6 +15,7 @@ import frc.robot.Constants.Game.IGamePosition;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CoralIntakeFromSource;
 import frc.robot.commands.ReefAlign;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 import frc.robot.subsystems.PoseSensorFusion.CameraTarget;
 import frc.robot.subsystems.PoseSensorFusion.VisionDebouncer;
 import java.io.IOException;
@@ -71,6 +72,6 @@ public class AutoUtils {
                                                         .getTranslation())
                                         < 0.7)
                         .repeatedly()
-                        .onlyWhile(() -> !RobotContainer.elevatorHead.hasCoral()));
+                        .onlyWhile(() -> RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL));
     }
 }

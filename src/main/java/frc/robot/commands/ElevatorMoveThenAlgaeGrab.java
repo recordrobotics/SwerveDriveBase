@@ -9,6 +9,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 
 public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
 
@@ -33,7 +34,8 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
                             else RobotContainer.elevatorHead.set(AlgaeGrabberStates.INTAKE_REEF);
                         },
                         RobotContainer.elevatorHead),
-                new WaitUntilCommand(RobotContainer.elevatorHead::hasAlgae),
+                new WaitUntilCommand(
+                        () -> RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.ALGAE)),
                 new InstantCommand(
                         () -> {
                             if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE)

@@ -114,6 +114,27 @@ public class ElevatorHead extends KillableSubsystem implements ShuffleboardPubli
         OFF;
     }
 
+    public enum GamePiece {
+        NONE(false, ""),
+        ALGAE(false, "algae"),
+        CORAL(false, "coral"),
+        CORAL_CERTAIN(true, "coral");
+
+        private boolean certain;
+        private String gpName;
+
+        private GamePiece(boolean certain, String gpName) {
+            this.certain = certain;
+            this.gpName = gpName;
+        }
+
+        public boolean equals(GamePiece other) {
+            // CoralCertain.equals(Coral) == true
+            // Coral.equals(CoralCertain) == false
+            return this.gpName.equals(other.gpName) && ((this.certain == other.certain) || !other.certain);
+        }
+    }
+
     @AutoLogLevel(level = Level.Sysid)
     public double getVelocity() {
         return velocityCached
@@ -238,8 +259,16 @@ public class ElevatorHead extends KillableSubsystem implements ShuffleboardPubli
     }
 
     @AutoLogLevel(level = Level.Real)
-    public boolean hasAlgae() {
-        return hasAlgae;
+    public GamePiece getGamePiece() {
+        if (debounced_for_sure_value) {
+            return GamePiece.CORAL_CERTAIN;
+        } else if (debounced_value) {
+            return GamePiece.CORAL;
+        } else if (hasAlgae) {
+            return GamePiece.ALGAE;
+        } else {
+            return GamePiece.NONE;
+        }
     }
 
     @AutoLogLevel(level = Level.Real)
@@ -247,21 +276,12 @@ public class ElevatorHead extends KillableSubsystem implements ShuffleboardPubli
         return currentState;
     }
 
-    @AutoLogLevel(level = Level.Real)
-    public boolean hasCoral() {
-        return debounced_value;
-    }
-
-    public boolean hasCoralForSure() {
-        return debounced_for_sure_value;
-    }
-
     public boolean positionAtGoal() {
         return positionPid.atGoal();
     }
 
     public boolean coralReady() {
-        return Math.abs(getVelocity()) < 0.1 || (hasCoral() && positionAtGoal());
+        return Math.abs(getVelocity()) < 0.1 || (getGamePiece().equals(GamePiece.CORAL) && positionAtGoal());
     }
 
     private double lastSpeed = 0;

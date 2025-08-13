@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 
 public class GroundAlgaeToggled extends Command {
     private ElevatorHeight targetHeight;
@@ -34,7 +35,10 @@ public class GroundAlgaeToggled extends Command {
         isRunning = false;
         if (interrupted) {
             new ElevatorMoveThenAlgaeGrabEnd(
-                            RobotContainer.elevatorHead.hasAlgae() ? targetHeight : ElevatorHeight.BOTTOM, true)
+                            (RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.ALGAE))
+                                    ? targetHeight
+                                    : ElevatorHeight.BOTTOM,
+                            true)
                     .handleInterrupt(this::cancel)
                     .schedule();
         }

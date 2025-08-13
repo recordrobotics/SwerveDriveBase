@@ -10,6 +10,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.simulation.CoralIntakeToElevator;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 import frc.robot.utils.CommandUtils;
 
 public class CoralIntakeFromSource extends SequentialCommandGroup {
@@ -43,7 +44,8 @@ public class CoralIntakeFromSource extends SequentialCommandGroup {
                         () -> RobotContainer.elevatorHead.set(CoralShooterStates.INTAKE), RobotContainer.elevatorHead),
                 new WaitUntilCommand(() -> RobotContainer.elevator.atGoal()),
                 new CoralIntakeToElevator()
-                        .simulateFor(new WaitUntilCommand(() -> RobotContainer.elevatorHead.hasCoral())),
+                        .simulateFor(new WaitUntilCommand(
+                                () -> RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.CORAL))),
                 new InstantCommand(
                         () -> {
                             RobotContainer.coralIntake.set(CoralIntakeState.UP);

@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 
 public class ElevatorMoveThenAlgaeGrabEnd extends SequentialCommandGroup {
     public ElevatorMoveThenAlgaeGrabEnd(ElevatorHeight targetHeight, boolean withProxy) {
@@ -26,7 +27,7 @@ public class ElevatorMoveThenAlgaeGrabEnd extends SequentialCommandGroup {
                         new InstantCommand(
                                 () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OFF),
                                 RobotContainer.elevatorHead),
-                        RobotContainer.elevatorHead::hasAlgae),
+                        () -> RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.ALGAE)),
                 withProxy
                         ? Commands.either(
                                         new ElevatorMove(ElevatorHeight.GROUND_ALGAE),

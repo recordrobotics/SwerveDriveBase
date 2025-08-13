@@ -55,6 +55,7 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.Climber.ClimberState;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
+import frc.robot.subsystems.ElevatorHead.GamePiece;
 import frc.robot.subsystems.io.real.ClimberReal;
 import frc.robot.subsystems.io.real.CoralIntakeReal;
 import frc.robot.subsystems.io.real.ElevatorArmReal;
@@ -269,7 +270,7 @@ public class RobotContainer {
                 .toggleOnTrue(new CoralIntakeFromGroundToggled());
 
         new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
-                        && !elevatorHead.hasCoralForSure())
+                        && elevatorHead.getGamePiece().equals(GamePiece.CORAL_CERTAIN))
                 .onTrue(
                         new CoralIntakeFromGround()
                         // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
@@ -290,7 +291,7 @@ public class RobotContainer {
                                                         .onlyIf(() -> !CoralIntakeSimple.isRunning)),
                                         () -> DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                                                 == ReefLevelSwitchValue.L1)
-                                .onlyWhile(() -> elevatorHead.hasCoral()
+                                .onlyWhile(() -> elevatorHead.getGamePiece().equals(GamePiece.CORAL)
                                         || !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple())
                         // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
                         );
@@ -313,7 +314,7 @@ public class RobotContainer {
                                         .onlyIf(() -> !CoralIntakeSimple.isRunning
                                                 && !CoralIntakeFromGroundUpSimple.isRunning
                                                 && !AutoAlgae.isRunning()),
-                                () -> !RobotContainer.elevatorHead.hasCoralForSure()
+                                () -> RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL_CERTAIN
                                         && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
                                         && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                                                 != ReefLevelSwitchValue.L1,
@@ -333,8 +334,8 @@ public class RobotContainer {
 
         new Trigger(() -> DashboardUI.Overview.getControl().getCoralIntakeScoreL1()).onTrue(coralScoreL1Cmd.asProxy());
 
-        BooleanSupplier algaeLock =
-                () -> DashboardUI.Overview.getControl().getManualOverride() || !elevatorHead.hasCoral();
+        BooleanSupplier algaeLock = () ->
+                DashboardUI.Overview.getControl().getManualOverride() || elevatorHead.getGamePiece() != GamePiece.CORAL;
 
         new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae() && algaeLock.getAsBoolean())
                 .toggleOnTrue(new GroundAlgaeToggled(ElevatorHeight.GROUND_ALGAE));
@@ -354,7 +355,8 @@ public class RobotContainer {
         new Trigger(() -> DashboardUI.Overview.getControl().getScoreAlgae() && !algaeLock.getAsBoolean())
                 .onTrue(new VibrateXbox(RumbleType.kLeftRumble, 1).withTimeout(0.1));
 
-        new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeSimple() && !elevatorHead.hasCoralForSure())
+        new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeSimple()
+                        && elevatorHead.getGamePiece() != GamePiece.CORAL_CERTAIN)
                 .onTrue(Commands.either(
                         new DeferredCommand(
                                 () -> new ScheduleCommand(new AutoAlgae(IGamePosition.closestTo(
@@ -384,10 +386,10 @@ public class RobotContainer {
                                         .asProxy(),
                                 Set.of()),
                         new ProcessorScore(false).asProxy(),
-                        () -> elevatorHead.hasCoral()
+                        () -> elevatorHead.getGamePiece().equals(GamePiece.CORAL)
                                 || (DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                                                 == ReefLevelSwitchValue.L1
-                                        && !elevatorHead.hasAlgae())));
+                                        && elevatorHead.getGamePiece() != GamePiece.ALGAE)));
     }
 
     /**
