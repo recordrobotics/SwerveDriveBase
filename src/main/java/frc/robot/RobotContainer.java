@@ -240,8 +240,8 @@ public class RobotContainer {
 
         new Trigger(() -> DashboardUI.Overview.getControl().getCoralIntakeScoreL1()).onTrue(coralScoreL1Cmd.asProxy());
 
-        BooleanSupplier algaeLock = () ->
-                DashboardUI.Overview.getControl().getManualOverride() || elevatorHead.getGamePiece() != GamePiece.CORAL;
+        BooleanSupplier algaeLock = () -> DashboardUI.Overview.getControl().getManualOverride()
+                || !elevatorHead.getGamePiece().atLeast(GamePiece.CORAL);
 
         new Trigger(() -> DashboardUI.Overview.getControl().getGroundAlgae() && algaeLock.getAsBoolean())
                 .toggleOnTrue(new GroundAlgaeToggled(ElevatorHeight.GROUND_ALGAE));
@@ -326,7 +326,9 @@ public class RobotContainer {
                                         .onlyIf(() -> !CoralIntakeSimple.isRunning
                                                 && !CoralIntakeFromGroundUpSimple.isRunning
                                                 && !AutoAlgae.isRunning()),
-                                () -> RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL_CERTAIN
+                                () -> !RobotContainer.elevatorHead
+                                                .getGamePiece()
+                                                .atLeast(GamePiece.CORAL_CERTAIN)
                                         && !DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
                                         && DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                                                 != ReefLevelSwitchValue.L1,
@@ -334,7 +336,7 @@ public class RobotContainer {
                         .ignoringDisable(true));
 
         new Trigger(() -> DashboardUI.Overview.getControl().getReefAlgaeSimple()
-                        && elevatorHead.getGamePiece() != GamePiece.CORAL_CERTAIN)
+                        && !elevatorHead.getGamePiece().atLeast(GamePiece.CORAL_CERTAIN))
                 .onTrue(Commands.either(
                         new DeferredCommand(
                                 () -> new ScheduleCommand(new AutoAlgae(IGamePosition.closestTo(
@@ -355,10 +357,10 @@ public class RobotContainer {
                                         .asProxy(),
                                 Set.of()),
                         new ProcessorScore(false).asProxy(),
-                        () -> elevatorHead.getGamePiece().equals(GamePiece.CORAL)
+                        () -> elevatorHead.getGamePiece().atLeast(GamePiece.CORAL)
                                 || (DashboardUI.Overview.getControl().getReefLevelSwitchValue()
                                                 == ReefLevelSwitchValue.L1
-                                        && elevatorHead.getGamePiece() != GamePiece.ALGAE)));
+                                        && !elevatorHead.getGamePiece().atLeast(GamePiece.ALGAE))));
     }
 
     /**

@@ -36,7 +36,7 @@ public class GroundAlgaeToggled extends Command {
         isRunning = false;
         if (interrupted) {
             new ElevatorMoveThenAlgaeGrabEnd(
-                            (RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.ALGAE))
+                            (RobotContainer.elevatorHead.getGamePiece().atLeast(GamePiece.ALGAE))
                                     ? targetHeight
                                     : ElevatorHeight.BOTTOM,
                             true)

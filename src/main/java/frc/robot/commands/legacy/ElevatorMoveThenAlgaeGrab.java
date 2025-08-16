@@ -36,7 +36,7 @@ public class ElevatorMoveThenAlgaeGrab extends SequentialCommandGroup {
                         },
                         RobotContainer.elevatorHead),
                 new WaitUntilCommand(
-                        () -> RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.ALGAE)),
+                        () -> RobotContainer.elevatorHead.getGamePiece().atLeast(GamePiece.ALGAE)),
                 new InstantCommand(
                         () -> {
                             if (RobotContainer.elevator.getNearestHeight() == ElevatorHeight.GROUND_ALGAE)

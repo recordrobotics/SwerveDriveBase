@@ -72,6 +72,7 @@ public class AutoUtils {
                                                         .getTranslation())
                                         < 0.7)
                         .repeatedly()
-                        .onlyWhile(() -> RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL));
+                        .onlyWhile(() ->
+                                !RobotContainer.elevatorHead.getGamePiece().atLeast(GamePiece.CORAL)));
     }
 }

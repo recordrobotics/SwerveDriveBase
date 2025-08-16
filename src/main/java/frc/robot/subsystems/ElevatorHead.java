@@ -281,7 +281,7 @@ public class ElevatorHead extends KillableSubsystem implements ShuffleboardPubli
     }
 
     public boolean coralReady() {
-        return Math.abs(getVelocity()) < 0.1 || (getGamePiece().equals(GamePiece.CORAL) && positionAtGoal());
+        return Math.abs(getVelocity()) < 0.1 || (getGamePiece().atLeast(GamePiece.CORAL) && positionAtGoal());
     }
 
     private double lastSpeed = 0;

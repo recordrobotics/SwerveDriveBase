@@ -27,7 +27,7 @@ public class AutoScore extends SequentialCommandGroup {
     private boolean isL1 = false;
 
     private CoralLevel getLevel() {
-        return isL1 && RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL
+        return isL1 && !RobotContainer.elevatorHead.getGamePiece().atLeast(GamePiece.CORAL)
                 ? CoralLevel.L1
                 : DashboardUI.Overview.getControl().getReefLevelSwitchValue().toCoralLevel();
     }

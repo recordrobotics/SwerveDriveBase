@@ -39,7 +39,7 @@ public class CoralIntakeFromGroundUp extends SequentialCommandGroup {
                                 new CoralIntakeToElevator()
                                         .simulateFor(new WaitUntilCommand(() -> RobotContainer.elevatorHead
                                                 .getGamePiece()
-                                                .equals(GamePiece.CORAL))))
+                                                .atLeast(GamePiece.CORAL))))
                         .andThen(new InstantCommand(
                                 () -> {
                                     RobotContainer.coralIntake.set(CoralIntakeState.UP);

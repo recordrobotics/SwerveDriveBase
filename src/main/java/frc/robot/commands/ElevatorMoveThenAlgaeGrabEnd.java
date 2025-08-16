@@ -27,7 +27,7 @@ public class ElevatorMoveThenAlgaeGrabEnd extends SequentialCommandGroup {
                         new InstantCommand(
                                 () -> RobotContainer.elevatorHead.set(AlgaeGrabberStates.OFF),
                                 RobotContainer.elevatorHead),
-                        () -> RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.ALGAE)),
+                        () -> RobotContainer.elevatorHead.getGamePiece().atLeast(GamePiece.ALGAE)),
                 withProxy
                         ? Commands.either(
                                         new ElevatorMove(ElevatorHeight.GROUND_ALGAE),

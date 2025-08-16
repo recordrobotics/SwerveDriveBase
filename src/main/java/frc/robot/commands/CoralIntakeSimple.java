@@ -49,7 +49,7 @@ public class CoralIntakeSimple extends SequentialCommandGroup {
                 // wait for elevator to have coral
                 new CoralIntakeToElevator()
                         .simulateFor(new WaitUntilCommand(
-                                () -> RobotContainer.elevatorHead.getGamePiece().equals(GamePiece.CORAL))),
+                                () -> RobotContainer.elevatorHead.getGamePiece().atLeast(GamePiece.CORAL))),
                 new InstantCommand(
                         () -> {
                             RobotContainer.coralIntake.set(CoralIntakeState.UP);

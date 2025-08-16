@@ -40,7 +40,8 @@ public class CoralShoot extends SequentialCommandGroup {
                         },
                         RobotContainer.elevatorHead),
                 // Make sure coral left
-                new WaitUntilCommand(() -> RobotContainer.elevatorHead.getGamePiece() != GamePiece.CORAL)
+                new WaitUntilCommand(() ->
+                                !RobotContainer.elevatorHead.getGamePiece().atLeast(GamePiece.CORAL))
                         .raceWith(new WaitCommand(Constants.ElevatorHead.SHOOT_STALL_TIME)
                                 .andThen(new WaitUntilCommand(() -> {
                                     if (RobotContainer.elevator.getNearestHeight() != ElevatorHeight.L4) return false;
@@ -62,7 +63,7 @@ public class CoralShoot extends SequentialCommandGroup {
                                         // wait for elevator to have coral
                                         new WaitUntilCommand(() -> RobotContainer.elevatorHead
                                                 .getGamePiece()
-                                                .equals(GamePiece.CORAL)))
+                                                .atLeast(GamePiece.CORAL)))
                                 .andThen(
                                         // move coral a set distance
                                         new InstantCommand(
