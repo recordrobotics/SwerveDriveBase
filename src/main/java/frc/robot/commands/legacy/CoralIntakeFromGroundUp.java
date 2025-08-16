@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.legacy;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;

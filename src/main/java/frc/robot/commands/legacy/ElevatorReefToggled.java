@@ -1,9 +1,10 @@
-package frc.robot.commands;
+package frc.robot.commands.legacy;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ElevatorMove;
 
 public class ElevatorReefToggled extends Command {
 
@@ -12,7 +13,7 @@ public class ElevatorReefToggled extends Command {
 
     public ElevatorReefToggled(ElevatorHeight targetHeight) {
         this.targetHeight = targetHeight;
-        addRequirements(RobotContainer.elevatorMoveToggleRequirement);
+        addRequirements(ToggleRequirements.elevatorMoveToggleRequirement);
     }
 
     @Override

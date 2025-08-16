@@ -128,9 +128,9 @@ public class ElevatorHead extends KillableSubsystem implements ShuffleboardPubli
             this.gpName = gpName;
         }
 
-        public boolean equals(GamePiece other) {
-            // CoralCertain.equals(Coral) == true
-            // Coral.equals(CoralCertain) == false
+        public boolean atLeast(GamePiece other) {
+            // CoralCertain.atLeast(Coral) == true
+            // Coral.atLeast(CoralCertain) == false
             return this.gpName.equals(other.gpName) && ((this.certain == other.certain) || !other.certain);
         }
     }

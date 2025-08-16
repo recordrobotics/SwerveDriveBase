@@ -1,8 +1,8 @@
-package frc.robot.commands;
+package frc.robot.commands.legacy;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorHeight;
-import frc.robot.RobotContainer;
+import frc.robot.commands.ElevatorMoveThenAlgaeGrabEnd;
 
 public class ElevatorAlgaeToggled extends Command {
 
@@ -10,7 +10,7 @@ public class ElevatorAlgaeToggled extends Command {
 
     public ElevatorAlgaeToggled(ElevatorHeight targetHeight) {
         this.targetHeight = targetHeight;
-        addRequirements(RobotContainer.elevatorMoveToggleRequirement);
+        addRequirements(ToggleRequirements.elevatorMoveToggleRequirement);
     }
 
     @Override

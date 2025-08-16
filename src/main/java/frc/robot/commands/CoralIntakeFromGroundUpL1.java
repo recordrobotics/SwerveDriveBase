@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.legacy.CoralIntakeFromGroundToggled;
+import frc.robot.commands.legacy.ToggleRequirements;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 
 public class CoralIntakeFromGroundUpL1 extends SequentialCommandGroup {
@@ -20,7 +22,7 @@ public class CoralIntakeFromGroundUpL1 extends SequentialCommandGroup {
                 new InstantCommand(
                         () -> RobotContainer.coralIntake.set(CoralIntakeState.UP),
                         RobotContainer.coralIntake,
-                        RobotContainer.coralIntakeMoveToggleRequirement),
+                        ToggleRequirements.coralIntakeMoveToggleRequirement),
                 new WaitUntilCommand(() -> RobotContainer.coralIntake.armAtGoal()),
                 new ScheduleCommand(RobotContainer.lights
                         .coralIntake

@@ -1,14 +1,14 @@
-package frc.robot.commands;
+package frc.robot.commands.legacy;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
+import frc.robot.commands.CoralIntakeFromGround;
 
 public class CoralIntakeFromGroundToggled extends Command {
 
     public static boolean isGoingToL1 = false;
 
     public CoralIntakeFromGroundToggled() {
-        addRequirements(RobotContainer.coralIntakeMoveToggleRequirement);
+        addRequirements(ToggleRequirements.coralIntakeMoveToggleRequirement);
     }
 
     @Override
