@@ -293,7 +293,7 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(this::resetEncoders).ignoringDisable(true));
 
         new Trigger(() -> DashboardUI.Overview.getControl().getCoralGroundIntakeSimple()
-                        && elevatorHead.getGamePiece().atLeast(GamePiece.CORAL_CERTAIN))
+                        && !elevatorHead.getGamePiece().atLeast(GamePiece.CORAL_CERTAIN))
                 .onTrue(new CoralIntakeFromGround())
                 .onFalse(Commands.either(
                                 new CoralIntakeFromGroundUpL1(),
