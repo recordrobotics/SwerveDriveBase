@@ -106,7 +106,7 @@ public class CoralDetection extends ManagedSubsystemBase {
 
             // Remove old corals
             detectedCorals.removeIf(coral -> {
-                double age = Timer.getFPGATimestamp() - coral.timestamp;
+                double age = Timer.getTimestamp() - coral.timestamp;
                 return age > Constants.PhotonVision.CORAL_TIMEOUT.in(Seconds) || age < 0;
             });
         }

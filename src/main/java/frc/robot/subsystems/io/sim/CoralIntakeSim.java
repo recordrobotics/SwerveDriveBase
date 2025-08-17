@@ -127,6 +127,18 @@ public class CoralIntakeSim implements CoralIntakeIO {
 
     @Override
     public void setWheelPosition(double newValue) {
+        // Reset internal sim state
+        wheelSimModel.setState(Units.rotationsToRadians(newValue), 0);
+
+        // Update raw rotor position to match internal sim state (has to be called before setPosition to
+        // have correct offset)
+        wheelSim.setPosition(Constants.CoralIntake.WHEEL_GEAR_RATIO
+                * Units.radiansToRotations(wheelSimModel.getAngularPositionRad()));
+        wheelSim.setVelocity(Constants.CoralIntake.WHEEL_GEAR_RATIO
+                * Units.radiansToRotations(wheelSimModel.getAngularVelocityRadPerSec())
+                * 60.0);
+
+        // Update internal raw position offset
         wheel.getEncoder().setPosition(newValue);
     }
 
@@ -215,6 +227,14 @@ public class CoralIntakeSim implements CoralIntakeIO {
     public void close() throws Exception {
         wheel.close();
         arm.close();
+    }
+
+    public void addCoral() {
+        intakeSimulation.addGamePieceToIntake();
+    }
+
+    public void removeCoral() {
+        intakeSimulation.obtainGamePieceFromIntake();
     }
 
     private boolean hadGamePieces = false;

@@ -39,6 +39,9 @@ public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
 
+    private Runnable periodicRunnable;
+    private volatile boolean initialized = false;
+
     private static double autoStartTimestamp;
 
     private static final String defaultPathRio = "/home/lvuser/logs";
@@ -63,20 +66,29 @@ public class Robot extends LoggedRobot {
                 break;
         }
 
-        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REPLAY) {
+        if (Constants.RobotState.getMode().isRealtime()) {
             setUseTiming(true); // Run at standard robot speed (20 ms)
             Logger.addDataReceiver(new WPILOGWriter(RobotBase.isSimulation() ? defaultPathSim : defaultPathRio));
             Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         } else {
-            setUseTiming(false); // Run as fast as possible
-            String logPath =
-                    LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-            Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-            Logger.addDataReceiver(
-                    new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+            setUseTiming(
+                    Constants.RobotState.getMode() == Constants.RobotState.Mode.TEST
+                            ? true /* TODO: Still looking into ways to speed up Phoenix sim (false is faster) */
+                            : false); // Run as fast as possible
+            if (Constants.RobotState.getMode() == Constants.RobotState.Mode.REPLAY) {
+                String logPath =
+                        LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+                Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+                Logger.addDataReceiver(
+                        new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+            } else if (Constants.RobotState.getMode() == Constants.RobotState.Mode.TEST) {
+                // TODO: only for debugging test cases
+                Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+            }
         }
 
-        DriverStation.silenceJoystickConnectionWarning(Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM);
+        DriverStation.silenceJoystickConnectionWarning(
+                Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL);
 
         Logger.start();
 
@@ -90,10 +102,23 @@ public class Robot extends LoggedRobot {
             SignalLogger.start();
         }
 
-        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
             // Use custom improved simulation
             SimulatedArena.overrideInstance(new ImprovedArena2025Reefscape());
         }
+    }
+
+    public void setPeriodicRunnable(Runnable periodicRunnable) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.TEST) return;
+        this.periodicRunnable = periodicRunnable;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    public RobotContainer getRobotContainer() {
+        return m_robotContainer;
     }
 
     /**
@@ -120,6 +145,8 @@ public class Robot extends LoggedRobot {
         DashboardUI.Autonomous.switchTo();
 
         AutoLogLevelManager.addObject(this);
+
+        initialized = true;
     }
 
     /**
@@ -196,7 +223,7 @@ public class Robot extends LoggedRobot {
     /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
     @Override
     public void autonomousInit() {
-        autoStartTimestamp = Timer.getFPGATimestamp();
+        autoStartTimestamp = Timer.getTimestamp();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         // Cancel any previous commands
@@ -274,5 +301,16 @@ public class Robot extends LoggedRobot {
 
     public static double getAutoStartTime() {
         return autoStartTimestamp;
+    }
+
+    @Override
+    protected void loopFunc() {
+        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.TEST) {
+            if (periodicRunnable == null)
+                throw new IllegalStateException("Periodic runnable is not set for test mode!");
+            periodicRunnable.run();
+        }
+
+        super.loopFunc();
     }
 }

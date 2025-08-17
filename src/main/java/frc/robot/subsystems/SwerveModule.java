@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotState.Mode;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.SwerveModuleIO;
 import frc.robot.utils.AutoLogLevel.Level;
@@ -129,7 +130,9 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
                         .withStatorCurrentLimitEnable(true)));
 
         // ~2 Seconds delay per swerve module to wait for encoder values to stabilize
-        Timer.delay(2.3);
+        if (Constants.RobotState.getMode() == Mode.REAL) {
+            Timer.delay(2.3);
+        }
 
         // Sets motor speeds to 0
         io.setDriveMotorVoltage(0);
@@ -239,7 +242,7 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
         targetDriveVelocity = desiredState.speedMetersPerSecond;
     }
 
-    private double lastMovementTime = Timer.getFPGATimestamp();
+    private double lastMovementTime = Timer.getTimestamp();
     private boolean hasResetAbs = false;
 
     public void periodic() {
@@ -255,8 +258,8 @@ public class SwerveModule implements ShuffleboardPublisher, AutoCloseable, Power
 
         if (Math.abs(driveVelocityCached) > 0.08 || Math.abs(turnVelocityCached) > 1.0) {
             hasResetAbs = false;
-            lastMovementTime = Timer.getFPGATimestamp();
-        } else if (Timer.getFPGATimestamp() - lastMovementTime > 2.0
+            lastMovementTime = Timer.getTimestamp();
+        } else if (Timer.getTimestamp() - lastMovementTime > 2.0
                 && isAbsEncoderConnected()
                 && !hasResetAbs) { // if still for 2 seconds
             hasResetAbs = true;

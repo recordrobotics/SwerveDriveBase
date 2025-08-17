@@ -110,12 +110,26 @@ public class ElevatorSim implements ElevatorIO {
 
     @Override
     public void setLeadMotorPosition(double newValue) {
+        // Reset internal sim state
+        elevatorSim.setState(newValue, 0);
+
+        // Update raw rotor position to match internal sim state (has to be called before setPosition to
+        // have correct offset)
+        motorLeadSim.setRawRotorPosition(elevatorSim.getPositionMeters() / Constants.Elevator.METERS_PER_ROTATION);
+        motorLeadSim.setRotorVelocity(
+                elevatorSim.getVelocityMetersPerSecond() / Constants.Elevator.METERS_PER_ROTATION);
+        motorFollowerSim.setRawRotorPosition(elevatorSim.getPositionMeters() / Constants.Elevator.METERS_PER_ROTATION);
+        motorFollowerSim.setRotorVelocity(
+                elevatorSim.getVelocityMetersPerSecond() / Constants.Elevator.METERS_PER_ROTATION);
+
+        // Update internal raw position offset
         motorLead.setPosition(newValue);
+        motorFollower.setPosition(newValue);
     }
 
     @Override
     public void setFollowerMotorPosition(double newValue) {
-        motorFollower.setPosition(newValue);
+        setLeadMotorPosition(newValue);
     }
 
     @Override

@@ -90,7 +90,7 @@ public class CoralIntakeToElevator extends SequentialCommandGroup implements Sim
                                     });
                             return (coral.poseSupplier.get() == null
                                     ? new WaitUntilCommand(() -> {
-                                                if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+                                                if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
                                                     for (GamePieceProjectile c : SimulatedArena.getInstance()
                                                             .gamePieceLaunched()) {
                                                         if (c.gamePieceType

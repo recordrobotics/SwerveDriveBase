@@ -19,7 +19,7 @@ public class ElevatorMove extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        lastMoveTime = Timer.getFPGATimestamp();
+        lastMoveTime = Timer.getTimestamp();
 
         initialElevatorHeight = RobotContainer.elevator.getCurrentHeight();
         initialArmAngle = RobotContainer.elevatorArm.getArmAngle();
@@ -35,10 +35,10 @@ public class ElevatorMove extends Command {
         RobotContainer.elevatorArm.set(targetHeight.getArmAngle());
 
         if (Math.abs(RobotContainer.elevator.getCurrentVelocity()) >= 0.03 || RobotContainer.elevator.atGoal()) {
-            lastMoveTime = Timer.getFPGATimestamp();
+            lastMoveTime = Timer.getTimestamp();
         } else {
             // If the elevator is not moving, check if it has been stationary for too long
-            double currentTime = Timer.getFPGATimestamp();
+            double currentTime = Timer.getTimestamp();
             if (currentTime - lastMoveTime > 0.1) { // elevator stalled
                 // Reset the elevator and arm to their initial positions
                 RobotContainer.elevator.set(initialElevatorHeight);

@@ -121,6 +121,11 @@ public class ElevatorHeadSim implements ElevatorHeadIO {
                 () -> RobotContainer.model.elevatorArm.getCoralShooterTargetPose();
     }
 
+    public void clearPreload() {
+        setCoralDetectorSim(true);
+        RobotContainer.model.getRobotCoral().poseSupplier = () -> null;
+    }
+
     @Override
     public void close() throws Exception {
         motor.close();

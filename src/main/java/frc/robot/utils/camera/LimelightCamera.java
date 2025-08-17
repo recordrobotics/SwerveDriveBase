@@ -237,7 +237,7 @@ public class LimelightCamera implements IVisionCamera {
 
             measurement = new PoseEstimate(
                     maplePose,
-                    Timer.getFPGATimestamp(),
+                    Timer.getTimestamp(),
                     type.latencyMs,
                     ALL_SIM_TAGS.length,
                     0.1,
@@ -247,7 +247,7 @@ public class LimelightCamera implements IVisionCamera {
                     false);
             measurement_m2 = new PoseEstimate(
                     maplePose,
-                    Timer.getFPGATimestamp(),
+                    Timer.getTimestamp(),
                     type.latencyMs,
                     ALL_SIM_TAGS.length,
                     0.1,
@@ -258,7 +258,7 @@ public class LimelightCamera implements IVisionCamera {
         }
 
         if (measurement == null || measurement_m2 == null) {
-            if (Constants.RobotState.getMode() != Constants.RobotState.Mode.SIM) {
+            if (Constants.RobotState.getMode() == Constants.RobotState.Mode.REAL) {
                 limelightConnected = false; // only can be disconnected out of sim
             }
             return;

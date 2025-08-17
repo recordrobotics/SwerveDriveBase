@@ -1,6 +1,10 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
+  "java.project.sourcePaths": [
+    "src/main/java",
+    "src/test/java"
+  ],
   "files.exclude": {
     "**/.classpath": true,
     "**/.DS_Store": true,
@@ -77,5 +81,6 @@
   "files.autoSaveDelay": 1000,
   "iis.configDir": "",
   "java.debug.settings.onBuildFailureProceed": true,
-  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable"
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+  "wpilib.skipTests": true
 }

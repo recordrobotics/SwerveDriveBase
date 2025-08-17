@@ -3,8 +3,10 @@ package frc.robot.utils.mapleSim;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.ironmaple.simulation.Goal;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnField;
@@ -20,8 +22,8 @@ import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeReefBranch
  * ReefscapeReefBranch} objects. However for all other purposes this class behaves and can be used
  * like a normal goal.
  */
-class ImprovedReefscapeReefSimulation implements SimulatedArena.Simulatable {
-    protected final List<ImprovedReefscapeReefBranch> branches;
+public class ImprovedReefscapeReefSimulation implements SimulatedArena.Simulatable {
+    protected final HashMap<String, ImprovedReefscapeReefBranch> branches;
     public ReefscapeAlgaeOnField algae;
     private StructArrayPublisher<Pose3d> reefPub;
     Pose3d[] branchPoses;
@@ -35,12 +37,15 @@ class ImprovedReefscapeReefSimulation implements SimulatedArena.Simulatable {
      * @param isBlue Wether this is the blue reef or the red one.
      */
     ImprovedReefscapeReefSimulation(ImprovedArena2025Reefscape arena, boolean isBlue) {
-        branches = new ArrayList<ImprovedReefscapeReefBranch>(48);
+        branches = new HashMap<String, ImprovedReefscapeReefBranch>(48);
         branchPoses = new Pose3d[96];
         for (int tower = 0; tower < 12; tower++) {
             for (int level = 0; level < 4; level++) {
-                branches.add(new ImprovedReefscapeReefBranch(arena, isBlue, level, tower));
-                Pose3d tempPose = branches.get(branches.size() - 1).getPose();
+                char towerChar = (char) ('A' + tower);
+                char levelChar = (char) ('1' + level);
+                ImprovedReefscapeReefBranch branch = new ImprovedReefscapeReefBranch(arena, isBlue, level, tower);
+                branches.put(String.valueOf(towerChar) + String.valueOf(levelChar), branch);
+                Pose3d tempPose = branch.getPose();
 
                 branchPoses[2 * (tower * 4 + level)] = tempPose;
 
@@ -56,14 +61,14 @@ class ImprovedReefscapeReefSimulation implements SimulatedArena.Simulatable {
     }
 
     public void draw(List<Pose3d> coralPosesToDisplay) {
-        for (ImprovedReefscapeReefBranch branch : branches) {
+        for (ImprovedReefscapeReefBranch branch : branches.values()) {
             branch.draw(coralPosesToDisplay);
         }
     }
 
     @Override
     public void simulationSubTick(int subTickNum) {
-        for (ImprovedReefscapeReefBranch branch : branches) {
+        for (ImprovedReefscapeReefBranch branch : branches.values()) {
             branch.simulationSubTick(subTickNum);
         }
     }
@@ -74,8 +79,16 @@ class ImprovedReefscapeReefSimulation implements SimulatedArena.Simulatable {
      * <h2>Resets the reef to its original state.</h2>
      */
     public void clearReef() {
-        for (ImprovedReefscapeReefBranch branch : branches) {
+        for (ImprovedReefscapeReefBranch branch : branches.values()) {
             branch.clear();
         }
+    }
+
+    public ImprovedReefscapeReefBranch getBranch(String id) {
+        return branches.get(id);
+    }
+
+    public Set<Map.Entry<String, ImprovedReefscapeReefBranch>> getBranches() {
+        return branches.entrySet();
     }
 }

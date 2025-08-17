@@ -220,4 +220,8 @@ public class ImprovedReefscapeReefBranch extends Goal {
             drawList.add(getPose().transformBy(new Transform3d(0, 0.12, 0, new Rotation3d())));
         }
     }
+
+    public int getGamePieceCount() {
+        return gamePieceCount;
+    }
 }

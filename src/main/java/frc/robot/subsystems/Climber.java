@@ -110,10 +110,10 @@ public class Climber extends KillableSubsystem
                     lastClimbVoltage, atGoal() ? 0 : 12, 0.02, Constants.Climber.CLIMB_VOLTAGE_SLEW_RATE);
 
             if (getEstimatedkV() >= Constants.Climber.CLIMB_EXPECTED_KV_MIN) {
-                lastExpectedKVTime = Timer.getFPGATimestamp();
+                lastExpectedKVTime = Timer.getTimestamp();
             }
 
-            if (Timer.getFPGATimestamp() - lastExpectedKVTime > Constants.Climber.CLIMB_EXPECTED_KV_TIMEOUT.in(Seconds)
+            if (Timer.getTimestamp() - lastExpectedKVTime > Constants.Climber.CLIMB_EXPECTED_KV_TIMEOUT.in(Seconds)
                     && !atGoal()) {
                 // If we haven't seen a expected kV value in a while, set the voltage to 0 and park
                 lastClimbVoltage = 0;
@@ -159,7 +159,7 @@ public class Climber extends KillableSubsystem
             case Climb:
                 io.setRatchet(Constants.Climber.RATCHET_ENGAGED);
                 lastClimbVoltage = 0.0;
-                lastExpectedKVTime = Timer.getFPGATimestamp();
+                lastExpectedKVTime = Timer.getTimestamp();
                 ratchetEngaged = true;
                 break;
         }

@@ -168,7 +168,7 @@ public class RobotContainer {
 
         noEncoderResetAlert.set(true);
 
-        if (Constants.RobotState.getMode() == Mode.SIM) {
+        if (Constants.RobotState.getMode() != Mode.REAL) {
             // No point in manually resetting encoders in simulation since starting config is always in the right spot
             resetEncoders();
         }
@@ -401,7 +401,7 @@ public class RobotContainer {
         //     MathUtil.clamp(BatterySim.calculateDefaultBatteryLoadedVoltage(currents), 0, 13));
     }
 
-    private void resetEncoders() {
+    public void resetEncoders() {
         climber.resetEncoders();
         elevator.resetEncoders();
         elevatorArm.resetEncoders();

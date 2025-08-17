@@ -107,6 +107,13 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+    forkEvery = 1
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
+tasks.test {
+    // Don't run tests as part of the default build
+    onlyIf { gradle.startParameter.taskNames.contains("test") }
 }
 
 // Simulation configuration (e.g. environment variables).

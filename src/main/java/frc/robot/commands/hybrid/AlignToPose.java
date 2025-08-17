@@ -93,6 +93,8 @@ public class AlignToPose extends Command {
             currentVelocity =
                     MathUtil.slewRateLimit(currentVelocity, targetDirection, 0.02, Constants.Align.MAX_ACCELERATION);
 
+            currentVelocity = targetDirection;
+
             Logger.recordOutput("AlignToPose/Velocity", targetDirection.getNorm());
             Logger.recordOutput("AlignToPose/VelocityLimited", currentVelocity.getNorm());
 
@@ -105,6 +107,8 @@ public class AlignToPose extends Command {
         Logger.recordOutput("AlignToPose/Target", p);
         Logger.recordOutput("AlignToPose/AtGoal/T", isTAtGoal());
         Logger.recordOutput("AlignToPose/AtGoal/Rot", rotPID.atGoal());
+
+        Logger.recordOutput("AlignToPose/Set", new Transform2d(x, y, new Rotation2d(rot)));
 
         drivetrainControl = DrivetrainControl.createFieldRelative(
                 new Transform2d(x, y, new Rotation2d(rot)),

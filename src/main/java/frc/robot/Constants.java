@@ -594,7 +594,7 @@ public final class Constants {
         public static final double AT_GOAL_POSITION_TOLERANCE = 0.05;
         public static final double AT_GOAL_VELOCITY_TOLERANCE = 0.07;
 
-        public static final Time SHOOT_TIME = Seconds.of(0.3);
+        public static final Time SHOOT_TIME = Seconds.of(0.1);
         public static final Time SHOOT_STALL_TIME = Seconds.of(0.3);
 
         public static final double DEBOUNCE_TIME = 0.02;
@@ -974,8 +974,13 @@ public final class Constants {
     }
 
     public final class RobotState {
+
+        public static boolean runningAsUnitTest = false;
+
         public static Mode getMode() {
-            return RobotBase.isReal() ? Mode.REAL : (RobotBase.isSimulation() ? Mode.SIM : Mode.REPLAY);
+            if (RobotBase.isReal()) return Mode.REAL;
+            if (runningAsUnitTest) return Mode.TEST;
+            return RobotBase.isSimulation() ? Mode.SIM : Mode.REPLAY;
         }
 
         public static final boolean MOTOR_LOGGING_ENABLED = false;
@@ -995,9 +1000,20 @@ public final class Constants {
         }
 
         public enum Mode {
-            REAL,
-            SIM,
-            REPLAY
+            REAL(true),
+            SIM(true),
+            REPLAY(false),
+            TEST(false);
+
+            boolean realtime;
+
+            Mode(boolean realtime) {
+                this.realtime = realtime;
+            }
+
+            public boolean isRealtime() {
+                return realtime;
+            }
         }
     }
 }

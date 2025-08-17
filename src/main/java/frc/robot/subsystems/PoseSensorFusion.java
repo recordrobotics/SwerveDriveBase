@@ -181,7 +181,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase implements AutoClosea
     public void periodicManaged() {}
 
     public void calculationLoop() {
-        updateTimestamp = Timer.getFPGATimestamp();
+        updateTimestamp = Timer.getTimestamp();
         updateNav = nav.getAdjustedAngle();
         updatePositions = getModulePositions();
 
@@ -196,7 +196,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase implements AutoClosea
             if (useISPE) {
                 addVisionMeasurement(
                         independentPoseEstimator.getEstimatedRobotPose(),
-                        Timer.getFPGATimestamp(),
+                        Timer.getTimestamp(),
                         VecBuilder.fill(0.7, 0.7, 9999999));
             }
         }
@@ -242,7 +242,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase implements AutoClosea
     /** Resets the field relative position of the robot (mostly for testing). */
     public void resetStartingPose() {
         setToPose(DashboardUI.Autonomous.getStartingLocation().getPose());
-        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
             RobotContainer.drivetrain
                     .getSwerveDriveSimulation()
                     .setSimulationWorldPose(

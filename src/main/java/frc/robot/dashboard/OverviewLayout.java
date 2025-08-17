@@ -2,6 +2,7 @@ package frc.robot.dashboard;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Constants;
 import frc.robot.control.AbstractControl;
 import frc.robot.utils.libraries.Elastic;
 import java.util.EnumSet;
@@ -26,6 +27,7 @@ public class OverviewLayout extends AbstractLayout {
             new LoggedDashboardChooser<>("Driver Orientation");
     private static LoggedDashboardChooser<AbstractControl> driveMode = new LoggedDashboardChooser<>("Drive Mode");
     private static AbstractControl _defaultControl;
+    private static AbstractControl _testControl;
 
     // private Supplier<Boolean> poseCertainValue = () -> false;
     private Supplier<Boolean> navSensorValue = () -> false;
@@ -72,7 +74,19 @@ public class OverviewLayout extends AbstractLayout {
         return driverOrientation.get();
     }
 
+    public static void setTestControl(AbstractControl testControl) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.TEST) return;
+        _testControl = testControl;
+    }
+
     public AbstractControl getControl() {
+        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.TEST) {
+            if (_testControl == null) {
+                throw new IllegalStateException("Test control is not set!");
+            }
+            return _testControl;
+        }
+
         if (driveMode.get() == null) return _defaultControl;
         return driveMode.get();
     }

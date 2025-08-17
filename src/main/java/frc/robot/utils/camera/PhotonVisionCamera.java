@@ -143,7 +143,7 @@ public class PhotonVisionCamera implements IVisionCamera {
                 || Constants.RobotState.VISION_SIMULATION_MODE
                         == Constants.RobotState.VisionSimulationMode.PHOTON_SIM) {
             photonEstimatorClose.addHeadingData(
-                    Timer.getFPGATimestamp(),
+                    Timer.getTimestamp(),
                     new Rotation3d(
                             0,
                             0,
@@ -152,7 +152,7 @@ public class PhotonVisionCamera implements IVisionCamera {
                                     .getRotation()
                                     .getRadians()));
             photonEstimatorFar.addHeadingData(
-                    Timer.getFPGATimestamp(),
+                    Timer.getTimestamp(),
                     new Rotation3d(
                             0,
                             0,
@@ -170,9 +170,9 @@ public class PhotonVisionCamera implements IVisionCamera {
             }
 
             measurement_close_opt = Optional.of(new VisionCameraEstimate(
-                    maplePose, Timer.getFPGATimestamp(), 0.01, ALL_SIM_TAGS.length, 6, 0.1, ALL_SIM_TAGS, false));
+                    maplePose, Timer.getTimestamp(), 0.01, ALL_SIM_TAGS.length, 6, 0.1, ALL_SIM_TAGS, false));
             measurement_far_opt = Optional.of(new VisionCameraEstimate(
-                    maplePose, Timer.getFPGATimestamp(), 0.01, ALL_SIM_TAGS.length, 6, 0.1, ALL_SIM_TAGS, true));
+                    maplePose, Timer.getTimestamp(), 0.01, ALL_SIM_TAGS.length, 6, 0.1, ALL_SIM_TAGS, true));
         }
 
         if (!camera.isConnected()) {

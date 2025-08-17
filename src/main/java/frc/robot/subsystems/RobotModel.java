@@ -434,7 +434,7 @@ public class RobotModel extends ManagedSubsystemBase {
 
     @AutoLogLevel(level = Level.Sim)
     private Pose3d[] getCoralPositions() {
-        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
             List<Pose3d> coralPoses = SimulatedArena.getInstance().getGamePiecesPosesByType("Coral");
             Pose3d robotCoralPose = robotCoral.poseSupplier.get();
             if (robotCoralPose != null) {
@@ -448,7 +448,7 @@ public class RobotModel extends ManagedSubsystemBase {
 
     @AutoLogLevel(level = Level.Sim)
     private Pose3d[] getAlgaePositions() {
-        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
             return SimulatedArena.getInstance().getGamePiecesArrayByType("Algae");
         } else {
             return new Pose3d[0];
@@ -457,7 +457,7 @@ public class RobotModel extends ManagedSubsystemBase {
 
     @AutoLogLevel(level = Level.Sim)
     public Pose2d getRobot() {
-        if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
             return RobotContainer.drivetrain.getSwerveDriveSimulation().getSimulatedDriveTrainPose();
         } else {
             return Pose2d.kZero;
