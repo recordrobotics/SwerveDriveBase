@@ -111,7 +111,9 @@ public class PhotonVisionCamera implements IVisionCamera {
                 Constants.Game.APRILTAG_LAYOUT, PoseStrategy.CONSTRAINED_SOLVEPNP, robotToCamera);
         photonEstimatorFar.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL
+                && Constants.RobotState.VISION_SIMULATION_MODE
+                        == Constants.RobotState.VisionSimulationMode.PHOTON_SIM) {
             SimCameraProperties cameraProp = new SimCameraProperties();
             cameraProp.setCalibration(
                     type.getDetectorWidth(), type.getDetectorHeight(), Rotation2d.fromDegrees(type.fov));
@@ -121,11 +123,8 @@ public class PhotonVisionCamera implements IVisionCamera {
             cameraProp.setLatencyStdDevMs(type.latencyStdDevMs);
 
             PhotonCameraSim cameraSim = new PhotonCameraSim(camera, cameraProp);
-
-            if (Constants.RobotState.VISION_SIMULATION_MODE == Constants.RobotState.VisionSimulationMode.PHOTON_SIM) {
-                cameraSim.enableDrawWireframe(true);
-                RobotContainer.visionSim.addCamera(cameraSim, robotToCamera);
-            }
+            cameraSim.enableDrawWireframe(true);
+            RobotContainer.visionSim.addCamera(cameraSim, robotToCamera);
         }
     }
 

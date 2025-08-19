@@ -83,7 +83,7 @@ public class Robot extends LoggedRobot {
                         new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
             } else if (Constants.RobotState.getMode() == Constants.RobotState.Mode.TEST) {
                 // TODO: only for debugging test cases
-                Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+                // Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
             }
         }
 
@@ -99,7 +99,9 @@ public class Robot extends LoggedRobot {
                                 + "[WARNING] During competition, set MOTOR_LOGGING_ENABLED to false since logging is enabled automatically.",
                         false);
             }
-            SignalLogger.start();
+            if (Constants.RobotState.getMode() != Constants.RobotState.Mode.TEST) {
+                SignalLogger.start();
+            }
         }
 
         if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
@@ -133,8 +135,10 @@ public class Robot extends LoggedRobot {
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
 
-        // Elastic layout webserver
-        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.TEST) {
+            // Elastic layout webserver
+            WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+        }
 
         if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
             // Reset simulation field

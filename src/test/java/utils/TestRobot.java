@@ -1,5 +1,7 @@
 package utils;
 
+import com.ctre.phoenix6.unmanaged.Unmanaged;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
@@ -24,6 +26,8 @@ import org.ironmaple.simulation.SimulatedArena;
 public class TestRobot {
 
     static {
+        NetworkTableInstance.getDefault().startLocal();
+        Unmanaged.setPhoenixDiagnosticsStartTime(-1);
         Constants.RobotState.runningAsUnitTest = true;
         RobotController.setTimeSource(TestRobot::getTimestamp);
     }
