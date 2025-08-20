@@ -26,8 +26,10 @@ import org.ironmaple.simulation.SimulatedArena;
 public class TestRobot {
 
     static {
-        NetworkTableInstance.getDefault().startLocal();
-        Unmanaged.setPhoenixDiagnosticsStartTime(-1);
+        if (!Constants.RobotState.UNIT_TESTS_ENABLE_ADVANTAGE_SCOPE) {
+            NetworkTableInstance.getDefault().startLocal(); // disable nt
+        }
+        Unmanaged.setPhoenixDiagnosticsStartTime(-1); // disable phoenix
         Constants.RobotState.runningAsUnitTest = true;
         RobotController.setTimeSource(TestRobot::getTimestamp);
     }

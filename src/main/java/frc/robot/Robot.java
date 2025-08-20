@@ -82,8 +82,9 @@ public class Robot extends LoggedRobot {
                 Logger.addDataReceiver(
                         new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
             } else if (Constants.RobotState.getMode() == Constants.RobotState.Mode.TEST) {
-                // TODO: only for debugging test cases
-                // Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+                if (Constants.RobotState.UNIT_TESTS_ENABLE_ADVANTAGE_SCOPE) {
+                    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+                }
             }
         }
 
