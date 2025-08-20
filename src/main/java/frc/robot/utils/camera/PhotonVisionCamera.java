@@ -2,7 +2,6 @@ package frc.robot.utils.camera;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -40,10 +39,9 @@ public class PhotonVisionCamera implements IVisionCamera {
 
     private String name;
 
-    private final double SINGLE_TAG_CONFIDENCE;
-    private final double MULTI_TAG_CONFIDENCE_CLOSE;
-    private final double MULTI_TAG_CONFIDENCE_FAR;
-    private final double MT_CLOSE_MAX_DIST;
+    private final double CONFIDENCE_CLOSE;
+    private final double CONFIDENCE_FAR;
+    private final double CLOSE_MAX_DIST;
 
     private final double MAX_POSE_ERROR;
 
@@ -95,10 +93,9 @@ public class PhotonVisionCamera implements IVisionCamera {
     public PhotonVisionCamera(String name, CameraType type, Transform3d robotToCamera, double stdMultiplier) {
         this.name = name;
         this.type = type;
-        this.SINGLE_TAG_CONFIDENCE = 0.65 * stdMultiplier;
-        this.MULTI_TAG_CONFIDENCE_CLOSE = 0.65 * stdMultiplier;
-        this.MULTI_TAG_CONFIDENCE_FAR = 0.7 * stdMultiplier;
-        this.MT_CLOSE_MAX_DIST = Units.feetToMeters(7);
+        this.CONFIDENCE_CLOSE = 0.65 * stdMultiplier;
+        this.CONFIDENCE_FAR = 0.7 * stdMultiplier;
+        this.CLOSE_MAX_DIST = Units.feetToMeters(7);
         this.MAX_POSE_ERROR = 10; // 10 meters
 
         camera = new PhotonCamera(name);
@@ -197,15 +194,15 @@ public class PhotonVisionCamera implements IVisionCamera {
 
         if (!DashboardUI.Autonomous.getForceMT1()) {
             if (measurement_close.tagCount > 0 && SimpleMath.isPoseInField(measurement_close.pose)) {
-                if (measurement_close.avgTagDist < MT_CLOSE_MAX_DIST) {
-                    confidence = MULTI_TAG_CONFIDENCE_CLOSE;
+                if (measurement_close.avgTagDist < CLOSE_MAX_DIST) {
+                    confidence = CONFIDENCE_CLOSE;
                 } else {
-                    confidence = MULTI_TAG_CONFIDENCE_FAR;
+                    confidence = CONFIDENCE_FAR;
                     measurement_close = measurement_far;
                 }
             }
-        } else {
-            confidence = MULTI_TAG_CONFIDENCE_CLOSE;
+        } else { // reseting robot pose before match
+            confidence = CONFIDENCE_CLOSE;
         }
 
         unsafeEstimate = measurement_close;
@@ -303,55 +300,8 @@ public class PhotonVisionCamera implements IVisionCamera {
             } else {
                 visionEst = Optional.empty();
             }
-
-            updateEstimationStdDevs(estimator, visionEst, change.getTargets());
         }
         return visionEst;
-    }
-
-    /**
-     * Calculates new standard deviations This algorithm is a heuristic that creates dynamic standard
-     * deviations based on number of tags, estimation strategy, and distance from the tags.
-     *
-     * @param estimatedPose The estimated pose to guess standard deviations for.
-     * @param targets All targets in this camera frame
-     */
-    private void updateEstimationStdDevs(
-            PhotonPoseEstimator estimator,
-            Optional<VisionCameraEstimate> estimatedPose,
-            List<PhotonTrackedTarget> targets) {
-
-        double confidence = 0;
-
-        if (!estimatedPose.isEmpty()) {
-            // Pose present. Start running Heuristic
-            confidence = SINGLE_TAG_CONFIDENCE;
-            int numTags = 0;
-            double avgDist = 0;
-
-            // Precalculation - see how many tags we found, and calculate an average-distance metric
-            for (PhotonTrackedTarget tgt : targets) {
-                Optional<Pose3d> tagPose = estimator.getFieldTags().getTagPose(tgt.getFiducialId());
-                if (tagPose.isEmpty()) continue;
-                numTags++;
-                avgDist += tagPose.get()
-                        .toPose2d()
-                        .getTranslation()
-                        .getDistance(estimatedPose.get().pose.getTranslation());
-            }
-
-            if (numTags == 0) {
-                confidence = 0;
-            } else {
-                // One or more tags visible, run the full heuristic.
-                avgDist /= numTags;
-                // Decrease std devs if multiple targets are visible
-                if (numTags > 1) confidence = MULTI_TAG_CONFIDENCE_CLOSE;
-                // Increase std devs based on (average) distance
-                if (numTags == 1 && avgDist > 4) confidence = 0;
-                else confidence *= (1 + (avgDist * avgDist / 30));
-            }
-        }
     }
 
     public void close() {
