@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import frc.robot.subsystems.io.ElevatorIO;
 
+@SuppressWarnings("java:S1186") // Methods intentionally left blank
 public class ElevatorStub implements ElevatorIO {
 
     @SuppressWarnings("unused")
@@ -20,24 +21,16 @@ public class ElevatorStub implements ElevatorIO {
     }
 
     @Override
-    public void applyTalonFXConfig(TalonFXConfiguration configuration) {
-        /* stub */
-    }
+    public void applyTalonFXConfig(TalonFXConfiguration configuration) {}
 
     @Override
-    public void setLeadMotorVoltage(double outputVolts) {
-        /* stub */
-    }
+    public void setLeadMotorVoltage(double outputVolts) {}
 
     @Override
-    public void setLeadMotionMagic(MotionMagicExpoVoltage request) {
-        /* stub */
-    }
+    public void setLeadMotionMagic(MotionMagicExpoVoltage request) {}
 
     @Override
-    public void setFollowerMotionMagic(Follower request) {
-        /* stub */
-    }
+    public void setFollowerMotionMagic(Follower request) {}
 
     @Override
     public double getLeadMotorVoltage() {
@@ -50,14 +43,10 @@ public class ElevatorStub implements ElevatorIO {
     }
 
     @Override
-    public void setLeadMotorPosition(double newValue) {
-        /* stub */
-    }
+    public void setLeadMotorPosition(double newValue) {}
 
     @Override
-    public void setFollowerMotorPosition(double newValue) {
-        /* stub */
-    }
+    public void setFollowerMotorPosition(double newValue) {}
 
     @Override
     public double getLeadMotorPosition() {
@@ -80,9 +69,7 @@ public class ElevatorStub implements ElevatorIO {
     }
 
     @Override
-    public void setLeadMotorPercent(double newValue) {
-        /* stub */
-    }
+    public void setLeadMotorPercent(double newValue) {}
 
     @Override
     public double getLeadMotorPercent() {
@@ -110,12 +97,8 @@ public class ElevatorStub implements ElevatorIO {
     }
 
     @Override
-    public void close() throws Exception {
-        /* stub */
-    }
+    public void close() throws Exception {}
 
     @Override
-    public void simulationPeriodic() {
-        /* stub */
-    }
+    public void simulationPeriodic() {}
 }

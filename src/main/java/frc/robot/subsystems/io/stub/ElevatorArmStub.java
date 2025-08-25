@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import frc.robot.subsystems.io.ElevatorArmIO;
 
+@SuppressWarnings("java:S1186") // Methods intentionally left blank
 public class ElevatorArmStub implements ElevatorArmIO {
 
     @SuppressWarnings("unused")
@@ -14,24 +15,16 @@ public class ElevatorArmStub implements ElevatorArmIO {
     }
 
     @Override
-    public void applyArmTalonFXConfig(TalonFXConfiguration configuration) {
-        /* stub */
-    }
+    public void applyArmTalonFXConfig(TalonFXConfiguration configuration) {}
 
     @Override
-    public void setArmVoltage(double outputVolts) {
-        /* stub */
-    }
+    public void setArmVoltage(double outputVolts) {}
 
     @Override
-    public void setArmPosition(double newValue) {
-        /* stub */
-    }
+    public void setArmPosition(double newValue) {}
 
     @Override
-    public void setArmMotionMagic(MotionMagicExpoVoltage request) {
-        /* stub */
-    }
+    public void setArmMotionMagic(MotionMagicExpoVoltage request) {}
 
     @Override
     public double getArmPosition() {
@@ -44,9 +37,7 @@ public class ElevatorArmStub implements ElevatorArmIO {
     }
 
     @Override
-    public void setArmPercent(double newValue) {
-        /* stub */
-    }
+    public void setArmPercent(double newValue) {}
 
     @Override
     public double getArmPercent() {
@@ -64,12 +55,8 @@ public class ElevatorArmStub implements ElevatorArmIO {
     }
 
     @Override
-    public void close() throws Exception {
-        /* stub */
-    }
+    public void close() throws Exception {}
 
     @Override
-    public void simulationPeriodic() {
-        /* stub */
-    }
+    public void simulationPeriodic() {}
 }

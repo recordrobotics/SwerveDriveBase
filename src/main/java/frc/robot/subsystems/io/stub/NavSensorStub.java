@@ -2,17 +2,14 @@ package frc.robot.subsystems.io.stub;
 
 import frc.robot.subsystems.io.NavSensorIO;
 
+@SuppressWarnings("java:S1186") // Methods intentionally left blank
 public class NavSensorStub implements NavSensorIO {
 
     @Override
-    public void reset() {
-        /* stub */
-    }
+    public void reset() {}
 
     @Override
-    public void resetDisplacement() {
-        /* stub */
-    }
+    public void resetDisplacement() {}
 
     @Override
     public double getAngle() {
@@ -35,12 +32,8 @@ public class NavSensorStub implements NavSensorIO {
     }
 
     @Override
-    public void close() throws Exception {
-        /* stub */
-    }
+    public void close() throws Exception {}
 
     @Override
-    public void simulationPeriodic() {
-        /* stub */
-    }
+    public void simulationPeriodic() {}
 }

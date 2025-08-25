@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import frc.robot.subsystems.io.CoralIntakeIO;
 
+@SuppressWarnings("java:S1186") // Methods intentionally left blank
 public class CoralIntakeStub implements CoralIntakeIO {
 
     @SuppressWarnings("unused")
@@ -14,34 +15,22 @@ public class CoralIntakeStub implements CoralIntakeIO {
     }
 
     @Override
-    public void applyArmTalonFXConfig(TalonFXConfiguration configuration) {
-        /* stub */
-    }
+    public void applyArmTalonFXConfig(TalonFXConfiguration configuration) {}
 
     @Override
-    public void setWheelVoltage(double outputVolts) {
-        /* stub */
-    }
+    public void setWheelVoltage(double outputVolts) {}
 
     @Override
-    public void setArmVoltage(double outputVolts) {
-        /* stub */
-    }
+    public void setArmVoltage(double outputVolts) {}
 
     @Override
-    public void setWheelPosition(double newValue) {
-        /* stub */
-    }
+    public void setWheelPosition(double newValue) {}
 
     @Override
-    public void setArmPosition(double newValue) {
-        /* stub */
-    }
+    public void setArmPosition(double newValue) {}
 
     @Override
-    public void setArmMotionMagic(MotionMagicExpoVoltage request) {
-        /* stub */
-    }
+    public void setArmMotionMagic(MotionMagicExpoVoltage request) {}
 
     @Override
     public double getWheelVoltage() {
@@ -74,14 +63,10 @@ public class CoralIntakeStub implements CoralIntakeIO {
     }
 
     @Override
-    public void setWheelPercent(double newValue) {
-        /* stub */
-    }
+    public void setWheelPercent(double newValue) {}
 
     @Override
-    public void setArmPercent(double newValue) {
-        /* stub */
-    }
+    public void setArmPercent(double newValue) {}
 
     @Override
     public double getWheelPercent() {
@@ -104,12 +89,8 @@ public class CoralIntakeStub implements CoralIntakeIO {
     }
 
     @Override
-    public void close() throws Exception {
-        /* stub */
-    }
+    public void close() throws Exception {}
 
     @Override
-    public void simulationPeriodic() {
-        /* stub */
-    }
+    public void simulationPeriodic() {}
 }

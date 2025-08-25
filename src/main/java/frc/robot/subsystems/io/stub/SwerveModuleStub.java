@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import frc.robot.subsystems.io.SwerveModuleIO;
 import frc.robot.utils.ModuleConstants;
 
+@SuppressWarnings("java:S1186") // Methods intentionally left blank
 public class SwerveModuleStub implements SwerveModuleIO {
 
     @SuppressWarnings("unused")
@@ -17,34 +18,22 @@ public class SwerveModuleStub implements SwerveModuleIO {
     }
 
     @Override
-    public void applyDriveTalonFXConfig(TalonFXConfiguration configuration) {
-        /* stub */
-    }
+    public void applyDriveTalonFXConfig(TalonFXConfiguration configuration) {}
 
     @Override
-    public void applyTurnTalonFXConfig(TalonFXConfiguration configuration) {
-        /* stub */
-    }
+    public void applyTurnTalonFXConfig(TalonFXConfiguration configuration) {}
 
     @Override
-    public void setDriveMotorVoltage(double newValue) {
-        /* stub */
-    }
+    public void setDriveMotorVoltage(double newValue) {}
 
     @Override
-    public void setTurnMotorVoltage(double newValue) {
-        /* stub */
-    }
+    public void setTurnMotorVoltage(double newValue) {}
 
     @Override
-    public void setTurnMotorMotionMagic(MotionMagicExpoVoltage request) {
-        /* stub */
-    }
+    public void setTurnMotorMotionMagic(MotionMagicExpoVoltage request) {}
 
     @Override
-    public void setDriveMotorMotionMagic(MotionMagicVelocityVoltage request) {
-        /* stub */
-    }
+    public void setDriveMotorMotionMagic(MotionMagicVelocityVoltage request) {}
 
     @Override
     public double getDriveMotorVoltage() {
@@ -57,14 +46,10 @@ public class SwerveModuleStub implements SwerveModuleIO {
     }
 
     @Override
-    public void setDriveMotorPercent(double newValue) {
-        /* stub */
-    }
+    public void setDriveMotorPercent(double newValue) {}
 
     @Override
-    public void setTurnMotorPercent(double newValue) {
-        /* stub */
-    }
+    public void setTurnMotorPercent(double newValue) {}
 
     @Override
     public double getDriveMotorPercent() {
@@ -107,19 +92,13 @@ public class SwerveModuleStub implements SwerveModuleIO {
     }
 
     @Override
-    public void setDriveMechanismPosition(double newValue) {
-        /* stub */
-    }
+    public void setDriveMechanismPosition(double newValue) {}
 
     @Override
-    public void setTurnMechanismPosition(double newValue) {
-        /* stub */
-    }
+    public void setTurnMechanismPosition(double newValue) {}
 
     @Override
-    public void close() throws Exception {
-        /* stub */
-    }
+    public void close() throws Exception {}
 
     @Override
     public double getDriveMotorCurrentDrawAmps() {
@@ -132,7 +111,5 @@ public class SwerveModuleStub implements SwerveModuleIO {
     }
 
     @Override
-    public void simulationPeriodic() {
-        /* stub */
-    }
+    public void simulationPeriodic() {}
 }

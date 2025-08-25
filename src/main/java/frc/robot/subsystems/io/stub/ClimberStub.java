@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import frc.robot.subsystems.io.ClimberIO;
 
+@SuppressWarnings("java:S1186") // Methods intentionally left blank
 public class ClimberStub implements ClimberIO {
 
     @SuppressWarnings("unused")
@@ -14,24 +15,16 @@ public class ClimberStub implements ClimberIO {
     }
 
     @Override
-    public void applyTalonFXConfig(TalonFXConfiguration configuration) {
-        /* stub */
-    }
+    public void applyTalonFXConfig(TalonFXConfiguration configuration) {}
 
     @Override
-    public void setVoltage(double outputVolts) {
-        /* stub */
-    }
+    public void setVoltage(double outputVolts) {}
 
     @Override
-    public void setPosition(double newValue) {
-        /* stub */
-    }
+    public void setPosition(double newValue) {}
 
     @Override
-    public void setMotionMagic(MotionMagicVoltage request) {
-        /* stub */
-    }
+    public void setMotionMagic(MotionMagicVoltage request) {}
 
     @Override
     public double getPosition() {
@@ -44,9 +37,7 @@ public class ClimberStub implements ClimberIO {
     }
 
     @Override
-    public void setPercent(double newValue) {
-        /* stub */
-    }
+    public void setPercent(double newValue) {}
 
     @Override
     public double getPercent() {
@@ -64,17 +55,11 @@ public class ClimberStub implements ClimberIO {
     }
 
     @Override
-    public void setRatchet(double value) {
-        /* stub */
-    }
+    public void setRatchet(double value) {}
 
     @Override
-    public void simulationPeriodic() {
-        /* stub */
-    }
+    public void simulationPeriodic() {}
 
     @Override
-    public void close() {
-        /* stub */
-    }
+    public void close() {}
 }

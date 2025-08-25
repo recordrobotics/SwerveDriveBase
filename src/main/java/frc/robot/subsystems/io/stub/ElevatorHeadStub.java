@@ -2,6 +2,7 @@ package frc.robot.subsystems.io.stub;
 
 import frc.robot.subsystems.io.ElevatorHeadIO;
 
+@SuppressWarnings("java:S1186") // Methods intentionally left blank
 public class ElevatorHeadStub implements ElevatorHeadIO {
 
     @SuppressWarnings("unused")
@@ -12,14 +13,10 @@ public class ElevatorHeadStub implements ElevatorHeadIO {
     }
 
     @Override
-    public void setVoltage(double outputVolts) {
-        /* stub */
-    }
+    public void setVoltage(double outputVolts) {}
 
     @Override
-    public void setPosition(double newValue) {
-        /* stub */
-    }
+    public void setPosition(double newValue) {}
 
     @Override
     public double getPosition() {
@@ -37,9 +34,7 @@ public class ElevatorHeadStub implements ElevatorHeadIO {
     }
 
     @Override
-    public void setPercent(double newValue) {
-        /* stub */
-    }
+    public void setPercent(double newValue) {}
 
     @Override
     public double getPercent() {
@@ -57,12 +52,8 @@ public class ElevatorHeadStub implements ElevatorHeadIO {
     }
 
     @Override
-    public void close() throws Exception {
-        /* stub */
-    }
+    public void close() throws Exception {}
 
     @Override
-    public void simulationPeriodic() {
-        /* stub */
-    }
+    public void simulationPeriodic() {}
 }
