@@ -364,6 +364,7 @@ public final class ElevatorHead extends KillableSubsystem implements PoweredSubs
     }
 
     /** frees up all hardware allocations */
+    @Override
     public void close() throws Exception {
         io.close();
     }
