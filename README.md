@@ -5,6 +5,7 @@
       <a href="https://github.com/recordrobotics/2025_Control/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/recordrobotics/2025_Control/actions/workflows/ci.yml/badge.svg?branch=main"></a>
       <a href="https://docs.recordrobotics.org/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/2024-control?logo=readthedocs&labelColor=%23556bc2"></a>
       <a href="https://github.com/recordrobotics/2025_Control/actions/workflows/test.yml"><img alt="Unit Tests Status" src="https://img.shields.io/github/actions/workflow/status/recordrobotics/2025_Control/test.yml?logo=gradle&label=tests&labelColor=purple"></a>
+      <a href="https://sonarcloud.io/summary/new_code?id=recordrobotics_2025_Control"><img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=recordrobotics_2025_Control&metric=alert_status"></a>
   </p>
 </h1>
 
