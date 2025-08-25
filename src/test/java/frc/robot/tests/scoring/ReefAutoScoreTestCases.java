@@ -79,7 +79,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> blue1() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Blue")), 1);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("BLUE")), 1);
         }
     }
 
@@ -87,7 +87,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> blue2() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Blue")), 2);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("BLUE")), 2);
         }
     }
 
@@ -95,7 +95,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> blue3() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Blue")), 3);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("BLUE")), 3);
         }
     }
 
@@ -103,7 +103,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> blue4() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Blue")), 4);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("BLUE")), 4);
         }
     }
 
@@ -111,7 +111,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> red1() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Red")), 1);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("RED")), 1);
         }
     }
 
@@ -119,7 +119,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> red2() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Red")), 2);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("RED")), 2);
         }
     }
 
@@ -127,7 +127,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> red3() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Red")), 3);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("RED")), 3);
         }
     }
 
@@ -135,7 +135,7 @@ public class ReefAutoScoreTestCases {
         @TestFactory
         Stream<DynamicTest> red4() {
             return testFactory(
-                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("Red")), 4);
+                    Arrays.stream(CoralPosition.values()).filter(c -> c.name().startsWith("RED")), 4);
         }
     }
 }
