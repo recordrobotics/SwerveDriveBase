@@ -277,25 +277,30 @@ public final class Constants {
             }
         }
 
-        public enum SourcePosition implements IGamePosition {
-            BLUE_OUTER_LEFT(13, 1),
-            BLUE_OUTER_RIGHT(12, 1),
-            BLUE_INNER_LEFT(13, 0),
-            BLUE_INNER_RIGHT(12, 0),
+        public static final String SOURCE_LEFT_REGION = "Left";
+        public static final String SOURCE_RIGHT_REGION = "Right";
 
-            RED_OUTER_LEFT(1, 1),
-            RED_OUTER_RIGHT(2, 1),
-            RED_INNER_LEFT(1, 0),
-            RED_INNER_RIGHT(2, 0);
+        public enum SourcePosition implements IGamePosition {
+            BLUE_OUTER_LEFT(13, 1, SOURCE_LEFT_REGION),
+            BLUE_OUTER_RIGHT(12, 1, SOURCE_RIGHT_REGION),
+            BLUE_INNER_LEFT(13, 0, SOURCE_LEFT_REGION),
+            BLUE_INNER_RIGHT(12, 0, SOURCE_RIGHT_REGION),
+
+            RED_OUTER_LEFT(1, 1, SOURCE_LEFT_REGION),
+            RED_OUTER_RIGHT(2, 1, SOURCE_RIGHT_REGION),
+            RED_INNER_LEFT(1, 0, SOURCE_LEFT_REGION),
+            RED_INNER_RIGHT(2, 0, SOURCE_RIGHT_REGION);
 
             private Pose2d pose;
+            private String region;
 
-            private SourcePosition(Pose2d pose) {
+            private SourcePosition(Pose2d pose, String region) {
                 this.pose = pose;
+                this.region = region;
             }
 
-            private SourcePosition(int apriltagId, int side) {
-                this(calculatePoseFromAprilTag(apriltagId, side));
+            private SourcePosition(int apriltagId, int side, String region) {
+                this(calculatePoseFromAprilTag(apriltagId, side), region);
             }
 
             private static Pose2d calculatePoseFromAprilTag(int apriltagId, int side) {
@@ -316,6 +321,10 @@ public final class Constants {
 
             public Pose2d getPose() {
                 return pose;
+            }
+
+            public String getRegion() {
+                return region;
             }
         }
 
