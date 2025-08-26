@@ -3,6 +3,7 @@ package frc.robot.utils.modifiers;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -42,6 +43,10 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
     public static final double MIN_DRIVER_VELOCITY_DIFFERENCE_FOR_ASSIST_CANCEL = 0.5;
     public static final double MIN_DRIVER_ROTATION_VELOCITY_DIFFERENCE_FOR_ASSIST_CANCEL = Units.degreesToRadians(40);
     public static final double CORAL_VELOCITY_TANGENCY_THRESHOLD = 0.85;
+
+    public static final double MIN_ASSIST_WEIGHT = 0.2;
+    public static final double MAX_ASSIST_WEIGHT = 1.0;
+    public static final double WEIGHT_HALF_SCALE_DISTANCE = 3.0;
 
     @Override
     public boolean apply(DrivetrainControl control) {
@@ -106,8 +111,10 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
         Logger.recordOutput(
                 "GroundIntakeAssist/TargetPose", new Pose2d(robotPose.getTranslation(), new Rotation2d(angle)));
 
-        Translation2d targetVelocity = DrivetrainControl.fieldToRobot(robotToCoral, robotPose.getRotation())
-                .times(Constants.Assists.GROUND_ASSIST_TRANSLATION_P);
+        Translation2d targetVelocity = clipVelocity(
+                DrivetrainControl.fieldToRobot(robotToCoral, robotPose.getRotation())
+                        .times(Constants.Assists.GROUND_ASSIST_TRANSLATION_P),
+                Constants.Swerve.ROBOT_MAX_SPEED / SimpleMath.SQRT2);
 
         double angleDiff =
                 normalizeAngleDifference(angle - robotPose.getRotation().getRadians());
@@ -117,7 +124,11 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
             return false;
         }
 
-        applyAssistVelocity(control, targetVelocity, targetAngularVelocity);
+        double distanceToCoral = robotPose
+                .getTranslation()
+                .getDistance(closestCoral.getTranslation().toTranslation2d());
+
+        applyAssistVelocity(control, targetVelocity, targetAngularVelocity, distanceToCoral);
         logFailReason(FailReason.NONE);
         return true;
     }
@@ -130,6 +141,15 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
         if (angleDiff > Math.PI) angleDiff -= SimpleMath.PI2;
         if (angleDiff < -Math.PI) angleDiff += SimpleMath.PI2;
         return angleDiff;
+    }
+
+    private static Translation2d clipVelocity(Translation2d velocity, double maxVelocity) {
+        double speed = velocity.getNorm();
+        if (speed > maxVelocity) {
+            return velocity.div(speed).times(maxVelocity);
+        } else {
+            return velocity;
+        }
     }
 
     private static boolean isDriverMovementCompatible(
@@ -165,11 +185,18 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
     }
 
     private static void applyAssistVelocity(
-            DrivetrainControl control, Translation2d targetVelocity, Rotation2d targetAngularVelocity) {
+            DrivetrainControl control,
+            Translation2d targetVelocity,
+            Rotation2d targetAngularVelocity,
+            double distanceToCoral) {
+
+        // Inverse distance weight 0-1
+        double t = 1.0 / (distanceToCoral / WEIGHT_HALF_SCALE_DISTANCE + 1.0);
+
         control.applyWeightedVelocity(
                 new Transform2d(
                         targetVelocity.getX(), control.getTargetVelocity().getY(), targetAngularVelocity),
-                1.0 /* MathUtil.interpolate(0.6, 1.0, MathUtil.inverseInterpolate(0.1, 0.5, driverSpeed)) */);
+                MathUtil.interpolate(MIN_ASSIST_WEIGHT, MAX_ASSIST_WEIGHT, t));
     }
 
     private static List<Pose3d> findCoralInDirection(

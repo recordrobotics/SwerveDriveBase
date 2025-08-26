@@ -446,7 +446,7 @@ public final class Constants {
         public static final Distance GROUND_ASSIST_MAX_CORAL_DISTANCE = Meters.of(4);
         public static final Angle GROUND_ASSIST_MAX_ANGLE_ERROR = Degrees.of(60);
         public static final double GROUND_ASSIST_ROTATION_P = 5.0;
-        public static final double GROUND_ASSIST_TRANSLATION_P = 6.0;
+        public static final double GROUND_ASSIST_TRANSLATION_P = 5.0;
     }
 
     public final class Climber {
