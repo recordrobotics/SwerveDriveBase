@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.CoralIntake.CoralIntakeState;
 import frc.robot.utils.SimpleMath;
+import frc.robot.utils.field.FieldIntersection;
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -188,8 +189,11 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
                 double angleDiff =
                         normalizeAngleDifference(angle - robotPose.getRotation().getRadians());
 
-                // Ignore if the angle is too large
-                if (Math.abs(angleDiff) <= Constants.Assists.GROUND_ASSIST_MAX_ANGLE_ERROR.in(Radians)) {
+                boolean reachable = !FieldIntersection.collidesWithField(
+                        robotPose.getTranslation(), coral.getTranslation().toTranslation2d());
+
+                // Ignore if the angle is too large or not reachable
+                if (reachable && Math.abs(angleDiff) <= Constants.Assists.GROUND_ASSIST_MAX_ANGLE_ERROR.in(Radians)) {
                     corals.add(coral);
                 }
             }

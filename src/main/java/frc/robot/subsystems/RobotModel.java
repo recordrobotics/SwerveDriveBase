@@ -17,6 +17,7 @@ import frc.robot.RobotContainer;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
 import frc.robot.utils.ManagedSubsystemBase;
+import frc.robot.utils.field.FieldIntersection;
 import java.util.List;
 import java.util.function.Supplier;
 import org.ironmaple.simulation.SimulatedArena;
@@ -419,6 +420,7 @@ public final class RobotModel extends ManagedSubsystemBase {
                             Constants.Game.AlgaePosition.values(),
                             Constants.Game.SourcePosition.values(),
                             Constants.Game.ProcessorPosition.values()));
+            FieldIntersection.logPolygons();
         }
     }
 
