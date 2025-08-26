@@ -3,6 +3,7 @@ package frc.robot.utils.field;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.utils.SimpleMath;
 import java.util.Arrays;
 import org.ironmaple.utils.FieldMirroringUtils;
 import org.littletonrobotics.junction.Logger;
@@ -97,6 +98,10 @@ public final class FieldIntersection {
      * @return True if the line segment intersects any field obstacles, false otherwise.
      */
     public static boolean collidesWithField(Translation2d a, Translation2d b) {
+        if (!SimpleMath.isInField(a) || !SimpleMath.isInField(b)) {
+            return true;
+        }
+
         return intersection.intersectsAny((float) a.getX(), (float) a.getY(), (float) b.getX(), (float) b.getY(), true);
     }
 

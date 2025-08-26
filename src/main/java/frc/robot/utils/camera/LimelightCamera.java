@@ -334,7 +334,7 @@ public class LimelightCamera implements IVisionCamera {
         if (DashboardUI.Autonomous.isForceMT1Pressed()) {
             currentMeasurementStdDevs = mt1Confidence;
             unsafeEstimate = new VisionCameraEstimate(measurement);
-        } else if (measurement.tagCount > 0 && SimpleMath.isPoseInField(measurement.pose)) {
+        } else if (measurement.tagCount > 0 && SimpleMath.isInField(measurement.pose)) {
             if (measurement.avgTagDist < mt1MaxDistance) {
                 currentMeasurementStdDevs = mt1Confidence;
                 unsafeEstimate = new VisionCameraEstimate(measurement);

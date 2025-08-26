@@ -238,7 +238,7 @@ public class PhotonVisionCamera implements IVisionCamera {
             return closeEst;
         }
 
-        if (closeEst.tagCount() > 0 && SimpleMath.isPoseInField(closeEst.pose())) {
+        if (closeEst.tagCount() > 0 && SimpleMath.isInField(closeEst.pose())) {
             if (closeEst.avgTagDist() < closeMaxDistance) {
                 currentMeasurementStdDevs = confidenceClose;
             } else {

@@ -64,7 +64,14 @@ public final class SimpleMath {
         return Math.signum(input) * proportion * sensitivity;
     }
 
-    public static boolean isPoseInField(Pose2d pose) {
+    public static boolean isInField(Pose2d pose) {
+        return pose.getX() >= 0
+                && pose.getY() >= 0
+                && pose.getX() <= FlippingUtil.fieldSizeX
+                && pose.getY() <= FlippingUtil.fieldSizeY;
+    }
+
+    public static boolean isInField(Translation2d pose) {
         return pose.getX() >= 0
                 && pose.getY() >= 0
                 && pose.getX() <= FlippingUtil.fieldSizeX
