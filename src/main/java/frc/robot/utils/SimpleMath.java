@@ -65,10 +65,7 @@ public final class SimpleMath {
     }
 
     public static boolean isInField(Pose2d pose) {
-        return pose.getX() >= 0
-                && pose.getY() >= 0
-                && pose.getX() <= FlippingUtil.fieldSizeX
-                && pose.getY() <= FlippingUtil.fieldSizeY;
+        return isInField(pose.getTranslation());
     }
 
     public static boolean isInField(Translation2d pose) {
