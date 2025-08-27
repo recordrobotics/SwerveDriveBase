@@ -11,12 +11,14 @@
         "blue",
         "debouncer",
         "Debouncers",
+        "dio",
         "estimatedkV",
         "fiducials",
         "fpga",
         "holonomic",
         "imu",
         "ispe",
+        "jacoco",
         "jni",
         "lljson",
         "LLOS",
@@ -24,6 +26,7 @@
         "llrobot",
         "log",
         "lvuser",
+        "mikepenz",
         "mjpeg",
         "MMEXPO",
         "mode",
@@ -32,7 +35,6 @@
         "NOSONAR",
         "nums",
         "pid",
-        "dio",
         "pnp",
         "priorityid",
         "pwm",
@@ -44,6 +46,7 @@
         "Ruckig",
         "Simulatable",
         "solve",
+        "SonarQube",
         "STDDEV",
         "subsytems",
         "SVPRO",
@@ -55,10 +58,16 @@
         "txnc",
         "tync",
         "wpi",
+        "wpilib",
         "wpilibj"
     ],
     // flagWords - list of words to be always considered incorrect
     "flagWords": [
         "FLACON"
+    ],
+    "ignorePaths": [
+        "*.gradle",
+        "*.bat",
+        "gradlew"
     ]
 }
