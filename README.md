@@ -6,6 +6,7 @@
       <a href="https://docs.recordrobotics.org/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/2024-control?logo=readthedocs&labelColor=%23556bc2"></a>
       <a href="https://github.com/recordrobotics/2025_Control/actions/workflows/ci.yml"><img alt="Unit Tests Status" src="https://img.shields.io/github/check-runs/recordrobotics/2025_Control/main?nameFilter=JUnit%20Test%20Report&logo=gradle&label=tests&labelColor=purple"></a>
       <a href="https://sonarcloud.io/summary/new_code?id=recordrobotics_2025_Control"><img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=recordrobotics_2025_Control&metric=alert_status"></a>
+      <a href="https://sonarcloud.io/summary/new_code?id=recordrobotics_2025_Control"><img alt="Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=recordrobotics_2025_Control&metric=coverage"></a>
   </p>
 </h1>
 
