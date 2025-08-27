@@ -21,7 +21,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-public class ReefAutoScoreTestCases {
+@SuppressWarnings("java:S2187") // dynamic test cases
+public class ReefAutoScoreTests {
 
     private static Stream<DynamicTest> testFactory(Stream<CoralPosition> branches, int level) {
         return branches.map(coralPosition -> {

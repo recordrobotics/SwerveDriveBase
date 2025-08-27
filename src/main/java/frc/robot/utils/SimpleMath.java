@@ -2,12 +2,9 @@ package frc.robot.utils;
 
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.MathSharedStore;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import java.util.Random;
 
 public final class SimpleMath {
@@ -30,19 +27,11 @@ public final class SimpleMath {
      *     also be outside the output range
      */
     public static double remap(double value, double inputMin, double inputMax, double outputMin, double outputMax) {
-        return (value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
-    }
+        if (Math.abs(inputMin - inputMax) < 1e-9) {
+            throw new IllegalArgumentException("Input range cannot be zero");
+        }
 
-    /**
-     * Remaps a value between 0 and 1 to a range, while clamping inside the range
-     *
-     * @param value01 Input value BETWEEN 0 and 1
-     * @param min Min range of output value
-     * @param max Max range of output value
-     * @return Value in range of output range (ALWAYS INSIDE, CLAMPED)
-     */
-    public static double remap(double value01, double min, double max) {
-        return remap(MathUtil.clamp(value01, 0, 1), 0, 1, min, max);
+        return (value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
     }
 
     /**
@@ -73,34 +62,6 @@ public final class SimpleMath {
                 && pose.getY() >= 0
                 && pose.getX() <= FlippingUtil.fieldSizeX
                 && pose.getY() <= FlippingUtil.fieldSizeY;
-    }
-
-    /**
-     * Converts a Translation3d to a Rotation3d
-     *
-     * <p>This function takes a Translation3d and returns a Rotation3d object with the yaw and pitch
-     * calculated from the translation. The roll is set to 0 as it's not required.
-     *
-     * <p>The yaw is calculated as the angle from the X axis to the point (x, y) in the XY plane. The
-     * pitch is calculated as the angle from the XY plane to the point (x, y, z) in 3D space.
-     *
-     * @param translation The Translation3d to convert
-     * @return A Rotation3d with the calculated yaw and pitch
-     */
-    public static Rotation3d translationToRotation(Translation3d translation) {
-        double x = translation.getX();
-        double y = translation.getY();
-        double z = translation.getZ();
-
-        // Calculate yaw (rotation around Z axis)
-        double yaw = Math.atan2(y, x);
-
-        // Calculate pitch (rotation around Y axis)
-        double horizontalDistance = Math.sqrt(x * x + y * y);
-        double pitch = Math.atan2(z, horizontalDistance);
-
-        // Roll is set to 0 as it's not required
-        return new Rotation3d(0.0, pitch, yaw);
     }
 
     public static double slewRateLimitLinear(double current, double next, double dt, double maxVelocity) {
