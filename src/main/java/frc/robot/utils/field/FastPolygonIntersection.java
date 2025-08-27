@@ -121,6 +121,7 @@ public final class FastPolygonIntersection {
     }
 
     // Fast segment intersection test (cross product)
+    @SuppressWarnings("java:S1541") // Math repeats for each edge, no cycles
     private static boolean segmentsIntersect(
             float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
 
@@ -129,10 +130,18 @@ public final class FastPolygonIntersection {
         float d3 = direction(x1, y1, x2, y2, x3, y3);
         float d4 = direction(x1, y1, x2, y2, x4, y4);
 
-        return (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)));
+        return (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
+                || (Math.abs(d1) < 1e-9f && onSegment(x3, y3, x4, y4, x1, y1))
+                || (Math.abs(d2) < 1e-9f && onSegment(x3, y3, x4, y4, x2, y2))
+                || (Math.abs(d3) < 1e-9f && onSegment(x1, y1, x2, y2, x3, y3))
+                || (Math.abs(d4) < 1e-9f && onSegment(x1, y1, x2, y2, x4, y4));
     }
 
     private static float direction(float xi, float yi, float xj, float yj, float xk, float yk) {
         return (xk - xi) * (yj - yi) - (xj - xi) * (yk - yi);
+    }
+
+    private static boolean onSegment(float xi, float yi, float xj, float yj, float xk, float yk) {
+        return Math.min(xi, xj) <= xk && xk <= Math.max(xi, xj) && Math.min(yi, yj) <= yk && yk <= Math.max(yi, yj);
     }
 }
