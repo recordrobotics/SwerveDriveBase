@@ -36,13 +36,13 @@ jobs:
     - name: Cache SonarQube packages
       uses: actions/cache@v4
       with:
-        path: ~/.sonar/cache
+        path: /root/.sonar/cache
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
     - name: Cache Gradle packages
       uses: actions/cache@v4
       with:
-        path: ~/.gradle/caches
+        path: /root/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: ${{ runner.os }}-gradle
     # Run tests and generate code coverage report
