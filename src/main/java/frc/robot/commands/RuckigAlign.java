@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.utils.AutoPath;
 import frc.robot.utils.SimpleMath;
 import java.util.ArrayList;
 import java.util.List;
@@ -345,7 +344,7 @@ public class RuckigAlign extends Command {
         double vr = rPid.calculate(currentPose.getRotation().getRadians(), newPosition[2])
                 + feedforward(newVelocity[2], newAcceleration[2], newJerk[2]);
 
-        AutoPath.CONTROL_MODIFER.drive(
+        RobotContainer.AUTO_CONTROL_MODIFER.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, vr), currentPose.getRotation()));
 
         output.passToInput(input);

@@ -72,6 +72,7 @@ import frc.robot.utils.SysIdManager.SysIdRoutine;
 import frc.robot.utils.libraries.Elastic;
 import frc.robot.utils.libraries.Elastic.Notification;
 import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
+import frc.robot.utils.modifiers.AutoControlModifier;
 import frc.robot.utils.modifiers.GroundIntakeAssist;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
@@ -97,6 +98,8 @@ public final class RobotContainer {
 
     public static final double AUTO_ALIGN_FIRST_WAYPOINT_TIMEOUT = 2.0;
     public static final double AUTO_ALIGN_SECOND_WAYPOINT_TIMEOUT = 1.0;
+
+    public static final AutoControlModifier AUTO_CONTROL_MODIFER = new AutoControlModifier();
 
     public static Drivetrain drivetrain;
     public static PoseSensorFusion poseSensorFusion;
@@ -154,6 +157,7 @@ public final class RobotContainer {
             humanPlayerSimulation = new HumanPlayerSimulation();
         }
 
+        drivetrain.modifiers.add(0, AUTO_CONTROL_MODIFER);
         drivetrain.modifiers.add(new GroundIntakeAssist());
 
         model = new RobotModel();

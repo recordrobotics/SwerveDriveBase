@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import org.littletonrobotics.junction.Logger;
 
-public class AutoPathControlModifier extends OneshotControlModifier {
+public class AutoControlModifier extends OneshotControlModifier {
 
     private ChassisSpeeds speeds;
 
@@ -16,7 +16,7 @@ public class AutoPathControlModifier extends OneshotControlModifier {
 
     @Override
     protected boolean perform(DrivetrainControl control) {
-        Logger.recordOutput("AutoPathControlModifier/Speeds", speeds);
+        Logger.recordOutput("AutoControlModifier/Speeds", speeds);
 
         control.applyWeightedVelocity(
                 new Transform2d(

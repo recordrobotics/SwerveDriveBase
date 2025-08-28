@@ -25,14 +25,11 @@ import frc.robot.commands.WaypointAlign;
 import frc.robot.commands.legacy.CoralIntakeFromSource;
 import frc.robot.commands.legacy.ElevatorMoveThenAlgaeGrab;
 import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
-import frc.robot.utils.modifiers.AutoPathControlModifier;
 import java.util.Optional;
 import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
 public final class AutoPath {
-
-    public static final AutoPathControlModifier CONTROL_MODIFER = new AutoPathControlModifier();
 
     private AutoPath() {}
 
@@ -45,8 +42,6 @@ public final class AutoPath {
             e.printStackTrace();
             Notifications.send(NotificationLevel.ERROR, "AutoPath failed to load config", "Error message in console");
         }
-
-        RobotContainer.drivetrain.modifiers.add(0, CONTROL_MODIFER);
 
         // Registering named commands (so that the pathplanner can call them by name)
 
@@ -108,7 +103,7 @@ public final class AutoPath {
                 RobotContainer.drivetrain::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
 
                 // Method that will drive the robot given ROBOT RELATIVE speeds
-                (speeds, feedforwards) -> CONTROL_MODIFER.drive(speeds),
+                (speeds, feedforwards) -> RobotContainer.AUTO_CONTROL_MODIFER.drive(speeds),
                 Constants.Swerve.PP_DRIVE_CONTROLLER,
                 config,
 
