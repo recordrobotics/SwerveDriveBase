@@ -1,7 +1,6 @@
 package frc.robot.dashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,12 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldStartingLocation;
-import frc.robot.commands.auto.BargeLeftAuto;
-import frc.robot.commands.auto.BargeRightAuto;
+import frc.robot.commands.auto.CreateAutoRoutineException;
+import frc.robot.commands.auto.IAutoRoutine;
 import frc.robot.utils.libraries.Elastic;
-import java.io.IOException;
 import java.util.EnumSet;
-import org.json.simple.parser.ParseException;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 @SuppressWarnings("java:S2325")
@@ -39,17 +37,30 @@ public final class AutonomousLayout extends AbstractLayout {
         SmartDashboard.putBoolean("Autonomous/ForceMT1", false);
     }
 
-    public void setupAutoChooser() {
+    /**
+     * Sets up the auto chooser with the given routines in addition to pathplanner autos loaded by default.
+     * @param routines
+     */
+    @SafeVarargs
+    public final void setupAutoChooser(final Supplier<IAutoRoutine>... routines) {
         autoChooser = new LoggedDashboardChooser<>("Auto Code", AutoBuilder.buildAutoChooser());
-        try {
-            autoChooser.addOption("CMD_BargeLeftOuter", new BargeLeftAuto());
-        } catch (FileVersionException | IOException | ParseException e) {
-            e.printStackTrace();
-        }
-        try {
-            autoChooser.addOption("CMD_BargeRightOuter", new BargeRightAuto());
-        } catch (FileVersionException | IOException | ParseException e) {
-            e.printStackTrace();
+
+        // Add non-pathplanner autos
+        for (Supplier<IAutoRoutine> routineSupplier : routines) {
+
+            IAutoRoutine routine;
+            try {
+                routine = routineSupplier.get();
+            } catch (CreateAutoRoutineException e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            if (routine instanceof Command cmd) {
+                autoChooser.addOption(routine.getAutoName(), cmd);
+            } else {
+                throw new IllegalArgumentException("Auto routine does not implement Command: " + routine.getAutoName());
+            }
         }
     }
 

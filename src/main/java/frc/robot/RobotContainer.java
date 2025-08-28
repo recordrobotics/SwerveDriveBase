@@ -36,6 +36,8 @@ import frc.robot.commands.ProcessorScore;
 import frc.robot.commands.ReefAlign;
 import frc.robot.commands.VibrateXbox;
 import frc.robot.commands.WaypointAlign;
+import frc.robot.commands.auto.BargeLeftAuto;
+import frc.robot.commands.auto.BargeRightAuto;
 import frc.robot.commands.auto.PlannedAuto;
 import frc.robot.commands.legacy.CoralIntakeFromGroundToggled;
 import frc.robot.commands.legacy.CoralIntakeFromSource;
@@ -165,7 +167,7 @@ public final class RobotContainer {
         // Sets up auto path
         AutoPath.initialize();
 
-        DashboardUI.Autonomous.setupAutoChooser();
+        DashboardUI.Autonomous.setupAutoChooser(BargeLeftAuto::new, BargeRightAuto::new);
 
         // Sets up Control scheme chooser
         DashboardUI.Overview.addControls(
