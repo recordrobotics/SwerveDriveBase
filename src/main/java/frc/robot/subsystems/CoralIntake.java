@@ -42,6 +42,13 @@ import org.littletonrobotics.junction.Logger;
 
 public final class CoralIntake extends KillableSubsystem implements PoweredSubsystem, EncoderResettableSubsystem {
 
+    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(4.0).per(Second);
+    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(2.3);
+    private static final Time SYSID_TIMEOUT = Seconds.of(1.0);
+
+    private static final double POSITION_TOLERANCE = 0.15;
+    private static final double VELOCITY_TOLERANCE = 1.05;
+
     private final CoralIntakeIO io;
 
     private final PIDController pid =
@@ -63,9 +70,11 @@ public final class CoralIntake extends KillableSubsystem implements PoweredSubsy
     private double wheelVelocityCached = 0;
     private double wheelVoltageCached = 0;
 
-    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(4.0).per(Second);
-    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(2.3);
-    private static final Time SYSID_TIMEOUT = Seconds.of(1.0);
+    private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
+    private double lastSpeed = 0;
+
+    private final SysIdRoutine sysIdRoutineWheel;
+    private final SysIdRoutine sysIdRoutineArm;
 
     public CoralIntake(CoralIntakeIO io) {
         this.io = io;
@@ -131,9 +140,6 @@ public final class CoralIntake extends KillableSubsystem implements PoweredSubsy
             throw new IllegalStateException("CoralIntakeIO is not a simulation");
         }
     }
-
-    private final SysIdRoutine sysIdRoutineWheel;
-    private final SysIdRoutine sysIdRoutineArm;
 
     public enum CoralIntakeState {
         UP,
@@ -205,9 +211,6 @@ public final class CoralIntake extends KillableSubsystem implements PoweredSubsy
         }
     }
 
-    private static final double POSITION_TOLERANCE = 0.15;
-    private static final double VELOCITY_TOLERANCE = 1.05;
-
     public boolean armAtGoal() {
         return SimpleMath.isWithinTolerance(getArmAngle(), currentSetpoint.position, POSITION_TOLERANCE)
                 && SimpleMath.isWithinTolerance(getArmVelocity(), 0, VELOCITY_TOLERANCE);
@@ -251,9 +254,6 @@ public final class CoralIntake extends KillableSubsystem implements PoweredSubsy
                 break;
         }
     }
-
-    private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
-    private double lastSpeed = 0;
 
     @Override
     public void periodicManaged() {

@@ -29,6 +29,7 @@ public class SubsystemManager extends SubsystemBase {
     private final Watchdog watchdog = new Watchdog(TimedRobot.kDefaultPeriod, () -> {});
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final List<Future<?>> futures = new ArrayList<>();
 
     /**
      * Returns the Scheduler instance.
@@ -60,8 +61,6 @@ public class SubsystemManager extends SubsystemBase {
             }
         }
     }
-
-    private final List<Future<?>> futures = new ArrayList<>();
 
     @Override
     public void periodic() {

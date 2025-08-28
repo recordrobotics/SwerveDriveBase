@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public final class PathHelper {
-    private PathHelper() {}
 
     private static final String NEXT_CONTROL = "nextControl";
     private static final String PREV_CONTROL = "prevControl";
@@ -20,6 +19,8 @@ public final class PathHelper {
     private static final String Y = "y";
 
     private static int counter = 0;
+
+    private PathHelper() {}
 
     public static int getCounter() {
         return counter;

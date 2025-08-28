@@ -27,6 +27,13 @@ import org.photonvision.targeting.TargetCorner;
 
 public class CoralDetection extends ManagedSubsystemBase {
 
+    private static final double PITCH_EXTENT = 28.7; // degrees
+    private static final double YAW_EXTENT = 27.4; // degrees
+    private static final double TRUE_PITCH_EXTENT = 40; // degrees
+    private static final double TRUE_YAW_EXTENT = 39.8; // degrees
+    private static final double ASPECT_RATIO_MIN = 0.5;
+    private static final double ASPECT_RATIO_MAX = 2.5;
+
     // no IO since simulation does not currently support non-apriltag pipelines, so no point
     private PhotonCamera camera;
     // instead simulation can choose between maple sim coral or external photonvision client
@@ -184,13 +191,6 @@ public class CoralDetection extends ManagedSubsystemBase {
     public CoralDetectionSimulationMode getSimulationMode() {
         return simulationMode;
     }
-
-    private static final double PITCH_EXTENT = 28.7; // degrees
-    private static final double YAW_EXTENT = 27.4; // degrees
-    private static final double TRUE_PITCH_EXTENT = 40; // degrees
-    private static final double TRUE_YAW_EXTENT = 39.8; // degrees
-    private static final double ASPECT_RATIO_MIN = 0.5;
-    private static final double ASPECT_RATIO_MAX = 2.5;
 
     /**
      * Uses law of sines assuming a constant height ground plane to project 2d targets into 3d

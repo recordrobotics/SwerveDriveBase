@@ -63,7 +63,6 @@ public final class Constants {
     private Constants() {}
 
     public final class Game {
-        private Game() {}
 
         public static final AprilTagFieldLayout APRILTAG_LAYOUT =
                 AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
@@ -176,8 +175,8 @@ public final class Constants {
             }
         }
 
-        private static final Distance REEF_SEGMENT_OFFSET = Meters.of(0.1743095);
-        private static final Distance SHOOTER_OFFSET = Meters.of(0.182088);
+        public static final Distance REEF_SEGMENT_OFFSET = Meters.of(0.1743095);
+        public static final Distance SHOOTER_OFFSET = Meters.of(0.182088);
 
         public enum CoralPosition implements IGamePosition {
             BLUE_A(18, 0),
@@ -206,8 +205,13 @@ public final class Constants {
             RED_K(6, 0),
             RED_L(6, 1);
 
-            private Pose2d pose;
+            public static final double FIRST_WAYPOINT_OFFSET = 0.2;
+            public static final double L1_REEF_OFFSET = 0.4;
+            public static final double L2L3_REEF_OFFSET = 0.02;
+            public static final double L4_REEF_OFFSET = 0.05;
+
             public final int apriltagId;
+            private Pose2d pose;
 
             private CoralPosition(int apriltagId, int side) {
                 this.pose = calculatePoseFromAprilTag(apriltagId, side);
@@ -227,11 +231,6 @@ public final class Constants {
                                 (side == 0 ? -REEF_SEGMENT_OFFSET.in(Meters) : REEF_SEGMENT_OFFSET.in(Meters)),
                                 Rotation2d.k180deg));
             }
-
-            public static final double FIRST_WAYPOINT_OFFSET = 0.2;
-            public static final double L1_REEF_OFFSET = 0.4;
-            public static final double L2L3_REEF_OFFSET = 0.02;
-            public static final double L4_REEF_OFFSET = 0.05;
 
             public Pose2d getFirstStagePose() {
                 return pose.transformBy(
@@ -354,6 +353,8 @@ public final class Constants {
                 return pose;
             }
         }
+
+        private Game() {}
     }
 
     public enum FieldStartingLocation {
@@ -377,7 +378,6 @@ public final class Constants {
     }
 
     public final class Align {
-        private Align() {}
 
         public static final double MAX_VELOCITY = Constants.Swerve.ROBOT_MAX_SPEED; // m/s
         public static final double MAX_ANGULAR_VELOCITY = 1.8; // rad/s
@@ -399,10 +399,11 @@ public final class Constants {
         public static final double ELEVATOR_START_MOVE_DISTANCE = 1.5;
 
         public static final double ADDITIONAL_OFFSET = 0.02;
+
+        private Align() {}
     }
 
     public final class PhotonVision {
-        private PhotonVision() {}
 
         public static final String PHOTON_L1_NAME = "photon-l1";
         public static final String PHOTON_SOURCE_NAME = "photon-source";
@@ -424,10 +425,11 @@ public final class Constants {
         public static final int CORAL_ID = 1;
 
         public static final double ROT_STD_DEV_WHEN_TRUSTING = 4;
+
+        private PhotonVision() {}
     }
 
     public final class Limelight {
-        private Limelight() {}
 
         public static final String LIMELIGHT_LEFT_NAME = "limelight-left";
         public static final String LIMELIGHT_CENTER_NAME = "limelight-center";
@@ -438,19 +440,21 @@ public final class Constants {
                 new Translation3d(0.219412, 0.050800, 0.156247), new Rotation3d(0, Units.degreesToRadians(-27), 0));
 
         public static final double ROT_STD_DEV_WHEN_TRUSTING = 4;
+
+        private Limelight() {}
     }
 
     public final class Assists {
-        private Assists() {}
 
         public static final Distance GROUND_ASSIST_MAX_CORAL_DISTANCE = Meters.of(4);
         public static final Angle GROUND_ASSIST_MAX_ANGLE_ERROR = Degrees.of(60);
         public static final double GROUND_ASSIST_ROTATION_P = 5.0;
         public static final double GROUND_ASSIST_TRANSLATION_P = 5.0;
+
+        private Assists() {}
     }
 
     public final class Climber {
-        private Climber() {}
 
         public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(40);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(100);
@@ -488,10 +492,11 @@ public final class Constants {
         // TODO: make correct
         public static final Distance LENGTH = Meters.of(0.431);
         public static final double ANGLE_OFFSET = 0;
+
+        private Climber() {}
     }
 
     public final class ElevatorArm {
-        private ElevatorArm() {}
 
         public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(15);
         public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
@@ -523,6 +528,8 @@ public final class Constants {
         public static final double ANGLE_OFFSET = 0;
 
         public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
+
+        private ElevatorArm() {}
     }
 
     public enum ElevatorHeight {
@@ -538,6 +545,9 @@ public final class Constants {
         GROUND_ALGAE_PROCESSOR(0.04, Units.degreesToRadians(5)),
         PROCESSOR_SCORE(0.04, Units.degreesToRadians(-60)),
         BARGE_ALGAE(1.309, Units.degreesToRadians(110));
+
+        private static final double HEIGHT_DIFFERENCE_TOLERANCE = 0.1; // meters
+        private static final double ANGLE_DIFFERENCE_TOLERANCE = Units.degreesToRadians(4); // radians
 
         private double height;
         private double armAngleRadians;
@@ -555,9 +565,6 @@ public final class Constants {
             return armAngleRadians;
         }
 
-        private static final double HEIGHT_DIFFERENCE_TOLERANCE = 0.1; // meters
-        private static final double ANGLE_DIFFERENCE_TOLERANCE = Units.degreesToRadians(4); // radians
-
         public double getDifference(double height, double angle) {
             return Math.abs(this.height - height) / HEIGHT_DIFFERENCE_TOLERANCE
                     + Math.abs(this.armAngleRadians - angle) / ANGLE_DIFFERENCE_TOLERANCE;
@@ -565,7 +572,6 @@ public final class Constants {
     }
 
     public final class Elevator {
-        private Elevator() {}
 
         public static final double MAX_VELOCITY = 2.3;
         public static final double MAX_ACCELERATION = 10;
@@ -602,10 +608,11 @@ public final class Constants {
         public static final double MAX_HEIGHT = 1.339;
 
         public static final Distance MANUAL_CONTROL_MARGIN = Meters.of(0.1);
+
+        private Elevator() {}
     }
 
     public final class ElevatorHead {
-        private ElevatorHead() {}
 
         public static final double KP = 0.047421;
         public static final double KD = 0.0;
@@ -654,10 +661,11 @@ public final class Constants {
         public static final double SHOOT_TIME_GROUND = 2.3;
         public static final double SHOOT_TIME_REEF = 0.3;
         public static final double SHOOT_TIME_BARGE = 0.4;
+
+        private ElevatorHead() {}
     }
 
     public final class CoralIntake {
-        private CoralIntake() {}
 
         public static final Current ARM_SUPPLY_CURRENT_LIMIT = Amps.of(10);
         public static final Current ARM_STATOR_CURRENT_LIMIT = Amps.of(60);
@@ -710,10 +718,11 @@ public final class Constants {
         public static final Pose2d ROOT_MECHANISM_POSE = new Pose2d(0, 0.4, Rotation2d.fromDegrees(0));
         public static final double LENGTH = 0.385;
         public static final double ANGLE_OFFSET = 0;
+
+        private CoralIntake() {}
     }
 
     public final class Lights {
-        private Lights() {}
 
         public static final int LENGTH = 150;
 
@@ -737,61 +746,6 @@ public final class Constants {
 
         public static final LEDPattern FLASHING_GREEN =
                 LEDPattern.solid(Color.kGreen).blink(Constants.Lights.FLASH_FREQUENCY);
-
-        @SuppressWarnings("java:S6411") // LEDReader as Key is inefficient but acceptable
-        private static HashMap<LEDReader, Long> lastSparkles = new HashMap<>();
-
-        private static final Random rand = new Random();
-
-        @SuppressWarnings("java:S109")
-        private static LEDPattern sparkle(Frequency frequency, Frequency fadeFrequency) {
-            final double periodMicros = frequency.asPeriod().in(Microseconds);
-            final double fadePeriodSeconds = fadeFrequency.asPeriod().in(Seconds);
-            final double multiplier = MathUtil.clamp(1.0 / fadePeriodSeconds, 0, 1);
-
-            return (reader, writer) -> {
-                long now = RobotController.getTime();
-
-                long lastSparkle = lastSparkles.getOrDefault(reader, 0l);
-
-                if (now - lastSparkle > periodMicros) {
-                    lastSparkle = now;
-                    lastSparkles.put(reader, lastSparkle);
-
-                    int led = rand.nextInt(reader.getLength());
-                    writer.setLED(led, Color.kWhite);
-                }
-
-                int baseR, baseG, baseB;
-
-                if (DriverStationUtils.getCurrentAlliance() == Alliance.Red) {
-                    baseR = 140;
-                    baseG = 0;
-                    baseB = 0;
-                } else {
-                    baseR = 0;
-                    baseG = 0;
-                    baseB = 140;
-                }
-
-                for (int led = 0; led < reader.getLength(); led++) {
-                    int blendedRGB = Color.lerpRGB(
-                            reader.getRed(led),
-                            reader.getGreen(led),
-                            reader.getBlue(led),
-                            baseR,
-                            baseG,
-                            baseB,
-                            multiplier);
-
-                    writer.setRGB(
-                            led,
-                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kRed),
-                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kGreen),
-                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kBlue));
-                }
-            };
-        }
 
         public static final LEDPattern CLIMB_PATTERN =
                 sparkle(Hertz.of(25), Percent.of(5).per(Second));
@@ -851,10 +805,66 @@ public final class Constants {
         public static final Supplier<LEDPattern> hybridPattern =
                 () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack)
                         .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
+
+        @SuppressWarnings("java:S6411") // LEDReader as Key is inefficient but acceptable
+        private static HashMap<LEDReader, Long> lastSparkles = new HashMap<>();
+
+        private static final Random rand = new Random();
+
+        private Lights() {}
+
+        @SuppressWarnings("java:S109")
+        private static LEDPattern sparkle(Frequency frequency, Frequency fadeFrequency) {
+            final double periodMicros = frequency.asPeriod().in(Microseconds);
+            final double fadePeriodSeconds = fadeFrequency.asPeriod().in(Seconds);
+            final double multiplier = MathUtil.clamp(1.0 / fadePeriodSeconds, 0, 1);
+
+            return (reader, writer) -> {
+                long now = RobotController.getTime();
+
+                long lastSparkle = lastSparkles.getOrDefault(reader, 0l);
+
+                if (now - lastSparkle > periodMicros) {
+                    lastSparkle = now;
+                    lastSparkles.put(reader, lastSparkle);
+
+                    int led = rand.nextInt(reader.getLength());
+                    writer.setLED(led, Color.kWhite);
+                }
+
+                int baseR, baseG, baseB;
+
+                if (DriverStationUtils.getCurrentAlliance() == Alliance.Red) {
+                    baseR = 140;
+                    baseG = 0;
+                    baseB = 0;
+                } else {
+                    baseR = 0;
+                    baseG = 0;
+                    baseB = 140;
+                }
+
+                for (int led = 0; led < reader.getLength(); led++) {
+                    int blendedRGB = Color.lerpRGB(
+                            reader.getRed(led),
+                            reader.getGreen(led),
+                            reader.getBlue(led),
+                            baseR,
+                            baseG,
+                            baseB,
+                            multiplier);
+
+                    writer.setRGB(
+                            led,
+                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kRed),
+                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kGreen),
+                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kBlue));
+                }
+            };
+        }
     }
 
     public final class Control {
-        private Control() {}
 
         // Sensitivity for speed meter
         public static final double DIRECTIONAL_SPEED_METER_LOW = 0.25;
@@ -877,10 +887,11 @@ public final class Constants {
 
         public static final double XBOX_SPIN_ROT_THRESHOLD = 0.1;
         public static final double XBOX_SPIN_ROT_SENSITIVITY = 1.0;
+
+        private Control() {}
     }
 
     public final class Frame {
-        private Frame() {}
 
         /**
          * Distance between wheels (width aka between left and right and length aka between front and
@@ -897,10 +908,11 @@ public final class Constants {
 
         public static final double ROBOT_MASS = 64.864; // kg
         public static final double ROBOT_MOI = 14.547; // kg*m^2
+
+        private Frame() {}
     }
 
     public final class Swerve {
-        private Swerve() {}
 
         public static final double PERIODIC = 0.02;
 
@@ -998,6 +1010,8 @@ public final class Constants {
                 new PIDConstants(1.5, 0.0, 0.0) // Rotation PID constants
                 );
 
+        private Swerve() {}
+
         // Module Creation
 
         public static ModuleConstants getFrontLeftConstants() throws InvalidConfigException {
@@ -1018,37 +1032,15 @@ public final class Constants {
     }
 
     public final class Auto {
-        private Auto() {}
 
         public static final Time SOURCE_TIMEOUT = Seconds.of(0.8);
+
+        private Auto() {}
     }
 
     public final class RobotState {
-        private RobotState() {}
-
-        private static boolean runningAsUnitTest = false;
-
-        public static void setRunningAsUnitTest() {
-            runningAsUnitTest = true;
-        }
-
-        public static Mode getMode() {
-            if (RobotBase.isReal()) return Mode.REAL;
-            if (runningAsUnitTest) return Mode.TEST;
-            return RobotBase.isSimulation() ? Mode.SIM : Mode.REPLAY;
-        }
 
         public static final boolean MOTOR_LOGGING_ENABLED = false;
-
-        private static AutoLogLevel.Level getAutoLogLevel() {
-            if (RobotBase.isReal()) {
-                return SysIdManager.getSysIdRoutine() != SysIdRoutine.NONE
-                        ? AutoLogLevel.Level.SYSID
-                        : AutoLogLevel.Level.REAL;
-            } else {
-                return AutoLogLevel.Level.SIM;
-            }
-        }
 
         public static final AutoLogLevel.Level AUTO_LOG_LEVEL = getAutoLogLevel();
 
@@ -1072,6 +1064,30 @@ public final class Constants {
          * Example: {@code ./gradlew test --tests "*ReefAutoScoreTestCases`$Blue4"}
          */
         public static final boolean UNIT_TESTS_ENABLE_ADVANTAGE_SCOPE = false;
+
+        private static boolean runningAsUnitTest = false;
+
+        private RobotState() {}
+
+        public static void setRunningAsUnitTest() {
+            runningAsUnitTest = true;
+        }
+
+        public static Mode getMode() {
+            if (RobotBase.isReal()) return Mode.REAL;
+            if (runningAsUnitTest) return Mode.TEST;
+            return RobotBase.isSimulation() ? Mode.SIM : Mode.REPLAY;
+        }
+
+        private static AutoLogLevel.Level getAutoLogLevel() {
+            if (RobotBase.isReal()) {
+                return SysIdManager.getSysIdRoutine() != SysIdRoutine.NONE
+                        ? AutoLogLevel.Level.SYSID
+                        : AutoLogLevel.Level.REAL;
+            } else {
+                return AutoLogLevel.Level.SIM;
+            }
+        }
 
         public enum VisionSimulationMode {
             PHOTON_SIM,

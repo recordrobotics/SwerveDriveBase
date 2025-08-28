@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public final class FileUtils {
+
+    private static final ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
     private FileUtils() {}
 
     public static File getLaunchDirectory() {
@@ -19,8 +22,6 @@ public final class FileUtils {
                 .replace(File.separator + "build" + File.separator + "jni" + File.separator + "release", "");
         return new File(path).getAbsoluteFile();
     }
-
-    private static final ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     public static JsonNode readJson(File file) throws FileNotFoundException {
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file.getAbsolutePath());

@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 @Deprecated(forRemoval = true)
 public final class ToggleRequirements {
-    private ToggleRequirements() {}
 
     public static class ElevatorMoveToggleRequirement extends SubsystemBase {}
 
@@ -26,4 +25,6 @@ public final class ToggleRequirements {
     @Deprecated(forRemoval = true)
     public static final CoralIntakeMoveToggleRequirement coralIntakeMoveToggleRequirement =
             new CoralIntakeMoveToggleRequirement();
+
+    private ToggleRequirements() {}
 }

@@ -42,11 +42,12 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
     "java:S3011"
 })
 public final class AutoLogLevelManager {
-    private AutoLogLevelManager() {}
 
     private static final List<Runnable> callbacks = new ArrayList<>();
     private static final List<Integer> scannedObjectHashes = new ArrayList<>();
     private static final Set<String> allowedPackages = new HashSet<>();
+
+    private AutoLogLevelManager() {}
 
     /**
      * Adds a new allowed package to use when scanning for annotations. By default, the parent class

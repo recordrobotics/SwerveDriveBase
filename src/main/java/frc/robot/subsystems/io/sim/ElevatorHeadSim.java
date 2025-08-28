@@ -29,12 +29,20 @@ import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
 public class ElevatorHeadSim implements ElevatorHeadIO {
 
+    private static final double ALGAE_VOLTAGE_DIVIDER = 20.0;
+    private static final double SHOOT_CORAL_VELOCITY_THRESHOLD = 1.4; // m/s
+    private static final double CORAL_PROJECTILE_INITIAL_VELOCITY_MULTIPLIER = 2.0;
+
+    private static final int SHOOTER_CORAL_MOVEMENT_VELOCITY_FILTER_SIZE = 10;
+
     private final double periodicDt;
 
     private final SparkMax motor;
     private final SparkMaxSim motorSim;
 
     private boolean hasAlgae = false;
+
+    private MedianFilter velocityFilter = new MedianFilter(SHOOTER_CORAL_MOVEMENT_VELOCITY_FILTER_SIZE);
 
     private final DCMotor wheelMotor = DCMotor.getNeo550(1);
 
@@ -136,13 +144,6 @@ public class ElevatorHeadSim implements ElevatorHeadIO {
             coralDetector.close();
         }
     }
-
-    private static final int SHOOTER_CORAL_MOVEMENT_VELOCITY_FILTER_SIZE = 10;
-    private MedianFilter velocityFilter = new MedianFilter(SHOOTER_CORAL_MOVEMENT_VELOCITY_FILTER_SIZE);
-
-    private static final double ALGAE_VOLTAGE_DIVIDER = 20.0;
-    private static final double SHOOT_CORAL_VELOCITY_THRESHOLD = 1.4; // m/s
-    private static final double CORAL_PROJECTILE_INITIAL_VELOCITY_MULTIPLIER = 2.0;
 
     @Override
     public void simulationPeriodic() {

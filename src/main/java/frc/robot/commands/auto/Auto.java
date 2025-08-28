@@ -21,6 +21,9 @@ import org.json.simple.parser.ParseException;
 
 public class Auto {
 
+    private static final double ALIGN_TIMEOUT = 2.0;
+    private static final double SHOOT_TIMEOUT = 1.0;
+
     public record ScoringPosition(CoralPosition position, CoralLevel level) {}
 
     public record PPScoringPath(String branch, int level) {}
@@ -87,9 +90,6 @@ public class Auto {
 
         return cmds;
     }
-
-    private static final double ALIGN_TIMEOUT = 2.0;
-    private static final double SHOOT_TIMEOUT = 1.0;
 
     private static Command createScoringSequence() {
         return Commands.sequence(

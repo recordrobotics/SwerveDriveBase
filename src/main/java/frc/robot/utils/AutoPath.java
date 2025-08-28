@@ -31,9 +31,10 @@ import java.util.Set;
 import org.littletonrobotics.junction.Logger;
 
 public final class AutoPath {
-    private AutoPath() {}
 
     public static final AutoPathControlModifier CONTROL_MODIFER = new AutoPathControlModifier();
+
+    private AutoPath() {}
 
     @SuppressWarnings("java:S109")
     public static void initialize() {

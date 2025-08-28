@@ -29,6 +29,19 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class PhotonVisionCamera implements IVisionCamera {
 
+    private static final RawVisionFiducial[] ALL_SIM_TAGS = Constants.Game.APRILTAG_LAYOUT.getTags().stream()
+            .map(v -> new RawVisionFiducial(v.ID, 0.1, 6, 7, 0))
+            .toArray(RawVisionFiducial[]::new);
+
+    private static final double DEFAULT_CONFIDENCE_CLOSE = 0.65;
+    private static final double DEFAULT_CONFIDENCE_FAR = 0.7;
+    private static final double DEFAULT_CLOSE_MAX_DISTANCE = Units.feetToMeters(7);
+    private static final double DEFAULT_MAX_POSE_ERROR = 10; // 10 meters
+
+    private static final double MAPLE_SIM_STDDEV = 0.001;
+    private static final double MAPLE_SIM_TAG_DIST = 6;
+    private static final double MAPLE_SIM_TAG_AREA = 0.1;
+
     private int numTags = 0;
     private boolean hasVision = false;
     private boolean connected = false;
@@ -50,47 +63,6 @@ public class PhotonVisionCamera implements IVisionCamera {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimatorClose;
     private final PhotonPoseEstimator photonEstimatorFar;
-
-    private static final RawVisionFiducial[] ALL_SIM_TAGS = Constants.Game.APRILTAG_LAYOUT.getTags().stream()
-            .map(v -> new RawVisionFiducial(v.ID, 0.1, 6, 7, 0))
-            .toArray(RawVisionFiducial[]::new);
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public CameraType getCameraType() {
-        return type;
-    }
-
-    public boolean hasVision() {
-        return hasVision;
-    }
-
-    public int getNumTags() {
-        return numTags;
-    }
-
-    public VisionCameraEstimate getCurrentEstimate() {
-        return currentEstimate;
-    }
-
-    public VisionCameraEstimate getUnsafeEstimate() {
-        return unsafeEstimate;
-    }
-
-    public double getMeasurementStdDevs() {
-        return currentMeasurementStdDevs;
-    }
-
-    private static final double DEFAULT_CONFIDENCE_CLOSE = 0.65;
-    private static final double DEFAULT_CONFIDENCE_FAR = 0.7;
-    private static final double DEFAULT_CLOSE_MAX_DISTANCE = Units.feetToMeters(7);
-    private static final double DEFAULT_MAX_POSE_ERROR = 10; // 10 meters
 
     public PhotonVisionCamera(String name, CameraType type, Transform3d robotToCamera, double stdMultiplier) {
         this.name = name;
@@ -125,6 +97,38 @@ public class PhotonVisionCamera implements IVisionCamera {
             cameraSim.enableDrawWireframe(true);
             RobotContainer.visionSim.addCamera(cameraSim, robotToCamera);
         }
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CameraType getCameraType() {
+        return type;
+    }
+
+    public boolean hasVision() {
+        return hasVision;
+    }
+
+    public int getNumTags() {
+        return numTags;
+    }
+
+    public VisionCameraEstimate getCurrentEstimate() {
+        return currentEstimate;
+    }
+
+    public VisionCameraEstimate getUnsafeEstimate() {
+        return unsafeEstimate;
+    }
+
+    public double getMeasurementStdDevs() {
+        return currentMeasurementStdDevs;
     }
 
     public void setPipeline(int pipeline) {
@@ -180,10 +184,6 @@ public class PhotonVisionCamera implements IVisionCamera {
         photonEstimatorClose.addHeadingData(timestamp, heading);
         photonEstimatorFar.addHeadingData(timestamp, heading);
     }
-
-    private static final double MAPLE_SIM_STDDEV = 0.001;
-    private static final double MAPLE_SIM_TAG_DIST = 6;
-    private static final double MAPLE_SIM_TAG_AREA = 0.1;
 
     private MeasurementPair getMapleSimMeasurements() {
         Pose2d maplePose = RobotContainer.model.getRobot();

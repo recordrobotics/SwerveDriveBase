@@ -36,6 +36,13 @@ import org.littletonrobotics.junction.Logger;
 
 public final class ElevatorArm extends ManagedSubsystemBase implements PoweredSubsystem, EncoderResettableSubsystem {
 
+    private static final double POSITION_TOLERANCE = 0.15;
+    private static final double VELOCITY_TOLERANCE = 1.05;
+
+    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(2.0).per(Second);
+    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(1.5);
+    private static final Time SYSID_TIMEOUT = Seconds.of(1.3);
+
     private final ElevatorArmIO io;
     private final SysIdRoutine sysIdRoutine;
 
@@ -45,9 +52,7 @@ public final class ElevatorArm extends ManagedSubsystemBase implements PoweredSu
     private double velocityCached = 0;
     private double voltageCached = 0;
 
-    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(2.0).per(Second);
-    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(1.5);
-    private static final Time SYSID_TIMEOUT = Seconds.of(1.3);
+    private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
 
     public ElevatorArm(ElevatorArmIO io) {
         this.io = io;
@@ -141,15 +146,10 @@ public final class ElevatorArm extends ManagedSubsystemBase implements PoweredSu
         }
     }
 
-    private static final double POSITION_TOLERANCE = 0.15;
-    private static final double VELOCITY_TOLERANCE = 1.05;
-
     public boolean atGoal() {
         return SimpleMath.isWithinTolerance(getArmAngle(), currentSetpoint.position, POSITION_TOLERANCE)
                 && SimpleMath.isWithinTolerance(getArmVelocity(), 0, VELOCITY_TOLERANCE);
     }
-
-    private TrapezoidProfile.State currentSetpoint = new TrapezoidProfile.State();
 
     @Override
     public void periodicManaged() {

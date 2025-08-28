@@ -13,8 +13,44 @@ import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
 
 public class AutoAlgae extends SequentialCommandGroup {
 
+    private static final double AUTO_LOWER_DISTANCE = 1.0;
+
+    // 8s timeout for first waypoint
+    private static final double FIRST_WAYPOINT_TIMEOUT = 8.0;
+    // 4s for second
+    private static final double OTHER_WAYPOINT_TIMEOUT = 4.0;
+
     private static boolean cancelCommand = false;
     private static boolean isRunning = false;
+
+    public AutoAlgae(AlgaePosition reefPole) {
+        addCommands(
+                new InstantCommand(() -> {
+                    resetCancel();
+                    startRunning();
+                }),
+                WaypointAlign.alignWithCommand(
+                                AlgaeAlign.generateWaypoints(reefPole),
+                                new Double[] {FIRST_WAYPOINT_TIMEOUT, OTHER_WAYPOINT_TIMEOUT},
+                                // start elevator immediately
+                                -1,
+                                // elevator has to be fully extended before moving to second waypoint
+                                0,
+                                algaeGrabCommand(reefPole.getLevel().getHeight())
+                                        .asProxy())
+                        .onlyWhile(() -> RobotState.isAutonomous() || !cancelCommand),
+                new WaitUntilCommand(() -> {
+                    Pose2d pose = reefPole.getPose();
+
+                    double dist = RobotContainer.poseSensorFusion
+                            .getEstimatedPosition()
+                            .getTranslation()
+                            .getDistance(pose.getTranslation());
+
+                    return cancelCommand || (dist > AUTO_LOWER_DISTANCE);
+                }),
+                new ElevatorMoveThenAlgaeGrabEnd(reefPole.getLevel().getHeight(), true).asProxy());
+    }
 
     public static void performCancel() {
         cancelCommand = true;
@@ -45,41 +81,5 @@ public class AutoAlgae extends SequentialCommandGroup {
                             else RobotContainer.elevatorHead.set(AlgaeGrabberStates.INTAKE_REEF);
                         },
                         RobotContainer.elevatorHead));
-    }
-
-    private static final double AUTO_LOWER_DISTANCE = 1.0;
-
-    // 8s timeout for first waypoint
-    private static final double FIRST_WAYPOINT_TIMEOUT = 8.0;
-    // 4s for second
-    private static final double OTHER_WAYPOINT_TIMEOUT = 4.0;
-
-    public AutoAlgae(AlgaePosition reefPole) {
-        addCommands(
-                new InstantCommand(() -> {
-                    resetCancel();
-                    startRunning();
-                }),
-                WaypointAlign.alignWithCommand(
-                                AlgaeAlign.generateWaypoints(reefPole),
-                                new Double[] {FIRST_WAYPOINT_TIMEOUT, OTHER_WAYPOINT_TIMEOUT},
-                                // start elevator immediately
-                                -1,
-                                // elevator has to be fully extended before moving to second waypoint
-                                0,
-                                algaeGrabCommand(reefPole.getLevel().getHeight())
-                                        .asProxy())
-                        .onlyWhile(() -> RobotState.isAutonomous() || !cancelCommand),
-                new WaitUntilCommand(() -> {
-                    Pose2d pose = reefPole.getPose();
-
-                    double dist = RobotContainer.poseSensorFusion
-                            .getEstimatedPosition()
-                            .getTranslation()
-                            .getDistance(pose.getTranslation());
-
-                    return cancelCommand || (dist > AUTO_LOWER_DISTANCE);
-                }),
-                new ElevatorMoveThenAlgaeGrabEnd(reefPole.getLevel().getHeight(), true).asProxy());
     }
 }

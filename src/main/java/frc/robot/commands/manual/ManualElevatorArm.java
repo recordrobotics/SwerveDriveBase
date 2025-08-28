@@ -11,18 +11,19 @@ import frc.robot.control.AbstractControl;
 import frc.robot.dashboard.DashboardUI;
 
 public class ManualElevatorArm extends Command {
+
+    private static final double DEADBAND = 0.001;
+
+    private double angle = 0;
+
     public ManualElevatorArm() {
         addRequirements(RobotContainer.elevatorArm);
     }
-
-    private double angle = 0;
 
     @Override
     public void initialize() {
         angle = RobotContainer.elevatorArm.getArmAngle();
     }
-
-    private static final double DEADBAND = 0.001;
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

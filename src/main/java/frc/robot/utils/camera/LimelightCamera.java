@@ -31,6 +31,21 @@ import org.photonvision.targeting.TargetCorner;
 
 public class LimelightCamera implements IVisionCamera {
 
+    private static final RawFiducial[] ALL_SIM_TAGS = Constants.Game.APRILTAG_LAYOUT.getTags().stream()
+            .map(v -> new RawFiducial(v.ID, 0.1, 0.1, 0.1, 6, 7, 0))
+            .toArray(RawFiducial[]::new);
+
+    private static final double DEFAULT_CONFIDENCE_MT1 = 0.65;
+    private static final double DEFAULT_CONFIDENCE_MT2 = 0.7;
+    private static final double DEFAULT_CLOSE_MT1_DISTANCE =
+            Units.feetToMeters(7); // 7 feet is where the MT1 (yellow) gets bad wiggles
+    private static final double DEFAULT_MAX_POSE_ERROR = 10; // 10 meters
+
+    private static final double MAPLE_SIM_STDDEV = 0.001;
+    private static final double MAPLE_SIM_TAG_SPAN = 0.1;
+    private static final double MAPLE_SIM_TAG_DIST = 6;
+    private static final double MAPLE_SIM_TAG_AREA = 2.0;
+
     private int numTags = 0;
     private boolean hasVision = false;
     private boolean limelightConnected = false;
@@ -53,9 +68,32 @@ public class LimelightCamera implements IVisionCamera {
     private PhotonPoseEstimator photonEstimator;
     private CameraType type;
 
-    private static final RawFiducial[] ALL_SIM_TAGS = Constants.Game.APRILTAG_LAYOUT.getTags().stream()
-            .map(v -> new RawFiducial(v.ID, 0.1, 0.1, 0.1, 6, 7, 0))
-            .toArray(RawFiducial[]::new);
+    public LimelightCamera(String name, CameraType type, Transform3d robotToCamera) {
+        this.name = name;
+        this.type = type;
+        this.mt1Confidence = DEFAULT_CONFIDENCE_MT1;
+        this.mt2Confidence = DEFAULT_CONFIDENCE_MT2;
+        this.mt1MaxDistance = DEFAULT_CLOSE_MT1_DISTANCE;
+        this.maxPoseError = DEFAULT_MAX_POSE_ERROR;
+
+        if (isPhotonSimMode()) {
+            fakeCamera = new PhotonCamera(name);
+            SimCameraProperties cameraProp = new SimCameraProperties();
+            cameraProp.setCalibration(
+                    type.getDetectorWidth(), type.getDetectorHeight(), Rotation2d.fromDegrees(type.fov));
+            cameraProp.setCalibError(type.pxError, type.pxErrorStdDev);
+            cameraProp.setFPS(type.fps);
+            cameraProp.setAvgLatencyMs(type.latencyMs);
+            cameraProp.setLatencyStdDevMs(type.latencyStdDevMs);
+
+            PhotonCameraSim cameraSim = new PhotonCameraSim(fakeCamera, cameraProp);
+            cameraSim.enableDrawWireframe(true);
+            RobotContainer.visionSim.addCamera(cameraSim, robotToCamera);
+
+            photonEstimator = new PhotonPoseEstimator(
+                    Constants.Game.APRILTAG_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCamera);
+        }
+    }
 
     public boolean isConnected() {
         return limelightConnected;
@@ -89,47 +127,9 @@ public class LimelightCamera implements IVisionCamera {
         return currentMeasurementStdDevs;
     }
 
-    private static final double DEFAULT_CONFIDENCE_MT1 = 0.65;
-    private static final double DEFAULT_CONFIDENCE_MT2 = 0.7;
-    private static final double DEFAULT_CLOSE_MT1_DISTANCE =
-            Units.feetToMeters(7); // 7 feet is where the MT1 (yellow) gets bad wiggles
-    private static final double DEFAULT_MAX_POSE_ERROR = 10; // 10 meters
-
-    public LimelightCamera(String name, CameraType type, Transform3d robotToCamera) {
-        this.name = name;
-        this.type = type;
-        this.mt1Confidence = DEFAULT_CONFIDENCE_MT1;
-        this.mt2Confidence = DEFAULT_CONFIDENCE_MT2;
-        this.mt1MaxDistance = DEFAULT_CLOSE_MT1_DISTANCE;
-        this.maxPoseError = DEFAULT_MAX_POSE_ERROR;
-
-        if (isPhotonSimMode()) {
-            fakeCamera = new PhotonCamera(name);
-            SimCameraProperties cameraProp = new SimCameraProperties();
-            cameraProp.setCalibration(
-                    type.getDetectorWidth(), type.getDetectorHeight(), Rotation2d.fromDegrees(type.fov));
-            cameraProp.setCalibError(type.pxError, type.pxErrorStdDev);
-            cameraProp.setFPS(type.fps);
-            cameraProp.setAvgLatencyMs(type.latencyMs);
-            cameraProp.setLatencyStdDevMs(type.latencyStdDevMs);
-
-            PhotonCameraSim cameraSim = new PhotonCameraSim(fakeCamera, cameraProp);
-            cameraSim.enableDrawWireframe(true);
-            RobotContainer.visionSim.addCamera(cameraSim, robotToCamera);
-
-            photonEstimator = new PhotonPoseEstimator(
-                    Constants.Game.APRILTAG_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCamera);
-        }
-    }
-
     public void setPipeline(int pipeline) {
         LimelightHelpers.setPipelineIndex(name, pipeline);
     }
-
-    private static final double MAPLE_SIM_STDDEV = 0.001;
-    private static final double MAPLE_SIM_TAG_SPAN = 0.1;
-    private static final double MAPLE_SIM_TAG_DIST = 6;
-    private static final double MAPLE_SIM_TAG_AREA = 2.0;
 
     public void updateEstimation(boolean trust, boolean ignore) {
         updateRobotOrientation();

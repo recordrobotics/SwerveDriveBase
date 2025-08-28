@@ -4,6 +4,11 @@
 <module name="Checker">
   <property name="charset" value="UTF-8" />
 
+  <module name="SuppressionFilter">
+    <property name="file"
+      value="${configDirectory}/suppressions.xml" />
+  </module>
+
   <!-- Enforce correct order of declarations -->
   <module name="TreeWalker">
     <module name="DeclarationOrder" />

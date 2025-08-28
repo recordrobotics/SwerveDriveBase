@@ -22,8 +22,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class GroundIntakeAssist implements IDrivetrainControlModifier {
 
-    private boolean enabled = true;
-
     public enum FailReason {
         NONE,
         NO_OR_UNREACHABLE_CORAL,
@@ -31,12 +29,6 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
         NOT_DRIVING,
         DRIVER_MOVING_IN_OPPOSITE_DIRECTION,
         DRIVER_ROTATE_IN_OPPOSITE_DIRECTION
-    }
-
-    private PIDController rotationController = new PIDController(Constants.Assists.GROUND_ASSIST_ROTATION_P, 0.0, 0);
-
-    public GroundIntakeAssist() {
-        rotationController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public static final double MIN_TARGET_VELOCITY_FOR_ASSIST_CANCEL = 2.0;
@@ -47,6 +39,13 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
     public static final double MIN_ASSIST_WEIGHT = 0.2;
     public static final double MAX_ASSIST_WEIGHT = 1.0;
     public static final double WEIGHT_HALF_SCALE_DISTANCE = 3.0;
+
+    private boolean enabled = true;
+    private PIDController rotationController = new PIDController(Constants.Assists.GROUND_ASSIST_ROTATION_P, 0.0, 0);
+
+    public GroundIntakeAssist() {
+        rotationController.enableContinuousInput(-Math.PI, Math.PI);
+    }
 
     @Override
     public boolean apply(DrivetrainControl control) {

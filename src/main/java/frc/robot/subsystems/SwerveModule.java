@@ -26,6 +26,9 @@ import org.littletonrobotics.junction.Logger;
 
 public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
 
+    private static final double STATIONARY_DRIVE_VELOCITY_THRESHOLD = 0.08;
+    private static final double STATIONARY_TURN_VELOCITY_THRESHOLD = 1.0;
+
     // Creates variables for motors and absolute encoders
     private int driveMotorChannel;
 
@@ -40,8 +43,8 @@ public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
     private final double driveGearRatio;
     private final double wheelDiameter;
 
-    final MotionMagicExpoVoltage turnRequest;
-    final MotionMagicVelocityVoltage driveRequest;
+    private final MotionMagicExpoVoltage turnRequest;
+    private final MotionMagicVelocityVoltage driveRequest;
 
     private double drivePositionCached = 0;
     private double driveVelocityCached = 0;
@@ -50,6 +53,9 @@ public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
     private double turnPositionCached = 0;
     private double turnVelocityCached = 0;
     private double turnVoltageCached = 0;
+
+    private double lastMovementTime = Timer.getTimestamp();
+    private boolean hasResetAbs = false;
 
     /**
      * Constructs a SwerveModule with a drive motor, turning motor, and absolute turning encoder.
@@ -234,12 +240,6 @@ public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
         targetTurnPosition = desiredState.angle.getRotations();
         targetDriveVelocity = desiredState.speedMetersPerSecond;
     }
-
-    private double lastMovementTime = Timer.getTimestamp();
-    private boolean hasResetAbs = false;
-
-    private static final double STATIONARY_DRIVE_VELOCITY_THRESHOLD = 0.08;
-    private static final double STATIONARY_TURN_VELOCITY_THRESHOLD = 1.0;
 
     public void periodic() {
         drivePositionCached = io.getDriveMechanismPosition();

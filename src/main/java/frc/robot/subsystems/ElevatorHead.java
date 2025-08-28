@@ -28,6 +28,14 @@ import org.littletonrobotics.junction.Logger;
 
 public final class ElevatorHead extends KillableSubsystem implements PoweredSubsystem {
 
+    private static final String GP_NAME_NONE = "";
+    private static final String GP_NAME_ALGAE = "algae";
+    private static final String GP_NAME_CORAL = "coral";
+
+    private static final double CORAL_READY_MAX_VELOCITY = 0.1; // m/s
+    private static final double WAITING_FOR_ALGAE_MIN_VELOCITY = 1.0; // TODO: tune
+    private static final double ALGAE_ACQUIRED_MAX_VELOCITY = 0.5; // TODO: tune
+
     private final ElevatorHeadIO io;
 
     private boolean debouncedValue = false;
@@ -56,6 +64,10 @@ public final class ElevatorHead extends KillableSubsystem implements PoweredSubs
     private boolean hasAlgae = false;
     private boolean waitingForAlgae = false;
     private boolean waitingForIntakeSpeed = false;
+
+    private double lastSpeed = 0;
+
+    private final SysIdRoutine sysIdRoutine;
 
     public ElevatorHead(ElevatorHeadIO io) {
         this.io = io;
@@ -87,8 +99,6 @@ public final class ElevatorHead extends KillableSubsystem implements PoweredSubs
         }
     }
 
-    private final SysIdRoutine sysIdRoutine;
-
     public enum AlgaeGrabberStates {
         OUT_GROUND,
         OUT_REEF,
@@ -107,10 +117,6 @@ public final class ElevatorHead extends KillableSubsystem implements PoweredSubs
         POSITION,
         OFF;
     }
-
-    private static final String GP_NAME_NONE = "";
-    private static final String GP_NAME_ALGAE = "algae";
-    private static final String GP_NAME_CORAL = "coral";
 
     public enum GamePiece {
         NONE(0, GP_NAME_NONE),
@@ -279,8 +285,6 @@ public final class ElevatorHead extends KillableSubsystem implements PoweredSubs
         return positionPid.atGoal();
     }
 
-    private static final double CORAL_READY_MAX_VELOCITY = 0.1; // m/s
-
     /**
      * @return true if the coral shooter is ready to shoot coral (at low velocity or has coral and at goal position)
      * @deprecated use getGamePiece().atLeast(GamePiece.CORAL_POSITIONED) instead
@@ -290,11 +294,6 @@ public final class ElevatorHead extends KillableSubsystem implements PoweredSubs
         return Math.abs(getVelocity()) < CORAL_READY_MAX_VELOCITY
                 || (getGamePiece().atLeast(GamePiece.CORAL) && positionAtGoal());
     }
-
-    private double lastSpeed = 0;
-
-    private static final double WAITING_FOR_ALGAE_MIN_VELOCITY = 1.0; // TODO: tune
-    private static final double ALGAE_ACQUIRED_MAX_VELOCITY = 0.5; // TODO: tune
 
     @Override
     public void periodicManaged() {

@@ -25,8 +25,25 @@ import frc.robot.utils.modifiers.DrivetrainControl;
 @SuppressWarnings({"java:S109"})
 public class JoystickXboxSimple implements AbstractControl {
 
+    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
+    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
+
+    private static final LinearVelocity MANUAL_ELEVATOR_VELOCITY_MAX =
+            Centimeters.of(50).per(Second);
+    private static final AngularVelocity MANUAL_ELEVATOR_ARM_VELOCITY_MAX =
+            Degrees.of(180).per(Second);
+
+    private static final double AUTO_SOURCE_MAX_DISTANCE = 2.3; // meters
+    private static final double AUTO_SOURCE_MAX_ANGLE_DIFF = 80; // degrees
+
     private Joystick joystick;
     private XboxController xboxController;
+
+    private Transform2d lastVelocity = new Transform2d();
+    private Transform2d lastAcceleration = new Transform2d();
+    private Transform2d velocity = new Transform2d();
+    private Transform2d acceleration = new Transform2d();
+    private Transform2d jerk = new Transform2d();
 
     private ReefLevelSwitchValue reefswitch = ReefLevelSwitchValue.L4;
 
@@ -43,12 +60,6 @@ public class JoystickXboxSimple implements AbstractControl {
         new Trigger(() -> xboxController.getYButtonPressed())
                 .onTrue(new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L4).ignoringDisable(true));
     }
-
-    private Transform2d lastVelocity = new Transform2d();
-    private Transform2d lastAcceleration = new Transform2d();
-    private Transform2d velocity = new Transform2d();
-    private Transform2d acceleration = new Transform2d();
-    private Transform2d jerk = new Transform2d();
 
     @Override
     public void update() {
@@ -170,9 +181,6 @@ public class JoystickXboxSimple implements AbstractControl {
     public boolean isHalfSpeedTriggered() {
         return isAutoScoreTriggered(); // half speed auto enabled when scoring
     }
-
-    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
-    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
 
     public Double getDirectionalSpeedLevel() {
         // Remaps speed meter from -1 -> 1 to 0.5 -> 4, then returns
@@ -306,11 +314,6 @@ public class JoystickXboxSimple implements AbstractControl {
         return false;
     }
 
-    private static final LinearVelocity MANUAL_ELEVATOR_VELOCITY_MAX =
-            Centimeters.of(50).per(Second);
-    private static final AngularVelocity MANUAL_ELEVATOR_ARM_VELOCITY_MAX =
-            Degrees.of(180).per(Second);
-
     @Override
     public LinearVelocity getManualElevatorVelocity() {
         double axis = SimpleMath.povToVector(joystick.getPOV()).getY();
@@ -327,9 +330,6 @@ public class JoystickXboxSimple implements AbstractControl {
     public boolean isClimbTriggered() {
         return joystick.getRawButton(7);
     }
-
-    private static final double AUTO_SOURCE_MAX_DISTANCE = 2.3; // meters
-    private static final double AUTO_SOURCE_MAX_ANGLE_DIFF = 80; // degrees
 
     @Override
     public boolean isCoralSourceIntakeAutoTriggered() {

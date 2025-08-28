@@ -27,6 +27,11 @@ import org.recordrobotics.ruckig.enums.Synchronization;
 
 public class RuckigAlign extends Command {
 
+    public enum AlignMode {
+        POSITION, // Full stop at target
+        VELOCITY // Keep moving at target velocity
+    }
+
     /**
      * Allows sequential RuckigAlign commands to not reset the trajectory state on every initialize.
      * Useful for following waypoints with velocity mode.
@@ -154,6 +159,9 @@ public class RuckigAlign extends Command {
         }
     }
 
+    private static final double VELOCITY_TOLERANCE_MULTIPLIER = 5.0;
+    private static final double VELOCITY_MODE_DISTANCE_TO_TARGET_THRESHOLD = 0.05; // meters
+
     private static final Ruckig3 ruckig = new Ruckig3();
     private static final InputParameter3 input = new InputParameter3();
     private static final OutputParameter3 output = new OutputParameter3();
@@ -164,10 +172,7 @@ public class RuckigAlign extends Command {
 
     private static AlignMode currentMode = AlignMode.POSITION;
 
-    public enum AlignMode {
-        POSITION, // Full stop at target
-        VELOCITY // Keep moving at target velocity
-    }
+    private static boolean lastAlignSuccessful = false;
 
     public record RuckigAlignState(KinematicState kinematicState, AlignMode alignMode) {}
 
@@ -187,8 +192,6 @@ public class RuckigAlign extends Command {
     private final boolean resetTrajectory;
 
     private Result result;
-
-    private static boolean lastAlignSuccessful = false;
 
     public RuckigAlign(
             Supplier<RuckigAlignState> targetStateSupplier,
@@ -267,8 +270,6 @@ public class RuckigAlign extends Command {
         rPid.setTolerance(Constants.Align.ROTATIONAL_TOLERANCE, Constants.Align.ROTATIONAL_VELOCITY_TOLERANCE);
         currentMode = AlignMode.POSITION;
     }
-
-    private static final double VELOCITY_TOLERANCE_MULTIPLIER = 5.0;
 
     /**
      * Increases the tolerance for velocity mode
@@ -363,8 +364,6 @@ public class RuckigAlign extends Command {
             reset();
         }
     }
-
-    private static final double VELOCITY_MODE_DISTANCE_TO_TARGET_THRESHOLD = 0.05; // meters
 
     @Override
     public boolean isFinished() {

@@ -10,9 +10,10 @@ import org.littletonrobotics.junction.Logger;
 
 @SuppressWarnings("java:S109")
 public final class FieldIntersection {
-    private FieldIntersection() {}
 
     private static final FastPolygonIntersection intersection;
+
+    private FieldIntersection() {}
 
     static {
         // blue reef

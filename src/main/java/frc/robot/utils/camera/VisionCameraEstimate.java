@@ -30,14 +30,6 @@ public record VisionCameraEstimate(
         this(new Pose2d(), 0, 0, 0, 0, 0, new RawVisionFiducial[0], false);
     }
 
-    private static RawVisionFiducial[] convertRawFiducials(RawFiducial[] rawFiducials) {
-        RawVisionFiducial[] converted = new RawVisionFiducial[rawFiducials.length];
-        for (int i = 0; i < rawFiducials.length; i++) {
-            converted[i] = new RawVisionFiducial(rawFiducials[i]);
-        }
-        return converted;
-    }
-
     public VisionCameraEstimate(PoseEstimate limelightEstimate) {
         this(
                 limelightEstimate.pose,
@@ -48,6 +40,14 @@ public record VisionCameraEstimate(
                 limelightEstimate.avgTagArea,
                 convertRawFiducials(limelightEstimate.rawFiducials),
                 limelightEstimate.isMegaTag2);
+    }
+
+    private static RawVisionFiducial[] convertRawFiducials(RawFiducial[] rawFiducials) {
+        RawVisionFiducial[] converted = new RawVisionFiducial[rawFiducials.length];
+        for (int i = 0; i < rawFiducials.length; i++) {
+            converted[i] = new RawVisionFiducial(rawFiducials[i]);
+        }
+        return converted;
     }
 
     @Override

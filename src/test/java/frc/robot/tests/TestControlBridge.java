@@ -22,6 +22,19 @@ import java.util.Map;
 
 public class TestControlBridge implements AbstractControl {
 
+    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
+    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
+
+    private static final LinearVelocity MANUAL_ELEVATOR_VELOCITY_MAX =
+            Centimeters.of(50).per(Second);
+    private static final AngularVelocity MANUAL_ELEVATOR_ARM_VELOCITY_MAX =
+            Degrees.of(180).per(Second);
+
+    private static final double AUTO_SOURCE_MAX_DISTANCE = 2.3; // meters
+    private static final double AUTO_SOURCE_MAX_ANGLE_DIFF = 80; // degrees
+
+    private static TestControlBridge instance;
+
     static {
         DashboardUI.Overview.setTestControl(getInstance());
     }
@@ -36,8 +49,6 @@ public class TestControlBridge implements AbstractControl {
 
     private EnumMap<Button, Integer> buttonStates = new EnumMap<>(Button.class);
     private EnumMap<Axis, Double> axisStates = new EnumMap<>(Axis.class);
-
-    private static TestControlBridge instance;
 
     public static TestControlBridge getInstance() {
         if (instance == null) {
@@ -180,9 +191,6 @@ public class TestControlBridge implements AbstractControl {
         return isAutoScoreTriggered(); // half speed auto enabled when scoring
     }
 
-    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
-    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
-
     public Double getDirectionalSpeedLevel() {
         // Remaps speed meter from -1 -> 1 to 0.5 -> 4, then returns
         double speed = SimpleMath.remap(
@@ -315,11 +323,6 @@ public class TestControlBridge implements AbstractControl {
         return getButton(Button.INTAKE_SCORE_L1);
     }
 
-    private static final LinearVelocity MANUAL_ELEVATOR_VELOCITY_MAX =
-            Centimeters.of(50).per(Second);
-    private static final AngularVelocity MANUAL_ELEVATOR_ARM_VELOCITY_MAX =
-            Degrees.of(180).per(Second);
-
     @Override
     public LinearVelocity getManualElevatorVelocity() {
         double axis = SimpleMath.povToVector((int) Math.round(axisStates.getOrDefault(Axis.POV, -1.0)))
@@ -338,9 +341,6 @@ public class TestControlBridge implements AbstractControl {
     public boolean isClimbTriggered() {
         return getButton(Button.CLIMB);
     }
-
-    private static final double AUTO_SOURCE_MAX_DISTANCE = 2.3; // meters
-    private static final double AUTO_SOURCE_MAX_ANGLE_DIFF = 80; // degrees
 
     @Override
     public boolean isCoralSourceIntakeAutoTriggered() {

@@ -6,6 +6,10 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.RobotContainer;
 
 public class ElevatorMove extends Command {
+
+    private static final double STALL_VELOCITY_THRESHOLD = 0.03;
+    private static final double STALL_TIME_THRESHOLD = 0.1;
+
     private ElevatorHeight targetHeight;
     private double lastMoveTime = 0;
     private double initialElevatorHeight;
@@ -27,9 +31,6 @@ public class ElevatorMove extends Command {
         RobotContainer.elevator.moveTo(targetHeight);
         RobotContainer.elevatorArm.set(targetHeight.getArmAngle());
     }
-
-    private static final double STALL_VELOCITY_THRESHOLD = 0.03;
-    private static final double STALL_TIME_THRESHOLD = 0.1;
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

@@ -44,9 +44,17 @@ import org.littletonrobotics.junction.Logger;
 
 public class PoseSensorFusion extends ManagedSubsystemBase {
 
-    public final NavSensor nav;
-
     public static final double MAX_MEASUREMENT_STD_DEVS = 9_999_999;
+
+    private static final double L1_STD_MULTIPLIER = 2.0;
+    private static final double SOURCE_STD_MULTIPLIER = 8.0;
+
+    private static final double ISPE_STD_DEV = 0.7;
+    private static final double MAX_L1_DISTANCE_TO_IGNORE_SOURCE = 2.5;
+
+    private static final double DEFAULT_DEBOUNCE_TIME = 0.5;
+
+    public final NavSensor nav;
 
     private SwerveDrivePoseEstimator poseFilter;
     private IndependentSwervePoseEstimator independentPoseEstimator;
@@ -57,9 +65,6 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
             Constants.Limelight.LIMELIGHT_CENTER_NAME,
             CameraType.LIMELIGHT_2,
             Constants.Limelight.ROBOT_TO_CAMERA_CENTER);
-
-    private static final double L1_STD_MULTIPLIER = 2.0;
-    private static final double SOURCE_STD_MULTIPLIER = 8.0;
 
     private PhotonVisionCamera l1Camera = new PhotonVisionCamera(
             Constants.PhotonVision.PHOTON_L1_NAME,
@@ -75,6 +80,22 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     private final Set<IVisionCamera> cameras = Set.of(leftCamera, centerCamera, l1Camera, sourceCamera);
 
     private final HashSet<VisionDebouncer> visionDebouncers = new HashSet<>();
+
+    private ConcurrentSkipListSet<DeferredPoseEstimation> deferredPoseEstimations =
+            new ConcurrentSkipListSet<>((a, b) -> Double.compare(a.timestampSeconds, b.timestampSeconds));
+
+    private boolean trustLimelightLeft;
+    private boolean trustLimelightCenter;
+    private boolean useISPE;
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Future<?> calculationFuture = null;
+
+    private double updateTimestamp;
+    private Rotation2d updateNav;
+    private SwerveModulePosition[] updatePositions;
+
+    private int nextVisionId = 1;
 
     public PoseSensorFusion() {
         nav = new NavSensor(
@@ -114,21 +135,11 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     public record DeferredPoseEstimation(
             Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {}
 
-    private ConcurrentSkipListSet<DeferredPoseEstimation> deferredPoseEstimations =
-            new ConcurrentSkipListSet<>((a, b) -> Double.compare(a.timestampSeconds, b.timestampSeconds));
-
     public void addVisionMeasurement(
             Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
         deferredPoseEstimations.add(
                 new DeferredPoseEstimation(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs));
     }
-
-    private boolean trustLimelightLeft;
-    private boolean trustLimelightCenter;
-    private boolean useISPE;
-
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private Future<?> calculationFuture = null;
 
     public void startCalculation() {
         deferredPoseEstimations.clear();
@@ -139,10 +150,6 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
 
         calculationFuture = executor.submit(this::calculationLoop);
     }
-
-    private double updateTimestamp;
-    private Rotation2d updateNav;
-    private SwerveModulePosition[] updatePositions;
 
     public void endCalculation() {
         if (updatePositions != null) {
@@ -186,9 +193,6 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     public void periodicManaged() {
         /* logic is asynchronous */
     }
-
-    private static final double ISPE_STD_DEV = 0.7;
-    private static final double MAX_L1_DISTANCE_TO_IGNORE_SOURCE = 2.5;
 
     public void calculationLoop() {
         updateTimestamp = Timer.getTimestamp();
@@ -318,8 +322,6 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
         }
     }
 
-    private static final double DEFAULT_DEBOUNCE_TIME = 0.5;
-
     public VisionDebouncer registerVisionCheck(CameraTarget camera) {
         return registerVisionCheck(camera, DEFAULT_DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
     }
@@ -332,8 +334,6 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     public VisionDebouncer registerVisionCheck(CameraTarget camera, int... tagIds) {
         return registerVisionCheck(camera, tagIds, DEFAULT_DEBOUNCE_TIME, Debouncer.DebounceType.kBoth);
     }
-
-    private int nextVisionId = 1;
 
     public VisionDebouncer registerVisionCheck(
             CameraTarget camera, int[] tagIds, double debounceTime, Debouncer.DebounceType debounceType) {

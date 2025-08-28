@@ -163,6 +163,9 @@ tasks.withType(JavaCompile) {
 checkstyle {
     toolVersion = "11.0.0"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    configProperties = [
+        "configDirectory": file("${rootDir}/config/checkstyle").absolutePath
+    ]
 }
 
 spotless {

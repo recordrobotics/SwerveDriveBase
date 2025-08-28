@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Notifications {
-    private Notifications() {}
 
     private static List<Alert> alerts = new ArrayList<>();
+
+    private Notifications() {}
 
     public static void send(NotificationLevel type, String title, String description) {
         send(type, title, description, 0); // Yes 0 does work it makes it infinite

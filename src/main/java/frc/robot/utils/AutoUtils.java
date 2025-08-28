@@ -20,6 +20,13 @@ import java.util.Set;
 import org.json.simple.parser.ParseException;
 
 public final class AutoUtils {
+
+    // How long to wait after starting drive to source before deploying intake
+    public static final double SOURCE_INTAKE_DEPLOY_DELAY = 0.3;
+    // If the robot is within this distance of the closest reef, it will drive to source from there, otherwise go from
+    // ElevatorStart waypoint
+    public static final double REEF_DISTANCE_THRESHOLD = 0.7;
+
     private AutoUtils() {}
 
     public static Command alignWithVision() {
@@ -42,12 +49,6 @@ public final class AutoUtils {
                 },
                 Set.of(RobotContainer.drivetrain));
     }
-
-    // How long to wait after starting drive to source before deploying intake
-    public static final double SOURCE_INTAKE_DEPLOY_DELAY = 0.3;
-    // If the robot is within this distance of the closest reef, it will drive to source from there, otherwise go from
-    // ElevatorStart waypoint
-    public static final double REEF_DISTANCE_THRESHOLD = 0.7;
 
     public static Command createSource(String reefLetter, String sourceSide)
             throws FileVersionException, IOException, ParseException {

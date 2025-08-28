@@ -86,6 +86,18 @@ import org.photonvision.simulation.VisionSystemSim;
 @SuppressWarnings({"java:S1444", "java:S1104", "java:S3010"})
 public final class RobotContainer {
 
+    public static final double ROBOT_PERIODIC = 0.02;
+    public static final int CONTROL_JOYSTICK_PORT = 2;
+    public static final int CONTROL_XBOX_PORT = 0;
+
+    public static final double INVALID_COMMAND_VIBRATE_TIME = 0.1;
+
+    public static final double ELEVATOR_LOCK_REEF_DISTANCE = 0.2;
+    public static final double ELEVATOR_LOCK_REEF_ANGLE_DIFF = 80; /* degrees */
+
+    public static final double AUTO_ALIGN_FIRST_WAYPOINT_TIMEOUT = 2.0;
+    public static final double AUTO_ALIGN_SECOND_WAYPOINT_TIMEOUT = 1.0;
+
     public static Drivetrain drivetrain;
     public static PoseSensorFusion poseSensorFusion;
     public static Elevator elevator;
@@ -103,18 +115,6 @@ public final class RobotContainer {
     private Command autoCommand;
 
     private Alert noEncoderResetAlert = new Alert("Encoders not reset!", AlertType.kError);
-
-    public static final double ROBOT_PERIODIC = 0.02;
-    public static final int CONTROL_JOYSTICK_PORT = 2;
-    public static final int CONTROL_XBOX_PORT = 0;
-
-    public static final double INVALID_COMMAND_VIBRATE_TIME = 0.1;
-
-    public static final double ELEVATOR_LOCK_REEF_DISTANCE = 0.2;
-    public static final double ELEVATOR_LOCK_REEF_ANGLE_DIFF = 80; /* degrees */
-
-    public static final double AUTO_ALIGN_FIRST_WAYPOINT_TIMEOUT = 2.0;
-    public static final double AUTO_ALIGN_SECOND_WAYPOINT_TIMEOUT = 1.0;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {

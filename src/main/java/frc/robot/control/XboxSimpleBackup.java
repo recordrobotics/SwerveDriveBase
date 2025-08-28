@@ -28,11 +28,24 @@ import frc.robot.utils.modifiers.DrivetrainControl;
 @Deprecated(forRemoval = false)
 public class XboxSimpleBackup implements AbstractControl {
 
+    private static final double SHOULDER_TRIGGER_THRESHOLD = 0.3;
+
+    private static final double AUTO_SOURCE_MAX_DISTANCE = 2.3; // meters
+    private static final double AUTO_SOURCE_MAX_ANGLE_DIFF = 80; // degrees
+
+    private static final double SPEED_LEVEL = 2;
+    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
+    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
+
     private XboxController xboxController;
 
-    private ReefLevelSwitchValue reefswitch = ReefLevelSwitchValue.L4;
+    private Transform2d lastVelocity = new Transform2d();
+    private Transform2d lastAcceleration = new Transform2d();
+    private Transform2d velocity = new Transform2d();
+    private Transform2d acceleration = new Transform2d();
+    private Transform2d jerk = new Transform2d();
 
-    private static final double SHOULDER_TRIGGER_THRESHOLD = 0.3;
+    private ReefLevelSwitchValue reefswitch = ReefLevelSwitchValue.L4;
 
     /**
      * @deprecated This is a backup control scheme using an Xbox controller.
@@ -51,12 +64,6 @@ public class XboxSimpleBackup implements AbstractControl {
         new Trigger(() -> xboxController.getYButton())
                 .onTrue(new InstantCommand(() -> reefswitch = ReefLevelSwitchValue.L4).ignoringDisable(true));
     }
-
-    private Transform2d lastVelocity = new Transform2d();
-    private Transform2d lastAcceleration = new Transform2d();
-    private Transform2d velocity = new Transform2d();
-    private Transform2d acceleration = new Transform2d();
-    private Transform2d jerk = new Transform2d();
 
     @Override
     public void update() {
@@ -175,10 +182,6 @@ public class XboxSimpleBackup implements AbstractControl {
     public boolean isHalfSpeedTriggered() {
         return isAutoScoreTriggered(); // half speed auto enabled when scoring
     }
-
-    private static final double SPEED_LEVEL = 2;
-    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
-    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
 
     public Double getDirectionalSpeedLevel() {
         double speed = SPEED_LEVEL;
@@ -314,9 +317,6 @@ public class XboxSimpleBackup implements AbstractControl {
     public boolean isClimbTriggered() {
         return xboxController.getLeftTriggerAxis() > SHOULDER_TRIGGER_THRESHOLD;
     }
-
-    private static final double AUTO_SOURCE_MAX_DISTANCE = 2.3; // meters
-    private static final double AUTO_SOURCE_MAX_ANGLE_DIFF = 80; // degrees
 
     @Override
     public boolean isCoralSourceIntakeAutoTriggered() {

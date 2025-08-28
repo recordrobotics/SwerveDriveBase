@@ -7,9 +7,10 @@ import frc.robot.Constants.Game.AlgaePosition;
 import java.util.List;
 
 public final class AlgaeAlign {
-    private AlgaeAlign() {}
 
     private static final double APPROACH_DISTANCE = 0.3;
+
+    private AlgaeAlign() {}
 
     public static List<Pose2d> generateWaypoints(AlgaePosition pole) {
         return WaypointAlign.createWaypointsToTarget(

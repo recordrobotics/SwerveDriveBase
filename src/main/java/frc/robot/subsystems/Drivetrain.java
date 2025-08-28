@@ -49,16 +49,31 @@ import org.littletonrobotics.junction.Logger;
 
 /** Represents a swerve drive style drivetrain. */
 public final class Drivetrain extends KillableSubsystem implements PoweredSubsystem {
-    // Creates swerve module objects
-    private final SwerveModule frontLeft;
-    private final SwerveModule frontRight;
-    private final SwerveModule backLeft;
-    private final SwerveModule backRight;
 
     private static final int FL = 0;
     private static final int FR = 1;
     private static final int BL = 2;
     private static final int BR = 3;
+
+    private static final double ENCODER_STABILIZATION_TIME = 2.3;
+
+    private static final Velocity<VoltageUnit> SYSID_DRIVE_RAMP_RATE =
+            Volts.of(3.0).per(Second);
+    private static final Voltage SYSID_DRIVE_STEP_VOLTAGE = Volts.of(3.0);
+    private static final Time SYSID_DRIVE_TIMEOUT = Seconds.of(1.5);
+
+    private static final Velocity<VoltageUnit> SYSID_TURN_RAMP_RATE =
+            Volts.of(6.0).per(Second);
+    private static final Voltage SYSID_TURN_STEP_VOLTAGE = Volts.of(2.0);
+    private static final Time SYSID_TURN_TIMEOUT = Seconds.of(1.0);
+
+    public final List<IDrivetrainControlModifier> modifiers = new ArrayList<>();
+
+    // Creates swerve module objects
+    private final SwerveModule frontLeft;
+    private final SwerveModule frontRight;
+    private final SwerveModule backLeft;
+    private final SwerveModule backRight;
 
     private final SysIdRoutine sysIdRoutineDriveMotorsSpin;
     private final SysIdRoutine sysIdRoutineDriveMotorsForward;
@@ -104,40 +119,6 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
 
     private int lastModifiersAppliedCount = 0;
     private SwerveModuleState[] lastModuleSetpoints = new SwerveModuleState[0];
-
-    public final List<IDrivetrainControlModifier> modifiers = new ArrayList<>();
-
-    public SwerveModule getFrontLeftModule() {
-        return frontLeft;
-    }
-
-    public SwerveModule getFrontRightModule() {
-        return frontRight;
-    }
-
-    public SwerveModule getBackLeftModule() {
-        return backLeft;
-    }
-
-    public SwerveModule getBackRightModule() {
-        return backRight;
-    }
-
-    public SwerveDriveSimulation getSwerveDriveSimulation() {
-        return swerveDriveSimulation;
-    }
-
-    private static final double ENCODER_STABILIZATION_TIME = 2.3;
-
-    private static final Velocity<VoltageUnit> SYSID_DRIVE_RAMP_RATE =
-            Volts.of(3.0).per(Second);
-    private static final Voltage SYSID_DRIVE_STEP_VOLTAGE = Volts.of(3.0);
-    private static final Time SYSID_DRIVE_TIMEOUT = Seconds.of(1.5);
-
-    private static final Velocity<VoltageUnit> SYSID_TURN_RAMP_RATE =
-            Volts.of(6.0).per(Second);
-    private static final Voltage SYSID_TURN_STEP_VOLTAGE = Volts.of(2.0);
-    private static final Time SYSID_TURN_TIMEOUT = Seconds.of(1.0);
 
     public Drivetrain() throws InvalidConfigException {
         ModuleConstants frontLeftConstants = Constants.Swerve.getFrontLeftConstants();
@@ -218,6 +199,26 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
                         SYSID_TURN_TIMEOUT,
                         state -> Logger.recordOutput("Drivetrain/Turn/SysIdTestState", state.toString())),
                 new SysIdRoutine.Mechanism(this::sysIdOnlyTurnMotors, null, this));
+    }
+
+    public SwerveModule getFrontLeftModule() {
+        return frontLeft;
+    }
+
+    public SwerveModule getFrontRightModule() {
+        return frontRight;
+    }
+
+    public SwerveModule getBackLeftModule() {
+        return backLeft;
+    }
+
+    public SwerveModule getBackRightModule() {
+        return backRight;
+    }
+
+    public SwerveDriveSimulation getSwerveDriveSimulation() {
+        return swerveDriveSimulation;
     }
 
     private static DrivetrainControl getDrivetrainControl() {

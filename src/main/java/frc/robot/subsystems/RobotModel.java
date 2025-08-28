@@ -38,6 +38,8 @@ public final class RobotModel extends ManagedSubsystemBase {
     public static class Elevator implements RobotMechanism {
         public static final int POSE_COUNT = 2; /* 2 stage elevator */
 
+        private static final double FIRST_STAGE_MAX_HEIGHT = 0.760967; // meters
+        private static final double SECOND_STAGE_MAX_HEIGHT = 1.44; // meters
         private static final double LINE_WIDTH = 10;
 
         @AutoLogLevel(level = Level.DEBUG_REAL)
@@ -92,9 +94,6 @@ public final class RobotModel extends ManagedSubsystemBase {
             return POSE_COUNT;
         }
 
-        private static final double FIRST_STAGE_MAX_HEIGHT = 0.760967; // meters
-        private static final double SECOND_STAGE_MAX_HEIGHT = 1.44; // meters
-
         public double getFirstStageHeight() {
             return (elevatorNode.getLength() - Constants.Elevator.MIN_LENGTH)
                     / Constants.Elevator.MAX_HEIGHT
@@ -144,6 +143,7 @@ public final class RobotModel extends ManagedSubsystemBase {
     public static class CoralIntake implements RobotMechanism {
         public static final int POSE_COUNT = 1;
 
+        private static final Translation3d SHAFT_ORIGIN = new Translation3d(0, 0.3337, 0.3598);
         private static final double LINE_WIDTH = 3;
 
         @AutoLogLevel(level = Level.DEBUG_REAL)
@@ -190,8 +190,6 @@ public final class RobotModel extends ManagedSubsystemBase {
             return POSE_COUNT;
         }
 
-        private static final Translation3d SHAFT_ORIGIN = new Translation3d(0, 0.3337, 0.3598);
-
         @Override
         public void updatePoses(Pose3d[] poses, int i) {
             poses[i] = Pose3d.kZero.rotateAround(
@@ -213,13 +211,11 @@ public final class RobotModel extends ManagedSubsystemBase {
     public static class ElevatorArm implements RobotMechanism {
         public static final int POSE_COUNT = 1;
 
+        private static final Translation3d SHAFT_ORIGIN = new Translation3d(0.318, 0, 0.575);
+        private static final double CORAL_ANGLE_IN_SHOOTER = 20;
         private static final double LINE_WIDTH = 3;
 
         private RobotModel model;
-
-        public ElevatorArm(RobotModel model) {
-            this.model = model;
-        }
 
         @AutoLogLevel(level = Level.DEBUG_REAL)
         private LoggedMechanism2d mechanism =
@@ -252,6 +248,10 @@ public final class RobotModel extends ManagedSubsystemBase {
                         LINE_WIDTH,
                         new Color8Bit(Color.kViolet)));
 
+        public ElevatorArm(RobotModel model) {
+            this.model = model;
+        }
+
         public void update(double angle) {
             elevatorArmNode.setAngle(Units.radiansToDegrees(Constants.ElevatorArm.ANGLE_OFFSET + angle));
         }
@@ -265,8 +265,6 @@ public final class RobotModel extends ManagedSubsystemBase {
             return POSE_COUNT;
         }
 
-        private static final Translation3d SHAFT_ORIGIN = new Translation3d(0.318, 0, 0.575);
-
         @Override
         public void updatePoses(Pose3d[] poses, int i) {
             Pose3d pose = Pose3d.kZero.rotateAround(
@@ -275,8 +273,6 @@ public final class RobotModel extends ManagedSubsystemBase {
                     pose.getTranslation().plus(new Translation3d(0, 0, model.elevator.getSecondStageHeight())),
                     pose.getRotation());
         }
-
-        private static final double CORAL_ANGLE_IN_SHOOTER = 20;
 
         @SuppressWarnings("java:S109") // specific xyz transform coordinates
         public Pose3d getCoralShooterTargetPose() {
@@ -341,6 +337,7 @@ public final class RobotModel extends ManagedSubsystemBase {
     public static class Climber implements RobotMechanism {
         public static final int POSE_COUNT = 1;
 
+        private static final Translation3d SHAFT_ORIGIN = new Translation3d(-0.2921, 0, 0.4097);
         private static final double LINE_WIDTH = 3;
 
         @AutoLogLevel(level = Level.DEBUG_REAL)
@@ -386,8 +383,6 @@ public final class RobotModel extends ManagedSubsystemBase {
             return POSE_COUNT;
         }
 
-        private static final Translation3d SHAFT_ORIGIN = new Translation3d(-0.2921, 0, 0.4097);
-
         @Override
         public void updatePoses(Pose3d[] poses, int i) {
             poses[i] = new Pose3d(0, 0, 0, new Rotation3d())
@@ -395,10 +390,32 @@ public final class RobotModel extends ManagedSubsystemBase {
         }
     }
 
+    public static class RobotCoral {
+        private Supplier<Pose3d> poseSupplier;
+
+        public RobotCoral(Supplier<Pose3d> poseSupplier) {
+            this.poseSupplier = poseSupplier;
+        }
+
+        public Supplier<Pose3d> getPoseSupplier() {
+            return poseSupplier;
+        }
+
+        public Pose3d getPose() {
+            return poseSupplier.get();
+        }
+
+        public void setPoseSupplier(Supplier<Pose3d> poseSupplier) {
+            this.poseSupplier = poseSupplier;
+        }
+    }
+
     public final Elevator elevator = new Elevator();
     public final ElevatorArm elevatorArm = new ElevatorArm(this);
     public final Climber climber = new Climber();
     public final CoralIntake coralIntake = new CoralIntake();
+
+    private final RobotCoral robotCoral = new RobotCoral(() -> null);
 
     @AutoLogLevel(level = Level.REAL)
     public Pose3d[] mechanismPoses =
@@ -470,28 +487,6 @@ public final class RobotModel extends ManagedSubsystemBase {
             return Pose2d.kZero;
         }
     }
-
-    public static class RobotCoral {
-        private Supplier<Pose3d> poseSupplier;
-
-        public RobotCoral(Supplier<Pose3d> poseSupplier) {
-            this.poseSupplier = poseSupplier;
-        }
-
-        public Supplier<Pose3d> getPoseSupplier() {
-            return poseSupplier;
-        }
-
-        public Pose3d getPose() {
-            return poseSupplier.get();
-        }
-
-        public void setPoseSupplier(Supplier<Pose3d> poseSupplier) {
-            this.poseSupplier = poseSupplier;
-        }
-    }
-
-    private final RobotCoral robotCoral = new RobotCoral(() -> null);
 
     public RobotCoral getRobotCoral() {
         return robotCoral;

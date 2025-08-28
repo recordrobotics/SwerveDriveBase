@@ -8,11 +8,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import java.util.Random;
 
 public final class SimpleMath {
-    private SimpleMath() {}
 
     public static final double PI2 = Math.PI * 2;
     public static final double SQRT2 = Math.sqrt(2);
     public static final double SECONDS_PER_MINUTE = 60;
+
+    private static final Random rand = new Random();
+
+    private SimpleMath() {}
 
     /**
      * Remaps a value between a range to a different range
@@ -102,8 +105,6 @@ public final class SimpleMath {
     public static boolean isWithinTolerance(double value, double target, double tolerance) {
         return Math.abs(value - target) <= tolerance;
     }
-
-    private static final Random rand = new Random();
 
     public static Pose2d poseNoise(Pose2d pose, double stdDev, double stdDevRot) {
         double x = pose.getX() + rand.nextGaussian(0, stdDev);

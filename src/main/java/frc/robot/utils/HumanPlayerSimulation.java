@@ -58,6 +58,24 @@ public class HumanPlayerSimulation extends SubsystemBase {
 
     public static class HumanPlayer {
 
+        public static final int MAX_CORAL_PER_STATION = 30;
+        public static final double GROUND_NEAR_VELOCITY = 1.0;
+        public static final double GROUND_FAR_VELOCITY = 4.0;
+        public static final double SOURCE_VELOCITY = 2.0;
+
+        private static final double SOURCE_WIDTH = 0.75;
+        private static final double INTAKE_OFFSET = 0.1;
+        private static final double SOURCE_HEIGHT = 1.16;
+        private static final double CORAL_GROUND_TOUCH_HEIGHT = 0.2;
+
+        private static final double GROUND_INTERVAL_MIN = 1.0;
+        private static final double GROUND_INTERVAL_MAX = 2.3;
+        private static final double SOURCE_INTERVAL_MIN = 1.4;
+        private static final double SOURCE_INTERVAL_MAX = 2.0;
+
+        private double lastDropTime = 0;
+        private int coralLeft = MAX_CORAL_PER_STATION;
+        private Random random = new Random();
         private HumanPlayerSimulationStrategy strategy;
         private HumanPlayerSource source;
 
@@ -82,12 +100,6 @@ public class HumanPlayerSimulation extends SubsystemBase {
             return source;
         }
 
-        public static final int MAX_CORAL_PER_STATION = 30;
-
-        private double lastDropTime = 0;
-        private int coralLeft = MAX_CORAL_PER_STATION;
-        private Random random = new Random();
-
         public void reset() {
             lastDropTime = 0;
             coralLeft = MAX_CORAL_PER_STATION;
@@ -102,10 +114,6 @@ public class HumanPlayerSimulation extends SubsystemBase {
             };
         }
 
-        private static final double SOURCE_WIDTH = 0.75;
-        private static final double INTAKE_OFFSET = 0.1;
-        private static final double SOURCE_HEIGHT = 1.16;
-
         private Pose3d getEjectPose(Pose2d target) {
             Pose3d sourcePose = new Pose3d(getSourcePose());
 
@@ -117,8 +125,6 @@ public class HumanPlayerSimulation extends SubsystemBase {
                     SOURCE_HEIGHT,
                     new Rotation3d(0, 0, 0)));
         }
-
-        private static final double CORAL_GROUND_TOUCH_HEIGHT = 0.2;
 
         public void dropWithVelocity(Pose2d target, double velocity) {
             if (coralLeft <= 0) {
@@ -141,15 +147,6 @@ public class HumanPlayerSimulation extends SubsystemBase {
                             .withTouchGroundHeight(CORAL_GROUND_TOUCH_HEIGHT)
                             .enableBecomesGamePieceOnFieldAfterTouchGround());
         }
-
-        public static final double GROUND_NEAR_VELOCITY = 1.0;
-        public static final double GROUND_FAR_VELOCITY = 4.0;
-        public static final double SOURCE_VELOCITY = 2.0;
-
-        private static final double GROUND_INTERVAL_MIN = 1.0;
-        private static final double GROUND_INTERVAL_MAX = 2.3;
-        private static final double SOURCE_INTERVAL_MIN = 1.4;
-        private static final double SOURCE_INTERVAL_MAX = 2.0;
 
         private void runOnlyGroundNear() {
             if (Timer.getTimestamp() - lastDropTime > random.nextDouble(GROUND_INTERVAL_MIN, GROUND_INTERVAL_MAX)) {

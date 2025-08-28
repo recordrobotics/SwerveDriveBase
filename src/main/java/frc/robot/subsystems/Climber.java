@@ -34,6 +34,13 @@ import org.littletonrobotics.junction.Logger;
 
 public final class Climber extends KillableSubsystem implements PoweredSubsystem, EncoderResettableSubsystem {
 
+    private static final double GOAL_POSITION_TOLERANCE = 0.01; // in rotations
+    private static final double KV_ZERO_CLIP_THRESHOLD = 0.2;
+
+    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(4.0).per(Second);
+    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(3.5);
+    private static final Time SYSID_TIMEOUT = Seconds.of(1.0);
+
     private final ClimberIO io;
     private final SysIdRoutine sysIdRoutine;
     private final MotionMagicVoltage armRequest;
@@ -44,9 +51,8 @@ public final class Climber extends KillableSubsystem implements PoweredSubsystem
     private double velocityCached = 0;
     private double voltageCached = 0;
 
-    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(4.0).per(Second);
-    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(3.5);
-    private static final Time SYSID_TIMEOUT = Seconds.of(1.0);
+    private double lastClimbVoltage = 0.0;
+    private double lastExpectedKVTime = 0;
 
     public Climber(ClimberIO io) {
         this.io = io;
@@ -100,9 +106,6 @@ public final class Climber extends KillableSubsystem implements PoweredSubsystem
         CLIMB
     }
 
-    private double lastClimbVoltage = 0.0;
-    private double lastExpectedKVTime = 0;
-
     @Override
     public void periodicManaged() {
         positionCached = io.getPosition();
@@ -133,8 +136,6 @@ public final class Climber extends KillableSubsystem implements PoweredSubsystem
         // Update mechanism
         RobotContainer.model.climber.update(getRotations());
     }
-
-    private static final double GOAL_POSITION_TOLERANCE = 0.01; // in rotations
 
     @AutoLogLevel(level = Level.DEBUG_REAL)
     public boolean atGoal() {
@@ -190,8 +191,6 @@ public final class Climber extends KillableSubsystem implements PoweredSubsystem
     public double getArmSetTo() {
         return voltageCached;
     }
-
-    private static final double KV_ZERO_CLIP_THRESHOLD = 0.2;
 
     @AutoLogLevel(level = Level.DEBUG_REAL)
     public double getEstimatedkV() {

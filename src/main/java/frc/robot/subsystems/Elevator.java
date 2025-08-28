@@ -33,6 +33,11 @@ import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
 public final class Elevator extends ManagedSubsystemBase implements PoweredSubsystem, EncoderResettableSubsystem {
+
+    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(4.5).per(Second);
+    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(3.0);
+    private static final Time SYSID_TIMEOUT = Seconds.of(1.2);
+
     private final ElevatorIO io;
 
     private final MotionMagicExpoVoltage elevatorRequest;
@@ -42,9 +47,9 @@ public final class Elevator extends ManagedSubsystemBase implements PoweredSubsy
     private double leadVelocityCached = 0;
     private double leadVoltageCached = 0;
 
-    private static final Velocity<VoltageUnit> SYSID_RAMP_RATE = Volts.of(4.5).per(Second);
-    private static final Voltage SYSID_STEP_VOLTAGE = Volts.of(3.0);
-    private static final Time SYSID_TIMEOUT = Seconds.of(1.2);
+    private double setpoint;
+
+    private final SysIdRoutine sysIdRoutine;
 
     public Elevator(ElevatorIO io) {
         this.io = io;
@@ -103,9 +108,6 @@ public final class Elevator extends ManagedSubsystemBase implements PoweredSubsy
 
         SmartDashboard.putNumber("Elevator", Constants.Elevator.STARTING_HEIGHT);
     }
-
-    private final SysIdRoutine sysIdRoutine;
-    private double setpoint;
 
     /** Height of the elevator in meters */
     @AutoLogLevel(level = Level.SYSID)

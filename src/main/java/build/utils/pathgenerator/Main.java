@@ -10,9 +10,10 @@ import frc.robot.Constants.Game.CoralPosition;
 import java.util.stream.Stream;
 
 public final class Main {
-    private Main() {}
 
     public static final Distance FIRST_STAGE_OFFSET = Meters.of(-0.6);
+
+    private Main() {}
 
     public static void main(String... args) {
         for (CoralPosition coral : Stream.of(CoralPosition.values())

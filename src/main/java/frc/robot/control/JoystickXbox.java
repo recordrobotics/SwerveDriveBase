@@ -25,10 +25,25 @@ import frc.robot.utils.modifiers.DrivetrainControl;
 @SuppressWarnings({"java:S109"})
 public class JoystickXbox implements AbstractControl {
 
+    private static final double SHOULDER_TRIGGER_THRESHOLD = 0.3;
+
+    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
+    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
+
+    private static final LinearVelocity MANUAL_ELEVATOR_VELOCITY_MAX =
+            Centimeters.of(50).per(Second);
+    private static final AngularVelocity MANUAL_ELEVATOR_ARM_VELOCITY_MAX =
+            Degrees.of(180).per(Second);
+    private static final double MANUAL_AXIS_DEADBAND = 0.1;
+
     private Joystick joystick;
     private XboxController xboxController;
 
-    private static final double SHOULDER_TRIGGER_THRESHOLD = 0.3;
+    private Transform2d lastVelocity = new Transform2d();
+    private Transform2d lastAcceleration = new Transform2d();
+    private Transform2d velocity = new Transform2d();
+    private Transform2d acceleration = new Transform2d();
+    private Transform2d jerk = new Transform2d();
 
     /**
      * @deprecated This is an old control scheme and will be removed
@@ -38,12 +53,6 @@ public class JoystickXbox implements AbstractControl {
         joystick = new Joystick(joystickPort);
         xboxController = new XboxController(xboxPort);
     }
-
-    private Transform2d lastVelocity = new Transform2d();
-    private Transform2d lastAcceleration = new Transform2d();
-    private Transform2d velocity = new Transform2d();
-    private Transform2d acceleration = new Transform2d();
-    private Transform2d jerk = new Transform2d();
 
     @Override
     public void update() {
@@ -161,9 +170,6 @@ public class JoystickXbox implements AbstractControl {
     public boolean isHalfSpeedTriggered() {
         return joystick.getRawButton(1);
     }
-
-    private static final double HALF_SPEED_DIRECTIONAL_DIVIDER = 3;
-    private static final double HALF_SPEED_SPIN_DIVIDER = 2;
 
     public Double getDirectionalSpeedLevel() {
         // Remaps speed meter from -1 -> 1 to 0.5 -> 4, then returns
@@ -296,12 +302,6 @@ public class JoystickXbox implements AbstractControl {
     public boolean isCoralIntakeScoreL1Triggered() {
         return xboxController.getPOV() == 180;
     }
-
-    private static final LinearVelocity MANUAL_ELEVATOR_VELOCITY_MAX =
-            Centimeters.of(50).per(Second);
-    private static final AngularVelocity MANUAL_ELEVATOR_ARM_VELOCITY_MAX =
-            Degrees.of(180).per(Second);
-    private static final double MANUAL_AXIS_DEADBAND = 0.1;
 
     @Override
     public LinearVelocity getManualElevatorVelocity() {

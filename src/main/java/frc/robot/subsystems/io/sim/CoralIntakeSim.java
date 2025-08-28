@@ -40,6 +40,13 @@ public class CoralIntakeSim implements CoralIntakeIO {
     private static final Distance WIDTH = Inches.of(21.25);
     private static final Distance LENGTH_EXTENDED = Inches.of(8.419554);
 
+    private static final double INTAKE_ANGLE_THRESHOLD = Units.degreesToRadians(30); // TODO check with real-world tests
+
+    private static final double INTAKE_VELOCITY_THRESHOLD = 1.0;
+    private static final double INTAKE_ARM_MAX_ANGLE_FOR_PROJECTILE_EJECT = Units.degreesToRadians(70);
+    private static final double CORAL_PROJECTILE_EJECT_SPEED = 2.0;
+    private static final double CORAL_GROUND_TOUCH_HEIGHT = 0.2;
+
     private final double periodicDt;
 
     private final SparkMax wheel;
@@ -72,7 +79,7 @@ public class CoralIntakeSim implements CoralIntakeIO {
     private final AbstractDriveTrainSimulation drivetrainSim;
     private final IntakeSimulation intakeSimulation;
 
-    private static final double INTAKE_ANGLE_THRESHOLD = Units.degreesToRadians(30); // TODO check with real-world tests
+    private boolean hadGamePieces = false;
 
     public CoralIntakeSim(double periodicDt, AbstractDriveTrainSimulation drivetrainSim) {
         this.periodicDt = periodicDt;
@@ -234,13 +241,6 @@ public class CoralIntakeSim implements CoralIntakeIO {
     public void removeCoral() {
         intakeSimulation.obtainGamePieceFromIntake();
     }
-
-    private boolean hadGamePieces = false;
-
-    private static final double INTAKE_VELOCITY_THRESHOLD = 1.0;
-    private static final double INTAKE_ARM_MAX_ANGLE_FOR_PROJECTILE_EJECT = Units.degreesToRadians(70);
-    private static final double CORAL_PROJECTILE_EJECT_SPEED = 2.0;
-    private static final double CORAL_GROUND_TOUCH_HEIGHT = 0.2;
 
     @Override
     public void simulationPeriodic() {

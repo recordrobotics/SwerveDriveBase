@@ -12,9 +12,9 @@ import frc.robot.subsystems.ElevatorHead.CoralShooterStates;
 
 public class CoralIntakeFromGroundUpSimple extends SequentialCommandGroup {
 
-    private static boolean running = false;
-
     public static final double PUSH_OUT_TIME = 0.1;
+
+    private static boolean running = false;
 
     public CoralIntakeFromGroundUpSimple() {
         addRequirements(RobotContainer.coralIntake);

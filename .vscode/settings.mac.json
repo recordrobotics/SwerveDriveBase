@@ -256,6 +256,9 @@
       "level": "off"
     }
   },
-  "java.checkstyle.configuration": "${workspaceFolder}\\config\\checkstyle\\checkstyle.xml",
-  "java.checkstyle.version": "11.0.0"
+  "java.checkstyle.configuration": "${workspaceFolder}/config/checkstyle/checkstyle.xml",
+  "java.checkstyle.version": "11.0.0",
+  "java.checkstyle.properties": {
+    "configDirectory": "${workspaceFolder}/config/checkstyle"
+  }
 }

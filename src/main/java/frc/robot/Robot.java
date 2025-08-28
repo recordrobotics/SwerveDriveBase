@@ -35,11 +35,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public final class Robot extends LoggedRobot {
-    private Command autonomousCommand;
-    private RobotContainer robotContainer;
-
-    private Runnable periodicRunnable;
-    private volatile boolean initialized = false;
 
     @SuppressWarnings("java:S1075")
     private static final String DEFAULT_PATH_RIO = "/home/lvuser/logs";
@@ -47,6 +42,13 @@ public final class Robot extends LoggedRobot {
     private static final String DEFAULT_PATH_SIM = "logs";
 
     private static final int ELASTIC_WEBSERVER_PORT = 5800;
+
+    private Command autonomousCommand;
+    private RobotContainer robotContainer;
+
+    private Runnable periodicRunnable;
+    private volatile boolean initialized = false;
+    private boolean hasRun = false;
 
     public Robot() {
         recordBuildMetadata();
@@ -231,8 +233,6 @@ public final class Robot extends LoggedRobot {
             DriverStation.reportError("AutoLogLevelManager exception: " + e.getMessage(), false);
         }
     }
-
-    boolean hasRun = false;
 
     /** This function is called once each time the robot enters Disabled mode. */
     @Override

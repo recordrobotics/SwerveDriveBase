@@ -11,18 +11,19 @@ import frc.robot.control.AbstractControl;
 import frc.robot.dashboard.DashboardUI;
 
 public class ManualElevator extends Command {
+
+    private static final double DEADBAND = 0.001;
+
+    private double height = 0;
+
     public ManualElevator() {
         addRequirements(RobotContainer.elevator);
     }
-
-    private double height = 0;
 
     @Override
     public void initialize() {
         height = RobotContainer.elevator.getCurrentHeight();
     }
-
-    private static final double DEADBAND = 0.001;
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
