@@ -255,5 +255,7 @@
     "java:S2160": {
       "level": "off"
     }
-  }
+  },
+  "java.checkstyle.configuration": "${workspaceFolder}\\config\\checkstyle\\checkstyle.xml",
+  "java.checkstyle.version": "11.0.0"
 }
