@@ -24,6 +24,7 @@ public class AutoScore extends SequentialCommandGroup {
     private static final double OTHER_WAYPOINT_TIMEOUT = 4.0;
 
     private static final double BACKAWAY_DISTANCE = 0.6;
+    private static final double BACKAWAY_TIMEOUT = 2.0;
 
     private static final double L4_DELAY_BEFORE_ELEVATOR_LOWER = 1.0;
 
@@ -71,7 +72,7 @@ public class AutoScore extends SequentialCommandGroup {
                                                                                                 -BACKAWAY_DISTANCE,
                                                                                                 0,
                                                                                                 Rotation2d.kZero)),
-                                                                        2.0),
+                                                                        BACKAWAY_TIMEOUT),
                                                                 Set.of(RobotContainer.drivetrain)) // back away
                                                         .alongWith(Commands.defer(
                                                                         () -> new WaitCommand(
