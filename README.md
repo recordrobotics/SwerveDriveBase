@@ -34,6 +34,12 @@ This repository recommends the following VS Code extensions for the best develop
         <b>SonarLint</b>
       </a>
     </td>
+    <td align="center">
+      <a href="https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle">
+        <img src="https://shengchen.gallerycdn.vsassets.io/extensions/shengchen/vscode-checkstyle/1.4.2/1680054146028/Microsoft.VisualStudio.Services.Icons.Default" width="64" alt="Checkstyle for Java"/><br/>
+        <b>Checkstyle for Java</b>
+      </a>
+    </td>
   </tr>
 </table>
 

@@ -258,4 +258,5 @@
       "level": "off"
     }
   },
+  "java.checkstyle.configuration": "${workspaceFolder}\\config\\checkstyle\\checkstyle.xml",
 }
