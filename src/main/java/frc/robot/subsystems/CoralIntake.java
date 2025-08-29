@@ -38,6 +38,7 @@ import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.SimpleMath;
 import frc.robot.utils.SysIdManager;
+import frc.robot.utils.modifiers.GroundIntakeAssist;
 import org.littletonrobotics.junction.Logger;
 
 public final class CoralIntake extends KillableSubsystem implements PoweredSubsystem, EncoderResettableSubsystem {
@@ -131,6 +132,8 @@ public final class CoralIntake extends KillableSubsystem implements PoweredSubsy
                 new SysIdRoutine.Mechanism(v -> io.setArmVoltage(v.in(Volts)), null, this));
 
         SmartDashboard.putNumber("CoralIntakeArm", Constants.CoralIntake.ARM_START_POS);
+
+        GroundIntakeAssist.getDefault().setEnabled(true);
     }
 
     public CoralIntakeSim getSimIO() throws IllegalStateException {

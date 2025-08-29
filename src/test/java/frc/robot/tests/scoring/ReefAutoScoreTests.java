@@ -22,7 +22,9 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 @SuppressWarnings("java:S2187") // dynamic test cases
-public class ReefAutoScoreTests {
+class ReefAutoScoreTests {
+
+    private static final double START_DISTANCE_FROM_REEF = 2.0;
 
     private static Stream<DynamicTest> testFactory(Stream<CoralPosition> branches, int level) {
         return branches.map(coralPosition -> {
@@ -39,8 +41,9 @@ public class ReefAutoScoreTests {
                         robot -> {
                             /* robot and field setup */
 
-                            final Pose2d startPose =
-                                    coralPosition.getPose().transformBy(new Transform2d(-2.0, 0, Rotation2d.kZero));
+                            final Pose2d startPose = coralPosition
+                                    .getPose()
+                                    .transformBy(new Transform2d(-START_DISTANCE_FROM_REEF, 0, Rotation2d.kZero));
                             RobotContainer.drivetrain.getSwerveDriveSimulation().setSimulationWorldPose(startPose);
 
                             // Odometry reset has to run during periodic to work correctly

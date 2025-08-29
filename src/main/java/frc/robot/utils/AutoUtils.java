@@ -15,6 +15,7 @@ import frc.robot.commands.ReefAlign;
 import frc.robot.commands.WaypointAlign;
 import frc.robot.commands.legacy.CoralIntakeFromSource;
 import frc.robot.subsystems.ElevatorHead.GamePiece;
+import frc.robot.utils.modifiers.AutoControlModifier;
 import java.io.IOException;
 import java.util.Set;
 import org.json.simple.parser.ParseException;
@@ -45,7 +46,8 @@ public final class AutoUtils {
                             0,
                             1,
                             true,
-                            new Double[] {2.0, 1.0});
+                            new Double[] {2.0, 1.0},
+                            AutoControlModifier.getDefault());
                 },
                 Set.of(RobotContainer.drivetrain));
     }

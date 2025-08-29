@@ -10,6 +10,7 @@ import frc.robot.Constants.ElevatorHeight;
 import frc.robot.Constants.Game.AlgaePosition;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorHead.AlgaeGrabberStates;
+import frc.robot.utils.modifiers.AutoControlModifier;
 
 public class AutoAlgae extends SequentialCommandGroup {
 
@@ -37,7 +38,8 @@ public class AutoAlgae extends SequentialCommandGroup {
                                 // elevator has to be fully extended before moving to second waypoint
                                 0,
                                 algaeGrabCommand(reefPole.getLevel().getHeight())
-                                        .asProxy())
+                                        .asProxy(),
+                                AutoControlModifier.getDefault())
                         .onlyWhile(() -> RobotState.isAutonomous() || !cancelCommand),
                 new WaitUntilCommand(() -> {
                     Pose2d pose = reefPole.getPose();

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.utils.SimpleMath;
+import frc.robot.utils.modifiers.AutoControlModifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -39,11 +40,15 @@ public class RuckigAlign extends Command {
 
         private record AlignEntry<T>(Supplier<T> initializer, Function<T, RuckigAlignState> state, double timeout) {}
 
+        private record Group(int startIndex, AutoControlModifier controlModifier) {}
+
         private final List<AlignEntry<T>> states = new ArrayList<>();
-        private final List<Integer> groups = new ArrayList<>();
+        private final List<Group> groups = new ArrayList<>();
         private final double[] maxVelocity;
         private final double[] maxAcceleration;
         private final double[] maxJerk;
+
+        private final AutoControlModifier defaultControlModifier;
 
         /**
          * Create a RuckigAlignGroup with the given constraints
@@ -51,7 +56,12 @@ public class RuckigAlign extends Command {
          * @param maxAcceleration the max acceleration for each of the 3 dimensions (x, y, rotation)
          * @param maxJerk the max jerk for each of the 3 dimensions (x, y, rotation)
          */
-        public RuckigAlignGroup(double[] maxVelocity, double[] maxAcceleration, double[] maxJerk) {
+        public RuckigAlignGroup(
+                AutoControlModifier defaultControlModifier,
+                double[] maxVelocity,
+                double[] maxAcceleration,
+                double[] maxJerk) {
+            this.defaultControlModifier = defaultControlModifier;
             this.maxVelocity = maxVelocity;
             this.maxAcceleration = maxAcceleration;
             this.maxJerk = maxJerk;
@@ -62,7 +72,16 @@ public class RuckigAlign extends Command {
          * @return this (for chaining)
          */
         public RuckigAlignGroup<T> newGroup() {
-            groups.add(states.size());
+            return newGroup(defaultControlModifier);
+        }
+
+        /**
+         * Start a new group of align states (used for splitting the group command into multiple)
+         * @param controlModifier the control modifier to use for this group
+         * @return this (for chaining)
+         */
+        public RuckigAlignGroup<T> newGroup(AutoControlModifier controlModifier) {
+            groups.add(new Group(states.size(), controlModifier));
             return this;
         }
 
@@ -115,29 +134,50 @@ public class RuckigAlign extends Command {
          * @return the command sequence
          */
         public Command build(int startGroup, int endGroup) {
+            if (groups.isEmpty()) {
+                return build(new int[] {});
+            }
+
+            return build(SimpleMath.range(startGroup, endGroup));
+        }
+
+        /**
+         * Build the RuckigAlign command sequence for a range of groups
+         * @param groupIds the group indices to include
+         * @return the command sequence
+         */
+        public Command build(int[] groupIds) {
             if (states.isEmpty()) return Commands.none();
 
-            final int startIndex;
-            final int endIndex;
+            List<Command> commands = new ArrayList<>();
 
             if (groups.isEmpty()) {
                 // If no groups were defined, treat all states as a single group
-                startIndex = 0;
-                endIndex = states.size();
+                addStateCommands(defaultControlModifier, 0, states.size(), commands);
             } else {
-                if (startGroup < 0
-                        || startGroup >= groups.size()
-                        || endGroup < 0
-                        || endGroup >= groups.size()
-                        || startGroup > endGroup) {
-                    throw new IllegalArgumentException("Invalid group indices");
-                }
+                for (int group : groupIds) {
+                    if (group < 0 || group >= groups.size()) {
+                        throw new IllegalArgumentException("Invalid group index: " + group);
+                    }
 
-                startIndex = groups.get(startGroup);
-                endIndex = (endGroup + 1 < groups.size()) ? groups.get(endGroup + 1) : states.size();
+                    int startIndex = groups.get(group).startIndex;
+                    int endIndex = (group + 1 < groups.size()) ? groups.get(group + 1).startIndex : states.size();
+                    addStateCommands(groups.get(group).controlModifier, startIndex, endIndex, commands);
+                }
             }
 
-            List<Command> commands = new ArrayList<>();
+            return Commands.sequence(commands.toArray(Command[]::new));
+        }
+
+        /**
+         * Add states from startIndex (inclusive) to endIndex (exclusive) to the commands list
+         * @param controlModifier the control modifier to use for these states
+         * @param startIndex the starting state index (inclusive)
+         * @param endIndex the ending state index (exclusive)
+         * @param commands the list to add the commands to
+         */
+        private void addStateCommands(
+                AutoControlModifier controlModifier, int startIndex, int endIndex, List<Command> commands) {
             for (int i = startIndex; i < endIndex; i++) {
                 final int index = i;
                 final AlignEntry<T> entry = states.get(index);
@@ -145,6 +185,7 @@ public class RuckigAlign extends Command {
                                 () -> {
                                     final T param = entry.initializer().get();
                                     return new RuckigAlign(
+                                            controlModifier,
                                             () -> entry.state().apply(param),
                                             maxVelocity,
                                             maxAcceleration,
@@ -154,7 +195,6 @@ public class RuckigAlign extends Command {
                                 Set.of(RobotContainer.drivetrain))
                         .withTimeout(entry.timeout()));
             }
-            return Commands.sequence(commands.toArray(Command[]::new));
         }
     }
 
@@ -190,22 +230,27 @@ public class RuckigAlign extends Command {
     private final double[] maxJerk;
     private final boolean resetTrajectory;
 
+    private final AutoControlModifier controlModifier;
+
     private Result result;
 
     public RuckigAlign(
+            AutoControlModifier controlModifier,
             Supplier<RuckigAlignState> targetStateSupplier,
             double[] maxVelocity,
             double[] maxAcceleration,
             double[] maxJerk) {
-        this(targetStateSupplier, maxVelocity, maxAcceleration, maxJerk, true);
+        this(controlModifier, targetStateSupplier, maxVelocity, maxAcceleration, maxJerk, true);
     }
 
     private RuckigAlign(
+            AutoControlModifier controlModifier,
             Supplier<RuckigAlignState> targetStateSupplier,
             double[] maxVelocity,
             double[] maxAcceleration,
             double[] maxJerk,
             boolean resetTrajectory) {
+        this.controlModifier = controlModifier;
         this.targetStateSupplier = targetStateSupplier;
         this.maxVelocity = maxVelocity;
         this.maxAcceleration = maxAcceleration;
@@ -344,7 +389,7 @@ public class RuckigAlign extends Command {
         double vr = rPid.calculate(currentPose.getRotation().getRadians(), newPosition[2])
                 + feedforward(newVelocity[2], newAcceleration[2], newJerk[2]);
 
-        RobotContainer.AUTO_CONTROL_MODIFER.drive(
+        controlModifier.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(vx, vy, vr), currentPose.getRotation()));
 
         output.passToInput(input);

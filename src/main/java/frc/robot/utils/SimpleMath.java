@@ -156,4 +156,22 @@ public final class SimpleMath {
     public static double average4(double a, double b, double c, double d) {
         return (a + b + c + d) / 4.0;
     }
+
+    /**
+     * Generates an integer array containing a range of integers from start (inclusive) to end (inclusive)
+     * @param start The starting integer (inclusive)
+     * @param end The ending integer (inclusive)
+     * @return An array of integers from start to end
+     */
+    public static int[] range(int start, int end) {
+        if (end < start) {
+            throw new IllegalArgumentException(
+                    "End must be greater than or equal to start (" + start + " <= " + end + ")");
+        }
+        int[] range = new int[end - start + 1];
+        for (int i = 0; i < range.length; i++) {
+            range[i] = start + i;
+        }
+        return range;
+    }
 }

@@ -75,7 +75,6 @@ import frc.robot.utils.libraries.Elastic;
 import frc.robot.utils.libraries.Elastic.Notification;
 import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
 import frc.robot.utils.modifiers.AutoControlModifier;
-import frc.robot.utils.modifiers.GroundIntakeAssist;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import org.photonvision.simulation.VisionSystemSim;
@@ -100,8 +99,6 @@ public final class RobotContainer {
 
     public static final double AUTO_ALIGN_FIRST_WAYPOINT_TIMEOUT = 2.0;
     public static final double AUTO_ALIGN_SECOND_WAYPOINT_TIMEOUT = 1.0;
-
-    public static final AutoControlModifier AUTO_CONTROL_MODIFER = new AutoControlModifier();
 
     public static Drivetrain drivetrain;
     public static PoseSensorFusion poseSensorFusion;
@@ -158,9 +155,6 @@ public final class RobotContainer {
             coralDetection = new CoralDetection();
             humanPlayerSimulation = new HumanPlayerSimulation();
         }
-
-        drivetrain.modifiers.add(0, AUTO_CONTROL_MODIFER);
-        drivetrain.modifiers.add(new GroundIntakeAssist());
 
         model = new RobotModel();
 
@@ -349,9 +343,13 @@ public final class RobotContainer {
     private static void configureAutoAlignTrigger() {
         new Trigger(() -> DashboardUI.Overview.getControl().isAutoAlignTriggered())
                 .whileTrue(Commands.defer(
-                        () -> WaypointAlign.align(ReefAlign.generateWaypointsClosest(false), 0, 1, true, new Double[] {
-                            AUTO_ALIGN_FIRST_WAYPOINT_TIMEOUT, AUTO_ALIGN_SECOND_WAYPOINT_TIMEOUT
-                        }),
+                        () -> WaypointAlign.align(
+                                ReefAlign.generateWaypointsClosest(false),
+                                0,
+                                1,
+                                true,
+                                new Double[] {AUTO_ALIGN_FIRST_WAYPOINT_TIMEOUT, AUTO_ALIGN_SECOND_WAYPOINT_TIMEOUT},
+                                AutoControlModifier.getDefault()),
                         Set.of(drivetrain)));
     }
 

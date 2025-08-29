@@ -397,4 +397,21 @@ class SimpleMathTests {
         double result = SimpleMath.average4(0.0, 0.0, 0.0, 0.0);
         assertEquals(0.0, result, DELTA);
     }
+
+    @Test
+    void testRangeNormal() {
+        int[] result = SimpleMath.range(3, 7);
+        assertArrayEquals(new int[] {3, 4, 5, 6, 7}, result);
+    }
+
+    @Test
+    void testRangeSingleValue() {
+        int[] result = SimpleMath.range(5, 5);
+        assertArrayEquals(new int[] {5}, result);
+    }
+
+    @Test
+    void testRangeInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> SimpleMath.range(7, 3));
+    }
 }

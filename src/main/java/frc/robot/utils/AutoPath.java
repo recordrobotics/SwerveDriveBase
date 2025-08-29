@@ -25,6 +25,7 @@ import frc.robot.commands.WaypointAlign;
 import frc.robot.commands.legacy.CoralIntakeFromSource;
 import frc.robot.commands.legacy.ElevatorMoveThenAlgaeGrab;
 import frc.robot.utils.libraries.Elastic.Notification.NotificationLevel;
+import frc.robot.utils.modifiers.AutoControlModifier;
 import java.util.Optional;
 import java.util.Set;
 import org.littletonrobotics.junction.Logger;
@@ -56,7 +57,8 @@ public final class AutoPath {
                                 0,
                                 1,
                                 true,
-                                new Double[] {2.0, 1.0})),
+                                new Double[] {2.0, 1.0},
+                                AutoControlModifier.getDefault())),
                         Set.of(RobotContainer.drivetrain)));
         NamedCommands.registerCommand("ElevatorL4", new ElevatorMove(ElevatorHeight.L4));
         NamedCommands.registerCommand("ElevatorL3", new ElevatorMove(ElevatorHeight.L3));
@@ -103,7 +105,7 @@ public final class AutoPath {
                 RobotContainer.drivetrain::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
 
                 // Method that will drive the robot given ROBOT RELATIVE speeds
-                (speeds, feedforwards) -> RobotContainer.AUTO_CONTROL_MODIFER.drive(speeds),
+                (speeds, feedforwards) -> AutoControlModifier.getDefault().drive(speeds),
                 Constants.Swerve.PP_DRIVE_CONTROLLER,
                 config,
 

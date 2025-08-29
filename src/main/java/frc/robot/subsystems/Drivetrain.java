@@ -35,10 +35,9 @@ import frc.robot.utils.ModuleConstants.InvalidConfigException;
 import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.SimpleMath;
 import frc.robot.utils.SysIdManager;
+import frc.robot.utils.modifiers.ControlModifierService;
+import frc.robot.utils.modifiers.ControlModifierService.ControlModifier;
 import frc.robot.utils.modifiers.DrivetrainControl;
-import frc.robot.utils.modifiers.IDrivetrainControlModifier;
-import java.util.ArrayList;
-import java.util.List;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.GyroSimulation;
@@ -66,8 +65,6 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
             Volts.of(6.0).per(Second);
     private static final Voltage SYSID_TURN_STEP_VOLTAGE = Volts.of(2.0);
     private static final Time SYSID_TURN_TIMEOUT = Seconds.of(1.0);
-
-    public final List<IDrivetrainControlModifier> modifiers = new ArrayList<>();
 
     // Creates swerve module objects
     private final SwerveModule frontLeft;
@@ -234,8 +231,11 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
         DrivetrainControl drivetrainControl = getDrivetrainControl();
 
         int applyCount = 0;
-        for (IDrivetrainControlModifier modifier : modifiers) {
-            if (modifier.isEnabled() && modifier.apply(drivetrainControl)) {
+
+        for (ControlModifier prioritizedModifier :
+                ControlModifierService.getInstance().getModifiers()) {
+            if (prioritizedModifier.modifier().isEnabled()
+                    && prioritizedModifier.modifier().apply(drivetrainControl)) {
                 applyCount++;
             }
         }

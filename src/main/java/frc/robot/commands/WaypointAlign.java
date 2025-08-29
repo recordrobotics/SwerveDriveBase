@@ -12,6 +12,7 @@ import frc.robot.commands.RuckigAlign.AlignMode;
 import frc.robot.commands.RuckigAlign.RuckigAlignGroup;
 import frc.robot.commands.RuckigAlign.RuckigAlignState;
 import frc.robot.utils.SimpleMath;
+import frc.robot.utils.modifiers.AutoControlModifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -213,10 +214,11 @@ public class WaypointAlign {
      * Aligns the robot to a target pose. The robot will move to the target pose and stop there.
      * @param target The target pose to align to
      * @param timeout The timeout for the alignment
+     * @param controlModifier The control modifier to use for the alignment
      * @return A command that aligns the robot to the target
      */
-    public static Command align(Pose2d target, double timeout) {
-        return align(List.of(target), 0, 0, true, new Double[] {timeout});
+    public static Command align(Pose2d target, double timeout, AutoControlModifier controlModifier) {
+        return align(List.of(target), 0, 0, true, new Double[] {timeout}, controlModifier);
     }
 
     /**
@@ -228,6 +230,7 @@ public class WaypointAlign {
      * @param endWaypoint The index of the waypoint to end at (inclusive)
      * @param stopAtEndWaypoint Whether to stop at the end waypoint (NOTE!: if the end waypoint is the last waypoint, the robot will always stop there)
      * @param waypointTimeouts The timeouts for each waypoint
+     * @param controlModifier The control modifier to use for the alignment
      * @return A command that aligns the robot with the waypoints
      */
     public static Command align(
@@ -235,14 +238,16 @@ public class WaypointAlign {
             int startWaypoint,
             int endWaypoint,
             boolean stopAtEndWaypoint,
-            Double[] waypointTimeouts) {
+            Double[] waypointTimeouts,
+            AutoControlModifier controlModifier) {
         return align(
                 waypoints,
                 startWaypoint,
                 endWaypoint,
                 stopAtEndWaypoint,
                 waypointTimeouts,
-                KinematicConstraints.DEFAULT);
+                KinematicConstraints.DEFAULT,
+                controlModifier);
     }
 
     private record WaypointData(KinematicState fullStopState, KinematicState velocityState) {}
@@ -257,6 +262,7 @@ public class WaypointAlign {
      * @param stopAtEndWaypoint Whether to stop at the end waypoint (NOTE!: if the end waypoint is the last waypoint, the robot will always stop there)
      * @param waypointTimeouts The timeouts for each waypoint
      * @param constraints The maximum kinematic constraints to use
+     * @param controlModifier The control modifier to use for the alignment
      * @return A command that aligns the robot with the waypoints
      */
     public static Command align(
@@ -265,9 +271,10 @@ public class WaypointAlign {
             int endWaypoint,
             boolean stopAtEndWaypoint,
             Double[] waypointTimeouts,
-            KinematicConstraints constraints) {
-        RuckigAlignGroup<WaypointData> waypointGroup =
-                new RuckigAlignGroup<>(constraints.maxVelocity, constraints.maxAcceleration, constraints.maxJerk);
+            KinematicConstraints constraints,
+            AutoControlModifier controlModifier) {
+        RuckigAlignGroup<WaypointData> waypointGroup = new RuckigAlignGroup<>(
+                controlModifier, constraints.maxVelocity, constraints.maxAcceleration, constraints.maxJerk);
         return align(waypoints, startWaypoint, endWaypoint, stopAtEndWaypoint, waypointTimeouts, waypointGroup)
                 .build();
     }
@@ -387,6 +394,7 @@ public class WaypointAlign {
      *     -1 and end is 0 then the command will run immediately and wait before entering the segment
      *     between first and second waypoint)
      * @param performCommand The command to run when at the right waypoint
+     * @param controlModifier The control modifier to use for the alignment
      * @return
      */
     public static Command alignWithCommand(
@@ -394,14 +402,16 @@ public class WaypointAlign {
             Double[] waypointTimeouts,
             int commandStartWaypoint,
             int commandEndWaypoint,
-            Command performCommand) {
+            Command performCommand,
+            AutoControlModifier controlModifier) {
         return alignWithCommand(
                 waypoints,
                 waypointTimeouts,
                 commandStartWaypoint,
                 commandEndWaypoint,
                 performCommand,
-                KinematicConstraints.DEFAULT);
+                KinematicConstraints.DEFAULT,
+                controlModifier);
     }
 
     /**
@@ -418,6 +428,7 @@ public class WaypointAlign {
      *     between first and second waypoint)
      * @param performCommand The command to run when at the right waypoint
      * @param constraints The maximum kinematic constraints to use
+     * @param controlModifier The control modifier to use for the alignment
      * @return
      */
     public static Command alignWithCommand(
@@ -426,7 +437,8 @@ public class WaypointAlign {
             int commandStartWaypoint,
             int commandEndWaypoint,
             Command performCommand,
-            KinematicConstraints constraints) {
+            KinematicConstraints constraints,
+            AutoControlModifier controlModifier) {
 
         if (waypoints.size() > waypointTimeouts.length) {
             throw new IllegalArgumentException("Waypoints and waypoint timeouts must have the same length");
@@ -435,7 +447,7 @@ public class WaypointAlign {
         return Commands.defer(
                 () -> {
                     RuckigAlignGroup<WaypointData> waypointGroup = new RuckigAlignGroup<>(
-                            constraints.maxVelocity, constraints.maxAcceleration, constraints.maxJerk);
+                            controlModifier, constraints.maxVelocity, constraints.maxAcceleration, constraints.maxJerk);
 
                     align(
                             waypoints,

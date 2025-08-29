@@ -40,11 +40,21 @@ public class GroundIntakeAssist implements IDrivetrainControlModifier {
     public static final double MAX_ASSIST_WEIGHT = 1.0;
     public static final double WEIGHT_HALF_SCALE_DISTANCE = 3.0;
 
-    private boolean enabled = true;
+    private static GroundIntakeAssist defaultInstance;
+
+    private boolean enabled = false;
     private PIDController rotationController = new PIDController(Constants.Assists.GROUND_ASSIST_ROTATION_P, 0.0, 0);
 
-    public GroundIntakeAssist() {
+    protected GroundIntakeAssist() {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
+    }
+
+    public static synchronized GroundIntakeAssist getDefault() {
+        if (defaultInstance == null) {
+            defaultInstance =
+                    ControlModifierService.getInstance().createModifier(GroundIntakeAssist::new, Priority.ASSIST);
+        }
+        return defaultInstance;
     }
 
     @Override
