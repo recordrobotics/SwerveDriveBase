@@ -191,6 +191,13 @@ public final class RobotContainer {
         /* nothing to do */
     }
 
+    public void disabledExit() {
+        // Reset encoders when enabling if not already reset (safety measure)
+        if (noEncoderResetAlert.get()) {
+            resetEncoders();
+        }
+    }
+
     /**
      * @deprecated This contains the old control scheme triggers
      */
