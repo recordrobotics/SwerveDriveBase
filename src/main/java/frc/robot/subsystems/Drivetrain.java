@@ -28,7 +28,6 @@ import frc.robot.subsystems.io.real.SwerveModuleReal;
 import frc.robot.subsystems.io.sim.SwerveModuleSim;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
-import frc.robot.utils.DCMotors;
 import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ModuleConstants.InvalidConfigException;
@@ -89,10 +88,10 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
             .withGyro(() -> new GyroSimulation(0.5, 0.05)) // navX-Micro
             // Specify swerve module (for realistic swerve dynamics)
             .withSwerveModule(new SwerveModuleSimulationConfig(
-                    DCMotor.getKrakenX60(1), // Drive motor is a Kraken X60
-                    DCMotors.getKrakenX44(1), // Steer motor is a Kraken X44
-                    Constants.Swerve.KRAKEN_DRIVE_GEAR_RATIO, // Drive motor gear ratio.
-                    Constants.Swerve.KRAKEN_TURN_GEAR_RATIO, // Steer motor gear ratio.
+                    DCMotor.getFalcon500(1), // Drive motor is a Falcon 500
+                    DCMotor.getFalcon500(1), // Steer motor is a Falcon 500
+                    Constants.Swerve.FALCON_DRIVE_GEAR_RATIO, // Drive motor gear ratio.
+                    Constants.Swerve.FALCON_TURN_GEAR_RATIO, // Steer motor gear ratio.
                     Volts.of(0.1),
                     Volts.of(0.2),
                     Inches.of(2),

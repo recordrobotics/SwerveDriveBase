@@ -129,9 +129,6 @@ public final class Constants {
         public static final LEDPattern FLASHING_GREEN =
                 LEDPattern.solid(Color.kGreen).blink(Constants.Lights.FLASH_FREQUENCY);
 
-        public static final LEDPattern CLIMB_PATTERN =
-                sparkle(Hertz.of(25), Percent.of(5).per(Second));
-
         public static final Supplier<LEDPattern> ALLIANCE_COLOR =
                 () -> DriverStationUtils.getCurrentAlliance() == Alliance.Red
                         ? LEDPattern.solid(Color.kRed).blend(LEDPattern.solid(Color.kBlack))
@@ -147,28 +144,6 @@ public final class Constants {
                                 .mask(LEDPattern.progressMaskLayer(() -> 0.3))
                                 .scrollAtAbsoluteSpeed(SCROLL_SPEED.times(5), LED_SPACING)
                                 .blend(LEDPattern.solid(Color.kBlue));
-
-        public static final Supplier<LEDPattern> sourcePattern =
-                () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kBlack)
-                        .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-        public static final Supplier<LEDPattern> reefScorePattern =
-                () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kBlue, Color.kBlack)
-                        .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-        public static final Supplier<LEDPattern> algaeScorePattern =
-                () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kPurple, Color.kBlack)
-                        .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-        public static final Supplier<LEDPattern> cagePattern =
-                () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kBlack)
-                        .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-        public static final Supplier<LEDPattern> removeAlgaePattern =
-                () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kYellow, Color.kBlack)
-                        .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-        public static final Supplier<LEDPattern> coralScorePattern =
-                () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kAqua, Color.kBlack)
-                        .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
-        public static final Supplier<LEDPattern> hybridPattern =
-                () -> LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kGreen, Color.kBlack)
-                        .scrollAtAbsoluteSpeed(SCROLL_SPEED, LED_SPACING);
 
         @SuppressWarnings("java:S6411") // LEDReader as Key is inefficient but acceptable
         private static HashMap<LEDReader, Long> lastSparkles = new HashMap<>();
@@ -270,7 +245,7 @@ public final class Constants {
                 FRAME_WIDTH + Inches.of(6.5).in(Meters);
         public static final double MAX_MECHANISM_HEIGHT = 2.1336;
 
-        public static final double ROBOT_MASS = 64.864; // kg
+        public static final double ROBOT_MASS = 34.864; // kg
         public static final double ROBOT_MOI = 14.547; // kg*m^2
 
         private Frame() {}
@@ -305,23 +280,23 @@ public final class Constants {
         public static final Current FALCON_TURN_STATOR_CURRENT_LIMIT = Amps.of(100);
         public static final Current FALCON_TURN_SUPPLY_CURRENT_LIMIT = Amps.of(25);
         public static final Current FALCON_DRIVE_STATOR_CURRENT_LIMIT = Amps.of(120);
-        public static final Current FALCON_DRIVE_SUPPLY_CURRENT_LIMIT = Amps.of(32);
+        public static final Current FALCON_DRIVE_SUPPLY_CURRENT_LIMIT = Amps.of(52);
 
         public static final Current KRAKEN_TURN_STATOR_CURRENT_LIMIT = Amps.of(100);
         public static final Current KRAKEN_TURN_SUPPLY_CURRENT_LIMIT = Amps.of(25);
         public static final Current KRAKEN_DRIVE_STATOR_CURRENT_LIMIT = Amps.of(120);
         public static final Current KRAKEN_DRIVE_SUPPLY_CURRENT_LIMIT = Amps.of(52);
 
-        public static final double FALCON_DRIVE_KS = 0.12373;
-        public static final double FALCON_DRIVE_KV = 2.5609;
-        public static final double FALCON_DRIVE_KA = 0.10075;
-        public static final double FALCON_DRIVE_KP = 0.1;
+        public static final double FALCON_DRIVE_KS = 0.13192;
+        public static final double FALCON_DRIVE_KV = 2.7547;
+        public static final double FALCON_DRIVE_KA = 0.24758;
+        public static final double FALCON_DRIVE_KP = 4.6957;
 
-        public static final double FALCON_TURN_KV = 1.7518;
-        public static final double FALCON_TURN_KA = 0.015791;
-        public static final double FALCON_TURN_KS = 0.08889;
-        public static final double FALCON_TURN_KP = 1.2;
-        public static final double FALCON_TURN_KD = 0.2;
+        public static final double FALCON_TURN_KV = 1.2993;
+        public static final double FALCON_TURN_KA = 0.058972;
+        public static final double FALCON_TURN_KS = 0.51562;
+        public static final double FALCON_TURN_KP = 55.543;
+        public static final double FALCON_TURN_KD = 2.3952;
 
         public static final double KRAKEN_DRIVE_KS = 0.13192;
         public static final double KRAKEN_DRIVE_KV = 2.7547;
@@ -360,8 +335,8 @@ public final class Constants {
                         WHEEL_DIAMETER / 2,
                         ROBOT_MAX_SPEED,
                         1.2,
-                        DCMotor.getKrakenX60(1),
-                        Constants.Swerve.KRAKEN_DRIVE_GEAR_RATIO,
+                        DCMotor.getFalcon500(1),
+                        Constants.Swerve.FALCON_DRIVE_GEAR_RATIO,
                         52,
                         1),
                 FRONT_LEFT_WHEEL_LOCATION,
@@ -379,19 +354,19 @@ public final class Constants {
         // Module Creation
 
         public static ModuleConstants getFrontLeftConstants() throws InvalidConfigException {
-            return ModuleConstants.fromConfig(MotorLocation.FRONT_LEFT, DriveMotorType.KRAKEN, TurnMotorType.KRAKEN);
+            return ModuleConstants.fromConfig(MotorLocation.FRONT_LEFT, DriveMotorType.FALCON, TurnMotorType.FALCON);
         }
 
         public static ModuleConstants getFrontRightConstants() throws InvalidConfigException {
-            return ModuleConstants.fromConfig(MotorLocation.FRONT_RIGHT, DriveMotorType.KRAKEN, TurnMotorType.KRAKEN);
+            return ModuleConstants.fromConfig(MotorLocation.FRONT_RIGHT, DriveMotorType.FALCON, TurnMotorType.FALCON);
         }
 
         public static ModuleConstants getBackLeftConstants() throws InvalidConfigException {
-            return ModuleConstants.fromConfig(MotorLocation.BACK_LEFT, DriveMotorType.KRAKEN, TurnMotorType.KRAKEN);
+            return ModuleConstants.fromConfig(MotorLocation.BACK_LEFT, DriveMotorType.FALCON, TurnMotorType.FALCON);
         }
 
         public static ModuleConstants getBackRightConstants() throws InvalidConfigException {
-            return ModuleConstants.fromConfig(MotorLocation.BACK_RIGHT, DriveMotorType.KRAKEN, TurnMotorType.KRAKEN);
+            return ModuleConstants.fromConfig(MotorLocation.BACK_RIGHT, DriveMotorType.FALCON, TurnMotorType.FALCON);
         }
     }
 
