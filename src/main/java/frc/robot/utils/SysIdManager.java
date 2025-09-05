@@ -28,13 +28,6 @@ public class SysIdManager {
 
     public enum SysIdRoutine {
         NONE,
-        CLIMBER(() -> RobotContainer.climber::sysIdQuasistatic, () -> RobotContainer.climber::sysIdDynamic),
-        CORAL_INTAKE_ARM(
-                () -> RobotContainer.coralIntake::sysIdQuasistaticArm,
-                () -> RobotContainer.coralIntake::sysIdDynamicArm),
-        CORAL_INTAKE_WHEEL(
-                () -> RobotContainer.coralIntake::sysIdQuasistaticWheel,
-                () -> RobotContainer.coralIntake::sysIdDynamicWheel),
         DRIVETRAIN_TURN(
                 () -> RobotContainer.drivetrain::sysIdQuasistaticTurnMotors,
                 () -> RobotContainer.drivetrain::sysIdDynamicTurnMotors),
@@ -43,11 +36,7 @@ public class SysIdManager {
                 () -> RobotContainer.drivetrain::sysIdDynamicDriveMotorsSpin),
         DRIVETRAIN_FORWARD(
                 () -> RobotContainer.drivetrain::sysIdQuasistaticDriveMotorsForward,
-                () -> RobotContainer.drivetrain::sysIdDynamicDriveMotorsForward),
-        ELEVATOR(() -> RobotContainer.elevator::sysIdQuasistatic, () -> RobotContainer.elevator::sysIdDynamic),
-        ELEVATOR_ARM(() -> RobotContainer.elevator::sysIdQuasistatic, () -> RobotContainer.elevator::sysIdDynamic),
-        ELEVATOR_HEAD(
-                () -> RobotContainer.elevatorHead::sysIdQuasistatic, () -> RobotContainer.elevatorHead::sysIdDynamic);
+                () -> RobotContainer.drivetrain::sysIdDynamicDriveMotorsForward);
 
         private final boolean enabled;
         private final Supplier<Function<Direction, Command>> quasistatic;

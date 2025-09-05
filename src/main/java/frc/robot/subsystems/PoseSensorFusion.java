@@ -25,10 +25,7 @@ import frc.robot.utils.AutoLogLevel.Level;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.IndependentSwervePoseEstimator;
 import frc.robot.utils.ManagedSubsystemBase;
-import frc.robot.utils.camera.CameraType;
 import frc.robot.utils.camera.IVisionCamera;
-import frc.robot.utils.camera.LimelightCamera;
-import frc.robot.utils.camera.PhotonVisionCamera;
 import frc.robot.utils.camera.VisionCameraEstimate.RawVisionFiducial;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,11 +43,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
 
     public static final double MAX_MEASUREMENT_STD_DEVS = 9_999_999;
 
-    private static final double L1_STD_MULTIPLIER = 2.0;
-    private static final double SOURCE_STD_MULTIPLIER = 8.0;
-
     private static final double ISPE_STD_DEV = 0.7;
-    private static final double MAX_L1_DISTANCE_TO_IGNORE_SOURCE = 2.5;
 
     private static final double DEFAULT_DEBOUNCE_TIME = 0.5;
 
@@ -59,33 +52,13 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     private SwerveDrivePoseEstimator poseFilter;
     private IndependentSwervePoseEstimator independentPoseEstimator;
 
-    private LimelightCamera leftCamera = new LimelightCamera(
-            Constants.Limelight.LIMELIGHT_LEFT_NAME, CameraType.LIMELIGHT_3G, Constants.Limelight.ROBOT_TO_CAMERA_LEFT);
-    private LimelightCamera centerCamera = new LimelightCamera(
-            Constants.Limelight.LIMELIGHT_CENTER_NAME,
-            CameraType.LIMELIGHT_2,
-            Constants.Limelight.ROBOT_TO_CAMERA_CENTER);
-
-    private PhotonVisionCamera l1Camera = new PhotonVisionCamera(
-            Constants.PhotonVision.PHOTON_L1_NAME,
-            CameraType.SVPRO_GLOBAL_SHUTTER,
-            Constants.PhotonVision.ROBOT_TO_CAMERA_L1,
-            L1_STD_MULTIPLIER);
-    private PhotonVisionCamera sourceCamera = new PhotonVisionCamera(
-            Constants.PhotonVision.PHOTON_SOURCE_NAME,
-            CameraType.SVPRO_GLOBAL_SHUTTER,
-            Constants.PhotonVision.ROBOT_TO_CAMERA_SOURCE,
-            SOURCE_STD_MULTIPLIER);
-
-    private final Set<IVisionCamera> cameras = Set.of(leftCamera, centerCamera, l1Camera, sourceCamera);
+    private final Set<IVisionCamera> cameras = Set.of();
 
     private final HashSet<VisionDebouncer> visionDebouncers = new HashSet<>();
 
     private ConcurrentSkipListSet<DeferredPoseEstimation> deferredPoseEstimations =
             new ConcurrentSkipListSet<>((a, b) -> Double.compare(a.timestampSeconds, b.timestampSeconds));
 
-    private boolean trustLimelightLeft;
-    private boolean trustLimelightCenter;
     private boolean useISPE;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -110,7 +83,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
                 RobotContainer.drivetrain.getKinematics(),
                 nav.getAdjustedAngle(),
                 getModulePositions(),
-                DashboardUI.Autonomous.getStartingLocation().getPose());
+                DashboardUI.Overview.getStartingLocation().getPose());
 
         independentPoseEstimator = new IndependentSwervePoseEstimator(
                 getEstimatedPosition(),
@@ -127,9 +100,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
                     Constants.Swerve.BACK_RIGHT_WHEEL_LOCATION
                 });
 
-        SmartDashboard.putBoolean("Autonomous/TrustLimelightLeft", true);
-        SmartDashboard.putBoolean("Autonomous/TrustLimelightCenter", true);
-        SmartDashboard.putBoolean("Autonomous/UseISPE", true);
+        SmartDashboard.putBoolean("Overview/UseISPE", true);
     }
 
     public record DeferredPoseEstimation(
@@ -144,9 +115,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     public void startCalculation() {
         deferredPoseEstimations.clear();
 
-        trustLimelightLeft = SmartDashboard.getBoolean("Autonomous/TrustLimelightLeft", false);
-        trustLimelightCenter = SmartDashboard.getBoolean("Autonomous/TrustLimelightCenter", false);
-        useISPE = SmartDashboard.getBoolean("Autonomous/UseISPE", true);
+        useISPE = SmartDashboard.getBoolean("Overview/UseISPE", true);
 
         calculationFuture = executor.submit(this::calculationLoop);
     }
@@ -174,11 +143,6 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
         }
 
         updateDashboard();
-
-        leftCamera.logValues("Left");
-        centerCamera.logValues("Center");
-        l1Camera.logValues("L1");
-        sourceCamera.logValues("Source");
 
         for (VisionDebouncer debouncer : visionDebouncers) {
             debouncer.update();
@@ -214,25 +178,18 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
                         VecBuilder.fill(ISPE_STD_DEV, ISPE_STD_DEV, MAX_MEASUREMENT_STD_DEVS));
             }
         }
-
-        leftCamera.updateEstimation(trustLimelightLeft, false);
-        centerCamera.updateEstimation(trustLimelightCenter, false);
-        l1Camera.updateEstimation(true, false);
-        sourceCamera.updateEstimation(
-                true,
-                l1Camera.hasVision() && l1Camera.getUnsafeEstimate().avgTagDist() < MAX_L1_DISTANCE_TO_IGNORE_SOURCE);
     }
 
     private void updateDashboard() {
         for (IVisionCamera camera : cameras) {
-            DashboardUI.Autonomous.setVisionPose(
+            DashboardUI.Overview.setVisionPose(
                     camera.getName(), camera.getUnsafeEstimate().pose());
         }
 
         SmartDashboard.putNumber(
                 "pose", poseFilter.getEstimatedPosition().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro", nav.getAdjustedAngle().getDegrees());
-        DashboardUI.Autonomous.setRobotPose(poseFilter.getEstimatedPosition());
+        DashboardUI.Overview.setRobotPose(poseFilter.getEstimatedPosition());
     }
 
     private static SwerveModulePosition[] getModulePositions() {
@@ -258,12 +215,12 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
 
     /** Resets the field relative position of the robot (mostly for testing). */
     public void resetStartingPose() {
-        setToPose(DashboardUI.Autonomous.getStartingLocation().getPose());
+        setToPose(DashboardUI.Overview.getStartingLocation().getPose());
         if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
             RobotContainer.drivetrain
                     .getSwerveDriveSimulation()
                     .setSimulationWorldPose(
-                            DashboardUI.Autonomous.getStartingLocation().getPose());
+                            DashboardUI.Overview.getStartingLocation().getPose());
         }
     }
 
@@ -290,12 +247,8 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     }
 
     public enum CameraTarget {
-        LEFT(RobotContainer.poseSensorFusion.getLeftCamera()),
-        CENTER(RobotContainer.poseSensorFusion.getCenterCamera()),
-        L1(RobotContainer.poseSensorFusion.getL1Camera()),
-        SOURCE(RobotContainer.poseSensorFusion.getSourceCamera()),
-        ELEVATOR(LEFT, CENTER),
-        ALL(LEFT, CENTER, L1, SOURCE);
+        @SuppressWarnings("java:S3878")
+        NONE(new IVisionCamera[0]);
 
         private Set<IVisionCamera> cameras;
 
@@ -303,6 +256,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
             this.cameras = Set.of(cameras);
         }
 
+        @SuppressWarnings("java:S1144")
         CameraTarget(CameraTarget... targets) {
             List<IVisionCamera> cameraList = new ArrayList<>();
             for (CameraTarget target : targets) {
@@ -349,22 +303,6 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     @Override
     public void close() throws Exception {
         nav.close();
-    }
-
-    public LimelightCamera getLeftCamera() {
-        return leftCamera;
-    }
-
-    public LimelightCamera getCenterCamera() {
-        return centerCamera;
-    }
-
-    public PhotonVisionCamera getL1Camera() {
-        return l1Camera;
-    }
-
-    public PhotonVisionCamera getSourceCamera() {
-        return sourceCamera;
     }
 
     public Set<IVisionCamera> getCameras() {

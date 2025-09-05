@@ -1,8 +1,12 @@
 package frc.robot.dashboard;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldStartingLocation;
 import frc.robot.control.AbstractControl;
 import frc.robot.utils.libraries.Elastic;
 import java.util.EnumSet;
@@ -23,16 +27,29 @@ public final class OverviewLayout extends AbstractLayout {
         }
     }
 
+    private final Field2d field = new Field2d();
+
     private LoggedDashboardChooser<DriverOrientation> driverOrientation =
             new LoggedDashboardChooser<>("Driver Orientation");
     private LoggedDashboardChooser<AbstractControl> driveMode = new LoggedDashboardChooser<>("Drive Mode");
+    private LoggedDashboardChooser<FieldStartingLocation> fieldStartingLocationChooser =
+            new LoggedDashboardChooser<>("Starting Location");
     private AbstractControl defaultControl;
     private AbstractControl testControl;
 
     private Supplier<Boolean> navSensorValue = () -> false;
 
     public OverviewLayout() {
+        buildSendable("Field", field);
         addValueSendable("Nav Sensor", () -> navSensorValue.get(), "boolean");
+
+        EnumSet.allOf(FieldStartingLocation.class)
+                .forEach(v -> fieldStartingLocationChooser.addOption(v.toString(), v));
+        fieldStartingLocationChooser.addDefaultOption(
+                FieldStartingLocation.DEFAULT.toString(), FieldStartingLocation.DEFAULT);
+
+        SmartDashboard.putBoolean("Autonomous/ResetLocationButton", false);
+        SmartDashboard.putBoolean("Autonomous/EncoderReset", false);
     }
 
     /**
@@ -88,5 +105,27 @@ public final class OverviewLayout extends AbstractLayout {
 
         if (driveMode.get() == null) return defaultControl;
         return driveMode.get();
+    }
+
+    public void setRobotPose(Pose2d pose) {
+        field.setRobotPose(pose);
+    }
+
+    public void setVisionPose(String name, Pose2d pose) {
+        field.getObject(name).setPose(pose);
+    }
+
+    public FieldStartingLocation getStartingLocation() {
+        return fieldStartingLocationChooser.get() == null
+                ? FieldStartingLocation.DEFAULT
+                : fieldStartingLocationChooser.get();
+    }
+
+    public boolean isResetLocationPressed() {
+        return SmartDashboard.getBoolean("Autonomous/ResetLocationButton", false);
+    }
+
+    public boolean isEncoderResetPressed() {
+        return SmartDashboard.getBoolean("Autonomous/EncoderReset", false);
     }
 }

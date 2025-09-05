@@ -5,18 +5,14 @@
 package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
-import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.KillSpecified;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.utils.AutoLogLevelManager;
-import frc.robot.utils.LocalADStarAK;
 import frc.robot.utils.SysIdManager;
 import frc.robot.utils.SysIdManager.SysIdRoutine;
 import frc.robot.utils.maplesim.ImprovedArena2025Reefscape;
@@ -160,7 +156,6 @@ public final class Robot extends LoggedRobot {
      */
     @Override
     public void robotInit() {
-        Pathfinding.setPathfinder(new LocalADStarAK());
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
@@ -178,7 +173,7 @@ public final class Robot extends LoggedRobot {
         }
 
         // MAKE SURE FIRST CALL TO ELASTIC IS NOT IN TELEOP OR AUTO INIT!!
-        DashboardUI.Autonomous.switchTo();
+        DashboardUI.Overview.switchTo();
 
         AutoLogLevelManager.addObject(this);
 
@@ -214,10 +209,6 @@ public final class Robot extends LoggedRobot {
             e.printStackTrace();
             DriverStation.reportError("CommandScheduler exception: " + e.getMessage(), false);
         }
-
-        SmartDashboard.putString(
-                "Overview/LevelSwitch",
-                DashboardUI.Overview.getControl().getReefLevelSwitchValue().toString());
 
         try {
             DashboardUI.update();
@@ -266,14 +257,6 @@ public final class Robot extends LoggedRobot {
         if (Constants.RobotState.getMode() == Constants.RobotState.Mode.SIM) {
             // Reset simulation field
             SimulatedArena.getInstance().resetFieldForAuto();
-            RobotContainer.humanPlayerSimulation.reset();
-
-            // Give robot preload
-            try {
-                RobotContainer.elevatorHead.getSimIO().setPreload();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
         // schedule the autonomous command (example)
@@ -281,7 +264,7 @@ public final class Robot extends LoggedRobot {
             autonomousCommand.schedule();
         }
 
-        DashboardUI.Autonomous.switchTo();
+        DashboardUI.Overview.switchTo();
 
         hasRun = true;
     }
@@ -302,8 +285,6 @@ public final class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
 
-        new KillSpecified(RobotContainer.elevatorHead, RobotContainer.coralIntake).schedule();
-
         robotContainer.teleopInit();
         hasRun = true;
 
@@ -313,8 +294,7 @@ public final class Robot extends LoggedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        Logger.recordOutput(
-                "Control/ReefLevelSwitch", DashboardUI.Overview.getControl().getReefLevelSwitchValue());
+        /* nothing to do */
     }
 
     @Override

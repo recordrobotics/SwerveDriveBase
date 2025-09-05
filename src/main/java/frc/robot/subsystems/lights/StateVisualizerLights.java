@@ -10,7 +10,6 @@ public final class StateVisualizerLights extends VirtualLightsSubsystem {
 
     public StateVisualizerLights(Lights lights) {
         super(lights, VIEW_START, VIEW_END);
-        setDefaultCommand(
-                runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY_WITH_CLIMB).ignoringDisable(true));
+        setDefaultCommand(runPattern(Constants.Lights.ALLIANCE_COLOR_FANCY).ignoringDisable(true));
     }
 }

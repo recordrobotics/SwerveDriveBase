@@ -144,7 +144,7 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
                     // Specify Configuration
                     driveTrainSimulationConfig,
                     // Specify starting pose
-                    DashboardUI.Autonomous.getStartingLocation().getPose());
+                    DashboardUI.Overview.getStartingLocation().getPose());
 
             // Register the drivetrain simulation to the default simulation world
             SimulatedArena.getInstance().addDriveTrainSimulation(swerveDriveSimulation);
