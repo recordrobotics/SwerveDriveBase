@@ -48,8 +48,8 @@ public final class OverviewLayout extends AbstractLayout {
         fieldStartingLocationChooser.addDefaultOption(
                 FieldStartingLocation.DEFAULT.toString(), FieldStartingLocation.DEFAULT);
 
-        SmartDashboard.putBoolean("Autonomous/ResetLocationButton", false);
-        SmartDashboard.putBoolean("Autonomous/EncoderReset", false);
+        SmartDashboard.putBoolean("Overview/ResetLocationButton", false);
+        SmartDashboard.putBoolean("Overview/EncoderReset", false);
     }
 
     /**
@@ -122,10 +122,10 @@ public final class OverviewLayout extends AbstractLayout {
     }
 
     public boolean isResetLocationPressed() {
-        return SmartDashboard.getBoolean("Autonomous/ResetLocationButton", false);
+        return SmartDashboard.getBoolean("Overview/ResetLocationButton", false);
     }
 
     public boolean isEncoderResetPressed() {
-        return SmartDashboard.getBoolean("Autonomous/EncoderReset", false);
+        return SmartDashboard.getBoolean("Overview/EncoderReset", false);
     }
 }
