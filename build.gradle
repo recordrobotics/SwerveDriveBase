@@ -77,6 +77,12 @@ task(pathgenerator, type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task(tuning, type: JavaExec) {
+    mainClass = "build.utils.tuning.Main"
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty 'java.library.path', "${project.buildDir}/jni/release"
+}
+
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 5.
 dependencies {

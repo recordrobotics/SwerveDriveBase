@@ -1,5 +1,6 @@
-package build.utils.pathgenerator;
+package build.utils;
 
+import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -36,9 +37,9 @@ public final class FileUtils {
         return obj;
     }
 
-    public static void writeJson(File file, JsonNode obj) {
+    public static void writeJson(File file, JsonNode obj, PrettyPrinter feature) {
         try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
-            mapper.writer(new PathPlannerPrettyPrinter()).writeValue(writer, obj);
+            mapper.writer(feature).writeValue(writer, obj);
         } catch (IOException e) {
             throw new InvalidFileFormatException("Error writing JSON file: " + file.getAbsolutePath(), e);
         }

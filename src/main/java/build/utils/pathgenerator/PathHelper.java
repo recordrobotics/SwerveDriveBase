@@ -1,5 +1,6 @@
 package build.utils.pathgenerator;
 
+import build.utils.FileUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,7 +31,7 @@ public final class PathHelper {
         for (File path : new File(FileUtils.getLaunchDirectory(), "src/main/deploy/pathplanner/paths").listFiles()) {
             JsonNode obj = FileUtils.readJson(path);
             processWaypoints(obj, name, pose);
-            FileUtils.writeJson(path, obj);
+            FileUtils.writeJson(path, obj, new PathPlannerPrettyPrinter());
         }
     }
 
