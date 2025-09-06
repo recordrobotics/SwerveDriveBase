@@ -1211,7 +1211,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/Shuffleboard/Test/Encoder 0",
+              "topic": "/SmartDashboard/Encoder 0",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1225,7 +1225,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/Shuffleboard/Test/Encoder 1",
+              "topic": "/SmartDashboard/Encoder 1",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1239,7 +1239,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/Shuffleboard/Test/Encoder 2",
+              "topic": "/SmartDashboard/Encoder 2",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1253,7 +1253,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/Shuffleboard/Test/Encoder 3",
+              "topic": "/SmartDashboard/Encoder 3",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false

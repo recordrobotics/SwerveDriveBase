@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.io.SwerveModuleIO;
 import frc.robot.utils.AutoLogLevel.Level;
@@ -29,8 +30,7 @@ public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
     private static final double STATIONARY_DRIVE_VELOCITY_THRESHOLD = 0.08;
     private static final double STATIONARY_TURN_VELOCITY_THRESHOLD = 1.0;
 
-    // Creates variables for motors and absolute encoders
-    private int driveMotorChannel;
+    private final int encoderChannel;
 
     private final SwerveModuleIO io;
 
@@ -67,7 +67,7 @@ public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
         this.io = io;
 
         // Creates TalonFX objects
-        driveMotorChannel = m.driveMotorChannel();
+        encoderChannel = m.absoluteTurningMotorEncoderChannel();
 
         // Creates Motor Encoder object and gets offset
         turningEncoderOffset = m.turningEncoderOffset();
@@ -271,8 +271,10 @@ public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
         io.setDriveMotorMotionMagic(driveRequest.withVelocity(actualTargetDriveVelocity));
 
         // TODO: remove after drivetrain tuning
-        Logger.recordOutput("Swerve/" + driveMotorChannel + "/Current", getDriveWheelVelocity());
-        Logger.recordOutput("Swerve/" + driveMotorChannel + "/Target", actualTargetDriveVelocity);
+        Logger.recordOutput("Swerve/" + encoderChannel + "/Current", getDriveWheelVelocity());
+        Logger.recordOutput("Swerve/" + encoderChannel + "/Target", actualTargetDriveVelocity);
+
+        SmartDashboard.putNumber("Encoder " + encoderChannel, io.getAbsoluteEncoder());
 
         if (SysIdManager.getSysIdRoutine() != SysIdRoutine.DRIVETRAIN_TURN) {
             io.setTurnMotorMotionMagic(turnRequest.withPosition(targetTurnPosition));
