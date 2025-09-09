@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState.Mode;
 import frc.robot.RobotContainer;
@@ -24,7 +25,6 @@ import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.IndependentSwervePoseEstimator;
-import frc.robot.utils.ManagedSubsystemBase;
 import frc.robot.utils.camera.IVisionCamera;
 import frc.robot.utils.camera.VisionCameraEstimate.RawVisionFiducial;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import org.littletonrobotics.junction.Logger;
 
-public class PoseSensorFusion extends ManagedSubsystemBase {
+public class PoseSensorFusion extends SubsystemBase implements AutoCloseable {
 
     public static final double MAX_MEASUREMENT_STD_DEVS = 9_999_999;
 
@@ -154,7 +154,7 @@ public class PoseSensorFusion extends ManagedSubsystemBase {
     }
 
     @Override
-    public void periodicManaged() {
+    public void periodic() {
         /* logic is asynchronous */
     }
 

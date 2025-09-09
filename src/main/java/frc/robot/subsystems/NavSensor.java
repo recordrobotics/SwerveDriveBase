@@ -1,12 +1,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.dashboard.DashboardUI;
 import frc.robot.subsystems.io.NavSensorIO;
-import frc.robot.utils.ManagedSubsystemBase;
 
-public class NavSensor extends ManagedSubsystemBase {
+public class NavSensor extends SubsystemBase implements AutoCloseable {
 
     private static final double PERIODIC = RobotContainer.ROBOT_PERIODIC;
 
@@ -54,7 +54,7 @@ public class NavSensor extends ManagedSubsystemBase {
     }
 
     @Override
-    public void periodicManaged() {
+    public void periodic() {
         double accelX = io.getWorldLinearAccelX();
         double accelY = io.getWorldLinearAccelY();
         jerkX = (accelX - lastAccelX) / PERIODIC;
@@ -64,7 +64,7 @@ public class NavSensor extends ManagedSubsystemBase {
     }
 
     @Override
-    public void simulationPeriodicManaged() {
+    public void simulationPeriodic() {
         io.simulationPeriodic();
     }
 

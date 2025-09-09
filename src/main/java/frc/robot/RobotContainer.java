@@ -40,7 +40,6 @@ public final class RobotContainer {
 
     public static Drivetrain drivetrain;
     public static PoseSensorFusion poseSensorFusion;
-    public static Lights lights;
     public static PowerDistributionPanel pdp;
     public static RobotModel model;
 
@@ -57,7 +56,6 @@ public final class RobotContainer {
         }
 
         poseSensorFusion = new PoseSensorFusion();
-        lights = new Lights();
         pdp = new PowerDistributionPanel();
         model = new RobotModel();
 

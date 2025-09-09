@@ -46,7 +46,7 @@ import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.Logger;
 
 /** Represents a swerve drive style drivetrain. */
-public final class Drivetrain extends KillableSubsystem implements PoweredSubsystem {
+public final class Drivetrain extends KillableSubsystem implements PoweredSubsystem, AutoCloseable {
 
     private static final int FL = 0;
     private static final int FR = 1;
@@ -266,7 +266,7 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
     }
 
     @Override
-    public void periodicManaged() {
+    public void periodic() {
         driveInternal();
 
         frontLeft.periodic();
@@ -276,7 +276,7 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
     }
 
     @Override
-    public void simulationPeriodicManaged() {
+    public void simulationPeriodic() {
         frontLeft.simulationPeriodic();
         frontRight.simulationPeriodic();
         backLeft.simulationPeriodic();

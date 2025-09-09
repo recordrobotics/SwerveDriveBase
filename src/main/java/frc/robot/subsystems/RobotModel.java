@@ -2,24 +2,24 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
-import frc.robot.utils.ManagedSubsystemBase;
 import frc.robot.utils.field.FieldIntersection;
 import java.util.List;
 import org.ironmaple.simulation.SimulatedArena;
 
 /** Represents the physical model of the robot, including mechanisms and their positions */
-public final class RobotModel extends ManagedSubsystemBase {
+public final class RobotModel extends SubsystemBase {
 
     public RobotModel() {
-        periodicManaged();
+        periodic();
     }
 
     @Override
-    public void periodicManaged() {
+    public void periodic() {
         if (Constants.RobotState.AUTO_LOG_LEVEL.isAtOrLowerThan(Level.DEBUG_SIM)) {
             FieldIntersection.logPolygons();
         }
