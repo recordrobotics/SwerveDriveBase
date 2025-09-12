@@ -19,13 +19,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.io.SwerveModuleIO;
 import frc.robot.utils.AutoLogLevel.Level;
 import frc.robot.utils.ModuleConstants;
-import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.SimpleMath;
 import frc.robot.utils.SysIdManager;
 import frc.robot.utils.SysIdManager.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 
-public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
+public final class SwerveModule implements AutoCloseable {
 
     private static final double STATIONARY_DRIVE_VELOCITY_THRESHOLD = 0.08;
     private static final double STATIONARY_TURN_VELOCITY_THRESHOLD = 1.0;
@@ -310,10 +309,5 @@ public final class SwerveModule implements AutoCloseable, PoweredSubsystem {
     /** frees up all hardware allocations */
     public void close() throws Exception {
         io.close();
-    }
-
-    @Override
-    public double getCurrentDrawAmps() {
-        return io.getDriveMotorCurrentDrawAmps() + io.getTurnMotorCurrentDrawAmps();
     }
 }

@@ -321,7 +321,6 @@ public class TestRobot {
             }
         }
 
-        testRobot.getRobotContainer().resetEncoders();
         CommandScheduler.getInstance().cancelAll();
     }
 

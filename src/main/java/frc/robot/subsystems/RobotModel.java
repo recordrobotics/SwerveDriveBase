@@ -7,7 +7,6 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
-import frc.robot.utils.field.FieldIntersection;
 import java.util.List;
 import org.ironmaple.simulation.SimulatedArena;
 
@@ -19,11 +18,7 @@ public final class RobotModel extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-        if (Constants.RobotState.AUTO_LOG_LEVEL.isAtOrLowerThan(Level.DEBUG_SIM)) {
-            FieldIntersection.logPolygons();
-        }
-    }
+    public void periodic() {}
 
     @AutoLogLevel(level = Level.SIM)
     @SuppressWarnings("java:S2325") // rest of the getters are non-static

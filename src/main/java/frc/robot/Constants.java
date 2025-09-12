@@ -11,9 +11,6 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.FlippingUtil;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,12 +18,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj.LEDPattern.GradientType;
-import edu.wpi.first.wpilibj.LEDReader;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.DriverStationUtils;
 import frc.robot.utils.ModuleConstants;
@@ -36,11 +28,6 @@ import frc.robot.utils.ModuleConstants.MotorLocation;
 import frc.robot.utils.ModuleConstants.TurnMotorType;
 import frc.robot.utils.SysIdManager;
 import frc.robot.utils.SysIdManager.SysIdRoutine;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -52,41 +39,6 @@ import java.util.function.Supplier;
  */
 public final class Constants {
     private Constants() {}
-
-    public final class Game {
-
-        public static final AprilTagFieldLayout APRILTAG_LAYOUT =
-                AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
-
-        public interface IGamePosition {
-            Pose2d getPose();
-
-            static <E extends IGamePosition> E closestTo(Pose2d pose, E[] values) {
-                E closest = null;
-                double closestDistance = Double.MAX_VALUE;
-                for (E pos : values) {
-                    double distance = pos.getPose().getTranslation().getDistance(pose.getTranslation());
-                    if (distance < closestDistance) {
-                        closest = pos;
-                        closestDistance = distance;
-                    }
-                }
-                return closest;
-            }
-
-            static Pose2d[] aggregatePositions(IGamePosition[]... values) {
-                List<Pose2d> poses = new ArrayList<>();
-                for (IGamePosition[] value : values) {
-                    for (IGamePosition pos : value) {
-                        poses.add(pos.getPose());
-                    }
-                }
-                return poses.toArray(new Pose2d[0]);
-            }
-        }
-
-        private Game() {}
-    }
 
     public enum FieldStartingLocation {
         DEFAULT(new Pose2d(7.145, 4.026, Rotation2d.fromDegrees(180.000)));
@@ -104,105 +56,6 @@ public final class Constants {
         }
     }
 
-    public final class Lights {
-
-        public static final int LENGTH = 150;
-
-        public static final Dimensionless MULTIPLIER = Percent.of(100);
-
-        public static final Time PULSATE_FREQUENCY = Seconds.of(0.4);
-        public static final Time FLASH_FREQUENCY = Seconds.of(0.2);
-
-        public static final double SUCCESS_FLASH_TIME = 1; // seconds
-
-        public static final LinearVelocity SCROLL_SPEED = MetersPerSecond.of(0.3);
-        public static final Distance LED_SPACING = Meters.of(1.0 / 30.0); // 30 LEDs per meter
-
-        public static final LEDPattern PULSATING_ORANGE = LEDPattern.solid(Color.kOrange)
-                .breathe(Constants.Lights.PULSATE_FREQUENCY)
-                .blend(LEDPattern.solid(Color.kOrange));
-
-        public static final LEDPattern PULSATING_GREEN = LEDPattern.solid(Color.kGreen)
-                .breathe(Constants.Lights.PULSATE_FREQUENCY)
-                .blend(LEDPattern.solid(Color.kGreen));
-
-        public static final LEDPattern FLASHING_GREEN =
-                LEDPattern.solid(Color.kGreen).blink(Constants.Lights.FLASH_FREQUENCY);
-
-        public static final Supplier<LEDPattern> ALLIANCE_COLOR =
-                () -> DriverStationUtils.getCurrentAlliance() == Alliance.Red
-                        ? LEDPattern.solid(Color.kRed).blend(LEDPattern.solid(Color.kBlack))
-                        : LEDPattern.solid(Color.kBlue).blend(LEDPattern.solid(Color.kBlack));
-
-        public static final Supplier<LEDPattern> ALLIANCE_COLOR_FANCY =
-                () -> DriverStationUtils.getCurrentAlliance() == Alliance.Red
-                        ? LEDPattern.gradient(GradientType.kContinuous, Color.kDarkOrange, Color.kPurple)
-                                .mask(LEDPattern.progressMaskLayer(() -> 0.3))
-                                .scrollAtAbsoluteSpeed(SCROLL_SPEED.times(5), LED_SPACING)
-                                .blend(LEDPattern.solid(Color.kRed))
-                        : LEDPattern.gradient(GradientType.kContinuous, Color.kViolet, Color.kPurple)
-                                .mask(LEDPattern.progressMaskLayer(() -> 0.3))
-                                .scrollAtAbsoluteSpeed(SCROLL_SPEED.times(5), LED_SPACING)
-                                .blend(LEDPattern.solid(Color.kBlue));
-
-        @SuppressWarnings("java:S6411") // LEDReader as Key is inefficient but acceptable
-        private static HashMap<LEDReader, Long> lastSparkles = new HashMap<>();
-
-        private static final Random rand = new Random();
-
-        private Lights() {}
-
-        @SuppressWarnings("java:S109")
-        private static LEDPattern sparkle(Frequency frequency, Frequency fadeFrequency) {
-            final double periodMicros = frequency.asPeriod().in(Microseconds);
-            final double fadePeriodSeconds = fadeFrequency.asPeriod().in(Seconds);
-            final double multiplier = MathUtil.clamp(1.0 / fadePeriodSeconds, 0, 1);
-
-            return (reader, writer) -> {
-                long now = RobotController.getTime();
-
-                long lastSparkle = lastSparkles.getOrDefault(reader, 0l);
-
-                if (now - lastSparkle > periodMicros) {
-                    lastSparkle = now;
-                    lastSparkles.put(reader, lastSparkle);
-
-                    int led = rand.nextInt(reader.getLength());
-                    writer.setLED(led, Color.kWhite);
-                }
-
-                int baseR, baseG, baseB;
-
-                if (DriverStationUtils.getCurrentAlliance() == Alliance.Red) {
-                    baseR = 140;
-                    baseG = 0;
-                    baseB = 0;
-                } else {
-                    baseR = 0;
-                    baseG = 0;
-                    baseB = 140;
-                }
-
-                for (int led = 0; led < reader.getLength(); led++) {
-                    int blendedRGB = Color.lerpRGB(
-                            reader.getRed(led),
-                            reader.getGreen(led),
-                            reader.getBlue(led),
-                            baseR,
-                            baseG,
-                            baseB,
-                            multiplier);
-
-                    writer.setRGB(
-                            led,
-                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kRed),
-                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kGreen),
-                            Color.unpackRGB(blendedRGB, Color.RGBChannel.kBlue));
-                }
-            };
-        }
-    }
-
     public final class Control {
 
         // Sensitivity for speed meter
@@ -217,15 +70,6 @@ public final class Constants {
         public static final double JOYSTICK_X_THRESHOLD = 0.15;
         public static final double JOYSTICK_Y_THRESHOLD = 0.15;
         public static final double JOYSTICK_SPIN_THRESHOLD = 0.3;
-
-        // Thresholds for directional controls (XY) and spin (theta)
-        public static final double XBOX_DIRECTIONAL_SENSITIVITY = 1;
-        public static final double XBOX_X_THRESHOLD = 0.15;
-        public static final double XBOX_Y_THRESHOLD = 0.15;
-        public static final double XBOX_SPIN_THRESHOLD = 0.3;
-
-        public static final double XBOX_SPIN_ROT_THRESHOLD = 0.1;
-        public static final double XBOX_SPIN_ROT_SENSITIVITY = 1.0;
 
         private Control() {}
     }
@@ -245,7 +89,7 @@ public final class Constants {
                 FRAME_WIDTH + Inches.of(6.5).in(Meters);
         public static final double MAX_MECHANISM_HEIGHT = 2.1336;
 
-        public static final double ROBOT_MASS = 34.864; // kg
+        public static final double ROBOT_MASS = 27.4; // kg
         public static final double ROBOT_MOI = 14.547; // kg*m^2
 
         private Frame() {}
@@ -376,8 +220,6 @@ public final class Constants {
 
         public static final AutoLogLevel.Level AUTO_LOG_LEVEL = getAutoLogLevel();
 
-        public static final VisionSimulationMode VISION_SIMULATION_MODE = VisionSimulationMode.MAPLE_CLEAN;
-
         /**
          * <p>
          * Enable NT and Advantage Scope for unit tests.
@@ -415,12 +257,6 @@ public final class Constants {
             } else {
                 return AutoLogLevel.Level.SIM;
             }
-        }
-
-        public enum VisionSimulationMode {
-            PHOTON_SIM,
-            MAPLE_CLEAN,
-            MAPLE_NOISE;
         }
 
         public enum Mode {

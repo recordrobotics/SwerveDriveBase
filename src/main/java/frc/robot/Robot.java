@@ -15,7 +15,6 @@ import frc.robot.dashboard.DashboardUI;
 import frc.robot.utils.AutoLogLevelManager;
 import frc.robot.utils.SysIdManager;
 import frc.robot.utils.SysIdManager.SysIdRoutine;
-import frc.robot.utils.maplesim.ImprovedArena2025Reefscape;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -51,7 +50,6 @@ public final class Robot extends LoggedRobot {
         configureLogging();
         configureDriveStation();
         configureMotorLogging();
-        configureSimulation();
     }
 
     private static void recordBuildMetadata() {
@@ -127,13 +125,6 @@ public final class Robot extends LoggedRobot {
             if (Constants.RobotState.getMode() != Constants.RobotState.Mode.TEST) {
                 SignalLogger.start();
             }
-        }
-    }
-
-    private static void configureSimulation() {
-        if (Constants.RobotState.getMode() != Constants.RobotState.Mode.REAL) {
-            // Use custom improved simulation
-            SimulatedArena.overrideInstance(new ImprovedArena2025Reefscape());
         }
     }
 
@@ -239,11 +230,6 @@ public final class Robot extends LoggedRobot {
     @Override
     public void disabledPeriodic() {
         /* nothing to do */
-    }
-
-    @Override
-    public void disabledExit() {
-        robotContainer.disabledExit();
     }
 
     /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

@@ -1,7 +1,7 @@
 {
     "front-left": {
-        "driveMotorChannel": 2,
-        "turningMotorChannel": 3,
+        "driveMotorChannel": 1,
+        "turningMotorChannel": 2,
         "encoderChannel": 0,
         "encoderOffset": {
             "falcon": 0.671,
@@ -9,8 +9,8 @@
         }
     },
     "front-right": {
-        "driveMotorChannel": 4,
-        "turningMotorChannel": 5,
+        "driveMotorChannel": 3,
+        "turningMotorChannel": 4,
         "encoderChannel": 1,
         "encoderOffset": {
             "falcon": 0.479,
@@ -18,8 +18,8 @@
         }
     },
     "back-left": {
-        "driveMotorChannel": 8,
-        "turningMotorChannel": 9,
+        "driveMotorChannel": 7,
+        "turningMotorChannel": 8,
         "encoderChannel": 2,
         "encoderOffset": {
             "falcon": 0.073,
@@ -27,8 +27,8 @@
         }
     },
     "back-right": {
-        "driveMotorChannel": 6,
-        "turningMotorChannel": 7,
+        "driveMotorChannel": 5,
+        "turningMotorChannel": 6,
         "encoderChannel": 3,
         "encoderOffset": {
             "falcon": 0.428,

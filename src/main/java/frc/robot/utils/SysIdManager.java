@@ -23,7 +23,7 @@ public class SysIdManager {
     }
 
     public static SysIdRoutine getSysIdRoutine() {
-        return SysIdRoutine.NONE;
+        return SysIdRoutine.DRIVETRAIN_TURN;
     }
 
     public enum SysIdRoutine {

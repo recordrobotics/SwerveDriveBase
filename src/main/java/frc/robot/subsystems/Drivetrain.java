@@ -18,6 +18,7 @@ import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState.Mode;
@@ -28,14 +29,10 @@ import frc.robot.subsystems.io.real.SwerveModuleReal;
 import frc.robot.subsystems.io.sim.SwerveModuleSim;
 import frc.robot.utils.AutoLogLevel;
 import frc.robot.utils.AutoLogLevel.Level;
-import frc.robot.utils.KillableSubsystem;
 import frc.robot.utils.ModuleConstants;
 import frc.robot.utils.ModuleConstants.InvalidConfigException;
-import frc.robot.utils.PoweredSubsystem;
 import frc.robot.utils.SimpleMath;
 import frc.robot.utils.SysIdManager;
-import frc.robot.utils.modifiers.ControlModifierService;
-import frc.robot.utils.modifiers.ControlModifierService.ControlModifier;
 import frc.robot.utils.modifiers.DrivetrainControl;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.COTS;
@@ -46,7 +43,7 @@ import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.Logger;
 
 /** Represents a swerve drive style drivetrain. */
-public final class Drivetrain extends KillableSubsystem implements PoweredSubsystem, AutoCloseable {
+public final class Drivetrain extends SubsystemBase implements AutoCloseable {
 
     private static final int FL = 0;
     private static final int FR = 1;
@@ -229,18 +226,6 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
     private void driveInternal() {
         DrivetrainControl drivetrainControl = getDrivetrainControl();
 
-        int applyCount = 0;
-
-        for (ControlModifier prioritizedModifier :
-                ControlModifierService.getInstance().getModifiers()) {
-            if (prioritizedModifier.modifier().isEnabled()
-                    && prioritizedModifier.modifier().apply(drivetrainControl)) {
-                applyCount++;
-            }
-        }
-
-        lastModifiersAppliedCount = applyCount;
-
         ChassisSpeeds nonDiscreteSpeeds = drivetrainControl.toChassisSpeeds(); // Converts the control to ChassisSpeeds
 
         // Note: it is important to not discretize speeds before or after
@@ -372,21 +357,6 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
     }
 
     /**
-     * Sets the PID target to zero and immediately stops all swerve modules.
-     *
-     * <p>This method commands the drivetrain to stop by setting the drive speeds to zero, thus
-     * ensuring that the robot comes to a halt. It also directly stops each swerve module by setting
-     * their motor outputs to zero.
-     */
-    @Override
-    public void kill() {
-        frontLeft.stop();
-        frontRight.stop();
-        backLeft.stop();
-        backRight.stop();
-    }
-
-    /**
      * Retrieves the current chassis speeds relative to the robot's orientation.
      *
      * <p>This method calculates the chassis speeds based on the current states of all four swerve
@@ -489,13 +459,5 @@ public final class Drivetrain extends KillableSubsystem implements PoweredSubsys
         backRight.close();
         frontLeft.close();
         frontRight.close();
-    }
-
-    @Override
-    public double getCurrentDrawAmps() {
-        return frontLeft.getCurrentDrawAmps()
-                + frontRight.getCurrentDrawAmps()
-                + backLeft.getCurrentDrawAmps()
-                + backRight.getCurrentDrawAmps();
     }
 }
