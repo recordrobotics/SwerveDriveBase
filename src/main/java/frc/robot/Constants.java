@@ -136,11 +136,11 @@ public final class Constants {
         public static final double FALCON_DRIVE_KA = 0.24758;
         public static final double FALCON_DRIVE_KP = 4.6957;
 
-        public static final double FALCON_TURN_KV = 1.2993;
-        public static final double FALCON_TURN_KA = 0.058972;
-        public static final double FALCON_TURN_KS = 0.51562;
-        public static final double FALCON_TURN_KP = 55.543;
-        public static final double FALCON_TURN_KD = 2.3952;
+        public static final double FALCON_TURN_KV = 1.7214;
+        public static final double FALCON_TURN_KA = 0.049311;
+        public static final double FALCON_TURN_KS = 0.13609;
+        public static final double FALCON_TURN_KP = 67.02;
+        public static final double FALCON_TURN_KD = 3.2831;
 
         public static final double KRAKEN_DRIVE_KS = 0.13192;
         public static final double KRAKEN_DRIVE_KV = 2.7547;

@@ -1,37 +1,37 @@
 {
     "front-left": {
-        "driveMotorChannel": 1,
-        "turningMotorChannel": 2,
+        "driveMotorChannel": 2,
+        "turningMotorChannel": 1,
         "encoderChannel": 0,
         "encoderOffset": {
-            "falcon": 0.671,
+            "falcon": 0.8279748956993724,
             "kraken": 0.6342
         }
     },
     "front-right": {
-        "driveMotorChannel": 3,
-        "turningMotorChannel": 4,
+        "driveMotorChannel": 4,
+        "turningMotorChannel": 3,
         "encoderChannel": 1,
         "encoderOffset": {
-            "falcon": 0.479,
+            "falcon": 0.4142530103563253,
             "kraken": 0.8387
         }
     },
     "back-left": {
-        "driveMotorChannel": 7,
-        "turningMotorChannel": 8,
+        "driveMotorChannel": 8,
+        "turningMotorChannel": 7,
         "encoderChannel": 2,
         "encoderOffset": {
-            "falcon": 0.073,
+            "falcon": 0.21952178048804452,
             "kraken": 0.4063
         }
     },
     "back-right": {
-        "driveMotorChannel": 5,
-        "turningMotorChannel": 6,
+        "driveMotorChannel": 6,
+        "turningMotorChannel": 5,
         "encoderChannel": 3,
         "encoderOffset": {
-            "falcon": 0.428,
+            "falcon": 0.17499625437490635,
             "kraken": 0.694
         }
     }
